@@ -337,6 +337,8 @@ definition {
 
 		Button.clickPublish();
 
+		Alert.viewSuccessMessage();
+
 		ApplicationsMenu.gotoSite(site = "Minium");
 
 		FrontStore.addInitializerProductToCart(
