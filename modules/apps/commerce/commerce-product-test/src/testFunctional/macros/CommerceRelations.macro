@@ -88,6 +88,8 @@ definition {
 
 		Pause(locator1 = "3000");
 
+		ScrollWebElementIntoView(locator1 = "CommerceEntry#ADD_RELATION_FIELD_SELECT");
+
 		ClickNoError(
 			key_entryName = "${entryName}",
 			key_title = "${title}",
