@@ -364,6 +364,8 @@ definition {
 
 		Button.click(button = "Apply");
 
+		WaitForElementPresent(locator1 = "Luca#LUCA");
+
 		Type(
 			key_fieldName = "Name",
 			locator1 = "CommerceAccelerators#CHECKOUT_GENERIC_TEXT_INPUT",
