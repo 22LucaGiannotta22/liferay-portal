@@ -335,6 +335,10 @@ definition {
 			locator1 = "TextInput#GENERIC_TEXT_INPUT",
 			value1 = "1");
 
+		AssertTextEquals(
+			locator1 = "CommerceEntry#DISCOUNT_AMOUNT",
+			value1 = "${discountAmount}");
+
 		Button.clickPublish();
 
 		ApplicationsMenu.gotoSite(site = "Minium");
