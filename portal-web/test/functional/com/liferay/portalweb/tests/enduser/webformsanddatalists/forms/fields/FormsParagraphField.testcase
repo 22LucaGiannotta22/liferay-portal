@@ -95,7 +95,7 @@ definition {
 
 		Form.closeSidebar();
 
-		Form.save();
+		Form.publishForm();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
@@ -424,8 +424,6 @@ definition {
 
 		Form.save();
 
-		Alert.viewSuccessMessageText(successMessage = "Your request completed successfully.");
-
 		AssertElementPresent(
 			key_formattingStyle = "h2",
 			locator1 = "FormFields#PARAGRAPH_TEXT_VALUE_STYLE",
@@ -645,8 +643,6 @@ definition {
 			uploadFileName = "Document_1.jpg");
 
 		Form.save();
-
-		Alert.viewSuccessMessageText(successMessage = "Your request completed successfully.");
 
 		FormsAdminNavigator.gotoBack();
 

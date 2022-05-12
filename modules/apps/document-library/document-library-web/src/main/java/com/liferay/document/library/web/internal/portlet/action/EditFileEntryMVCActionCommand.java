@@ -356,7 +356,9 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			String portletResource = ParamUtil.getString(
 				actionRequest, "portletResource");
 
-			if (Validator.isNotNull(portletResource)) {
+			if (Validator.isNotNull(portletResource) ||
+				cmd.equals(Constants.ADD_DYNAMIC)) {
+
 				hideDefaultSuccessMessage(actionRequest);
 
 				MultiSessionMessages.add(
@@ -1003,6 +1005,10 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			String cmd, Exception exception)
 		throws Exception {
 
+		if (_log.isWarnEnabled()) {
+			_log.warn(exception);
+		}
+
 		if (exception instanceof AssetCategoryException ||
 			exception instanceof AssetTagException) {
 
@@ -1058,6 +1064,10 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 				JSONPortletResponseUtil.writeJSON(
 					actionRequest, actionResponse, jsonObject);
+
+				if (cmd.equals(Constants.ADD_DYNAMIC)) {
+					hideDefaultErrorMessage(actionRequest);
+				}
 			}
 
 			if (exception instanceof AntivirusScannerException ||

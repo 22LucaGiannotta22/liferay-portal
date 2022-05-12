@@ -43,9 +43,7 @@ public class ObjectEntryEntityModel implements EntityModel {
 	public ObjectEntryEntityModel(List<ObjectField> objectFields) {
 		_entityFieldsMap = HashMapBuilder.<String, EntityField>put(
 			"creator",
-			new StringEntityField(
-				"creator",
-				locale -> Field.getSortableFieldName(Field.USER_NAME))
+			new StringEntityField("creator", locale -> Field.USER_NAME)
 		).put(
 			"creatorId",
 			new IntegerEntityField("creatorId", locale -> Field.USER_ID)
@@ -115,12 +113,20 @@ public class ObjectEntryEntityModel implements EntityModel {
 
 	private Optional<EntityField> _getEntityField(ObjectField objectField) {
 		if (objectField.isIndexedAsKeyword()) {
-			return Optional.of(
-				new StringEntityField(
-					objectField.getName(),
-					locale ->
-						"nestedFieldArray.value_keyword#" +
-							objectField.getName()));
+			StringEntityField stringEntityField = new StringEntityField(
+				objectField.getName(),
+				locale ->
+					"nestedFieldArray.value_keyword#" + objectField.getName());
+
+			if (Objects.equals(
+					objectField.getBusinessType(),
+					ObjectFieldConstants.BUSINESS_TYPE_PICKLIST)) {
+
+				return Optional.of(
+					new CollectionEntityField(stringEntityField));
+			}
+
+			return Optional.of(stringEntityField);
 		}
 		else if (Objects.equals(
 					objectField.getBusinessType(),
@@ -132,12 +138,21 @@ public class ObjectEntryEntityModel implements EntityModel {
 					 objectField.getDBType(),
 					 ObjectFieldConstants.DB_TYPE_STRING)) {
 
-			return Optional.of(
-				new StringEntityField(
-					objectField.getName(),
-					locale ->
-						"nestedFieldArray.value_keyword_lowercase#" +
-							objectField.getName()));
+			StringEntityField stringEntityField = new StringEntityField(
+				objectField.getName(),
+				locale ->
+					"nestedFieldArray.value_keyword_lowercase#" +
+						objectField.getName());
+
+			if (Objects.equals(
+					objectField.getBusinessType(),
+					ObjectFieldConstants.BUSINESS_TYPE_PICKLIST)) {
+
+				return Optional.of(
+					new CollectionEntityField(stringEntityField));
+			}
+
+			return Optional.of(stringEntityField);
 		}
 		else if (Objects.equals(
 					objectField.getDBType(),

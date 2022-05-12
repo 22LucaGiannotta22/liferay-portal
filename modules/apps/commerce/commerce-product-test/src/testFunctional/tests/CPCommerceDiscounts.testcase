@@ -280,7 +280,7 @@ definition {
 	@description = "This is a test for COMMERCE-6230. Discount coupon code limitations"
 	@priority = "3"
 	test LimitCouponCodeUsability {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 
 		// TODO Review
 
@@ -335,6 +335,10 @@ definition {
 			locator1 = "TextInput#GENERIC_TEXT_INPUT",
 			value1 = "1");
 
+		AssertTextEquals(
+			locator1 = "CommerceEntry#DISCOUNT_AMOUNT",
+			value1 = "${discountAmount}");
+
 		Button.clickPublish();
 
 		ApplicationsMenu.gotoSite(site = "Minium");
@@ -343,11 +347,7 @@ definition {
 			productName = "U-Joint",
 			productQuantity = "1");
 
-		CommerceNavigator.gotoMiniCart();
-
-		Button.click(button = "View Details");
-
-		Button.click(button = "Checkout");
+		CommerceCheckout.gotoCheckout();
 
 		Click(locator1 = "Icon#PLUS");
 
@@ -367,6 +367,8 @@ definition {
 			value1 = "TEST");
 
 		Button.click(button = "Apply");
+
+		WaitForElementPresent(locator1 = "Luca#LUCA");
 
 		Type(
 			key_fieldName = "Name",
@@ -424,11 +426,7 @@ definition {
 			productName = "U-Joint",
 			productQuantity = "1");
 
-		CommerceNavigator.gotoMiniCart();
-
-		Button.click(button = "View Details");
-
-		Button.click(button = "Checkout");
+		CommerceCheckout.gotoCheckout();
 
 		Type(
 			locator1 = "TextInput#DISCOUNT",
@@ -492,11 +490,7 @@ definition {
 			productName = "U-Joint",
 			productQuantity = "1");
 
-		CommerceNavigator.gotoMiniCart();
-
-		Button.click(button = "View Details");
-
-		Button.click(button = "Checkout");
+		CommerceCheckout.gotoCheckout();
 
 		Type(
 			locator1 = "TextInput#DISCOUNT",

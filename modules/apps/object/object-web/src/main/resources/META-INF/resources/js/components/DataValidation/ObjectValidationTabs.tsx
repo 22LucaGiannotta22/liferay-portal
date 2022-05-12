@@ -12,23 +12,27 @@
  * details.
  */
 
-import ClayForm from '@clayui/form';
-import React, {ChangeEventHandler, useEffect, useState} from 'react';
+import 'codemirror/mode/groovy/groovy';
+import ClayIcon from '@clayui/icon';
+import {useFeatureFlag} from 'data-engine-js-components-web';
+import React, {ChangeEventHandler, useRef, useState} from 'react';
 
-import Editor from '../Editor/Editor';
+import Card from '../Card/Card';
+import CodeMirrorEditor from '../CodeMirrorEditor';
+import Sidebar from '../Editor/Sidebar/Sidebar';
 import InputLocalized from '../Form/InputLocalized/InputLocalized';
 import Select from '../Form/Select';
 import ObjectValidationFormBase, {
 	ObjectValidationErrors,
 } from '../ObjectValidationFormBase';
-import {getTranslations} from './utils';
+
+import './ObjectValidationTabs.scss';
 
 function BasicInfo({
 	componentLabel,
 	defaultLocale,
 	disabled,
 	errors,
-	handleChange,
 	locales,
 	setValues,
 	values,
@@ -40,21 +44,9 @@ function BasicInfo({
 		}
 	);
 
-	useEffect(() => {
-		if (typeof values.name === 'string') {
-			const nameTranslations = getTranslations(values.name, 'Name');
-
-			setValues({name: nameTranslations});
-		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
 	return (
-		<ClayForm className="lfr-objects__edit-object-validation">
-			<div className="sheet">
-				<h2 className="sheet-title">{componentLabel}</h2>
-
+		<>
+			<Card title={componentLabel}>
 				<InputLocalized
 					disabled={disabled}
 					error={errors.name}
@@ -62,6 +54,7 @@ function BasicInfo({
 					locales={locales}
 					onSelectedLocaleChange={setSelectedLocale}
 					onTranslationsChange={(label) => setValues({name: label})}
+					placeholder={Liferay.Language.get('add-a-label')}
 					required
 					selectedLocale={locale}
 					translations={values.name as LocalizedValue<string>}
@@ -70,22 +63,17 @@ function BasicInfo({
 				<ObjectValidationFormBase
 					disabled={disabled}
 					errors={errors}
-					handleChange={handleChange}
-					objectValidationTypes={[
-						{
-							label: 'Groovy',
-						},
-					]}
+					objectValidationTypeLabel={values.engineLabel!}
 					setValues={setValues}
 					values={values}
 				/>
-			</div>
+			</Card>
 
 			<TriggerEventContainer
 				disabled={disabled}
 				eventTypes={[Liferay.Language.get('on-submission')]}
 			/>
-		</ClayForm>
+		</>
 	);
 }
 
@@ -94,6 +82,7 @@ function Conditions({
 	disabled,
 	errors,
 	locales,
+	objectValidationRuleElements,
 	setValues,
 	values,
 }: IConditions) {
@@ -103,39 +92,54 @@ function Conditions({
 			symbol: string;
 		}
 	);
-
-	useEffect(() => {
-		if (typeof values.errorLabel === 'string') {
-			const errorLabelTranslations = getTranslations(
-				values.errorLabel,
-				'ErrorLabel'
-			);
-
-			setValues({errorLabel: errorLabelTranslations});
-		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	const editorRef = useRef<CodeMirror.Editor>();
+	const flags = useFeatureFlag();
 
 	return (
-		<ClayForm className="lfr-objects__groovy-field">
-			<div className="sheet">
-				<h2 className="sheet-title">
-					{Liferay.Language.get('groovy')}
-				</h2>
+		<>
+			<div className="lfr-objects__object-data-validation-alt-sheet">
+				<div className="lfr-objects__object-validation-tabs-title-container">
+					<h2 className="sheet-title">{values.engineLabel}</h2>
+					&nbsp;
+					{values.engine === 'ddm' && (
+						<span
+							data-tooltip-align="top"
+							title={Liferay.Language.get(
+								'use-the-expression-builder-to-define-the-format-of-a-valid-object-entry'
+							)}
+						>
+							<ClayIcon
+								className="lfr-objects__object-validation-tabs-tooltip-icon"
+								symbol="question-circle-full"
+							/>
+						</span>
+					)}
+				</div>
 
-				<Editor
-					content={values.script}
-					disabled={disabled}
-					setValues={setValues}
-				/>
+				<div className="lfr-objects__object-validation-tabs-editor-container">
+					<CodeMirrorEditor
+						className="lfr-objects__side-panel-content-container"
+						editorRef={editorRef}
+						onChange={(script) => setValues({script})}
+						options={{
+							mode: 'groovy',
+							readOnly: disabled,
+							value: values.script ?? '',
+						}}
+					/>
+
+					{flags['LPS-147651'] && (
+						<Sidebar
+							editorRef={editorRef}
+							objectValidationRuleElements={
+								objectValidationRuleElements
+							}
+						/>
+					)}
+				</div>
 			</div>
 
-			<div className="mt-4 sheet">
-				<h2 className="sheet-title">
-					{Liferay.Language.get('error-message')}
-				</h2>
-
+			<Card title={Liferay.Language.get('error-message')}>
 				<InputLocalized
 					disabled={disabled}
 					error={errors.errorLabel}
@@ -145,29 +149,26 @@ function Conditions({
 					onTranslationsChange={(message) =>
 						setValues({errorLabel: message})
 					}
+					placeholder={Liferay.Language.get('add-an-error-message')}
 					required
 					selectedLocale={locale}
 					translations={values.errorLabel as LocalizedValue<string>}
 				/>
-			</div>
-		</ClayForm>
+			</Card>
+		</>
 	);
 }
 
 function TriggerEventContainer({disabled, eventTypes}: ITriggerEventProps) {
 	return (
-		<div className="mt-4 sheet">
-			<h2 className="sheet-title">
-				{Liferay.Language.get('trigger-event')}
-			</h2>
-
+		<Card title={Liferay.Language.get('trigger-event')}>
 			<Select
+				defaultValue={0}
 				disabled={disabled}
 				label={Liferay.Language.get('event')}
 				options={eventTypes}
-				value={0}
 			/>
-		</div>
+		</Card>
 	);
 }
 
@@ -176,8 +177,7 @@ interface ITriggerEventProps {
 	eventTypes: string[];
 }
 
-interface IBasicInfo {
-	componentLabel: string;
+interface ITabs {
 	defaultLocale: {label: string; symbol: string};
 	disabled: boolean;
 	errors: ObjectValidationErrors;
@@ -187,14 +187,12 @@ interface IBasicInfo {
 	values: Partial<ObjectValidation>;
 }
 
-interface IConditions {
-	defaultLocale: {label: string; symbol: string};
-	disabled: boolean;
-	errors: ObjectValidationErrors;
-	handleChange: ChangeEventHandler<HTMLInputElement>;
-	locales: Array<any>;
-	setValues: (values: Partial<ObjectValidation>) => void;
-	values: Partial<ObjectValidation>;
+interface IBasicInfo extends ITabs {
+	componentLabel: string;
+}
+
+interface IConditions extends ITabs {
+	objectValidationRuleElements: ObjectValidationRuleElement[];
 }
 
 export {BasicInfo, Conditions};
