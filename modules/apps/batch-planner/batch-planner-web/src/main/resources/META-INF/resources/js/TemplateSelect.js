@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 
 import {
+	HEADLESS_ENDPOINT_POLICY_NAME,
 	NULL_TEMPLATE_VALUE,
 	TEMPLATE_CREATED_EVENT,
 	TEMPLATE_SELECTED_EVENT,
@@ -95,9 +96,14 @@ const TemplateSelect = ({
 
 		const templateDetails = await fetchTemplateDetails(newTemplateId);
 
+		const headlessEndpointPolicy = templateDetails.policies.find(
+			(policy) => policy.name === HEADLESS_ENDPOINT_POLICY_NAME
+		);
+
 		Liferay.fire(TEMPLATE_SELECTED_EVENT, {
 			template: {
 				externalType: templateDetails.externalType,
+				headlessEndpoint: headlessEndpointPolicy?.value,
 				internalClassName: templateDetails.internalClassName,
 				mappings: templateDetails.mappings.reduce(
 					(mappings, mapping) => ({
@@ -110,7 +116,7 @@ const TemplateSelect = ({
 		});
 	};
 
-	const selectId = `${portletNamespace}templateSelect`;
+	const selectId = `${portletNamespace}templateName`;
 
 	return (
 		<ClayForm.Group>
@@ -139,6 +145,7 @@ const TemplateSelect = ({
 TemplateSelect.propTypes = {
 	portletNamespace: PropTypes.string.isRequired,
 	selectedTemplateClassName: PropTypes.string,
+	selectedTemplateHeadlessEndpoint: PropTypes.string,
 	selectedTemplateMapping: PropTypes.object,
 	templateOptions: PropTypes.arrayOf(
 		PropTypes.shape({

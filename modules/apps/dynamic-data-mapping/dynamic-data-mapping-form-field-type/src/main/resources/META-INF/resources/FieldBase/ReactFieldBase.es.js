@@ -62,17 +62,12 @@ function normalizeInputValue(fieldType, locale, value) {
 const getFieldDetails = ({
 	errorMessage,
 	hasError,
-	label,
 	required,
 	text,
 	tip,
 	warningMessage,
 }) => {
 	const fieldDetails = [];
-
-	if (label) {
-		fieldDetails.push(Liferay.Util.escape(label));
-	}
 
 	if (tip) {
 		fieldDetails.push(Liferay.Util.escape(tip));
@@ -140,7 +135,6 @@ const Popover = ({tooltip}) => {
 			data-testid="clayPopover"
 			disableScroll
 			header={Liferay.Language.get('input-mask-format')}
-			onShowChange={setPopoverVisible}
 			show={isPopoverVisible}
 			style={{maxWidth: POPOVER_MAX_WIDTH}}
 			trigger={
@@ -201,7 +195,6 @@ export function FieldBase({
 	const fieldDetails = getFieldDetails({
 		errorMessage,
 		hasError,
-		label,
 		required,
 		text,
 		tip,
@@ -209,6 +202,9 @@ export function FieldBase({
 	});
 
 	const fieldDetailsId = `${id ?? name}_fieldDetails`;
+
+	const accessibleProps =
+		accessible && fieldDetails ? {'aria-labelledby': fieldDetailsId} : null;
 
 	const hiddenTranslations = useMemo(() => {
 		if (!localizedValue) {
@@ -240,16 +236,6 @@ export function FieldBase({
 		type === 'paragraph' ||
 		type === 'radio';
 	const showPopover = fieldName === 'inputMaskFormat';
-	const showFor =
-		type === 'text' ||
-		type === 'numeric' ||
-		type === 'image' ||
-		type === 'search_location';
-
-	const accessibleProps = {
-		...(accessible && fieldDetails && {'aria-labelledby': fieldDetailsId}),
-		...(showFor ? {htmlFor: id ?? name} : {tabIndex: 0}),
-	};
 
 	const defaultRows = nestedFields?.map((field) => ({
 		columns: [{fields: [field], size: 12}],
@@ -326,6 +312,7 @@ export function FieldBase({
 							<legend
 								{...accessibleProps}
 								className="lfr-ddm-legend"
+								tabIndex={0}
 							>
 								{showLabel && label}
 
@@ -349,6 +336,8 @@ export function FieldBase({
 									'ddm-empty': !showLabel && !required,
 									'ddm-label': showLabel || required,
 								})}
+								htmlFor={id ?? name}
+								tabIndex={0}
 							>
 								{showLabel && label && (
 									<LabelProperty

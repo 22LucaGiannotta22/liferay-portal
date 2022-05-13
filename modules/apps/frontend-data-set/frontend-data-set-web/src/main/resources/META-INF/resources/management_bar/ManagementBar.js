@@ -24,7 +24,6 @@ function ManagementBar({
 	creationMenu,
 	fluid,
 	selectAllItems,
-	selectedItems,
 	selectedItemsKey,
 	selectedItemsValue,
 	selectionType,
@@ -38,7 +37,6 @@ function ManagementBar({
 					bulkActions={bulkActions}
 					fluid={fluid}
 					selectAllItems={selectAllItems}
-					selectedItems={selectedItems}
 					selectedItemsKey={selectedItemsKey}
 					selectedItemsValue={selectedItemsValue}
 					total={total}
@@ -69,7 +67,6 @@ ManagementBar.propTypes = {
 		secondaryItems: PropTypes.array,
 	}),
 	fluid: PropTypes.bool,
-	selectedItems: PropTypes.array,
 	selectedItemsKey: PropTypes.string,
 	selectedItemsValue: PropTypes.array,
 	selectionType: PropTypes.oneOf(['single', 'multiple']),

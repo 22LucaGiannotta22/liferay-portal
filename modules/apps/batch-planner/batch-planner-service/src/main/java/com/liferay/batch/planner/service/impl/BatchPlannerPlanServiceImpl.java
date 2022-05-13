@@ -16,13 +16,11 @@ package com.liferay.batch.planner.service.impl;
 
 import com.liferay.batch.planner.constants.BatchPlannerActionKeys;
 import com.liferay.batch.planner.constants.BatchPlannerConstants;
-import com.liferay.batch.planner.exception.BatchPlannerPlanInternalClassNameException;
 import com.liferay.batch.planner.model.BatchPlannerPlan;
 import com.liferay.batch.planner.model.BatchPlannerPlanTable;
 import com.liferay.batch.planner.service.base.BatchPlannerPlanServiceBaseImpl;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.string.CharPool;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -34,7 +32,6 @@ import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermi
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 
@@ -57,8 +54,8 @@ public class BatchPlannerPlanServiceImpl
 	@Override
 	public BatchPlannerPlan addBatchPlannerPlan(
 			boolean export, String externalType, String externalURL,
-			String internalClassName, String name, int size,
-			String taskItemDelegateName, boolean template)
+			String internalClassName, String name, String taskItemDelegateName,
+			boolean template)
 		throws PortalException {
 
 		PermissionChecker permissionChecker = getPermissionChecker();
@@ -69,7 +66,7 @@ public class BatchPlannerPlanServiceImpl
 
 		return batchPlannerPlanLocalService.addBatchPlannerPlan(
 			permissionChecker.getUserId(), export, externalType, externalURL,
-			internalClassName, name, size, taskItemDelegateName, template);
+			internalClassName, name, taskItemDelegateName, template);
 	}
 
 	@Override
@@ -121,12 +118,9 @@ public class BatchPlannerPlanServiceImpl
 
 	@Override
 	public List<BatchPlannerPlan> getBatchPlannerPlans(
-			long companyId, boolean export, boolean template,
-			String searchByKeyword, int start, int end,
-			OrderByComparator<BatchPlannerPlan> orderByComparator)
-		throws PortalException {
-
-		_checkAmbiguousKeyword(searchByKeyword);
+		long companyId, boolean export, boolean template,
+		String searchByKeyword, int start, int end,
+		OrderByComparator<BatchPlannerPlan> orderByComparator) {
 
 		searchByKeyword = StringUtil.quote(searchByKeyword, CharPool.PERCENT);
 
@@ -172,11 +166,8 @@ public class BatchPlannerPlanServiceImpl
 
 	@Override
 	public List<BatchPlannerPlan> getBatchPlannerPlans(
-			long companyId, boolean template, String searchByKeyword, int start,
-			int end, OrderByComparator<BatchPlannerPlan> orderByComparator)
-		throws PortalException {
-
-		_checkAmbiguousKeyword(searchByKeyword);
+		long companyId, boolean template, String searchByKeyword, int start,
+		int end, OrderByComparator<BatchPlannerPlan> orderByComparator) {
 
 		searchByKeyword = StringUtil.quote(searchByKeyword, CharPool.PERCENT);
 
@@ -247,11 +238,8 @@ public class BatchPlannerPlanServiceImpl
 
 	@Override
 	public int getBatchPlannerPlansCount(
-			long companyId, boolean export, boolean template,
-			String searchByKeyword)
-		throws PortalException {
-
-		_checkAmbiguousKeyword(searchByKeyword);
+		long companyId, boolean export, boolean template,
+		String searchByKeyword) {
 
 		searchByKeyword = StringUtil.quote(searchByKeyword, CharPool.PERCENT);
 
@@ -283,10 +271,7 @@ public class BatchPlannerPlanServiceImpl
 
 	@Override
 	public int getBatchPlannerPlansCount(
-			long companyId, boolean template, String searchByKeyword)
-		throws PortalException {
-
-		_checkAmbiguousKeyword(searchByKeyword);
+		long companyId, boolean template, String searchByKeyword) {
 
 		searchByKeyword = StringUtil.quote(searchByKeyword, CharPool.PERCENT);
 
@@ -326,20 +311,6 @@ public class BatchPlannerPlanServiceImpl
 		return batchPlannerPlanLocalService.updateBatchPlannerPlan(
 			batchPlannerPlanId, externalType, internalClassName, name);
 	}
-
-	private void _checkAmbiguousKeyword(String keyword) throws PortalException {
-		if (Validator.isNull(keyword) ||
-			!_AMBIGUOUS_SEARCH_KEWORDS.contains(
-				StringUtil.toLowerCase(keyword))) {
-
-			return;
-		}
-
-		throw new BatchPlannerPlanInternalClassNameException(
-			StringBundler.concat("Search term ", keyword, " is too ambiguous"));
-	}
-
-	private static final String _AMBIGUOUS_SEARCH_KEWORDS = "com.liferay";
 
 	private static volatile ModelResourcePermission<BatchPlannerPlan>
 		_batchPlannerPlanModelResourcePermission =

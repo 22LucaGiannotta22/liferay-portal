@@ -33,115 +33,94 @@ import Topper from '../topper/Topper';
 import Container from './Container';
 import isHovered from './isHovered';
 
-const ContainerWithControls = React.forwardRef(
-	({children, isDropTarget = true, item}, ref) => {
-		const canUpdateItemConfiguration = useSelector(
-			selectCanUpdateItemConfiguration
-		);
-		const [hovered, setHovered] = useState(false);
-		const selectedViewportSize = useSelector(
-			(state) => state.selectedViewportSize
-		);
+const ContainerWithControls = React.forwardRef(({children, item}, ref) => {
+	const canUpdateItemConfiguration = useSelector(
+		selectCanUpdateItemConfiguration
+	);
+	const hoveredItemType = useHoveredItemType();
+	const hoveredItemId = useHoveredItemId();
+	const [hovered, setHovered] = useState(false);
+	const selectedViewportSize = useSelector(
+		(state) => state.selectedViewportSize
+	);
 
-		const [setRef, itemElement] = useSetRef(ref);
+	const [setRef, itemElement] = useSetRef(ref);
 
-		const itemConfig = getResponsiveConfig(
-			item.config,
-			selectedViewportSize
-		);
+	const itemConfig = getResponsiveConfig(item.config, selectedViewportSize);
 
-		const {widthType} = itemConfig;
+	const {widthType} = itemConfig;
 
-		const {
-			display,
-			height,
-			marginLeft,
-			marginRight,
-			maxWidth,
-			minWidth,
-			shadow,
-			width,
-		} = itemConfig.styles;
+	const {
+		display,
+		height,
+		marginLeft,
+		marginRight,
+		maxWidth,
+		minWidth,
+		shadow,
+		width,
+	} = itemConfig.styles;
 
-		const style = {};
+	const style = {};
 
-		style.boxShadow = getFrontendTokenValue(shadow);
-		style.display = display;
-		style.maxWidth = maxWidth;
-		style.minWidth = minWidth;
-		style.width = width;
+	style.boxShadow = getFrontendTokenValue(shadow);
+	style.display = display;
+	style.maxWidth = maxWidth;
+	style.minWidth = minWidth;
+	style.width = width;
 
-		return (
-			<>
-				<HoverHandler
-					hovered={hovered}
-					item={item}
-					setHovered={setHovered}
-				/>
-				<Topper
-					className={classNames({
-						[getLayoutDataItemTopperUniqueClassName(
-							item.itemId
-						)]: config.featureFlagLps132571,
-						[`container-fluid`]:
-							widthType === CONTAINER_WIDTH_TYPES.fixed,
-						[`container-fluid-max-xl`]:
-							widthType === CONTAINER_WIDTH_TYPES.fixed,
-						[`ml-${marginLeft}`]:
-							isValidSpacingOption(marginLeft) &&
-							widthType !== CONTAINER_WIDTH_TYPES.fixed,
-						[`mr-${marginRight}`]:
-							isValidSpacingOption(marginRight) &&
-							widthType !== CONTAINER_WIDTH_TYPES.fixed,
-						'p-0': widthType === CONTAINER_WIDTH_TYPES.fixed,
-						'page-editor__topper--hovered': hovered,
-					})}
-					isDropTarget={isDropTarget}
-					item={item}
-					itemElement={itemElement}
-					style={style}
-				>
-					<Container
-						className={classNames({
-							'empty': !item.children.length && !height,
-							'page-editor__container': canUpdateItemConfiguration,
-						})}
-						item={item}
-						ref={setRef}
-					>
-						{children}
-					</Container>
-				</Topper>
-			</>
-		);
-	}
-);
+	useEffect(() => {
+		const backgroundImage = item.config?.styles?.backgroundImage;
+
+		if (backgroundImage?.classNameId && backgroundImage?.classPK) {
+			setHovered(
+				isHovered({
+					editableValue: backgroundImage,
+					hoveredItemId,
+					hoveredItemType,
+				})
+			);
+		}
+	}, [hoveredItemId, hoveredItemType, item]);
+
+	return (
+		<Topper
+			className={classNames({
+				[getLayoutDataItemTopperUniqueClassName(
+					item.itemId
+				)]: config.featureFlagLps132571,
+				[`container-fluid`]: widthType === CONTAINER_WIDTH_TYPES.fixed,
+				[`container-fluid-max-xl`]:
+					widthType === CONTAINER_WIDTH_TYPES.fixed,
+				[`ml-${marginLeft}`]:
+					isValidSpacingOption(marginLeft) &&
+					widthType !== CONTAINER_WIDTH_TYPES.fixed,
+				[`mr-${marginRight}`]:
+					isValidSpacingOption(marginRight) &&
+					widthType !== CONTAINER_WIDTH_TYPES.fixed,
+				'p-0': widthType === CONTAINER_WIDTH_TYPES.fixed,
+				'page-editor__topper--hovered': hovered,
+			})}
+			item={item}
+			itemElement={itemElement}
+			style={style}
+		>
+			<Container
+				className={classNames({
+					'empty': !item.children.length && !height,
+					'page-editor__container': canUpdateItemConfiguration,
+				})}
+				item={item}
+				ref={setRef}
+			>
+				{children}
+			</Container>
+		</Topper>
+	);
+});
 
 ContainerWithControls.propTypes = {
 	item: getLayoutDataItemPropTypes().isRequired,
 };
 
 export default ContainerWithControls;
-
-const HoverHandler = ({hovered, item, setHovered}) => {
-	const hoveredItemType = useHoveredItemType();
-	const hoveredItemId = useHoveredItemId();
-
-	useEffect(() => {
-		const backgroundImage = item.config?.styles?.backgroundImage;
-
-		if (backgroundImage?.classNameId && backgroundImage?.classPK) {
-			const nextHovered = isHovered({
-				editableValue: backgroundImage,
-				hoveredItemId,
-				hoveredItemType,
-			});
-
-			if (hovered !== nextHovered) {
-				setHovered(nextHovered);
-			}
-		}
-	}, [hovered, hoveredItemId, hoveredItemType, item, setHovered]);
-
-	return null;
-};

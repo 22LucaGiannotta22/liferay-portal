@@ -62,7 +62,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -1204,42 +1203,18 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 		throws Exception {
 
 		UnsafeConsumer<TaxonomyVocabulary, Exception>
-			taxonomyVocabularyUnsafeConsumer = null;
-
-		String createStrategy = (String)parameters.getOrDefault(
-			"createStrategy", "INSERT");
-
-		if ("INSERT".equalsIgnoreCase(createStrategy)) {
 			taxonomyVocabularyUnsafeConsumer = taxonomyVocabulary -> {
 			};
 
-			if (parameters.containsKey("assetLibraryId")) {
-				taxonomyVocabularyUnsafeConsumer =
-					taxonomyVocabulary -> postAssetLibraryTaxonomyVocabulary(
-						(Long)parameters.get("assetLibraryId"),
-						taxonomyVocabulary);
-			}
-			else if (parameters.containsKey("siteId")) {
-				taxonomyVocabularyUnsafeConsumer =
-					taxonomyVocabulary -> postSiteTaxonomyVocabulary(
-						(Long)parameters.get("siteId"), taxonomyVocabulary);
-			}
+		if (parameters.containsKey("assetLibraryId")) {
+			taxonomyVocabularyUnsafeConsumer =
+				taxonomyVocabulary -> postAssetLibraryTaxonomyVocabulary(
+					(Long)parameters.get("assetLibraryId"), taxonomyVocabulary);
 		}
-
-		if ("UPSERT".equalsIgnoreCase(createStrategy)) {
-			taxonomyVocabularyUnsafeConsumer = taxonomyVocabulary ->
-				putSiteTaxonomyVocabularyByExternalReferenceCode(
-					taxonomyVocabulary.getSiteId() != null ?
-						taxonomyVocabulary.getSiteId() :
-							(Long)parameters.get("siteId"),
-					taxonomyVocabulary.getExternalReferenceCode(),
-					taxonomyVocabulary);
-		}
-
-		if (taxonomyVocabularyUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Create strategy \"" + createStrategy +
-					"\" is not supported for TaxonomyVocabulary");
+		else if (parameters.containsKey("siteId")) {
+			taxonomyVocabularyUnsafeConsumer =
+				taxonomyVocabulary -> postSiteTaxonomyVocabulary(
+					(Long)parameters.get("siteId"), taxonomyVocabulary);
 		}
 
 		if (contextBatchUnsafeConsumer != null) {
@@ -1320,46 +1295,13 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 			Map<String, Serializable> parameters)
 		throws Exception {
 
-		UnsafeConsumer<TaxonomyVocabulary, Exception>
-			taxonomyVocabularyUnsafeConsumer = null;
-
-		String updateStrategy = (String)parameters.getOrDefault(
-			"updateStrategy", "UPDATE");
-
-		if ("PARTIAL_UPDATE".equalsIgnoreCase(updateStrategy)) {
-			taxonomyVocabularyUnsafeConsumer =
-				taxonomyVocabulary -> patchTaxonomyVocabulary(
-					taxonomyVocabulary.getId() != null ?
-						taxonomyVocabulary.getId() :
-							Long.parseLong(
-								(String)parameters.get("taxonomyVocabularyId")),
-					taxonomyVocabulary);
-		}
-
-		if ("UPDATE".equalsIgnoreCase(updateStrategy)) {
-			taxonomyVocabularyUnsafeConsumer =
-				taxonomyVocabulary -> putTaxonomyVocabulary(
-					taxonomyVocabulary.getId() != null ?
-						taxonomyVocabulary.getId() :
-							Long.parseLong(
-								(String)parameters.get("taxonomyVocabularyId")),
-					taxonomyVocabulary);
-		}
-
-		if (taxonomyVocabularyUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Update strategy \"" + updateStrategy +
-					"\" is not supported for TaxonomyVocabulary");
-		}
-
-		if (contextBatchUnsafeConsumer != null) {
-			contextBatchUnsafeConsumer.accept(
-				taxonomyVocabularies, taxonomyVocabularyUnsafeConsumer);
-		}
-		else {
-			for (TaxonomyVocabulary taxonomyVocabulary : taxonomyVocabularies) {
-				taxonomyVocabularyUnsafeConsumer.accept(taxonomyVocabulary);
-			}
+		for (TaxonomyVocabulary taxonomyVocabulary : taxonomyVocabularies) {
+			putTaxonomyVocabulary(
+				taxonomyVocabulary.getId() != null ?
+					taxonomyVocabulary.getId() :
+						Long.parseLong(
+							(String)parameters.get("taxonomyVocabularyId")),
+				taxonomyVocabulary);
 		}
 	}
 

@@ -380,8 +380,8 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 				getBackgroundImageJSONObject();
 
 		Assert.assertEquals(
-			expectedBackgroundImageJSONObject.toString(),
-			actualBackgroundImageJSONObject.toString());
+			expectedBackgroundImageJSONObject.toJSONString(),
+			actualBackgroundImageJSONObject.toJSONString());
 
 		Assert.assertEquals(
 			expectedContainerStyledLayoutStructureItem.getPaddingBottom(),
@@ -439,8 +439,10 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 					"BackgroundImageFragmentEntryProcessor");
 
 		Assert.assertEquals(
-			expectedBackgroundImageFragmentEntryProcessorJSONObject.toString(),
-			actualBackgroundImageFragmentEntryProcessorJSONObject.toString());
+			expectedBackgroundImageFragmentEntryProcessorJSONObject.
+				toJSONString(),
+			actualBackgroundImageFragmentEntryProcessorJSONObject.
+				toJSONString());
 
 		JSONObject expectedEditableFragmentEntryProcessorJSONObject =
 			expectedEditableValuesJSONObject.getJSONObject(
@@ -472,8 +474,8 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 			actualElementTextJSONObject.getJSONObject("config");
 
 		Assert.assertEquals(
-			expectedElementTextConfigJSONObject.toString(),
-			actualElementTextConfigJSONObject.toString());
+			expectedElementTextConfigJSONObject.toJSONString(),
+			actualElementTextConfigJSONObject.toJSONString());
 
 		JSONObject expectedFreeMarkerFragmentEntryProcessorJSONObject =
 			expectedEditableValuesJSONObject.getJSONObject(
@@ -485,8 +487,8 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 					"FreeMarkerFragmentEntryProcessor");
 
 		Assert.assertEquals(
-			expectedFreeMarkerFragmentEntryProcessorJSONObject.toString(),
-			actualFreeMarkerFragmentEntryProcessorJSONObject.toString());
+			expectedFreeMarkerFragmentEntryProcessorJSONObject.toJSONString(),
+			actualFreeMarkerFragmentEntryProcessorJSONObject.toJSONString());
 
 		Assert.assertEquals(
 			expectedFragmentEntryLink.getPosition(),

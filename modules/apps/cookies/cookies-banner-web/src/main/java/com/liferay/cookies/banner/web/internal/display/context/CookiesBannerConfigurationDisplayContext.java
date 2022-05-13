@@ -14,41 +14,26 @@
 
 package com.liferay.cookies.banner.web.internal.display.context;
 
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.RenderRequest;
-
-import javax.servlet.http.HttpServletRequest;
+import javax.portlet.RenderResponse;
 
 /**
  * @author Eduardo García
  */
-public class CookiesBannerConfigurationDisplayContext {
+public class CookiesBannerConfigurationDisplayContext
+	extends BaseCookiesBannerDisplayContext {
 
 	public CookiesBannerConfigurationDisplayContext(
-		RenderRequest renderRequest) {
+		RenderRequest renderRequest, RenderResponse renderResponse) {
 
-		_renderRequest = renderRequest;
-	}
-
-	public String getCookieDescription(
-		String cookie, HttpServletRequest httpServletRequest) {
-
-		return LanguageUtil.get(
-			httpServletRequest, "cookies-description[" + cookie + "]");
-	}
-
-	public String getCookieTitle(
-		String cookie, HttpServletRequest httpServletRequest) {
-
-		return LanguageUtil.get(
-			httpServletRequest, "cookies-title[" + cookie + "]");
+		super(renderRequest, renderResponse);
 	}
 
 	public boolean isShowButtons() {
-		ThemeDisplay themeDisplay = (ThemeDisplay)_renderRequest.getAttribute(
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
 		if (!themeDisplay.isStatePopUp()) {
@@ -57,7 +42,5 @@ public class CookiesBannerConfigurationDisplayContext {
 
 		return false;
 	}
-
-	private final RenderRequest _renderRequest;
 
 }

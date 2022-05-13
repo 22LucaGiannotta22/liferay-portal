@@ -16,43 +16,47 @@ package com.liferay.dynamic.data.mapping.internal.storage;
 
 import com.liferay.dynamic.data.mapping.storage.DDMStorageAdapter;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
+
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Leonardo Barros
  */
-public class DDMStorageAdapterTrackerImplTest {
+@PrepareForTest(ServiceTrackerMapFactory.class)
+@RunWith(PowerMockRunner.class)
+public class DDMStorageAdapterTrackerImplTest extends PowerMockito {
 
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
+	@Before
+	public void setUp() throws Exception {
+		mockStatic(ServiceTrackerMapFactory.class);
+	}
 
 	@Test
-	public void testActivate() throws Exception {
+	public void testActivate() {
 		DDMStorageAdapterTrackerImpl ddmStorageAdapterTrackerImpl =
 			new DDMStorageAdapterTrackerImpl();
 
-		BundleContext bundleContext = Mockito.mock(BundleContext.class);
+		BundleContext bundleContext = mock(BundleContext.class);
 
-		Filter filter = Mockito.mock(Filter.class);
-
-		Mockito.doReturn(
-			filter
-		).when(
-			bundleContext
-		).createFilter(
-			Mockito.anyString()
+		when(
+			ServiceTrackerMapFactory.openSingleValueMap(
+				bundleContext, DDMStorageAdapter.class,
+				"ddm.storage.adapter.type")
+		).thenReturn(
+			_ddmStorageAdapterServiceTrackerMap
 		);
 
 		ddmStorageAdapterTrackerImpl.activate(bundleContext);
@@ -108,8 +112,8 @@ public class DDMStorageAdapterTrackerImplTest {
 		).keySet();
 	}
 
-	private final ServiceTrackerMap<String, DDMStorageAdapter>
-		_ddmStorageAdapterServiceTrackerMap = Mockito.mock(
-			ServiceTrackerMap.class);
+	@Mock
+	private ServiceTrackerMap<String, DDMStorageAdapter>
+		_ddmStorageAdapterServiceTrackerMap;
 
 }

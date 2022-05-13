@@ -32,9 +32,9 @@ definition {
 	test CanAcessOptionModal {
 		ApplicationsMenu.gotoSite(key_site = "Testray 2");
 
-		TestrayLayout.clickManageOnSidebar();
+		Click(locator1 = "TestrayManage#MANAGE_SIDEBAR");
 
-		TestrayManage.selectOptionsManage(key_itemvalue = "Options");
+		Click(locator1 = "TestrayManage#OPTIONS_MANAGE");
 
 		AssertElementPresent(locator1 = "TestrayManage#OPTIONS_MODAL");
 
@@ -46,9 +46,9 @@ definition {
 	test CanAddNewOption {
 		ApplicationsMenu.gotoSite(key_site = "Testray 2");
 
-		TestrayLayout.clickManageOnSidebar();
+		Click(locator1 = "TestrayManage#MANAGE_SIDEBAR");
 
-		TestrayManage.selectOptionsManage(key_itemvalue = "Options");
+		Click(locator1 = "TestrayManage#OPTIONS_MANAGE");
 
 		Click(locator1 = "TestrayManage#ADD_OPTIONS");
 

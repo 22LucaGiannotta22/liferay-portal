@@ -1,8 +1,7 @@
 ## JavaLogLevelCheck
 
-When logging `debug/info/trace/warn` messages, always use the corresponding
+When logging `debug/info/trace/warn` messages on always use the corresponding
 `is*` method.
-
 When logging `error` messages, do not use `isErrorEnabled`. `isErrorEnabled`
 always returns `true`.
 

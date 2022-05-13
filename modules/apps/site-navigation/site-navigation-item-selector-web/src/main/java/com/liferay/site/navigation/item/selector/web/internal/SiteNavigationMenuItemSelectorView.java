@@ -16,10 +16,11 @@ package com.liferay.site.navigation.item.selector.web.internal;
 
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorView;
-import com.liferay.item.selector.ItemSelectorViewDescriptorRenderer;
 import com.liferay.item.selector.criteria.UUIDItemSelectorReturnType;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.site.navigation.item.selector.criterion.SiteNavigationMenuItemSelectorCriterion;
+import com.liferay.site.navigation.item.selector.web.internal.constants.SiteNavigationItemSelectorWebKeys;
+import com.liferay.site.navigation.item.selector.web.internal.display.context.SiteNavigationMenuItemSelectorViewDisplayContext;
 
 import java.io.IOException;
 
@@ -30,6 +31,8 @@ import java.util.ResourceBundle;
 
 import javax.portlet.PortletURL;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -55,6 +58,10 @@ public class SiteNavigationMenuItemSelectorView
 		return SiteNavigationMenuItemSelectorCriterion.class;
 	}
 
+	public ServletContext getServletContext() {
+		return _servletContext;
+	}
+
 	@Override
 	public List<ItemSelectorReturnType> getSupportedItemSelectorReturnTypes() {
 		return _supportedItemSelectorReturnTypes;
@@ -76,21 +83,33 @@ public class SiteNavigationMenuItemSelectorView
 			PortletURL portletURL, String itemSelectedEventName, boolean search)
 		throws IOException, ServletException {
 
-		_itemSelectorViewDescriptorRenderer.renderHTML(
-			servletRequest, servletResponse,
-			siteNavigationMenuItemSelectorCriterion, portletURL,
-			itemSelectedEventName, search,
-			new SiteNavigationMenuItemSelectorViewDescriptor(
-				(HttpServletRequest)servletRequest, portletURL));
+		SiteNavigationMenuItemSelectorViewDisplayContext
+			siteNavigationMenuItemSelectorViewDisplayContext =
+				new SiteNavigationMenuItemSelectorViewDisplayContext(
+					(HttpServletRequest)servletRequest, portletURL,
+					itemSelectedEventName);
+
+		servletRequest.setAttribute(
+			SiteNavigationItemSelectorWebKeys.
+				SITE_NAVIGATION_MENU_ITEM_SELECTOR_DISPLAY_CONTEXT,
+			siteNavigationMenuItemSelectorViewDisplayContext);
+
+		ServletContext servletContext = getServletContext();
+
+		RequestDispatcher requestDispatcher =
+			servletContext.getRequestDispatcher(
+				"/view_site_navigation_menus.jsp");
+
+		requestDispatcher.include(servletRequest, servletResponse);
 	}
 
 	private static final List<ItemSelectorReturnType>
 		_supportedItemSelectorReturnTypes = Collections.singletonList(
 			new UUIDItemSelectorReturnType());
 
-	@Reference
-	private ItemSelectorViewDescriptorRenderer
-		<SiteNavigationMenuItemSelectorCriterion>
-			_itemSelectorViewDescriptorRenderer;
+	@Reference(
+		target = "(osgi.web.symbolicname=com.liferay.site.navigation.item.selector.web)"
+	)
+	private ServletContext _servletContext;
 
 }

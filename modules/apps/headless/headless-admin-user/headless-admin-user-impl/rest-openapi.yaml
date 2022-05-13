@@ -2375,7 +2375,6 @@ paths:
                                 items:
                                     $ref: "#/components/schemas/Site"
                                 type: array
-            tags: ["Site"]
     "/my-user-account/subscriptions":
         get:
             operationId: getMyUserAccountSubscriptionsPage
@@ -3659,7 +3658,6 @@ paths:
                         application/xml:
                             schema:
                                 $ref: "#/components/schemas/Site"
-            tags: ["Site"]
     "/sites/{siteId}":
         get:
             operationId: getSite
@@ -3679,7 +3677,6 @@ paths:
                         application/xml:
                             schema:
                                 $ref: "#/components/schemas/Site"
-            tags: ["Site"]
     "/sites/{siteId}/segments":
         get:
             description:

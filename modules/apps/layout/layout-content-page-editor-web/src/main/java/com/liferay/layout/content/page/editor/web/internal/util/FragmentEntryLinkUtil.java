@@ -14,7 +14,6 @@
 
 package com.liferay.layout.content.page.editor.web.internal.util;
 
-import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.constants.FragmentEntryLinkConstants;
 import com.liferay.fragment.contributor.FragmentCollectionContributorTracker;
 import com.liferay.fragment.entry.processor.util.EditableFragmentEntryProcessorUtil;
@@ -152,13 +151,11 @@ public class FragmentEntryLinkUtil {
 				themeDisplay.getLocale());
 
 			String fragmentEntryKey = null;
-			int fragmentEntryType = FragmentConstants.TYPE_COMPONENT;
 			String icon = null;
 			String name = null;
 
 			if (fragmentEntry != null) {
 				fragmentEntryKey = fragmentEntry.getFragmentEntryKey();
-				fragmentEntryType = fragmentEntry.getType();
 				icon = fragmentEntry.getIcon();
 				name = fragmentEntry.getName();
 			}
@@ -174,11 +171,9 @@ public class FragmentEntryLinkUtil {
 				FragmentRenderer fragmentRenderer =
 					fragmentRendererTracker.getFragmentRenderer(rendererKey);
 
-				if (fragmentRenderer != null) {
-					fragmentEntryKey = fragmentRenderer.getKey();
+				fragmentEntryKey = fragmentRenderer.getKey();
 
-					name = fragmentRenderer.getLabel(themeDisplay.getLocale());
-				}
+				name = fragmentRenderer.getLabel(themeDisplay.getLocale());
 
 				if (Validator.isNotNull(portletId)) {
 					name = PortalUtil.getPortletTitle(
@@ -225,9 +220,6 @@ public class FragmentEntryLinkUtil {
 			).put(
 				"fragmentEntryLinkId",
 				String.valueOf(fragmentEntryLink.getFragmentEntryLinkId())
-			).put(
-				"fragmentEntryType",
-				FragmentConstants.getTypeLabel(fragmentEntryType)
 			).put(
 				"icon", icon
 			).put(

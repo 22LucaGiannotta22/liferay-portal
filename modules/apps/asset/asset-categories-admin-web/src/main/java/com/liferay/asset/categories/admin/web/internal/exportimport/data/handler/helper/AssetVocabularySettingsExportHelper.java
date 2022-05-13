@@ -48,7 +48,7 @@ public class AssetVocabularySettingsExportHelper
 		JSONObject settingsMetadataJSONObject =
 			_createSettingsMetadataJSONObject();
 
-		return settingsMetadataJSONObject.toString();
+		return settingsMetadataJSONObject.toJSONString();
 	}
 
 	protected String getSettings() {

@@ -274,10 +274,10 @@ public class UpdateLanguageActionTest {
 
 		mockHttpServletRequest.setParameter("redirect", url);
 
-		Assert.assertEquals(
-			expectedRedirect,
-			updateLanguageAction.getRedirect(
-				mockHttpServletRequest, themeDisplay, _targetLocale));
+		String redirect = updateLanguageAction.getRedirect(
+			mockHttpServletRequest, themeDisplay, _targetLocale);
+
+		Assert.assertEquals(expectedRedirect, redirect);
 	}
 
 	private String _getFriendlyURLSeparatorPart(Locale locale)

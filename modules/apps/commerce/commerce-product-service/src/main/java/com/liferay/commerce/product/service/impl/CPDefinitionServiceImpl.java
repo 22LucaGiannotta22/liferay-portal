@@ -70,8 +70,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
 			int deliverySubscriptionLength, String deliverySubscriptionType,
 			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles, int status,
-			ServiceContext serviceContext)
+			long deliveryMaxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
 		_checkCommerceCatalog(groupId, ActionKeys.UPDATE);
@@ -91,7 +90,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			maxSubscriptionCycles, deliverySubscriptionEnabled,
 			deliverySubscriptionLength, deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
-			deliveryMaxSubscriptionCycles, status, serviceContext);
+			deliveryMaxSubscriptionCycles, serviceContext);
 	}
 
 	@Override
@@ -116,8 +115,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			boolean neverExpire, String defaultSku, boolean subscriptionEnabled,
 			int subscriptionLength, String subscriptionType,
 			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, int status,
-			ServiceContext serviceContext)
+			long maxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
 		_checkCommerceCatalog(groupId, ActionKeys.UPDATE);
@@ -134,7 +132,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			expirationDateYear, expirationDateHour, expirationDateMinute,
 			neverExpire, defaultSku, subscriptionEnabled, subscriptionLength,
 			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
-			maxSubscriptionCycles, status, serviceContext);
+			maxSubscriptionCycles, serviceContext);
 	}
 
 	@Override
@@ -162,8 +160,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
 			int deliverySubscriptionLength, String deliverySubscriptionType,
 			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles, int status,
-			ServiceContext serviceContext)
+			long deliveryMaxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
 		_checkCommerceCatalog(groupId, ActionKeys.UPDATE);
@@ -183,7 +180,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			maxSubscriptionCycles, deliverySubscriptionEnabled,
 			deliverySubscriptionLength, deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
-			deliveryMaxSubscriptionCycles, status, serviceContext);
+			deliveryMaxSubscriptionCycles, serviceContext);
 	}
 
 	@Override
@@ -208,8 +205,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			boolean neverExpire, String defaultSku, boolean subscriptionEnabled,
 			int subscriptionLength, String subscriptionType,
 			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, int status,
-			ServiceContext serviceContext)
+			long maxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
 		_checkCommerceCatalog(groupId, ActionKeys.UPDATE);
@@ -226,7 +222,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			expirationDateYear, expirationDateHour, expirationDateMinute,
 			neverExpire, defaultSku, subscriptionEnabled, subscriptionLength,
 			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
-			maxSubscriptionCycles, status, serviceContext);
+			maxSubscriptionCycles, serviceContext);
 	}
 
 	@Override

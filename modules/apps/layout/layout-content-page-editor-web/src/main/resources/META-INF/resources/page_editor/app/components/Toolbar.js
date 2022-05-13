@@ -145,7 +145,9 @@ function ToolbarBody({className}) {
 		}
 	};
 
-	const onPublish = () => {
+	const handleSubmit = (event) => {
+		event.preventDefault();
+
 		if (
 			!config.masterUsed ||
 			confirm(
@@ -321,8 +323,8 @@ function ToolbarBody({className}) {
 					<PublishButton
 						canPublish={canPublish}
 						formRef={formRef}
+						handleSubmit={handleSubmit}
 						label={publishButtonLabel}
-						onPublish={onPublish}
 					/>
 				</li>
 			</ul>

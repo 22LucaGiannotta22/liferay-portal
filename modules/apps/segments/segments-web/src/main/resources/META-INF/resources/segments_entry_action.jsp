@@ -78,7 +78,7 @@ SegmentsEntry segmentsEntry = (SegmentsEntry)row.getObject();
 
 		String linkCssClass = "assign-site-roles-link dropdown-item";
 
-		if (!segmentsDisplayContext.isRoleSegmentationEnabled(group.getCompanyId())) {
+		if (!segmentsDisplayContext.isRoleSegmentationEnabled()) {
 			linkCssClass += " action disabled";
 		}
 		%>

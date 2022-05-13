@@ -236,7 +236,7 @@ public class AccountEntryLocalServiceImpl
 
 		User user = _userLocalService.getUser(userId);
 
-		AccountEntry accountEntry = fetchAccountEntryByExternalReferenceCode(
+		AccountEntry accountEntry = fetchAccountEntryByReferenceCode(
 			user.getCompanyId(), externalReferenceCode);
 
 		if (accountEntry != null) {

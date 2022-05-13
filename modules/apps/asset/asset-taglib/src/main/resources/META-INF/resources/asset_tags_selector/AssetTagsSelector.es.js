@@ -182,6 +182,7 @@ function AssetTagsSelector({
 					<ClayInput.GroupItem>
 						<ClayMultiSelect
 							inputName={inputName}
+							inputValue={inputValue}
 							items={selectedItems}
 							onBlur={handleInputBlur}
 							onChange={onInputValueChange}
@@ -199,7 +200,6 @@ function AssetTagsSelector({
 									  )
 									: []
 							}
-							value={inputValue}
 						/>
 					</ClayInput.GroupItem>
 

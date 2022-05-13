@@ -43,8 +43,9 @@ const KeySelect = ({
 				/>
 
 				<h6 className="font-weight-normal ml-3 mt-1">
-					Cluster nodes may not exceed the maximum number of
-					Activation Keys available ({avaliableKeysMaximumCount})
+					{!selectedClusterNodes
+						? `Cluster nodes may not exceed the maximum number of Activation Keys available (${avaliableKeysMaximumCount})`
+						: `This is the description area`}
 				</h6>
 			</ClayInput.GroupItem>
 		</ClayInput.Group>

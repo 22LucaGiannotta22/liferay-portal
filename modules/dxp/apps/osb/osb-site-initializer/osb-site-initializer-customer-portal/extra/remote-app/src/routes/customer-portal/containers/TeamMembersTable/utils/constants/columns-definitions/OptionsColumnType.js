@@ -11,7 +11,6 @@
 
 import {TEAM_MEMBERS_ACTION_TYPES} from '..';
 import {ButtonWithIcon} from '@clayui/core';
-import i18n from '../../../../../../../common/I18n';
 import {Button, ButtonDropDown} from '../../../../../../../common/components';
 import {getIsEditingUser} from '../../getIsEditingUser';
 
@@ -23,11 +22,12 @@ const MenuUserActions = ({cancelChanges, confirmChanges, userAccount}) => (
 			onClick={cancelChanges}
 			small
 		>
-			{i18n.translate('cancel')}
+			Cancel
 		</Button>
 
 		<Button onClick={() => confirmChanges(userAccount)} small>
-			{i18n.translate('save')}
+			{' '}
+			Save
 		</Button>
 	</div>
 );
@@ -41,7 +41,7 @@ const OptionsColumnType = ({
 }) => {
 	const userOptions = [
 		{
-			label: i18n.translate('edit'),
+			label: 'Edit',
 			onClick: () =>
 				setUserAction({
 					type: TEAM_MEMBERS_ACTION_TYPES.edit,
@@ -50,7 +50,7 @@ const OptionsColumnType = ({
 		},
 		{
 			customOptionStyle: 'cp-remove-member-option',
-			label: i18n.translate('remove'),
+			label: 'Remove',
 			onClick: () =>
 				setUserAction({
 					type: TEAM_MEMBERS_ACTION_TYPES.remove,

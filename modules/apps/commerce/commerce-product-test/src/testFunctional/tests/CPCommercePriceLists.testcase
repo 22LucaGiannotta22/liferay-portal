@@ -783,8 +783,6 @@ definition {
 
 		Navigator.gotoNavTab(navTab = "Products");
 
-		WaitForPageLoad();
-
 		Click(
 			key_value = "U-Joint",
 			locator1 = "CommerceEntry#BODY_VERTICAL_ELLIPSIS");

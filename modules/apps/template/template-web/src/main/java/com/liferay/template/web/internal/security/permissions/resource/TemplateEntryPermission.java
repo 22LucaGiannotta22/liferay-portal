@@ -35,11 +35,11 @@ public class TemplateEntryPermission {
 			String actionId)
 		throws PortalException {
 
+		DDMTemplate ddmTemplate = _ddmTemplateLocalService.fetchDDMTemplate(
+			templateEntry.getDDMTemplateId());
+
 		return _ddmTemplateModelResourcePermission.contains(
-			permissionChecker,
-			_ddmTemplateLocalService.fetchDDMTemplate(
-				templateEntry.getDDMTemplateId()),
-			actionId);
+			permissionChecker, ddmTemplate, actionId);
 	}
 
 	@Reference(unbind = "-")

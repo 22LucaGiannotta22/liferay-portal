@@ -21,12 +21,11 @@ import com.liferay.dispatch.executor.BaseDispatchTaskExecutor;
 import com.liferay.dispatch.executor.DispatchTaskExecutor;
 import com.liferay.dispatch.executor.DispatchTaskExecutorOutput;
 import com.liferay.dispatch.model.DispatchTrigger;
+import com.liferay.dispatch.service.DispatchTriggerLocalService;
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.transaction.Propagation;
-import com.liferay.portal.kernel.transaction.TransactionConfig;
-import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 
@@ -49,45 +48,35 @@ public class BatchPlannerDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	public void doExecute(
 			DispatchTrigger dispatchTrigger,
 			DispatchTaskExecutorOutput dispatchTaskExecutorOutput)
-		throws Exception {
+		throws PortalException {
 
 		ExpandoBridge expandoBridge = dispatchTrigger.getExpandoBridge();
+
+		long batchPlannerPlanId = GetterUtil.getLong(
+			expandoBridge.getAttribute("batchPlannerPlanId", false));
 
 		UnicodeProperties dispatchTaskSettingsUnicodeProperties =
 			dispatchTrigger.getDispatchTaskSettingsUnicodeProperties();
 
-		long batchPlannerPlanId = GetterUtil.getLong(
-			expandoBridge.getAttribute("batchPlannerPlanId", false),
-			GetterUtil.getLong(
+		if (batchPlannerPlanId <= 0) {
+			batchPlannerPlanId = GetterUtil.getLong(
 				dispatchTaskSettingsUnicodeProperties.getProperty(
-					"batchPlannerPlanId")));
+					"batchPlannerPlanId"));
+		}
 
 		String externalFileURL =
 			dispatchTaskSettingsUnicodeProperties.getProperty(
 				"external-file-url");
 
-		try {
-			TransactionInvokerUtil.invoke(
-				_transactionConfig,
-				() -> {
-					BatchPlannerPlan batchPlannerPlan =
-						_batchPlannerPlanHelper.copyBatchPlannerPlan(
-							dispatchTrigger.getUserId(), batchPlannerPlanId,
-							externalFileURL,
-							StringBundler.concat(
-								"Triggered by ", dispatchTrigger.getName(),
-								StringPool.COMMA_AND_SPACE,
-								System.currentTimeMillis()));
+		BatchPlannerPlan batchPlannerPlan =
+			_batchPlannerPlanHelper.copyBatchPlannerPlan(
+				dispatchTrigger.getUserId(), batchPlannerPlanId,
+				externalFileURL,
+				StringBundler.concat(
+					"Triggered by ", dispatchTrigger.getName(),
+					StringPool.COMMA_AND_SPACE, System.currentTimeMillis()));
 
-					_batchEngineBroker.submit(
-						batchPlannerPlan.getBatchPlannerPlanId());
-
-					return null;
-				});
-		}
-		catch (Throwable throwable) {
-			throw new Exception(throwable);
-		}
+		_batchEngineBroker.submit(batchPlannerPlan.getBatchPlannerPlanId());
 	}
 
 	@Override
@@ -95,14 +84,13 @@ public class BatchPlannerDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 		return null;
 	}
 
-	private static final TransactionConfig _transactionConfig =
-		TransactionConfig.Factory.create(
-			Propagation.REQUIRES_NEW, new Class<?>[] {Exception.class});
-
 	@Reference
 	private BatchEngineBroker _batchEngineBroker;
 
 	@Reference
 	private BatchPlannerPlanHelper _batchPlannerPlanHelper;
+
+	@Reference
+	private DispatchTriggerLocalService _dispatchTriggerLocalService;
 
 }

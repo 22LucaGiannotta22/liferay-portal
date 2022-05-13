@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.servlet.MultiSessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.sites.kernel.util.Sites;
+import com.liferay.sites.kernel.util.SitesUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -53,12 +53,12 @@ public class ResetPrototypeMVCActionCommand extends BaseMVCActionCommand {
 
 		Layout layout = themeDisplay.getLayout();
 
-		_sites.resetPrototype(layout);
+		SitesUtil.resetPrototype(layout);
 
 		Layout draftLayout = layout.fetchDraftLayout();
 
 		if (draftLayout != null) {
-			_sites.resetPrototype(draftLayout);
+			SitesUtil.resetPrototype(draftLayout);
 		}
 
 		MultiSessionMessages.add(
@@ -68,8 +68,5 @@ public class ResetPrototypeMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
-
-	@Reference
-	private Sites _sites;
 
 }

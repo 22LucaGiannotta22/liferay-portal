@@ -61,13 +61,13 @@ import com.liferay.headless.commerce.delivery.cart.internal.dto.v1_0.CartDTOConv
 import com.liferay.headless.commerce.delivery.cart.internal.dto.v1_0.CartItemDTOConverter;
 import com.liferay.headless.commerce.delivery.cart.internal.dto.v1_0.CartItemDTOConverterContext;
 import com.liferay.headless.commerce.delivery.cart.resource.v1_0.CartResource;
+import com.liferay.petra.encryptor.Encryptor;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.events.ServicePreAction;
 import com.liferay.portal.events.ThemeServicePreAction;
-import com.liferay.portal.kernel.encryptor.Encryptor;
 import com.liferay.portal.kernel.model.Country;
 import com.liferay.portal.kernel.model.Region;
 import com.liferay.portal.kernel.portlet.PortletProvider;
@@ -152,7 +152,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 			Key key = contextCompany.getKeyObj();
 
 			sb.append(
-				_encryptor.encrypt(
+				Encryptor.encrypt(
 					key, String.valueOf(commerceOrder.getCommerceOrderId())));
 
 			sb.append(StringPool.AMPERSAND);
@@ -357,7 +357,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 				commerceAddress.getCommerceAddressId());
 		}
 
-		_commerceOrderEngine.updateCommerceOrder(
+		_commerceOrderService.updateCommerceOrder(
 			commerceOrder.getExternalReferenceCode(),
 			commerceOrder.getCommerceOrderId(),
 			commerceOrder.getBillingAddressId(),
@@ -367,13 +367,8 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 			commerceOrder.getCommercePaymentMethodKey(),
 			commerceOrder.getPurchaseOrderNumber(),
 			commerceOrder.getShippingAmount(),
-			commerceOrder.getShippingOptionName(),
-			commerceOrder.getShippingWithTaxAmount(),
-			commerceOrder.getSubtotal(),
-			commerceOrder.getSubtotalWithTaxAmount(),
-			commerceOrder.getTaxAmount(), commerceOrder.getTotal(),
-			commerceOrder.getTotalDiscountAmount(),
-			commerceOrder.getTotalWithTaxAmount(), commerceContext, true);
+			commerceOrder.getShippingOptionName(), commerceOrder.getSubtotal(),
+			commerceOrder.getTotal(), commerceContext);
 	}
 
 	private void _addOrUpdateCommerceOrderItem(
@@ -442,10 +437,10 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 		}
 
 		if (useAsBilling) {
-			_commerceOrderEngine.updateCommerceOrder(
+			_commerceOrderService.updateCommerceOrder(
 				commerceOrder.getExternalReferenceCode(),
 				commerceOrder.getCommerceOrderId(),
-				commerceOrder.getBillingAddressId(),
+				commerceOrder.getShippingAddressId(),
 				commerceOrder.getCommerceShippingMethodId(),
 				commerceOrder.getShippingAddressId(),
 				commerceOrder.getAdvanceStatus(),
@@ -453,12 +448,8 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 				commerceOrder.getPurchaseOrderNumber(),
 				commerceOrder.getShippingAmount(),
 				commerceOrder.getShippingOptionName(),
-				commerceOrder.getShippingWithTaxAmount(),
-				commerceOrder.getSubtotal(),
-				commerceOrder.getSubtotalWithTaxAmount(),
-				commerceOrder.getTaxAmount(), commerceOrder.getTotal(),
-				commerceOrder.getTotalDiscountAmount(),
-				commerceOrder.getTotalWithTaxAmount(), commerceContext, true);
+				commerceOrder.getSubtotal(), commerceOrder.getTotal(),
+				commerceContext);
 		}
 		else {
 
@@ -492,7 +483,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 				commerceAddress.getCommerceAddressId());
 		}
 
-		return _commerceOrderEngine.updateCommerceOrder(
+		return _commerceOrderService.updateCommerceOrder(
 			commerceOrder.getExternalReferenceCode(),
 			commerceOrder.getCommerceOrderId(),
 			commerceOrder.getBillingAddressId(),
@@ -502,13 +493,8 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 			commerceOrder.getCommercePaymentMethodKey(),
 			commerceOrder.getPurchaseOrderNumber(),
 			commerceOrder.getShippingAmount(),
-			commerceOrder.getShippingOptionName(),
-			commerceOrder.getShippingWithTaxAmount(),
-			commerceOrder.getSubtotal(),
-			commerceOrder.getSubtotalWithTaxAmount(),
-			commerceOrder.getTaxAmount(), commerceOrder.getTotal(),
-			commerceOrder.getTotalDiscountAmount(),
-			commerceOrder.getTotalWithTaxAmount(), commerceContext, true);
+			commerceOrder.getShippingOptionName(), commerceOrder.getSubtotal(),
+			commerceOrder.getTotal(), commerceContext);
 	}
 
 	private long _getCommerceOrderTypeId(Cart cart) throws Exception {
@@ -735,7 +721,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 			contextUser.getUserId(), commerceOrder.getCommerceOrderId(),
 			commerceOrder.getCommerceAccountId());
 
-		_commerceOrderEngine.updateCommerceOrder(
+		commerceOrder = _commerceOrderService.updateCommerceOrder(
 			commerceOrder.getExternalReferenceCode(),
 			commerceOrder.getCommerceOrderId(),
 			GetterUtil.get(
@@ -754,12 +740,8 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 			GetterUtil.get(
 				cart.getShippingOption(),
 				commerceOrder.getShippingOptionName()),
-			commerceOrder.getShippingWithTaxAmount(),
-			commerceOrder.getSubtotal(),
-			commerceOrder.getSubtotalWithTaxAmount(),
-			commerceOrder.getTaxAmount(), commerceOrder.getTotal(),
-			commerceOrder.getTotalDiscountAmount(),
-			commerceOrder.getTotalWithTaxAmount(), commerceContext, true);
+			commerceOrder.getSubtotal(), commerceOrder.getTotal(),
+			commerceContext);
 
 		// Expando
 
@@ -858,9 +840,6 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 
 	@Reference
 	private CPInstanceLocalService _cpInstanceLocalService;
-
-	@Reference
-	private Encryptor _encryptor;
 
 	@Reference
 	private Portal _portal;

@@ -236,7 +236,8 @@ public class FacebookConnectStrutsAction implements StrutsAction {
 		boolean autoScreenName = true;
 		String screenName = StringPool.BLANK;
 		String emailAddress = jsonObject.getString("email");
-
+		long facebookId = jsonObject.getLong("id");
+		String openId = StringPool.BLANK;
 		Locale locale = LocaleUtil.getDefault();
 		String firstName = jsonObject.getString("first_name");
 		String middleName = StringPool.BLANK;
@@ -256,10 +257,10 @@ public class FacebookConnectStrutsAction implements StrutsAction {
 
 		User user = _userLocalService.addUser(
 			creatorUserId, companyId, autoPassword, password1, password2,
-			autoScreenName, screenName, emailAddress, locale, firstName,
-			middleName, lastName, prefixId, suffixId, male, birthdayMonth,
-			birthdayDay, birthdayYear, jobTitle, groupIds, organizationIds,
-			roleIds, userGroupIds, sendEmail, serviceContext);
+			autoScreenName, screenName, emailAddress, facebookId, openId,
+			locale, firstName, middleName, lastName, prefixId, suffixId, male,
+			birthdayMonth, birthdayDay, birthdayYear, jobTitle, groupIds,
+			organizationIds, roleIds, userGroupIds, sendEmail, serviceContext);
 
 		user = _userLocalService.updateLastLogin(
 			user.getUserId(), user.getLoginIP());
@@ -476,9 +477,9 @@ public class FacebookConnectStrutsAction implements StrutsAction {
 			user.getUserId(), StringPool.BLANK, StringPool.BLANK,
 			StringPool.BLANK, false, user.getReminderQueryQuestion(),
 			user.getReminderQueryAnswer(), user.getScreenName(), emailAddress,
-			true, null, user.getLanguageId(), user.getTimeZoneId(),
-			user.getGreeting(), user.getComments(), firstName,
-			user.getMiddleName(), lastName, contact.getPrefixId(),
+			facebookId, user.getOpenId(), true, null, user.getLanguageId(),
+			user.getTimeZoneId(), user.getGreeting(), user.getComments(),
+			firstName, user.getMiddleName(), lastName, contact.getPrefixId(),
 			contact.getSuffixId(), male, birthdayMonth, birthdayDay,
 			birthdayYear, contact.getSmsSn(), contact.getFacebookSn(),
 			contact.getJabberSn(), contact.getSkypeSn(), contact.getTwitterSn(),

@@ -110,8 +110,8 @@ export default function SiteLanguageConfiguration({
 		<>
 			<ClayRadioGroup
 				name={`${portletNamespace}TypeSettingsProperties--inheritLocales--`}
-				onChange={setInheritLocales}
-				value={inheritLocales}
+				onSelectedValueChange={setInheritLocales}
+				selectedValue={inheritLocales}
 			>
 				<ClayRadio
 					label={Liferay.Language.get(

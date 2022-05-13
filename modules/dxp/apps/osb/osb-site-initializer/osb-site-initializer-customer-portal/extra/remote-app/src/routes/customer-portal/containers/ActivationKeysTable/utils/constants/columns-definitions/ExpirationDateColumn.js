@@ -9,7 +9,6 @@
  * distribution rights of the Software.
  */
 
-import i18n from '../../../../../../../common/I18n';
 import getCurrentEndDate from '../../../../../../../common/utils/getCurrentEndDate';
 
 const DNE_YEARS = 100;
@@ -25,9 +24,9 @@ const ExpirationDateColumn = ({activationKey}) => {
 		return (
 			<p
 				className="cp-activation-key-cell-small font-weight-bold m-0 text-neutral-10"
-				title={[i18n.translate('this-key-does-not-expire')]}
+				title={['This key does not expire']}
 			>
-				{i18n.translate('dne')}
+				DNE
 			</p>
 		);
 	}

@@ -16,19 +16,9 @@ import {TYPES} from './context';
 export declare type TName = {
 	[key: string]: string;
 };
-export declare type TWorkflowStatus = {
-	label: string;
-	value: string;
-};
-export declare type TLabelValueObject = {
-	label: string;
-	value: string;
-};
 export declare type TObjectField = {
-	businessType: string;
 	checked: boolean;
-	filtered?: boolean;
-	hasFilter?: boolean;
+	filtered?: boolean | undefined;
 	id: number;
 	indexed: boolean;
 	indexedAsKeyword: boolean;
@@ -44,13 +34,12 @@ export declare type TObjectColumn = {
 	filterBy?: string;
 	isDefaultSort?: boolean;
 	label: TName;
-	objectFieldBusinessType?: string;
 	objectFieldName: string;
 	priority?: number;
 	sortOrder?: string;
 	type?: string;
 	value?: string;
-	valueList?: TLabelValueObject[];
+	valueList?: string[];
 };
 export declare type TObjectViewColumn = {
 	fieldLabel: string;
@@ -67,17 +56,13 @@ export declare type TObjectViewSortColumn = {
 	sortOrder?: string;
 };
 export declare type TObjectViewFilterColumn = {
-	definition: {
-		[key: string]: string[];
-	};
 	fieldLabel: string;
 	filterBy: string;
-	filterType: string;
 	label: TName;
-	objectFieldBusinessType?: string;
 	objectFieldName: string;
+	type: string;
 	value?: string;
-	valueList?: TLabelValueObject[];
+	valueList?: string[];
 };
 export declare type TObjectView = {
 	defaultObjectView: boolean;
@@ -91,7 +76,6 @@ export declare type TState = {
 	objectFields: TObjectField[];
 	objectView: TObjectView;
 	objectViewId: string;
-	workflowStatusJSONArray: TWorkflowStatus[];
 };
 export declare type TAction = {
 	payload: {

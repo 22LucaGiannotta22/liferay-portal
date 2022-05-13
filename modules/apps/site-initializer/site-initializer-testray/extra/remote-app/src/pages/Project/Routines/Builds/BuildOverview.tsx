@@ -34,7 +34,7 @@ const BuildOverview: React.FC<BuildOverviewProps> = ({testrayBuild}) => {
 
 	return (
 		<>
-			<Container collapsable title={i18n.translate('details')}>
+			<Container title={i18n.translate('details')}>
 				<QATable
 					items={[
 						{
@@ -90,11 +90,7 @@ const BuildOverview: React.FC<BuildOverviewProps> = ({testrayBuild}) => {
 				</div>
 			</Container>
 
-			<Container
-				className="mt-4"
-				collapsable
-				title={i18n.translate('total-test-cases')}
-			>
+			<Container className="mt-4" title="Total Test Cases">
 				<div className="row">
 					<div className="col-2">
 						<ClayChart

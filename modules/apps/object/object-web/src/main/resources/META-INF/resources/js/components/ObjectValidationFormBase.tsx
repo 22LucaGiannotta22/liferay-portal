@@ -12,33 +12,33 @@
  * details.
  */
 
-import {ClayInput, ClayToggle} from '@clayui/form';
-import React from 'react';
+import {ClayToggle} from '@clayui/form';
+import React, {ChangeEventHandler, ReactNode} from 'react';
 
 import useForm, {FormError, invalidateRequired} from '../hooks/useForm';
-import {defaultLanguageId} from '../utils/locale';
+import CustomSelect from './Form/CustomSelect/CustomSelect';
 
 const REQUIRED_MSG = Liferay.Language.get('required');
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId() as Liferay.Language.Locale;
+
 export default function ObjectValidationFormBase({
+	children,
 	disabled,
-	objectValidationTypeLabel,
+	objectValidationTypes,
 	setValues,
 	values,
 }: IProps) {
 	return (
 		<>
-			<label className="text-muted" htmlFor="validationTypeInput">
-				{Liferay.Language.get('type')}
-			</label>
-
-			<ClayInput
-				className="mb-3"
-				disabled
-				id="validationTypeInput"
-				value={objectValidationTypeLabel}
+			<CustomSelect<ObjectValidationType>
+				disabled={true}
+				label={Liferay.Language.get('type')}
+				options={objectValidationTypes}
+				value="Groovy"
 			/>
 
+			{children}
 			<ClayToggle
 				disabled={disabled}
 				label={Liferay.Language.get('active-validation')}
@@ -81,14 +81,18 @@ export function useObjectValidationForm({
 
 	return {errors, handleChange, handleSubmit, setValues, values};
 }
+
 interface IUseObjectValidationForm {
 	initialValues: Partial<ObjectValidation>;
 	onSubmit: (validation: ObjectValidation) => void;
 }
+
 interface IProps {
+	children?: ReactNode;
 	disabled: boolean;
 	errors: ObjectValidationErrors;
-	objectValidationTypeLabel: string;
+	handleChange: ChangeEventHandler<HTMLInputElement>;
+	objectValidationTypes: ObjectValidationType[];
 	setValues: (values: Partial<ObjectValidation>) => void;
 	values: Partial<ObjectValidation>;
 }

@@ -85,14 +85,14 @@ public class PortalImplLayoutSetFriendlyURLTest
 
 		themeDisplay.setDoAsUserId("impersonated");
 
+		String layoutSetFriendlyURL = portal.getLayoutSetFriendlyURL(
+			_layoutSetLocalService.getLayoutSet(group.getGroupId(), false),
+			themeDisplay);
+
 		Assert.assertEquals(
 			"impersonated",
 			HttpComponentsUtil.getParameter(
-				portal.getLayoutSetFriendlyURL(
-					_layoutSetLocalService.getLayoutSet(
-						group.getGroupId(), false),
-					themeDisplay),
-				"doAsUserId"));
+				layoutSetFriendlyURL, "doAsUserId"));
 	}
 
 	@Inject

@@ -53,9 +53,6 @@ jest.mock(
 				dangerColor: {
 					cssVariable: 'danger',
 				},
-				infoColor: {
-					cssVariable: 'info',
-				},
 				primaryColor: {
 					cssVariable: 'primary',
 				},
@@ -64,40 +61,15 @@ jest.mock(
 	})
 );
 
-const FRAGMENT_ID = 'FRAGMENT_ID';
-const ITEM_ID = 'ITEM_ID';
-const MASTER_ITEM_ID = 'ITEM_ID';
-
 const renderCommonStylesManager = ({
 	selectedViewportSize = VIEWPORT_SIZES.desktop,
-	editableValues = {},
 } = {}) => {
 	return render(
 		<StoreAPIContextProvider
 			getState={() => ({
-				fragmentEntryLinks: {
-					fragmentEntryLinkId: {
-						editableValues,
-						fragmentEntryLinkId: 'fragmentEntryLink',
-					},
-				},
 				layoutData: {
 					items: {
-						[FRAGMENT_ID]: {
-							children: [],
-							config: {
-								fragmentEntryLinkId: 'fragmentEntryLinkId',
-
-								styles: {
-									backgroundColor: 'infoColor',
-									marginBottom: '2',
-									marginTop: '3',
-								},
-							},
-							itemId: FRAGMENT_ID,
-							type: LAYOUT_DATA_ITEM_TYPES.fragment,
-						},
-						[ITEM_ID]: {
+						itemId: {
 							config: {
 								[VIEWPORT_SIZES.tablet]: {
 									styles: {
@@ -112,7 +84,7 @@ const renderCommonStylesManager = ({
 									marginTop: '2',
 								},
 							},
-							itemId: ITEM_ID,
+							itemId: 'itemId',
 							type: LAYOUT_DATA_ITEM_TYPES.row,
 						},
 					},
@@ -120,7 +92,7 @@ const renderCommonStylesManager = ({
 				masterLayout: {
 					masterLayoutData: {
 						items: {
-							[MASTER_ITEM_ID]: {
+							masterItemId: {
 								config: {
 									[VIEWPORT_SIZES.tablet]: {
 										styles: {
@@ -135,7 +107,7 @@ const renderCommonStylesManager = ({
 										marginTop: '2',
 									},
 								},
-								itemId: MASTER_ITEM_ID,
+								itemId: 'masterItemId',
 								type: LAYOUT_DATA_ITEM_TYPES.container,
 							},
 						},
@@ -177,20 +149,11 @@ describe('CommonStylesManager', () => {
 		renderCommonStylesManager();
 
 		const expected = `
-			.${getLayoutDataItemUniqueClassName(FRAGMENT_ID)} {
-				background-color: var(--info) !important;
-			}
-			
-			.${getLayoutDataItemTopperUniqueClassName(FRAGMENT_ID)} {
-				margin-bottom: var(--spacer-2, 0.5rem) !important;
-				margin-top: var(--spacer-3, 1rem) !important;
-			}
-
-			.${getLayoutDataItemUniqueClassName(ITEM_ID)} {
+			.${getLayoutDataItemUniqueClassName('itemId')} {
 				background-color: var(--danger) !important;
 			}
 			
-			.${getLayoutDataItemTopperUniqueClassName(ITEM_ID)} {
+			.${getLayoutDataItemTopperUniqueClassName('itemId')} {
 				margin-bottom: var(--spacer-3, 1rem) !important;
 				margin-top: var(--spacer-2, 0.5rem) !important;
 			}`;
@@ -204,7 +167,7 @@ describe('CommonStylesManager', () => {
 		renderCommonStylesManager();
 
 		const expected = `
-			.${getLayoutDataItemUniqueClassName(MASTER_ITEM_ID)} {
+			.${getLayoutDataItemUniqueClassName('masterItemId')} {
 				background-color: var(--danger) !important;
 				margin-bottom: var(--spacer-3, 1rem) !important;
 				margin-top: var(--spacer-2, 0.5rem) !important;
@@ -221,51 +184,11 @@ describe('CommonStylesManager', () => {
 		});
 
 		const expected = `
-			.${getLayoutDataItemUniqueClassName(FRAGMENT_ID)} {
-				background-color: var(--info) !important;
-			}
-			
-			.${getLayoutDataItemTopperUniqueClassName(FRAGMENT_ID)} {
-				margin-bottom: var(--spacer-2, 0.5rem) !important;
-				margin-top: var(--spacer-3, 1rem) !important;
-			}
-
-			.${getLayoutDataItemUniqueClassName(ITEM_ID)} {
+			.${getLayoutDataItemUniqueClassName('itemId')} {
 				background-color: var(--primary) !important;
 			}
 			
-			.${getLayoutDataItemTopperUniqueClassName(ITEM_ID)} {
-				margin-bottom: var(--spacer-2, 0.5rem) !important;
-				margin-top: var(--spacer-2, 0.5rem) !important;
-			}`;
-
-		const style = document.getElementById('layout-common-styles');
-
-		expect(normalize(style.innerHTML)).toBe(normalize(expected));
-	});
-
-	it('does not add styles to the topper if the fragment has inner common styles', () => {
-		renderCommonStylesManager({
-			editableValues: {
-				['com.liferay.fragment.entry.processor.styles.StylesFragmentEntryProcessor']: {
-					hasCommonStyles: true,
-				},
-			},
-			selectedViewportSize: VIEWPORT_SIZES.tablet,
-		});
-
-		const expected = `
-			.${getLayoutDataItemUniqueClassName(FRAGMENT_ID)} {
-				background-color: var(--info) !important;
-				margin-bottom: var(--spacer-2, 0.5rem) !important;
-				margin-top: var(--spacer-3, 1rem) !important;
-			}
-			
-			.${getLayoutDataItemUniqueClassName(ITEM_ID)} {
-				background-color: var(--primary) !important;
-			}
-			
-			.${getLayoutDataItemTopperUniqueClassName(ITEM_ID)} {
+			.${getLayoutDataItemTopperUniqueClassName('itemId')} {
 				margin-bottom: var(--spacer-2, 0.5rem) !important;
 				margin-top: var(--spacer-2, 0.5rem) !important;
 			}`;

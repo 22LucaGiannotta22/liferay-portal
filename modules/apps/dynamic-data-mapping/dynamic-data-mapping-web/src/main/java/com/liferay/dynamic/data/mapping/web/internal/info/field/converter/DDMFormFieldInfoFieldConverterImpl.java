@@ -67,8 +67,6 @@ public class DDMFormFieldInfoFieldConverterImpl
 			).build()
 		).localizable(
 			ddmFormField.isLocalizable()
-		).required(
-			ddmFormField.isRequired()
 		).build();
 	}
 

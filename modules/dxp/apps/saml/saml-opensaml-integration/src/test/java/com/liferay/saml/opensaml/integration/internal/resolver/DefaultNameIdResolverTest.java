@@ -49,26 +49,26 @@ public class DefaultNameIdResolverTest extends BaseSamlTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 
-		_beanProperties = Mockito.mock(BeanProperties.class);
+		_beanProperties = mock(BeanProperties.class);
 
 		ReflectionTestUtil.setFieldValue(
 			_defaultNameIdResolver, "_beanProperties", _beanProperties);
 
-		_metadataManager = Mockito.mock(MetadataManager.class);
+		_metadataManager = mock(MetadataManager.class);
 
 		_defaultNameIdResolver.setMetadataManager(_metadataManager);
 
-		Mockito.when(
+		when(
 			_metadataManager.getNameIdFormat(Mockito.eq(SP_ENTITY_ID))
 		).thenReturn(
-			NameID.EMAIL
+			NameID.EMAIL.toString()
 		);
 
-		_user = Mockito.mock(User.class);
+		_user = mock(User.class);
 
-		_expandoBridge = Mockito.mock(ExpandoBridge.class);
+		_expandoBridge = mock(ExpandoBridge.class);
 
-		Mockito.when(
+		when(
 			_user.getExpandoBridge()
 		).thenReturn(
 			_expandoBridge
@@ -77,14 +77,14 @@ public class DefaultNameIdResolverTest extends BaseSamlTestCase {
 
 	@Test
 	public void testResolveEmailAddressNameId() throws Exception {
-		Mockito.when(
+		when(
 			_beanProperties.getObject(
 				Mockito.any(User.class), Mockito.eq("emailAddress"))
 		).thenReturn(
 			"test@liferay.com"
 		);
 
-		Mockito.when(
+		when(
 			_metadataManager.getNameIdAttribute(Mockito.eq(SP_ENTITY_ID))
 		).thenReturn(
 			"emailAddress"
@@ -99,13 +99,13 @@ public class DefaultNameIdResolverTest extends BaseSamlTestCase {
 
 	@Test
 	public void testResolveExpandoNameId() throws Exception {
-		Mockito.when(
+		when(
 			_expandoBridge.getAttribute(Mockito.eq("customerId"))
 		).thenReturn(
 			"12345"
 		);
 
-		Mockito.when(
+		when(
 			_metadataManager.getNameIdAttribute(Mockito.eq(SP_ENTITY_ID))
 		).thenReturn(
 			"expando:customerId"
@@ -120,14 +120,14 @@ public class DefaultNameIdResolverTest extends BaseSamlTestCase {
 
 	@Test
 	public void testResolveNameIdWithPolicy() throws Exception {
-		Mockito.when(
+		when(
 			_beanProperties.getObject(
 				Mockito.any(User.class), Mockito.eq("screenName"))
 		).thenReturn(
 			"test"
 		);
 
-		Mockito.when(
+		when(
 			_metadataManager.getNameIdAttribute(Mockito.eq(SP_ENTITY_ID))
 		).thenReturn(
 			"screenName"
@@ -135,11 +135,11 @@ public class DefaultNameIdResolverTest extends BaseSamlTestCase {
 
 		NameIDPolicy nameIDPolicy = OpenSamlUtil.buildNameIdPolicy();
 
-		nameIDPolicy.setFormat(NameID.ENTITY);
+		nameIDPolicy.setFormat(NameID.ENTITY.toString());
 		nameIDPolicy.setSPNameQualifier("urn:liferay");
 
 		String nameId = _defaultNameIdResolver.resolve(
-			_user, SP_ENTITY_ID, NameID.ENTITY, null, false, null);
+			_user, SP_ENTITY_ID, NameID.ENTITY.toString(), null, false, null);
 
 		Assert.assertNotNull(nameId);
 		Assert.assertEquals("test", nameId);
@@ -147,23 +147,23 @@ public class DefaultNameIdResolverTest extends BaseSamlTestCase {
 
 	@Test
 	public void testResolveScreenNameNameId() throws Exception {
-		Mockito.when(
+		when(
 			_beanProperties.getObject(
 				Mockito.any(User.class), Mockito.eq("screenName"))
 		).thenReturn(
 			"test"
 		);
 
-		Mockito.when(
+		when(
 			_metadataManager.getNameIdAttribute(Mockito.eq(SP_ENTITY_ID))
 		).thenReturn(
 			"screenName"
 		);
 
-		Mockito.when(
+		when(
 			_metadataManager.getNameIdFormat(Mockito.eq(SP_ENTITY_ID))
 		).thenReturn(
-			NameID.ENTITY
+			NameID.ENTITY.toString()
 		);
 
 		String nameId = _defaultNameIdResolver.resolve(
@@ -175,7 +175,7 @@ public class DefaultNameIdResolverTest extends BaseSamlTestCase {
 
 	@Test
 	public void testResolveStaticNameId() throws Exception {
-		Mockito.when(
+		when(
 			_metadataManager.getNameIdAttribute(Mockito.eq(SP_ENTITY_ID))
 		).thenReturn(
 			"static:test@liferay.com"

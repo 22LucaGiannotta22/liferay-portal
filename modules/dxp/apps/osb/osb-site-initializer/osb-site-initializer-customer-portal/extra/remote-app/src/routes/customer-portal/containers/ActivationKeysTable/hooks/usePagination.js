@@ -10,7 +10,6 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import i18n from '../../../../../common/I18n';
 import {ACTIVATION_KEYS_LICENSE_FILTER_TYPES} from '../utils/constants';
 
 export default function usePagination(activationKeys, statusFilter) {
@@ -29,9 +28,9 @@ export default function usePagination(activationKeys, statusFilter) {
 			activePage,
 			itemsPerPage,
 			labels: {
-				paginationResults: i18n.translate('showing-x-to-x-of-x'),
-				perPageItems: i18n.translate('show-x-items'),
-				selectPerPageItems: i18n.translate('x-items'),
+				paginationResults: 'Showing {0} to {1} of {2}',
+				perPageItems: 'Show {0} Items',
+				selectPerPageItems: '{0} Items',
 			},
 			listItemsPerPage: [
 				{label: 5},

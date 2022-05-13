@@ -32,9 +32,11 @@ definition {
 	test CanAcessAddProjectPage {
 		ApplicationsMenu.gotoSite(site = "Testray 2");
 
-		TestrayLayout.clickManageOnSidebar();
+		Click(locator1 = "TestrayManage#MANAGE_SIDEBAR");
 
-		TestrayManage.selectOptionsManage(key_itemvalue = "Add Project");
+		Click(
+			key_itemvalue = "Add Project",
+			locator1 = "TestrayDropdown#DROPDOWN_ITEM");
 
 		AssertElementPresent(
 			key_title = "Projects",
@@ -46,9 +48,11 @@ definition {
 	test CanAcessManageRolesPage {
 		ApplicationsMenu.gotoSite(site = "Testray 2");
 
-		TestrayLayout.clickManageOnSidebar();
+		Click(locator1 = "TestrayManage#MANAGE_SIDEBAR");
 
-		TestrayManage.selectOptionsManage(key_itemvalue = "Manage Roles");
+		Click(
+			key_itemvalue = "Manage Roles",
+			locator1 = "TestrayDropdown#DROPDOWN_ITEM");
 
 		AssertElementPresent(
 			key_title = "Roles",
@@ -58,13 +62,13 @@ definition {
 	@description = "LPS-150334 - Verify if clicking on 'Manage Server' takes you to the 'Server Admistration' page."
 	@priority = "5"
 	test CanAcessServerAdministrationPage {
-		property portal.upstream = "quarantine";
-
 		ApplicationsMenu.gotoSite(site = "Testray 2");
 
-		TestrayLayout.clickManageOnSidebar();
+		Click(locator1 = "TestrayManage#MANAGE_SIDEBAR");
 
-		TestrayManage.selectOptionsManage(key_itemvalue = "Manage Server");
+		Click(
+			key_itemvalue = "Manage Server",
+			locator1 = "TestrayDropdown#DROPDOWN_ITEM");
 
 		AssertElementPresent(
 			key_title = "Server Administration",
@@ -76,9 +80,11 @@ definition {
 	test CanAcessUsersGroupsPage {
 		ApplicationsMenu.gotoSite(site = "Testray 2");
 
-		TestrayLayout.clickManageOnSidebar();
+		Click(locator1 = "TestrayManage#MANAGE_SIDEBAR");
 
-		TestrayManage.selectOptionsManage(key_itemvalue = "Manage User Groups");
+		Click(
+			key_itemvalue = "Manage User Groups",
+			locator1 = "TestrayDropdown#DROPDOWN_ITEM");
 
 		AssertElementPresent(
 			key_title = "User Groups",
@@ -90,9 +96,11 @@ definition {
 	test CanAcessUsersPage {
 		ApplicationsMenu.gotoSite(site = "Testray 2");
 
-		TestrayLayout.clickManageOnSidebar();
+		Click(locator1 = "TestrayManage#MANAGE_SIDEBAR");
 
-		TestrayManage.selectOptionsManage(key_itemvalue = "Manage User");
+		Click(
+			key_itemvalue = "Manage Users",
+			locator1 = "TestrayDropdown#DROPDOWN_ITEM");
 
 		AssertElementPresent(
 			key_title = "Users",

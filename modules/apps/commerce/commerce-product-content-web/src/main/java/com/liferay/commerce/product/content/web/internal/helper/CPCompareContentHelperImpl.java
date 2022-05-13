@@ -52,7 +52,6 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -79,8 +78,7 @@ public class CPCompareContentHelperImpl implements CPCompareContentHelper {
 			CPDataSourceResult cpDataSourceResult)
 		throws PortalException {
 
-		Set<CPSpecificationOption> cpSpecificationOptions =
-			new LinkedHashSet<>();
+		Set<CPSpecificationOption> cpSpecificationOptions = new HashSet<>();
 
 		for (CPCatalogEntry cpCatalogEntry :
 				cpDataSourceResult.getCPCatalogEntries()) {
@@ -221,8 +219,7 @@ public class CPCompareContentHelperImpl implements CPCompareContentHelper {
 			CPDataSourceResult cpDataSourceResult)
 		throws PortalException {
 
-		Set<CPSpecificationOption> cpSpecificationOptions =
-			new LinkedHashSet<>();
+		Set<CPSpecificationOption> cpSpecificationOptions = new HashSet<>();
 
 		for (CPCatalogEntry cpCatalogEntry :
 				cpDataSourceResult.getCPCatalogEntries()) {

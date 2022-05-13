@@ -50,7 +50,7 @@ public class ContainerStyledLayoutStructureItem
 			(ContainerStyledLayoutStructureItem)object;
 
 		if (!Objects.equals(
-				_linkJSONObject.toString(),
+				_linkJSONObject.toJSONString(),
 				containerStyledLayoutStructureItem._linkJSONObject.
 					toJSONString()) ||
 			!Objects.equals(

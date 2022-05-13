@@ -29,8 +29,6 @@ import com.liferay.expando.kernel.model.ExpandoColumnConstants;
 import com.liferay.expando.kernel.model.ExpandoTable;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalServiceUtil;
 import com.liferay.expando.kernel.service.ExpandoTableLocalServiceUtil;
-import com.liferay.exportimport.kernel.configuration.ExportImportConfigurationParameterMapFactoryUtil;
-import com.liferay.exportimport.kernel.service.StagingLocalServiceUtil;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalFolder;
 import com.liferay.journal.service.JournalFolderServiceUtil;
@@ -38,8 +36,6 @@ import com.liferay.journal.test.util.JournalTestUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.test.util.ConfigurationTemporarySwapper;
-import com.liferay.portal.kernel.comment.CommentManagerUtil;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -48,7 +44,6 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
-import com.liferay.portal.kernel.service.IdentityServiceContextFunction;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -94,8 +89,6 @@ import com.liferay.segments.criteria.contributor.SegmentsCriteriaContributor;
 import com.liferay.segments.model.SegmentsEntry;
 import com.liferay.segments.test.util.SegmentsTestUtil;
 
-import java.io.Serializable;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -105,7 +98,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -174,6 +166,8 @@ public class SXPBlueprintSearchResultTest {
 				JSONUtil.putAll(
 					"com.liferay.journal.model.JournalArticle",
 					"com.liferay.journal.model.JournalFolder")));
+
+		_updateSXPBlueprint();
 
 		_journalFolder = JournalFolderServiceUtil.addFolder(
 			_group.getGroupId(), 0, "Folder cola", StringPool.BLANK,
@@ -599,7 +593,7 @@ public class SXPBlueprintSearchResultTest {
 				HashMapBuilder.<String, Object>put(
 					"boost", 100
 				).put(
-					"factor", 10
+					"factor", 1.2
 				).put(
 					"modifier", "sqrt"
 				).build()
@@ -862,6 +856,8 @@ public class SXPBlueprintSearchResultTest {
 				"parameters",
 				JSONUtil.put("myparam", JSONUtil.put("type", "String"))));
 
+		_updateSXPBlueprint();
+
 		_setUpJournalArticles(
 			new String[] {"cola cola", ""},
 			new String[] {"Coca Cola", "liferay"});
@@ -962,47 +958,6 @@ public class SXPBlueprintSearchResultTest {
 	}
 
 	@Test
-	public void testHideComments() throws Exception {
-		JournalArticle journalArticle = _addJournalArticle(
-			_group.getGroupId(), 0, "Article", StringPool.BLANK, false, true);
-
-		_journalArticles.add(journalArticle);
-
-		CommentManagerUtil.addComment(
-			_user.getUserId(), _serviceContext.getScopeGroupId(),
-			JournalArticle.class.getName(), journalArticle.getResourcePrimKey(),
-			"Article Comment",
-			new IdentityServiceContextFunction(_serviceContext));
-
-		_updateConfigurationJSON(
-			"generalConfiguration",
-			JSONUtil.put(
-				"searchableAssetTypes",
-				JSONUtil.putAll(
-					"com.liferay.journal.model.JournalArticle",
-					"com.liferay.message.boards.model.MBMessage")));
-
-		_updateConfigurationJSON(
-			"queryConfiguration", JSONUtil.put("applyIndexerClauses", false));
-
-		_updateSXPBlueprint();
-
-		_updateElementInstancesJSON(
-			new Object[] {_getTextMatchOverMultipleFields()},
-			new String[] {"Text Match Over Multiple Fields"});
-
-		_keywords = "Article";
-
-		_assertSearchIgnoreRelevance("[Article, Article Comment]");
-
-		_updateElementInstancesJSON(
-			new Object[] {_getTextMatchOverMultipleFields(), null},
-			new String[] {"Text Match Over Multiple Fields", "Hide Comments"});
-
-		_assertSearchIgnoreRelevance("[Article]");
-	}
-
-	@Test
 	public void testHideContentsInACategory() throws Exception {
 		_addAssetCategory("Hidden", _addGroupUser(_group, "Employee"));
 
@@ -1078,7 +1033,24 @@ public class SXPBlueprintSearchResultTest {
 					SXPBlueprintSearchResultTestUtil.getMatchQueryJSONObject(
 						200, "los angeles")
 				).build(),
-				_getTextMatchOverMultipleFields(), null
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "AUTO"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "or"
+				).put(
+					"slop", 0
+				).put(
+					"type", "best_fields"
+				).build(),
+				null
 			},
 			new String[] {
 				"Paste Any Elasticsearch Query",
@@ -1098,7 +1070,24 @@ public class SXPBlueprintSearchResultTest {
 					SXPBlueprintSearchResultTestUtil.getMatchQueryJSONObject(
 						200, "orange county")
 				).build(),
-				_getTextMatchOverMultipleFields(), null
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "AUTO"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "or"
+				).put(
+					"slop", 0
+				).put(
+					"type", "best_fields"
+				).build(),
+				null
 			},
 			new String[] {
 				"Paste Any Elasticsearch Query",
@@ -1169,44 +1158,6 @@ public class SXPBlueprintSearchResultTest {
 		_updateElementInstancesJSON(null, null);
 
 		_assertSearchIgnoreRelevance("[Coca Cola, Pepsi Cola, Sprite]");
-	}
-
-	@Test
-	public void testLimitSearchToHeadVersion() throws Exception {
-		_updateConfigurationJSON(
-			"queryConfiguration", JSONUtil.put("applyIndexerClauses", false));
-
-		_journalArticles.add(
-			_addJournalArticle(
-				_group.getGroupId(), 0, "Article 1.0", StringPool.BLANK, false,
-				true));
-
-		_journalArticles.set(
-			0,
-			JournalTestUtil.updateArticle(
-				_journalArticles.get(0), "Article 1.1"));
-
-		_journalArticles.set(
-			0,
-			JournalTestUtil.updateArticle(
-				_journalArticles.get(0), "Article 1.2"));
-
-		_updateElementInstancesJSON(
-			new Object[] {_getTextMatchOverMultipleFields()},
-			new String[] {"Text Match Over Multiple Fields"});
-
-		_keywords = "Article";
-
-		_assertSearchIgnoreRelevance("[Article 1.0, Article 1.1, Article 1.2]");
-
-		_updateElementInstancesJSON(
-			new Object[] {_getTextMatchOverMultipleFields(), null},
-			new String[] {
-				"Text Match Over Multiple Fields",
-				"Limit Search to Head Version"
-			});
-
-		_assertSearch("[Article 1.2]");
 	}
 
 	@Test
@@ -1291,37 +1242,6 @@ public class SXPBlueprintSearchResultTest {
 
 		_assertSearchIgnoreRelevance(
 			"[Article file 1, Article file 2, PDF file]");
-	}
-
-	@Test
-	public void testLimitSearchToPublishedContents() throws Exception {
-		_updateConfigurationJSON(
-			"queryConfiguration", JSONUtil.put("applyIndexerClauses", false));
-
-		_setUpJournalArticles(
-			new String[] {"", "", ""}, new String[] {"Article 1", "Article 2"});
-
-		_journalArticles.add(
-			_addJournalArticle(
-				_group.getGroupId(), 0, "Draft Article", StringPool.BLANK, true,
-				false));
-
-		_updateElementInstancesJSON(
-			new Object[] {_getTextMatchOverMultipleFields()},
-			new String[] {"Text Match Over Multiple Fields"});
-
-		_keywords = "Article";
-
-		_assertSearchIgnoreRelevance("[Article 1, Article 2, Draft Article]");
-
-		_updateElementInstancesJSON(
-			new Object[] {_getTextMatchOverMultipleFields(), null},
-			new String[] {
-				"Text Match Over Multiple Fields",
-				"Limit Search to Published Contents"
-			});
-
-		_assertSearchIgnoreRelevance("[Article 1, Article 2]");
 	}
 
 	@Test
@@ -1479,59 +1399,6 @@ public class SXPBlueprintSearchResultTest {
 	}
 
 	@Test
-	public void testSchedulingAware() throws Exception {
-		_setUpJournalArticles(
-			new String[] {"", ""}, new String[] {"Article 1", "Article 2"});
-
-		_updateConfigurationJSON(
-			"queryConfiguration", JSONUtil.put("applyIndexerClauses", false));
-
-		Calendar calendar = CalendarFactoryUtil.getCalendar();
-
-		calendar.add(Calendar.DAY_OF_MONTH, +1);
-
-		Date displayDate = calendar.getTime();
-
-		_journalArticles.add(
-			JournalTestUtil.addArticle(
-				_group.getGroupId(), 0,
-				PortalUtil.getClassNameId(JournalArticle.class),
-				StringPool.BLANK, true,
-				HashMapBuilder.put(
-					LocaleUtil.US, "Article Scheduled"
-				).build(),
-				null,
-				HashMapBuilder.put(
-					LocaleUtil.US, StringPool.BLANK
-				).build(),
-				null, LocaleUtil.getSiteDefault(), displayDate, null, false,
-				true, _serviceContext));
-
-		Map<String, Object> textMatchOverMultipleFields =
-			_getTextMatchOverMultipleFields();
-
-		textMatchOverMultipleFields.replace(
-			"fields", new String[] {"title_${context.language_id}^2"});
-
-		_updateElementInstancesJSON(
-			new Object[] {textMatchOverMultipleFields},
-			new String[] {"Text Match Over Multiple Fields"});
-
-		_keywords = "Article";
-
-		_assertSearchIgnoreRelevance(
-			"[Article 1, Article 2, Article Scheduled]");
-
-		_updateElementInstancesJSON(
-			new Object[] {textMatchOverMultipleFields, null},
-			new String[] {
-				"Text Match Over Multiple Fields", "Scheduling Aware"
-			});
-
-		_assertSearchIgnoreRelevance("[Article 1, Article 2]");
-	}
-
-	@Test
 	public void testSearch() throws Exception {
 		_setUpJournalArticles(
 			new String[] {"Los Angeles", "Orange County"},
@@ -1546,7 +1413,23 @@ public class SXPBlueprintSearchResultTest {
 					SXPBlueprintSearchResultTestUtil.getMatchQueryJSONObject(
 						200, "los angeles")
 				).build(),
-				_getTextMatchOverMultipleFields()
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "AUTO"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "or"
+				).put(
+					"slop", 0
+				).put(
+					"type", "best_fields"
+				).build()
 			},
 			new String[] {
 				"Paste Any Elasticsearch Query",
@@ -1598,44 +1481,6 @@ public class SXPBlueprintSearchResultTest {
 	}
 
 	@Test
-	public void testStagingAware() throws Exception {
-		_updateConfigurationJSON(
-			"queryConfiguration", JSONUtil.put("applyIndexerClauses", false));
-
-		_enableLocalStaging();
-
-		Group stagingGroup = _group.getStagingGroup();
-
-		_setUpJournalArticles(
-			new String[] {"", "", ""}, new String[] {"Article 1", "Article 2"});
-
-		_journalArticles.add(
-			_addJournalArticle(
-				stagingGroup.getGroupId(), 0, "Staged Article",
-				StringPool.BLANK, false, true));
-
-		Map<String, Object> textMatchOverMultipleFields =
-			_getTextMatchOverMultipleFields();
-
-		textMatchOverMultipleFields.replace(
-			"fields", new String[] {"title_${context.language_id}^2"});
-
-		_updateElementInstancesJSON(
-			new Object[] {textMatchOverMultipleFields},
-			new String[] {"Text Match Over Multiple Fields"});
-
-		_keywords = "Article";
-
-		_assertSearch("[Article 1, Article 2, Staged Article]");
-
-		_updateElementInstancesJSON(
-			new Object[] {textMatchOverMultipleFields, null},
-			new String[] {"Text Match Over Multiple Fields", "Staging Aware"});
-
-		_assertSearch("[Article 1, Article 2]");
-	}
-
-	@Test
 	public void testTextMatchOverMultipleFields_bestFields() throws Exception {
 		_setUpJournalArticles(
 			new String[] {
@@ -1647,10 +1492,26 @@ public class SXPBlueprintSearchResultTest {
 				"fruit punch", "sprite"
 			});
 
-		_getTextMatchOverMultipleFields();
-
 		_updateElementInstancesJSON(
-			new Object[] {_getTextMatchOverMultipleFields()},
+			new Object[] {
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "AUTO"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "and"
+				).put(
+					"slop", 0
+				).put(
+					"type", "best_fields"
+				).build()
+			},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "coca cola";
@@ -1664,7 +1525,25 @@ public class SXPBlueprintSearchResultTest {
 			new String[] {"lorem ipsum dolor", "lorem ipsum sit", "nunquis"});
 
 		_updateElementInstancesJSON(
-			new Object[] {_getTextMatchOverMultipleFields()},
+			new Object[] {
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "AUTO"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "or"
+				).put(
+					"slop", 0
+				).put(
+					"type", "best_fields"
+				).build()
+			},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "ipsum sit sit";
@@ -1683,25 +1562,52 @@ public class SXPBlueprintSearchResultTest {
 				"lorem ipsum sit", "lorem ipsum dolor", "amet", "nunquis"
 			});
 
-		Map<String, Object> textMatchOverMultipleFields =
-			_getTextMatchOverMultipleFields();
-
-		textMatchOverMultipleFields.replace("fuzziness", "0");
-		textMatchOverMultipleFields.replace("operator", "and");
-		textMatchOverMultipleFields.replace("type", "bool_prefix");
-
 		_updateElementInstancesJSON(
-			new Object[] {textMatchOverMultipleFields},
+			new Object[] {
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "0"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "and"
+				).put(
+					"slop", 0
+				).put(
+					"type", "bool_prefix"
+				).build()
+			},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "lorem dol";
 
 		_assertSearchIgnoreRelevance("[lorem ipsum dolor]");
 
-		textMatchOverMultipleFields.replace("operator", "or");
-
 		_updateElementInstancesJSON(
-			new Object[] {textMatchOverMultipleFields},
+			new Object[] {
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "0"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "or"
+				).put(
+					"slop", 0
+				).put(
+					"type", "bool_prefix"
+				).build()
+			},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_assertSearchIgnoreRelevance(
@@ -1763,25 +1669,52 @@ public class SXPBlueprintSearchResultTest {
 				"amet", "lorem ipsum dolor", "lorem ipsum sit", "nunquis"
 			});
 
-		Map<String, Object> textMatchOverMultipleFields =
-			_getTextMatchOverMultipleFields();
-
-		textMatchOverMultipleFields.replace("fuzziness", "0");
-		textMatchOverMultipleFields.replace("operator", "and");
-		textMatchOverMultipleFields.replace("type", "most_fields");
-
 		_updateElementInstancesJSON(
-			new Object[] {textMatchOverMultipleFields},
+			new Object[] {
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "0"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "and"
+				).put(
+					"slop", 0
+				).put(
+					"type", "most_fields"
+				).build()
+			},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "sit lorem";
 
 		_assertSearch("[lorem ipsum sit, nunquis]");
 
-		textMatchOverMultipleFields.replace("operator", "or");
-
 		_updateElementInstancesJSON(
-			new Object[] {textMatchOverMultipleFields},
+			new Object[] {
+				HashMapBuilder.<String, Object>put(
+					"boost", 1
+				).put(
+					"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+				).put(
+					"fuzziness", "0"
+				).put(
+					"keywords", "${keywords}"
+				).put(
+					"minimum_should_match", 0
+				).put(
+					"operator", "or"
+				).put(
+					"slop", 0
+				).put(
+					"type", "most_fields"
+				).build()
+			},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "ipsum sit sit";
@@ -1906,24 +1839,6 @@ public class SXPBlueprintSearchResultTest {
 		return UserTestUtil.addGroupUser(group, role.getName());
 	}
 
-	private JournalArticle _addJournalArticle(
-			long groupId, long folderId, String name, String content,
-			boolean workflowEnabled, boolean approved)
-		throws Exception {
-
-		return JournalTestUtil.addArticle(
-			groupId, folderId, PortalUtil.getClassNameId(JournalArticle.class),
-			HashMapBuilder.put(
-				LocaleUtil.US, name
-			).build(),
-			null,
-			HashMapBuilder.put(
-				LocaleUtil.US, content
-			).build(),
-			LocaleUtil.getSiteDefault(), workflowEnabled, approved,
-			_serviceContext);
-	}
-
 	private SegmentsEntry _addSegmentsEntry(User user) throws Exception {
 		Criteria criteria = new Criteria();
 
@@ -1978,20 +1893,6 @@ public class SXPBlueprintSearchResultTest {
 				searchResponse.getRequestString(),
 				searchResponse.getDocumentsStream(), "title_en_US", expected);
 		}
-	}
-
-	private void _enableLocalStaging() throws Exception {
-		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext(_group.getGroupId());
-
-		Map<String, Serializable> attributes = serviceContext.getAttributes();
-
-		attributes.putAll(
-			ExportImportConfigurationParameterMapFactoryUtil.
-				buildParameterMap());
-
-		StagingLocalServiceUtil.enableLocalStaging(
-			TestPropsValues.getUserId(), _group, false, false, serviceContext);
 	}
 
 	private ConfigurationTemporarySwapper _getConfigurationTemporarySwapper(
@@ -2077,26 +1978,6 @@ public class SXPBlueprintSearchResultTest {
 			).build());
 	}
 
-	private Map<String, Object> _getTextMatchOverMultipleFields() {
-		return HashMapBuilder.<String, Object>put(
-			"boost", 1
-		).put(
-			"fields", SXPBlueprintSearchResultTestUtil.FIELDS
-		).put(
-			"fuzziness", "AUTO"
-		).put(
-			"keywords", "${keywords}"
-		).put(
-			"minimum_should_match", 0
-		).put(
-			"operator", "or"
-		).put(
-			"slop", 0
-		).put(
-			"type", "best_fields"
-		).build();
-	}
-
 	private String[] _getTimeOfDayAndNextTimeOfDay(LocalTime localTime) {
 		if (_isBetween(localTime, _LOCAL_TIME_04, _LOCAL_TIME_12)) {
 			return new String[] {"morning", "afternoon"};
@@ -2134,9 +2015,17 @@ public class SXPBlueprintSearchResultTest {
 		}
 
 		_journalArticles.add(
-			_addJournalArticle(
-				group.getGroupId(), 0, journalArticleTitles[0],
-				journalArticleContents[0], false, true));
+			JournalTestUtil.addArticle(
+				group.getGroupId(), 0,
+				PortalUtil.getClassNameId(JournalArticle.class),
+				HashMapBuilder.put(
+					LocaleUtil.US, journalArticleTitles[0]
+				).build(),
+				null,
+				HashMapBuilder.put(
+					LocaleUtil.US, journalArticleContents[0]
+				).build(),
+				LocaleUtil.getSiteDefault(), false, true, _serviceContext));
 
 		if (journalArticleTitles.length < 2) {
 			return;
@@ -2165,18 +2054,34 @@ public class SXPBlueprintSearchResultTest {
 		}
 
 		_journalArticles.add(
-			_addJournalArticle(
-				group.getGroupId(), journalFolderId, journalArticleTitles[1],
-				journalArticleContents[1], false, true));
+			JournalTestUtil.addArticle(
+				group.getGroupId(), journalFolderId,
+				PortalUtil.getClassNameId(JournalArticle.class),
+				HashMapBuilder.put(
+					LocaleUtil.US, journalArticleTitles[1]
+				).build(),
+				null,
+				HashMapBuilder.put(
+					LocaleUtil.US, journalArticleContents[1]
+				).build(),
+				LocaleUtil.getSiteDefault(), false, true, _serviceContext));
 
 		for (int i = 2;
 			 (journalArticleTitles.length > 2) &&
 			 (i < journalArticleTitles.length); i++) {
 
 			_journalArticles.add(
-				_addJournalArticle(
-					_group.getGroupId(), 0, journalArticleTitles[i],
-					journalArticleContents[i], false, true));
+				JournalTestUtil.addArticle(
+					_group.getGroupId(), 0,
+					PortalUtil.getClassNameId(JournalArticle.class),
+					HashMapBuilder.put(
+						LocaleUtil.US, journalArticleTitles[i]
+					).build(),
+					null,
+					HashMapBuilder.put(
+						LocaleUtil.US, journalArticleContents[i]
+					).build(),
+					LocaleUtil.getSiteDefault(), false, true, _serviceContext));
 		}
 	}
 
@@ -2201,18 +2106,12 @@ public class SXPBlueprintSearchResultTest {
 	}
 
 	private void _updateConfigurationJSON(
-			String configurationName, JSONObject jsonObject)
-		throws Exception {
-
-		JSONObject configurationJSONObject = JSONFactoryUtil.createJSONObject(
-			_sxpBlueprint.getConfigurationJSON());
+		String configurationName, JSONObject jsonObject) {
 
 		_sxpBlueprint.setConfigurationJSON(
-			configurationJSONObject.put(
+			_configurationJSONObject.put(
 				configurationName, jsonObject
 			).toString());
-
-		_updateSXPBlueprint();
 	}
 
 	private void _updateElementInstancesJSON(

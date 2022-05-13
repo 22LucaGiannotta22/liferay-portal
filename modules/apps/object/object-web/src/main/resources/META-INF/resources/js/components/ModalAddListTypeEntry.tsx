@@ -20,14 +20,24 @@ import {fetch} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import useForm from '../hooks/useForm';
-import {
-	availableLocales,
-	defaultLanguageId,
-	defaultLocale,
-} from '../utils/locale';
-import {toCamelCase} from '../utils/string';
+import {normalizeLanguageId, toCamelCase} from '../utils/string';
 import Input from './Form/Input';
 import InputLocalized from './Form/InputLocalized/InputLocalized';
+
+const defaultLanguageId: string = normalizeLanguageId(
+	Liferay.ThemeDisplay.getDefaultLanguageId()
+);
+
+const availableLocales: TLocale[] = Object.keys(Liferay.Language.available).map(
+	(language) => {
+		const formattedLocales = language.replace('_', '-');
+
+		return {
+			label: language,
+			symbol: formattedLocales.toLowerCase(),
+		};
+	}
+);
 
 const ModalAddListTypeEntry: React.FC<IProps> = ({
 	apiURL,
@@ -36,10 +46,7 @@ const ModalAddListTypeEntry: React.FC<IProps> = ({
 }) => {
 	const [error, setError] = useState<string>('');
 	const [selectedLocale, setSelectedLocale] = useState<TLocale>(
-		defaultLocale as {
-			label: string;
-			symbol: string;
-		}
+		availableLocales[0]
 	);
 	const initialValues: TInitialValues = {
 		key: undefined,

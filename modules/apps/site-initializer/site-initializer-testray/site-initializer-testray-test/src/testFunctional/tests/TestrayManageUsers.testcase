@@ -32,9 +32,11 @@ definition {
 	test CanAcessManageUsersPage {
 		ApplicationsMenu.gotoSite(site = "Testray 2");
 
-		TestrayLayout.clickManageOnSidebar();
+		Click(locator1 = "TestrayManage#MANAGE_SIDEBAR");
 
-		TestrayManage.selectOptionsManage(key_itemvalue = "Manage Users");
+		Click(
+			key_itemvalue = "Manage Users",
+			locator1 = "TestrayDropdown#DROPDOWN_ITEM");
 
 		AssertElementPresent(
 			key_breadcrumbName = "Manage Users",

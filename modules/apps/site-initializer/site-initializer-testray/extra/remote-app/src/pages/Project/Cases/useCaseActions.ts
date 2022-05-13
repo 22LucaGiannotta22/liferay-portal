@@ -13,7 +13,6 @@
  */
 
 import {useMutation} from '@apollo/client';
-import {useNavigate} from 'react-router-dom';
 
 import {DeleteCase} from '../../../graphql/mutations';
 import {TestrayCase} from '../../../graphql/queries';
@@ -23,15 +22,18 @@ import i18n from '../../../i18n';
 const useCaseActions = () => {
 	const [onDeleteCase] = useMutation(DeleteCase);
 
-	const navigate = useNavigate();
 	const formModal = useFormModal();
 	const modal = formModal.modal;
 
 	return {
 		actions: [
 			{
-				action: ({id}: TestrayCase) => navigate(`${id}/update`),
-
+				action: (testrayCase: TestrayCase) =>
+					modal.open({
+						...testrayCase,
+						caseTypeId: testrayCase.caseType?.id,
+						componentId: testrayCase.component?.id,
+					}),
 				name: i18n.translate('edit'),
 			},
 			{

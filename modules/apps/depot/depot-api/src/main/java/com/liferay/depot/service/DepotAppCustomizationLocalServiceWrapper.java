@@ -297,14 +297,6 @@ public class DepotAppCustomizationLocalServiceWrapper
 			start, end);
 	}
 
-	@Override
-	public java.util.List<com.liferay.depot.model.DepotAppCustomization>
-		getDepotAppCustomizations(long depotEntryId) {
-
-		return _depotAppCustomizationLocalService.getDepotAppCustomizations(
-			depotEntryId);
-	}
-
 	/**
 	 * Returns the number of depot app customizations.
 	 *

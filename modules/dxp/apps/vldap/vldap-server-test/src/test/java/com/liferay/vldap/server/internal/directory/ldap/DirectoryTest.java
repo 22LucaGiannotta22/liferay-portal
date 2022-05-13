@@ -16,7 +16,6 @@ package com.liferay.vldap.server.internal.directory.ldap;
 
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.comparator.UserScreenNameComparator;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.vldap.server.internal.BaseVLDAPTestCase;
 
 import java.util.ArrayList;
@@ -30,21 +29,18 @@ import org.apache.directory.api.ldap.model.entry.Entry;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
+
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Jonathan McCann
  */
+@RunWith(PowerMockRunner.class)
 public class DirectoryTest extends BaseVLDAPTestCase {
-
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
 
 	@Before
 	@Override
@@ -177,15 +173,15 @@ public class DirectoryTest extends BaseVLDAPTestCase {
 	}
 
 	private void _setUpUser() {
-		User user = Mockito.mock(User.class);
+		User user = mock(User.class);
 
-		Mockito.when(
+		when(
 			user.getScreenName()
 		).thenReturn(
 			"testScreenName"
 		);
 
-		Mockito.when(
+		when(
 			userLocalService.search(
 				Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
 				Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),

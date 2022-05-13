@@ -64,7 +64,7 @@ public class SiteAdminManagementToolbarDisplayContext
 		return DropdownItemListBuilder.add(
 			dropdownItem -> {
 				dropdownItem.putData("action", "deleteSites");
-				dropdownItem.setIcon("trash");
+				dropdownItem.setIcon("times-circle");
 				dropdownItem.setLabel(
 					LanguageUtil.get(httpServletRequest, "delete"));
 				dropdownItem.setQuickAction(true);

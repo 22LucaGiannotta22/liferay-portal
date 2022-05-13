@@ -28,6 +28,7 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItemListBuilder
 import com.liferay.journal.constants.JournalFolderConstants;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
+import com.liferay.journal.web.internal.configuration.FFBulkTranslationConfiguration;
 import com.liferay.journal.web.internal.configuration.JournalWebConfiguration;
 import com.liferay.journal.web.internal.security.permission.resource.JournalFolderPermission;
 import com.liferay.journal.web.internal.util.JournalUtil;
@@ -95,6 +96,9 @@ public class JournalManagementToolbarDisplayContext
 		_journalDisplayContext = journalDisplayContext;
 		_trashHelper = trashHelper;
 
+		_ffBulkTranslationConfiguration =
+			(FFBulkTranslationConfiguration)httpServletRequest.getAttribute(
+				FFBulkTranslationConfiguration.class.getName());
 		_journalWebConfiguration =
 			(JournalWebConfiguration)httpServletRequest.getAttribute(
 				JournalWebConfiguration.class.getName());
@@ -133,6 +137,7 @@ public class JournalManagementToolbarDisplayContext
 							dropdownItem.setQuickAction(true);
 						}
 					).add(
+						_ffBulkTranslationConfiguration::bulkTranslationEnabled,
 						dropdownItem -> {
 							dropdownItem.putData("action", "exportTranslation");
 							dropdownItem.setIcon("upload");
@@ -151,9 +156,20 @@ public class JournalManagementToolbarDisplayContext
 					DropdownItemListBuilder.add(
 						dropdownItem -> {
 							dropdownItem.putData("action", "deleteEntries");
+
+							boolean trashEnabled = _isTrashEnabled();
+
 							dropdownItem.setIcon("trash");
+
+							String label = "delete";
+
+							if (trashEnabled) {
+								label = "recycle-bin";
+							}
+
 							dropdownItem.setLabel(
-								LanguageUtil.get(httpServletRequest, "delete"));
+								LanguageUtil.get(httpServletRequest, label));
+
 							dropdownItem.setQuickAction(true);
 						}
 					).build());
@@ -785,6 +801,8 @@ public class JournalManagementToolbarDisplayContext
 
 	private String _ddmStructureOrderByCol;
 	private String _ddmStructureOrderByType;
+	private final FFBulkTranslationConfiguration
+		_ffBulkTranslationConfiguration;
 	private final JournalDisplayContext _journalDisplayContext;
 	private final JournalWebConfiguration _journalWebConfiguration;
 	private final ThemeDisplay _themeDisplay;

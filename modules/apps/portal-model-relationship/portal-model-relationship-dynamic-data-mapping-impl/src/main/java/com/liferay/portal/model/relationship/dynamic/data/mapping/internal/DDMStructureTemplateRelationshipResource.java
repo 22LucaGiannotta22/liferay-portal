@@ -50,9 +50,11 @@ public class DDMStructureTemplateRelationshipResource
 	}
 
 	private List<DDMTemplate> _getStructureTemplates(DDMStructure structure) {
+		long classNameId = _classNameLocalService.getClassNameId(
+			DDMStructure.class);
+
 		return _ddmTemplateLocalService.getTemplates(
-			structure.getGroupId(),
-			_classNameLocalService.getClassNameId(DDMStructure.class));
+			structure.getGroupId(), classNameId);
 	}
 
 	@Reference

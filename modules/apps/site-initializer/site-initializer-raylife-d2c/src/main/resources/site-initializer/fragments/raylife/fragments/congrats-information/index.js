@@ -18,7 +18,6 @@ const productId = localStorage.getItem('raylife-product-id');
 const raylifeApplicationForm = JSON.parse(
 	localStorage.getItem('raylife-application-form')
 );
-const orderId = localStorage.getItem('orderId');
 
 const fetchHeadless = async (url, options) => {
 	// eslint-disable-next-line @liferay/portal/no-global-fetch
@@ -124,25 +123,22 @@ const buildList = (items = []) => {
 						?.currentSrc;
 
 			return `<tr>
-								<td>
-									<img alt="icon" src="${imageSrc}" />
-									<span class="ml-1">${title}</span>
-								</td>
-								<td class="text-right">${
-									typeof formattedValue === 'string'
-										? formattedValue
-										: ''
-								}</td>
-								</tr>`;
+				 <td>
+					 <img alt="icon" src="${imageSrc}" />
+					 <span class="ml-1">${title}</span>
+				 </td>
+				 <td class="text-right">${
+						typeof formattedValue === 'string' ? formattedValue : ''
+					}</td>
+				 </tr>`;
 		})
 		.join('');
 };
 
 const main = async () => {
-	const [application, quoteComparison, orderItem] = await Promise.all([
+	const [application, quoteComparison] = await Promise.all([
 		fetchHeadless(`o/c/raylifeapplications/${applicationId}`),
 		fetchHeadless(`o/c/quotecomparisons/${productId}`),
-		fetchHeadless(`o/headless-commerce-admin-order/v1.0/orders/${orderId}`),
 	]);
 
 	const quoteDate = application.dateCreated
@@ -157,37 +153,14 @@ const main = async () => {
 		fragmentElement.querySelector('#congrats-info-title'),
 		raylifeApplicationForm?.basics?.productQuoteName
 	);
-
 	setValueToElement(
 		fragmentElement.querySelector('#congrats-info-policy'),
 		`Policy: #${applicationId}`
 	);
-
-	if (Number(quoteComparison.price) === Number(orderItem.totalAmount * 2)) {
-		setValueToElement(
-			fragmentElement.querySelector('#congrats-price'),
-			`$${Number(quoteComparison.price || 0).toLocaleString('en-US')}`
-		);
-	}
-	else {
-		const discountInPrice = quoteComparison.price * 0.05;
-
-		const discountDescription = `You saved 5% ($${Number(
-			discountInPrice || 0
-		).toLocaleString('en-US')})`;
-
-		setValueToElement(
-			fragmentElement.querySelector('#congrats-price'),
-			`$${Number(
-				quoteComparison.price - discountInPrice || 0
-			).toLocaleString('en-US')}`
-		);
-
-		setValueToElement(
-			fragmentElement.querySelector('#congrats-discount'),
-			discountDescription
-		);
-	}
+	setValueToElement(
+		fragmentElement.querySelector('#congrats-price'),
+		`$${Number(quoteComparison.price || 0).toLocaleString('en-US')}`
+	);
 	setValueToElement(
 		fragmentElement.querySelector('#congrats-info-date'),
 		`${quoteDate.toLocaleDateString()} - ${quoteDateNextYear.toLocaleDateString()}`

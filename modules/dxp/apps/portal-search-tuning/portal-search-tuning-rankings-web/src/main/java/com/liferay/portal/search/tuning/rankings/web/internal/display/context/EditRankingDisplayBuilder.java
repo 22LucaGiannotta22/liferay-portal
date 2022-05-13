@@ -188,9 +188,10 @@ public class EditRankingDisplayBuilder {
 	private void _setBackURL(
 		EditRankingDisplayContext editRankingDisplayContext) {
 
-		editRankingDisplayContext.setBackURL(
-			ParamUtil.getString(
-				_httpServletRequest, "backURL", _getRedirect()));
+		String backURL = ParamUtil.getString(
+			_httpServletRequest, "backURL", _getRedirect());
+
+		editRankingDisplayContext.setBackURL(backURL);
 	}
 
 	private void _setCompanyId(

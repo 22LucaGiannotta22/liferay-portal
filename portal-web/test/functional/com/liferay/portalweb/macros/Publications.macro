@@ -399,11 +399,7 @@ definition {
 	macro workOnProduction {
 		Click(locator1 = "Publications#PUBLICATIONS_INDICATOR_BUTTON");
 
-		ClickNoError(
-			key_menuItem = "Work on Production",
-			locator1 = "MenuItem#ANY_MENU_ITEM");
-
-		AssertConfirm(value1 = "Any changes made in Production will immediately be live. Continue to Production?");
+		MenuItem.click(menuItem = "Work on Production");
 	}
 
 }

@@ -71,7 +71,7 @@ definition {
 
 		Form.closeSidebar();
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Content & Data",
@@ -891,7 +891,7 @@ definition {
 
 		Form.closeSidebar();
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
@@ -999,7 +999,6 @@ definition {
 	@description = "Verify that Data Provider can retreive data for guest users"
 	@priority = "5"
 	test DataProviderCanRetrieveDataForGuestUser {
-		property portal.acceptance = "false";
 		property portal.upstream = "true";
 		property test.name.skip.portal.instance = "FormsDataProvider#DataProviderCanRetrieveDataForGuestUser";
 
@@ -1192,9 +1191,8 @@ definition {
 	@description = "This is a use case for LPS-50757."
 	@priority = "4"
 	test EditAllFormFieldsTypesUsedBySystemSettings {
-		property portal.acceptance = "quarantine";
-		property portal.release = "quarantine";
-		property portal.upstream = "quarantine";
+		property portal.acceptance = "true";
+		property portal.upstream = "true";
 		property test.name.skip.portal.instance = "Forms#EditAllFormFieldsTypesUsedBySystemSettings";
 
 		Navigator.openURL();
@@ -1372,8 +1370,6 @@ definition {
 			configurationCategory = "Infrastructure",
 			configurationName = "JavaScript Loader",
 			configurationScope = "System Scope");
-
-		Refresh();
 
 		for (var fieldName : list "applyVersioning,exposeGlobal") {
 			FormFields.viewCheckboxNotChecked(fieldName = "${fieldName}");
@@ -1753,7 +1749,7 @@ definition {
 
 		Form.closeSidebar();
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
@@ -1914,7 +1910,7 @@ definition {
 
 		Form.closeSidebar();
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",

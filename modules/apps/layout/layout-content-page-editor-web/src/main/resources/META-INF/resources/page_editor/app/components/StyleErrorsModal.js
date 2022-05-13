@@ -17,7 +17,7 @@ import ClayModal, {useModal} from '@clayui/modal';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-export function StyleErrorsModal({onCloseModal, onPublish}) {
+export function StyleErrorsModal({onCloseModal, onSubmit}) {
 	const {observer, onClose} = useModal({
 		onClose: onCloseModal,
 	});
@@ -47,7 +47,11 @@ export function StyleErrorsModal({onCloseModal, onPublish}) {
 							{Liferay.Language.get('cancel')}
 						</ClayButton>
 
-						<ClayButton displayType="warning" onClick={onPublish}>
+						<ClayButton
+							displayType="warning"
+							onClick={onSubmit}
+							type="submit"
+						>
 							{Liferay.Language.get('continue')}
 						</ClayButton>
 					</ClayButton.Group>
@@ -59,5 +63,5 @@ export function StyleErrorsModal({onCloseModal, onPublish}) {
 
 StyleErrorsModal.propTypes = {
 	onCloseModal: PropTypes.func.isRequired,
-	onPublish: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired,
 };

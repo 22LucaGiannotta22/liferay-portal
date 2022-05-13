@@ -422,6 +422,18 @@ public class BookmarksFolderWrapper
 	}
 
 	/**
+	 * Returns the trash handler for this bookmarks folder.
+	 *
+	 * @return the trash handler for this bookmarks folder
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
+	@Override
+	public com.liferay.portal.kernel.trash.TrashHandler getTrashHandler() {
+		return model.getTrashHandler();
+	}
+
+	/**
 	 * Returns the tree path of this bookmarks folder.
 	 *
 	 * @return the tree path of this bookmarks folder

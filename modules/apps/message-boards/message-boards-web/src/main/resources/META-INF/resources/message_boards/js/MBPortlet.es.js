@@ -314,7 +314,7 @@ class MBPortlet {
 											}" data-url="${
 												attachment.deleteURL
 											}" href="javascript:;">${Liferay.Language.get(
-												'delete'
+												'move-to-recycle-bin'
 											)}</a>`,
 										],
 										attachment.id.toString()

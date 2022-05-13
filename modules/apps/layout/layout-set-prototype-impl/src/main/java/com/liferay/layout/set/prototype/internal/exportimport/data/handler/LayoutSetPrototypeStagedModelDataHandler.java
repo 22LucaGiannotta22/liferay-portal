@@ -41,7 +41,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.sites.kernel.util.Sites;
+import com.liferay.sites.kernel.util.SitesUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -283,7 +283,7 @@ public class LayoutSetPrototypeStagedModelDataHandler
 		File file = null;
 
 		try {
-			file = _sites.exportLayoutSetPrototype(
+			file = SitesUtil.exportLayoutSetPrototype(
 				layoutSetPrototype, new ServiceContext());
 
 			try (InputStream inputStream = new FileInputStream(file)) {
@@ -347,7 +347,7 @@ public class LayoutSetPrototypeStagedModelDataHandler
 				portletDataContext.getZipEntryAsInputStream(
 					layoutSetPrototypeLARPath)) {
 
-			_sites.importLayoutSetPrototype(
+			SitesUtil.importLayoutSetPrototype(
 				importedLayoutSetPrototype, inputStream, serviceContext);
 		}
 		catch (IOException ioException) {
@@ -364,8 +364,5 @@ public class LayoutSetPrototypeStagedModelDataHandler
 	private LayoutLocalService _layoutLocalService;
 	private LayoutPrototypeLocalService _layoutPrototypeLocalService;
 	private LayoutSetPrototypeLocalService _layoutSetPrototypeLocalService;
-
-	@Reference
-	private Sites _sites;
 
 }

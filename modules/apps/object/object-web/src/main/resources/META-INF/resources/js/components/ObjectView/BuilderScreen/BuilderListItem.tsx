@@ -26,22 +26,16 @@ import './BuilderListItem.scss';
 
 interface IProps {
 	aliasColumnText?: string;
-	defaultFilter?: boolean;
-	defaultSort?: boolean;
 	hasDragAndDrop?: boolean;
 	index: number;
+	isDefaultSort?: boolean;
 	label?: string;
 	objectFieldName: string;
 	onEditing?: (boolean: boolean) => void;
 	onEditingObjectFieldName?: (objectFieldName: string) => void;
 	onVisibleEditModal?: (boolean: boolean) => void;
-	thirdColumnValues?: TThirdColumnValues[];
+	thirdColumnValues?: string[];
 }
-
-type TThirdColumnValues = {
-	label: string;
-	value: string;
-};
 
 type TItemHover = {
 	index: number;
@@ -55,10 +49,9 @@ type TDraggedOffset = {
 
 const BuilderListItem: React.FC<IProps> = ({
 	aliasColumnText,
-	defaultFilter,
-	defaultSort,
 	hasDragAndDrop,
 	index,
+	isDefaultSort,
 	label,
 	objectFieldName,
 	onEditing,
@@ -115,7 +108,7 @@ const BuilderListItem: React.FC<IProps> = ({
 
 			dispatch({
 				payload: {draggedIndex, targetIndex},
-				type: defaultSort
+				type: isDefaultSort
 					? TYPES.CHANGE_OBJECT_VIEW_SORT_COLUMN_ORDER
 					: TYPES.CHANGE_OBJECT_VIEW_COLUMN_ORDER,
 			});
@@ -126,19 +119,12 @@ const BuilderListItem: React.FC<IProps> = ({
 
 	const handleDeleteColumn = (
 		objectFieldName: string,
-		defaultFilter?: boolean,
-		defaultSort?: boolean
+		isDefaultSort?: boolean
 	) => {
-		if (defaultSort) {
+		if (isDefaultSort) {
 			dispatch({
 				payload: {objectFieldName},
 				type: TYPES.DELETE_OBJECT_VIEW_SORT_COLUMN,
-			});
-		}
-		else if (defaultFilter) {
-			dispatch({
-				payload: {objectFieldName},
-				type: TYPES.DELETE_OBJECT_VIEW_FILTER_COLUMN,
 			});
 		}
 		else {
@@ -207,8 +193,8 @@ const BuilderListItem: React.FC<IProps> = ({
 				<ClayList.ItemText>
 					{thirdColumnValues?.map((value, index) => {
 						return index !== thirdColumnValues.length - 1
-							? `${value.label}, `
-							: value.label;
+							? `${value}, `
+							: value;
 					})}
 				</ClayList.ItemText>
 			</ClayList.ItemField>
@@ -240,11 +226,7 @@ const BuilderListItem: React.FC<IProps> = ({
 
 					<ClayDropDown.Item
 						onClick={() =>
-							handleDeleteColumn(
-								objectFieldName,
-								defaultFilter,
-								defaultSort
-							)
+							handleDeleteColumn(objectFieldName, isDefaultSort)
 						}
 					>
 						<ClayIcon

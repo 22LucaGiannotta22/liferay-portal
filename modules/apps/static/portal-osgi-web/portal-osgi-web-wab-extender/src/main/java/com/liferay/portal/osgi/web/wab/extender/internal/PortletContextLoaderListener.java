@@ -182,8 +182,10 @@ public class PortletContextLoaderListener extends ContextLoaderListener {
 		ServletContext servletContext,
 		ConfigurableWebApplicationContext configurableWebApplicationContext) {
 
-		configurableWebApplicationContext.setConfigLocation(
-			servletContext.getInitParameter(_PORTAL_CONFIG_LOCATION_PARAM));
+		String configLocation = servletContext.getInitParameter(
+			_PORTAL_CONFIG_LOCATION_PARAM);
+
+		configurableWebApplicationContext.setConfigLocation(configLocation);
 
 		configurableWebApplicationContext.addBeanFactoryPostProcessor(
 			configurableListableBeanFactory -> {

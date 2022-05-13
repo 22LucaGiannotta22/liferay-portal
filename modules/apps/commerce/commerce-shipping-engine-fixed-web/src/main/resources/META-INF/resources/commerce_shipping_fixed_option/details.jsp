@@ -62,7 +62,7 @@ if (commerceShippingFixedOption != null) {
 </aui:form>
 
 <c:if test="<%= commerceShippingFixedOption == null %>">
-	<aui:script require="frontend-js-web/liferay/debounce/debounce.es as debounce">
+	<aui:script require="commerce-frontend-js/utilities/debounce as debounce">
 		var form = document.getElementById('<portlet:namespace />fm');
 
 		var keyInput = form.querySelector('#<portlet:namespace />key');

@@ -56,11 +56,10 @@ public class TagFacetPortletDisplayTemplateHandler
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		return LanguageUtil.format(
-			locale, "x-template",
-			_portal.getPortletTitle(
-				TagFacetPortletKeys.TAG_FACET, resourceBundle),
-			false);
+		String portletTitle = _portal.getPortletTitle(
+			TagFacetPortletKeys.TAG_FACET, resourceBundle);
+
+		return LanguageUtil.format(locale, "x-template", portletTitle, false);
 	}
 
 	@Override

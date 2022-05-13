@@ -83,7 +83,7 @@ public class RestoreCollectionDisplayConfigMVCActionCommand
 				fragmentEntryLinkJSONObject.getJSONObject("editableValues");
 
 			fragmentEntryLink.setEditableValues(
-				editableValuesJSONObject.toString());
+				editableValuesJSONObject.toJSONString());
 		}
 
 		LayoutStructureUtil.updateLayoutPageTemplateData(

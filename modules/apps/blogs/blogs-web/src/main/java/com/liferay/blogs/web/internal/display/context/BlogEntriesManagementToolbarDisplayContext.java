@@ -80,9 +80,21 @@ public class BlogEntriesManagementToolbarDisplayContext
 		return DropdownItemListBuilder.add(
 			dropdownItem -> {
 				dropdownItem.putData("action", "deleteEntries");
-				dropdownItem.setIcon("trash");
+
+				boolean trashEnabled = _trashHelper.isTrashEnabled(
+					_themeDisplay.getScopeGroupId());
+
+				dropdownItem.setIcon(trashEnabled ? "trash" : "times-circle");
+
+				String label = "delete";
+
+				if (trashEnabled) {
+					label = "move-to-recycle-bin";
+				}
+
 				dropdownItem.setLabel(
-					LanguageUtil.get(httpServletRequest, "delete"));
+					LanguageUtil.get(httpServletRequest, label));
+
 				dropdownItem.setQuickAction(true);
 			}
 		).build();

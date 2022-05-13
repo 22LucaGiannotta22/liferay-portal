@@ -12,7 +12,7 @@
  * details.
  */
 
-import '../../tests_utilities/polyfills';
+import '../../utils/polyfills';
 
 import '@testing-library/jest-dom/extend-expect';
 import {
@@ -35,8 +35,8 @@ import {
 	CURRENT_ACCOUNT_UPDATED,
 	CURRENT_ORDER_UPDATED,
 } from '../../../src/main/resources/META-INF/resources/utilities/eventsDefinitions';
-import * as Notificationtests_utilities from '../../../src/main/resources/META-INF/resources/utilities/notifications';
-import {getMockedCart} from '../../tests_utilities/fake_data/carts';
+import * as NotificationUtils from '../../../src/main/resources/META-INF/resources/utilities/notifications';
+import {getMockedCart} from '../../utils/fake_data/carts';
 
 jest.mock('../../../src/main/resources/META-INF/resources/ServiceProvider');
 
@@ -59,7 +59,7 @@ describe('MiniCart', () => {
 	let onCurrentAccountUpdated = () => {};
 
 	beforeEach(() => {
-		jest.spyOn(Notificationtests_utilities, 'showErrorNotification');
+		jest.spyOn(NotificationUtils, 'showErrorNotification');
 
 		ServiceProvider.DeliveryCartAPI = jest.fn().mockReturnValue({
 			getCartByIdWithItems: jest.fn(() =>
@@ -287,7 +287,7 @@ describe('MiniCart', () => {
 				).toHaveBeenCalledWith(PROPS.orderId);
 
 				expect(
-					Notificationtests_utilities.showErrorNotification
+					NotificationUtils.showErrorNotification
 				).toHaveBeenCalledWith(ERROR);
 			});
 

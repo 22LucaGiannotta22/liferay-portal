@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.model.StagedModel;
 import com.liferay.portal.kernel.model.Team;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.adapter.ModelAdapterUtil;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.TeamLocalServiceUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -162,11 +163,14 @@ public class SegmentsEntryStagedModelDataHandlerTest
 
 		initExport();
 
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(
+				stagingGroup.getGroupId(), TestPropsValues.getUserId());
+
 		Team team = TeamLocalServiceUtil.addTeam(
 			TestPropsValues.getUserId(), stagingGroup.getGroupId(),
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-			ServiceContextTestUtil.getServiceContext(
-				stagingGroup.getGroupId(), TestPropsValues.getUserId()));
+			serviceContext);
 
 		StagedModelDataHandlerUtil.exportStagedModel(portletDataContext, team);
 

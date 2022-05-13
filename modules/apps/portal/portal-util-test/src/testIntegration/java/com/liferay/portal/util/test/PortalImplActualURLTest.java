@@ -136,19 +136,24 @@ public class PortalImplActualURLTest {
 			StringPool.BLANK, LayoutConstants.TYPE_PORTLET, false,
 			StringPool.BLANK, serviceContext);
 
+		String queryString = HttpComponentsUtil.getQueryString(
+			_portal.getActualURL(
+				_group.getGroupId(), true, Portal.PATH_MAIN,
+				"/~/" + userGroup.getUserGroupId() + "/node", new HashMap<>(),
+				_getRequestContext()));
+
 		Map<String, String[]> parameterMap = HttpComponentsUtil.getParameterMap(
-			HttpComponentsUtil.getQueryString(
-				_portal.getActualURL(
-					_group.getGroupId(), true, Portal.PATH_MAIN,
-					"/~/" + userGroup.getUserGroupId() + "/node",
-					new HashMap<>(), _getRequestContext())));
+			queryString);
 
 		Assert.assertNull(parameterMap.get("p_l_id"));
+
 		Assert.assertEquals(
 			childLayout.getGroupId(), MapUtil.getLong(parameterMap, "groupId"));
+
 		Assert.assertEquals(
 			childLayout.isPrivateLayout(),
 			MapUtil.getBoolean(parameterMap, "privateLayout"));
+
 		Assert.assertEquals(
 			childLayout.getLayoutId(),
 			MapUtil.getLong(parameterMap, "layoutId"));

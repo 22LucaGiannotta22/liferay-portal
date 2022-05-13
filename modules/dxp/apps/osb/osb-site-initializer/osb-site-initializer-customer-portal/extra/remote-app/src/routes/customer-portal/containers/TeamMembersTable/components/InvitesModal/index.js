@@ -10,7 +10,6 @@
  */
 
 import ClayModal from '@clayui/modal';
-import i18n from '../../../../../../common/I18n';
 import InviteTeamMembersForm from '../../../../../../common/containers/setup-forms/InviteTeamMembersForm';
 
 const InvitesModal = ({
@@ -26,7 +25,7 @@ const InvitesModal = ({
 			<InviteTeamMembersForm
 				availableAdministratorAssets={availableAdministratorAssets}
 				handlePage={onClose}
-				leftButton={i18n.translate('cancel')}
+				leftButton="Cancel"
 				mutateUserData={mutateUserData}
 				project={project}
 				sessionId={sessionId}

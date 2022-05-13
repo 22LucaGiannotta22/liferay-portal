@@ -12,7 +12,7 @@
  * details.
  */
 
-/// <reference types="react" />
-
+import React from 'react';
 import './LayoutScreen.scss';
-export default function LayoutScreen(): JSX.Element;
+declare const LayoutScreen: React.FC<React.HTMLAttributes<HTMLElement>>;
+export default LayoutScreen;

@@ -220,7 +220,7 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 					}
 
 					updatePreparedStatement.setString(
-						1, settingsJSONObject.toString());
+						1, settingsJSONObject.toJSONString());
 
 					updatePreparedStatement.setLong(
 						2, resultSet.getLong("formInstanceId"));

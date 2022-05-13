@@ -407,8 +407,6 @@ public interface WebKeys {
 
 	public static final String ORGANIZATION = "ORGANIZATION";
 
-	public static final String ORIGINAL_PATH_INFO = "ORIGINAL_PATH_INFO";
-
 	public static final String OSGI_BUNDLE = "OSGI_BUNDLE";
 
 	public static final String OUTER_PORTLET_ID = "OUTER_PORTLET_ID";

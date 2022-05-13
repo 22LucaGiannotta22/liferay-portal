@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutPrototypeLocalService;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.upgrade.BaseSQLServerDatetimeUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.CTModelUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.DummyUpgradeStep;
@@ -182,8 +181,7 @@ public class LayoutPageTemplateServiceUpgrade
 			"5.0.0", "5.1.0",
 			new com.liferay.layout.page.template.internal.upgrade.v5_1_0.
 				LayoutPageTemplateStructureUpgradeProcess(
-					_layoutLocalService, _segmentsExperienceLocalService,
-					_userLocalService));
+					_layoutLocalService, _segmentsExperienceLocalService));
 	}
 
 	@Reference
@@ -215,8 +213,5 @@ public class LayoutPageTemplateServiceUpgrade
 
 	@Reference
 	private SegmentsExperienceLocalService _segmentsExperienceLocalService;
-
-	@Reference
-	private UserLocalService _userLocalService;
 
 }

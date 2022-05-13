@@ -83,9 +83,21 @@ public class WikiNodesManagementToolbarDisplayContext {
 		return DropdownItemListBuilder.add(
 			dropdownItem -> {
 				dropdownItem.putData("action", "deleteNodes");
-				dropdownItem.setIcon("trash");
-				dropdownItem.setLabel(
-					LanguageUtil.get(_httpServletRequest, "delete"));
+
+				if (_trashHelper.isTrashEnabled(
+						_themeDisplay.getScopeGroupId())) {
+
+					dropdownItem.setIcon("trash");
+					dropdownItem.setLabel(
+						LanguageUtil.get(
+							_httpServletRequest, "move-to-recycle-bin"));
+				}
+				else {
+					dropdownItem.setIcon("times-circle");
+					dropdownItem.setLabel(
+						LanguageUtil.get(_httpServletRequest, "delete"));
+				}
+
 				dropdownItem.setQuickAction(true);
 			}
 		).build();

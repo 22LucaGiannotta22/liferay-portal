@@ -73,10 +73,10 @@ public class FileSystemStore implements Store {
 		InputStream inputStream) {
 
 		try {
-			FileUtil.write(
-				getFileNameVersionFile(
-					companyId, repositoryId, fileName, versionLabel),
-				inputStream);
+			File fileNameVersionFile = getFileNameVersionFile(
+				companyId, repositoryId, fileName, versionLabel);
+
+			FileUtil.write(fileNameVersionFile, inputStream);
 		}
 		catch (IOException ioException) {
 			throw new SystemException(ioException);

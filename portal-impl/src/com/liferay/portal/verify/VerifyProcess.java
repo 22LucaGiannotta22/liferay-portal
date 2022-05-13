@@ -17,6 +17,7 @@ package com.liferay.portal.verify;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.db.BaseDBProcess;
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.ReleaseConstants;
@@ -60,7 +61,7 @@ public abstract class VerifyProcess extends BaseDBProcess {
 	public void verify() throws VerifyException {
 		long start = System.currentTimeMillis();
 
-		try (Connection connection = getConnection()) {
+		try (Connection connection = DataAccess.getConnection()) {
 			this.connection = connection;
 
 			process(

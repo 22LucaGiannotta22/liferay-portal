@@ -14,27 +14,29 @@
 
 package com.liferay.oauth.util;
 
-import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Igor Beslic
  */
-public class WebServerUtilTest {
+@PrepareForTest(PropsUtil.class)
+@RunWith(PowerMockRunner.class)
+public class WebServerUtilTest extends PowerMockito {
 
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
+	@Before
+	public void setUp() {
+		mockStatic(PropsUtil.class);
+	}
 
 	@Test
 	public void testNoWebServerGetOriginalURL() throws Exception {
@@ -110,24 +112,20 @@ public class WebServerUtilTest {
 	protected void setUpPropsUtil(
 		String protocol, String httpPort, String httpsPort) {
 
-		Props props = Mockito.mock(Props.class);
-
-		PropsUtil.setProps(props);
-
-		Mockito.when(
-			props.get(PropsKeys.WEB_SERVER_PROTOCOL)
+		when(
+			PropsUtil.get(PropsKeys.WEB_SERVER_PROTOCOL)
 		).thenReturn(
 			protocol
 		);
 
-		Mockito.when(
-			props.get(PropsKeys.WEB_SERVER_HTTP_PORT)
+		when(
+			PropsUtil.get(PropsKeys.WEB_SERVER_HTTP_PORT)
 		).thenReturn(
 			httpPort
 		);
 
-		Mockito.when(
-			props.get(PropsKeys.WEB_SERVER_HTTPS_PORT)
+		when(
+			PropsUtil.get(PropsKeys.WEB_SERVER_HTTPS_PORT)
 		).thenReturn(
 			httpsPort
 		);

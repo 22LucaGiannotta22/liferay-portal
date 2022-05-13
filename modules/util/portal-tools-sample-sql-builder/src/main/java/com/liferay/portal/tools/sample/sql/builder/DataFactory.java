@@ -1416,12 +1416,14 @@ public class DataFactory {
 		commerceCurrencyModel.setName(name);
 
 		commerceCurrencyModel.setRate(BigDecimal.valueOf(1));
-		commerceCurrencyModel.setFormatPattern(
-			StringBundler.concat(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ",
-				"available-locales=\"en_US\" default-locale=\"en_US\">",
-				"<FormatPattern language-id=\"en_US\">$###,##0.00",
-				"</FormatPattern></root>"));
+
+		String formatPattern = StringBundler.concat(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
+			"=\"en_US\" default-locale=\"en_US\"><FormatPattern language-id",
+			"=\"en_US\">$###,##0.00</FormatPattern></root>");
+
+		commerceCurrencyModel.setFormatPattern(formatPattern);
+
 		commerceCurrencyModel.setMaxFractionDigits(2);
 		commerceCurrencyModel.setMinFractionDigits(2);
 		commerceCurrencyModel.setRoundingMode("HALF_EVEN");
@@ -2363,12 +2365,14 @@ public class DataFactory {
 		cpAttachmentFileEntryModel.setFileEntryId(_counter.get());
 		cpAttachmentFileEntryModel.setDisplayDate(null);
 		cpAttachmentFileEntryModel.setExpirationDate(null);
-		cpAttachmentFileEntryModel.setTitle(
-			StringBundler.concat(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ",
-				"available-locales=\"en_US\" default-locale=\"en_US\"><Title ",
-				"language-id=\"en_US\">Attachment file Entry  ", index,
-				"</Title></root>"));
+
+		String title = StringBundler.concat(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
+			"=\"en_US\" default-locale=\"en_US\"><Title language-id=\"en_US\">",
+			"Attachment file Entry  ", index, "</Title></root>");
+
+		cpAttachmentFileEntryModel.setTitle(title);
+
 		cpAttachmentFileEntryModel.setPriority(0);
 		cpAttachmentFileEntryModel.setType(type);
 		cpAttachmentFileEntryModel.setLastPublishDate(new Date());

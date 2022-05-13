@@ -78,8 +78,6 @@ public interface Job {
 
 	public String getTestPropertiesContent();
 
-	public boolean isDownstreamEnabled();
-
 	public boolean isSegmentEnabled();
 
 	public boolean isValidationRequired();

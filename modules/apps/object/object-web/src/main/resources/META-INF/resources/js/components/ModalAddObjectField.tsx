@@ -20,10 +20,11 @@ import {fetch} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import {ERRORS} from '../utils/errors';
-import {defaultLanguageId} from '../utils/locale';
 import {toCamelCase} from '../utils/string';
 import Input from './Form/Input';
 import ObjectFieldFormBase, {useObjectFieldForm} from './ObjectFieldFormBase';
+
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId() as Liferay.Language.Locale;
 
 const headers = new Headers({
 	'Accept': 'application/json',
@@ -31,6 +32,8 @@ const headers = new Headers({
 });
 
 function ModalAddObjectField({
+	allowMaxLength,
+	allowUploadDocAndMedia,
 	apiURL,
 	objectFieldTypes,
 	objectName,
@@ -111,6 +114,8 @@ function ModalAddObjectField({
 					/>
 
 					<ObjectFieldFormBase
+						allowMaxLength={allowMaxLength}
+						allowUploadDocAndMedia={allowUploadDocAndMedia}
 						errors={errors}
 						handleChange={handleChange}
 						objectField={values}
@@ -142,6 +147,8 @@ function ModalAddObjectField({
 }
 
 export default function ModalWithProvider({
+	allowMaxLength,
+	allowUploadDocAndMedia,
 	apiURL,
 	objectFieldTypes,
 	objectName,
@@ -159,6 +166,8 @@ export default function ModalWithProvider({
 		<ClayModalProvider>
 			{isVisible && (
 				<ModalAddObjectField
+					allowMaxLength={allowMaxLength}
+					allowUploadDocAndMedia={allowUploadDocAndMedia}
 					apiURL={apiURL}
 					objectFieldTypes={objectFieldTypes}
 					objectName={objectName}
@@ -171,11 +180,15 @@ export default function ModalWithProvider({
 }
 
 interface IModal extends IProps {
+	allowMaxLength: boolean;
+	allowUploadDocAndMedia: boolean;
 	observer: any;
 	onClose: () => void;
 }
 
 interface IProps {
+	allowMaxLength: boolean;
+	allowUploadDocAndMedia: boolean;
 	apiURL: string;
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;

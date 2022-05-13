@@ -684,16 +684,17 @@ public class ModifiableServletContextAdapter
 			Class<?>[] parameterTypes = adapterMethod.getParameterTypes();
 
 			try {
-				methods.put(
-					ServletContext.class.getMethod(name, parameterTypes),
-					adapterMethod);
+				Method method = ServletContext.class.getMethod(
+					name, parameterTypes);
+
+				methods.put(method, adapterMethod);
 			}
 			catch (NoSuchMethodException noSuchMethodException1) {
 				try {
-					methods.put(
-						ModifiableServletContext.class.getMethod(
-							name, parameterTypes),
-						adapterMethod);
+					Method method = ModifiableServletContext.class.getMethod(
+						name, parameterTypes);
+
+					methods.put(method, adapterMethod);
 				}
 				catch (NoSuchMethodException noSuchMethodException2) {
 				}

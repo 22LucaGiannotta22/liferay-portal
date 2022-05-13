@@ -9,10 +9,8 @@
  * distribution rights of the Software.
  */
 
-import i18n from '../../../../../common/I18n';
-
-const COMPLIMENTARY = i18n.translate('complimentary');
-const SUBSCRIPTION = i18n.translate('subscription');
+const COMPLIMENTARY = 'Complimentary';
+const SUBSCRIPTION = 'Subscription';
 
 export function getProductDescription(complimentary) {
 	return complimentary ? COMPLIMENTARY : SUBSCRIPTION;

@@ -16,7 +16,8 @@ package com.liferay.commerce.product.content.web.internal.info.item.provider;
 
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.service.AssetCategoryLocalService;
-import com.liferay.commerce.context.CommerceContextThreadLocal;
+import com.liferay.commerce.context.CommerceContext;
+import com.liferay.commerce.context.CommerceContextFactory;
 import com.liferay.commerce.currency.model.CommerceMoney;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngine;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngineRegistry;
@@ -44,6 +45,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.Portal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -512,10 +514,15 @@ public class CPDefinitionInfoItemFieldValuesProvider
 			return StringPool.BLANK;
 		}
 
+		CommerceContext commerceContext = _commerceContextFactory.create(
+			themeDisplay.getCompanyId(),
+			_commerceChannelLocalService.getCommerceChannelGroupIdBySiteGroupId(
+				themeDisplay.getScopeGroupId()),
+			themeDisplay.getUserId(), 0, 0);
+
 		CommerceMoney commerceMoney =
 			_commerceProductPriceCalculation.getFinalPrice(
-				cpInstance.getCPInstanceId(), 1,
-				CommerceContextThreadLocal.get());
+				cpInstance.getCPInstanceId(), 1, commerceContext);
 
 		if (commerceMoney.isEmpty()) {
 			return StringPool.BLANK;
@@ -573,6 +580,9 @@ public class CPDefinitionInfoItemFieldValuesProvider
 	private CommerceChannelLocalService _commerceChannelLocalService;
 
 	@Reference
+	private CommerceContextFactory _commerceContextFactory;
+
+	@Reference
 	private CommerceInventoryEngine _commerceInventoryEngine;
 
 	@Reference
@@ -598,5 +608,8 @@ public class CPDefinitionInfoItemFieldValuesProvider
 	@Reference
 	private InfoItemFieldReaderFieldSetProvider
 		_infoItemFieldReaderFieldSetProvider;
+
+	@Reference
+	private Portal _portal;
 
 }

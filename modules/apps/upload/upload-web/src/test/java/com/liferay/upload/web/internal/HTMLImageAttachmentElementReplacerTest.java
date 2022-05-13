@@ -31,10 +31,12 @@ import org.junit.Test;
 
 import org.mockito.Mockito;
 
+import org.powermock.api.mockito.PowerMockito;
+
 /**
  * @author Alejandro Tardín
  */
-public class HTMLImageAttachmentElementReplacerTest {
+public class HTMLImageAttachmentElementReplacerTest extends PowerMockito {
 
 	@ClassRule
 	@Rule
@@ -52,9 +54,9 @@ public class HTMLImageAttachmentElementReplacerTest {
 
 		};
 
-		_portletFileRepository = Mockito.mock(PortletFileRepository.class);
+		_portletFileRepository = mock(PortletFileRepository.class);
 
-		Mockito.when(
+		when(
 			_portletFileRepository.getPortletFileEntryURL(
 				Mockito.isNull(ThemeDisplay.class), Mockito.eq(_fileEntry),
 				Mockito.eq(StringPool.BLANK))

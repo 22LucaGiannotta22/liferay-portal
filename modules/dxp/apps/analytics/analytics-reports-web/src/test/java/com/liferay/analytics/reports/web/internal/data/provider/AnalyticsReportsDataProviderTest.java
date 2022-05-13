@@ -174,7 +174,7 @@ public class AnalyticsReportsDataProviderTest {
 								))
 						).put(
 							"value", 5
-						).toString())));
+						).toJSONString())));
 
 		HistoricalMetric historicalMetric =
 			analyticsReportsDataProvider.getHistoricalReadsHistoricalMetric(
@@ -311,13 +311,13 @@ public class AnalyticsReportsDataProviderTest {
 								))
 						).put(
 							"value", 5
-						).toString()
+						).toJSONString()
 					).build()));
 
-		Assert.assertEquals(
-			Long.valueOf(12340),
-			analyticsReportsDataProvider.getTotalReads(
-				RandomTestUtil.randomLong(), RandomTestUtil.randomString()));
+		Long totalReads = analyticsReportsDataProvider.getTotalReads(
+			RandomTestUtil.randomLong(), RandomTestUtil.randomString());
+
+		Assert.assertEquals(Long.valueOf(12340), totalReads);
 	}
 
 	@Test(expected = PortalException.class)
@@ -354,13 +354,13 @@ public class AnalyticsReportsDataProviderTest {
 								))
 						).put(
 							"value", 5
-						).toString()
+						).toJSONString()
 					).build()));
 
-		Assert.assertEquals(
-			Long.valueOf(12340),
-			analyticsReportsDataProvider.getTotalViews(
-				RandomTestUtil.randomLong(), RandomTestUtil.randomString()));
+		Long totalViews = analyticsReportsDataProvider.getTotalViews(
+			RandomTestUtil.randomLong(), RandomTestUtil.randomString());
+
+		Assert.assertEquals(Long.valueOf(12340), totalViews);
 	}
 
 	@Test(expected = PortalException.class)

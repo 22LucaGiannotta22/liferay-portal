@@ -16,7 +16,6 @@ package com.liferay.object.admin.rest.client.serdes.v1_0;
 
 import com.liferay.object.admin.rest.client.dto.v1_0.ObjectView;
 import com.liferay.object.admin.rest.client.dto.v1_0.ObjectViewColumn;
-import com.liferay.object.admin.rest.client.dto.v1_0.ObjectViewFilterColumn;
 import com.liferay.object.admin.rest.client.dto.v1_0.ObjectViewSortColumn;
 import com.liferay.object.admin.rest.client.json.BaseJSONParser;
 
@@ -163,29 +162,6 @@ public class ObjectViewSerDes {
 			sb.append("]");
 		}
 
-		if (objectView.getObjectViewFilterColumns() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"objectViewFilterColumns\": ");
-
-			sb.append("[");
-
-			for (int i = 0; i < objectView.getObjectViewFilterColumns().length;
-				 i++) {
-
-				sb.append(
-					String.valueOf(objectView.getObjectViewFilterColumns()[i]));
-
-				if ((i + 1) < objectView.getObjectViewFilterColumns().length) {
-					sb.append(", ");
-				}
-			}
-
-			sb.append("]");
-		}
-
 		if (objectView.getObjectViewSortColumns() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -296,15 +272,6 @@ public class ObjectViewSerDes {
 				String.valueOf(objectView.getObjectViewColumns()));
 		}
 
-		if (objectView.getObjectViewFilterColumns() == null) {
-			map.put("objectViewFilterColumns", null);
-		}
-		else {
-			map.put(
-				"objectViewFilterColumns",
-				String.valueOf(objectView.getObjectViewFilterColumns()));
-		}
-
 		if (objectView.getObjectViewSortColumns() == null) {
 			map.put("objectViewSortColumns", null);
 		}
@@ -391,21 +358,6 @@ public class ObjectViewSerDes {
 								(String)object)
 						).toArray(
 							size -> new ObjectViewColumn[size]
-						));
-				}
-			}
-			else if (Objects.equals(
-						jsonParserFieldName, "objectViewFilterColumns")) {
-
-				if (jsonParserFieldValue != null) {
-					objectView.setObjectViewFilterColumns(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ObjectViewFilterColumnSerDes.toDTO(
-								(String)object)
-						).toArray(
-							size -> new ObjectViewFilterColumn[size]
 						));
 				}
 			}

@@ -20,6 +20,7 @@ import com.liferay.frontend.data.set.view.table.BaseTableFDSView;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
+import com.liferay.frontend.data.set.view.table.FDSTableSchemaField;
 
 import java.util.Locale;
 
@@ -41,31 +42,32 @@ public class CommercePriceListTableFDSView extends BaseTableFDSView {
 		FDSTableSchemaBuilder fdsTableSchemaBuilder =
 			_fdsTableSchemaBuilderFactory.create();
 
-		return fdsTableSchemaBuilder.add(
-			"name", "name",
-			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
-				"actionLink"
-			).setSortable(
-				true
-			)
-		).add(
-			"author", "author"
-		).add(
-			"catalogName", "catalog"
-		).add(
-			"priority", "priority"
-		).add(
-			"createDate", "create-date",
-			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
-				"dateTime"
-			).setSortable(
-				true
-			)
-		).add(
-			"workflowStatusInfo", "status",
-			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
-				"status")
-		).build();
+		FDSTableSchemaField nameFDSTableSchemaField =
+			fdsTableSchemaBuilder.addFDSTableSchemaField("name", "name");
+
+		nameFDSTableSchemaField.setContentRenderer("actionLink");
+		nameFDSTableSchemaField.setSortable(true);
+
+		fdsTableSchemaBuilder.addFDSTableSchemaField("author", "author");
+
+		fdsTableSchemaBuilder.addFDSTableSchemaField("catalogName", "catalog");
+
+		fdsTableSchemaBuilder.addFDSTableSchemaField("priority", "priority");
+
+		FDSTableSchemaField datefdsTableSchemaField =
+			fdsTableSchemaBuilder.addFDSTableSchemaField(
+				"createDate", "create-date");
+
+		datefdsTableSchemaField.setContentRenderer("dateTime");
+		datefdsTableSchemaField.setSortable(true);
+
+		FDSTableSchemaField fdsTableSchemaField =
+			fdsTableSchemaBuilder.addFDSTableSchemaField(
+				"workflowStatusInfo", "status");
+
+		fdsTableSchemaField.setContentRenderer("status");
+
+		return fdsTableSchemaBuilder.build();
 	}
 
 	@Reference

@@ -18,7 +18,6 @@ import com.liferay.oauth2.provider.service.impl.OAuth2ApplicationScopeAliasesLoc
 import com.liferay.oauth2.provider.util.builder.OAuth2ScopeBuilder;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -37,19 +36,17 @@ import org.apache.commons.compress.utils.Sets;
 import org.hamcrest.CoreMatchers;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Stian Sigvartsen
  */
-public class OAuth2ScopeBuilderImplTest {
-
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
+@RunWith(PowerMockRunner.class)
+public class OAuth2ScopeBuilderImplTest extends PowerMockito {
 
 	@Test
 	public void testApplicationIsolation() {

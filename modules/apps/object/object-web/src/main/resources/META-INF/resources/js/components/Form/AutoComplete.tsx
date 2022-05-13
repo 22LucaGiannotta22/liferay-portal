@@ -64,7 +64,7 @@ const AutoComplete: React.FC<IAutoCompleteProps> = ({
 		>
 			<ClayDropDown
 				active={active}
-				onActiveChange={setActive}
+				onActiveChange={(value) => setActive(value)}
 				trigger={
 					<CustomSelect
 						contentRight={<>{value && contentRight}</>}

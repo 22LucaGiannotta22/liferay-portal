@@ -12,7 +12,6 @@
 import {useModal} from '@clayui/core';
 import classNames from 'classnames';
 import {memo, useState} from 'react';
-import i18n from '../../../../../../common/I18n';
 import {Button} from '../../../../../../common/components';
 import ConfirmationModalLayout from '../../../../layouts/ConfirmationModalLayout';
 import {TEAM_MEMBERS_ACTION_TYPES} from '../../utils/constants';
@@ -40,7 +39,7 @@ const RemoveUserModal = ({onRemoveTeamMember, setUserAction, userAction}) => {
 					footerProps={{
 						cancelButton: (
 							<Button displayType="secondary" onClick={onClose}>
-								{i18n.translate('cancel')}
+								Cancel
 							</Button>
 						),
 						confirmationButton: (
@@ -53,23 +52,22 @@ const RemoveUserModal = ({onRemoveTeamMember, setUserAction, userAction}) => {
 								{isRemovingUser ? (
 									<>
 										<span className="cp-spinner mr-2 mt-1 spinner-border spinner-border-sm"></span>
-										{i18n.translate('removing')}...
+										Removing...
 									</>
 								) : (
-									`${i18n.translate('remove')}`
+									'Remove'
 								)}
 							</Button>
 						),
 					}}
 					observer={observer}
 					onClose={onClose}
-					title={i18n.translate('remove-user')}
+					title="Remove User"
 				>
 					<div className="align-items-center d-flex justify-content-center">
 						<p className="mb-6 mt-5 text-neutral-10">
-							{i18n.translate(
-								'are-you-sure-you-want-to-remove-this-team-member-from-the-project'
-							)}
+							Are you sure you want to remove this team member
+							from the project?
 						</p>
 					</div>
 				</ConfirmationModalLayout>

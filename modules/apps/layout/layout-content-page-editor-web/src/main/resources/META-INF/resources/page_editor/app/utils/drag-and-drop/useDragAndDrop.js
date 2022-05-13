@@ -32,7 +32,7 @@ import {
 	useToControlsId,
 } from '../../contexts/CollectionItemContext';
 import {useSelectItem} from '../../contexts/ControlsContext';
-import {useSelectorRef} from '../../contexts/StoreContext';
+import {useSelector} from '../../contexts/StoreContext';
 import {DRAG_DROP_TARGET_TYPE} from './constants/dragDropTargetType';
 import {TARGET_POSITIONS} from './constants/targetPositions';
 import defaultComputeHover from './defaultComputeHover';
@@ -279,6 +279,10 @@ export function useDropTarget(_targetItem, computeHover = defaultComputeHover) {
 }
 
 export function DragAndDropContextProvider({children}) {
+	const layoutDataRef = useRef({
+		items: [],
+	});
+
 	const [canDrag, setCanDrag] = useState(true);
 
 	const [state, reducerDispatch] = useReducer(
@@ -295,7 +299,11 @@ export function DragAndDropContextProvider({children}) {
 		return throttle(reducerDispatch, 100);
 	}, [reducerDispatch]);
 
-	const layoutDataRef = useSelectorRef((state) => state.layoutData);
+	useSelector((state) => {
+		layoutDataRef.current = state.layoutData;
+
+		return null;
+	});
 
 	const dragAndDropContext = useMemo(
 		() => ({

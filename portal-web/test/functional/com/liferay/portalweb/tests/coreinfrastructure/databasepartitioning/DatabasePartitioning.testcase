@@ -5,7 +5,6 @@ definition {
 	property database.types = "mysql";
 	property portal.release = "true";
 	property portal.upstream = "true";
-	property test.run.environment = "EE";
 	property testray.main.component.name = "Database Partitioning";
 	property timeout.explicit.wait = "180";
 
@@ -217,56 +216,6 @@ definition {
 			expectedCount = "1");
 	}
 
-	@priority = "4"
-	test CanSetVirtualHostViaPages {
-		property test.assert.warning.exceptions = "true";
-		property test.name.skip.portal.instance = "DatabasePartitioning#CanSetVirtualHostViaPages";
-
-		PortalInstances.openVirtualInstancesAdmin();
-
-		PortalInstances.addCP(
-			mailDomain = "www.able.com",
-			virtualHost = "www.able.com",
-			webId = "www.able.com");
-
-		User.firstLoginUI(
-			password = "test",
-			specificURL = "http://www.able.com:8080",
-			userEmailAddress = "test@www.able.com");
-
-		ProductMenu.gotoPortlet(
-			category = "Configuration",
-			panel = "Site Administration",
-			portlet = "Site Settings");
-
-		Site.addVirtualHostsURLCP(
-			pageVirtualHosts = "true",
-			pageVirtualHostURL = "www.baker.com");
-
-		Navigator.gotoPage(
-			baseURL = "www.baker.com:8080",
-			pageName = "Home");
-
-		AssertLocation(value1 = "http://www.baker.com:8080/web/guest/home");
-
-		SignOut.signOut();
-
-		User.firstLoginPG();
-
-		ApplicationsMenu.gotoPortlet(
-			category = "System",
-			panel = "Control Panel",
-			portlet = "Server Administration");
-
-		ServerAdministration.executeServerResourcesActions(actionsDescription = "Clear the database cache.");
-
-		Navigator.gotoPage(
-			baseURL = "www.baker.com:8080",
-			pageName = "Home");
-
-		AssertLocation(value1 = "http://www.baker.com:8080/web/guest/home");
-	}
-
 	@priority = "5"
 	test DeleteCompany {
 		property custom.properties = "database.partition.schema.name.prefix=testPartition";
@@ -359,6 +308,7 @@ definition {
 		DMDocument.viewCP(dmDocumentTitle = "DM Document Title");
 	}
 
+	@ignore = "true"
 	@priority = "4"
 	test ScheduleWebContentChangesWithDBPartitioningActivatedAcrossVariousCompanies {
 		property osgi.module.configuration.file.names = "com.liferay.journal.configuration.JournalServiceConfiguration.config";
@@ -388,17 +338,37 @@ definition {
 				webContentContent = "WC WebContent Content New Company",
 				webContentTitle = "WC WebContent Title New Company");
 
-			WebContent.increaseDisplayDate(minuteIncrease = "5");
+			WebContent.increaseDisplayDate(minuteIncrease = "8");
 
 			PortletEntry.publish();
-
-			AssertTextEquals(
-				key_webContentTitle = "WC WebContent Title New Company",
-				locator1 = "WC#ENTRY_LIST_WORKFLOW_STATUS",
-				value1 = "SCHEDULED");
 		}
 
+		task ("Add a page and WebContent display select a WebContent article") {
+			ProductMenu.gotoPortlet(
+				category = "Site Builder",
+				portlet = "Pages");
+
+			PagesAdmin.addPage(pageName = "Web Content Display Page");
+
+			Navigator.gotoPage(
+				baseURL = "www.able.com:8080",
+				pageName = "Web Content Display Page");
+
+			Portlet.addPG(portletName = "Web Content Display");
+
+			WebContentDisplayPortlet.selectWebContent(webContentTitle = "WC WebContent Title New Company");
+
+			IFrame.closeFrame();
+		}
+
+		AssertTextEquals.assertPartialText(
+			key_warningMessage = "WC WebContent Title New Company is scheduled and will be displayed",
+			locator1 = "Message#WARNING_SPECIFIC",
+			value1 = "WC WebContent Title New Company is scheduled and will be displayed");
+
 		task ("Add a WebContent article on default Company") {
+			SignOut.signOut();
+
 			User.firstLoginPG();
 
 			ProductMenu.gotoPortlet(
@@ -411,56 +381,80 @@ definition {
 				webContentContent = "WC WebContent Content Default Company",
 				webContentTitle = "WC WebContent Title Default Company");
 
-			WebContent.increaseDisplayDate(minuteIncrease = "2");
+			WebContent.increaseDisplayDate(minuteIncrease = "3");
 
 			PortletEntry.publish();
-
-			AssertTextEquals(
-				key_webContentTitle = "WC WebContent Title Default Company",
-				locator1 = "WC#ENTRY_LIST_WORKFLOW_STATUS",
-				value1 = "SCHEDULED");
 		}
 
-		task ("View WebContent Article Publish on default Company") {
-			Pause(locator1 = "150000");
-
+		task ("Add a page and WebContent display select a WebContent article") {
 			ProductMenu.gotoPortlet(
-				category = "Content & Data",
-				portlet = "Web Content");
+				category = "Site Builder",
+				portlet = "Pages");
 
-			AssertTextEquals(
-				key_webContentTitle = "WC WebContent Title Default Company",
-				locator1 = "WC#ENTRY_LIST_WORKFLOW_STATUS",
-				value1 = "APPROVED");
+			PagesAdmin.addPage(pageName = "Web Content Display Page");
+
+			Navigator.gotoPage(pageName = "Web Content Display Page");
+
+			Portlet.addPG(portletName = "Web Content Display");
+
+			WebContentDisplayPortlet.selectWebContent(webContentTitle = "WC WebContent Title Default Company");
+
+			IFrame.closeFrame();
+		}
+
+		AssertTextEquals.assertPartialText(
+			key_warningMessage = "WC WebContent Title Default Company is scheduled and will be displayed",
+			locator1 = "Message#WARNING_SPECIFIC",
+			value1 = "WC WebContent Title Default Company is scheduled and will be displayed");
+
+		task ("View WebContent Article Publish on default Company") {
+			Pause(locator1 = "180000");
+
+			// Disable Check on Default company until LPS-116111 is resolved
+
+			/*
+			Refresh();
+
+			WebContentDisplayPortlet.viewContent(
+				webContentContent = "WC WebContent Content Default Company",
+				webContentTitle = "WC WebContent Title Default Company");*/
 		}
 
 		task ("New Company publish it's WebContent Article") {
-			Navigator.openSpecificURL(url = "http://www.able.com:8080");
+			SignOut.signOut();
 
-			Pause(locator1 = "230000");
+			Navigator.gotoPage(
+				baseURL = "www.able.com:8080",
+				pageName = "Web Content Display Page");
 
-			ProductMenu.gotoPortlet(
-				category = "Content & Data",
-				portlet = "Web Content");
+			AssertTextEquals.assertPartialText(
+				key_warningMessage = "WC WebContent Title New Company is scheduled and will be displayed",
+				locator1 = "Message#WARNING_SPECIFIC",
+				value1 = "WC WebContent Title New Company is scheduled and will be displayed");
 
-			AssertTextEquals(
-				key_webContentTitle = "WC WebContent Title New Company",
-				locator1 = "WC#ENTRY_LIST_WORKFLOW_STATUS",
-				value1 = "APPROVED");
+			Pause(locator1 = "240000");
+
+			Refresh();
+
+			WebContentDisplayPortlet.viewContent(
+				webContentContent = "WC WebContent Content New Company",
+				webContentTitle = "WC WebContent Title New Company");
 		}
 
+		// Disable Check on Default company until LPS-116111 is resolved
+
+		/*
 		task ("WebContent Article not repulish on default Company") {
-			Navigator.openURL();
+			SignOut.signOut();
 
-			ProductMenu.gotoPortlet(
-				category = "Content & Data",
-				portlet = "Web Content");
+			User.firstLoginPG();
 
-			AssertTextEquals(
-				key_webContentTitle = "WC WebContent Title Default Company",
-				locator1 = "WC#ENTRY_LIST_WORKFLOW_STATUS",
-				value1 = "APPROVED");
-		}
+			Navigator.gotoPage(pageName = "Web Content Display Page");
+
+			WebContentDisplayPortlet.viewContent(
+				webContentContent = "WC WebContent Content Default Company",
+				webContentTitle = "WC WebContent Title Default Company");
+		}*/
 	}
 
 }

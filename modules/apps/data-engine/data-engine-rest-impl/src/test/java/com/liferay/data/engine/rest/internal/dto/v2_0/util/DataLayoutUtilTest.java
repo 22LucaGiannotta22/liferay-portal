@@ -27,39 +27,37 @@ import com.liferay.dynamic.data.mapping.model.DDMFormLayout;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutColumn;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutPage;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutRow;
+import com.liferay.dynamic.data.mapping.model.DDMFormRule;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormTestUtil;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.SetUtil;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
+
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Marcela Cunha
  */
-public class DataLayoutUtilTest {
+@PrepareForTest(LocaleUtil.class)
+@RunWith(PowerMockRunner.class)
+public class DataLayoutUtilTest extends PowerMockito {
 
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
-
-	@BeforeClass
-	public static void setUpClass() {
+	@Before
+	public void setUp() {
 		_setUpJSONFactoryUtil();
 		_setUpLocaleUtil();
 	}
@@ -185,40 +183,44 @@ public class DataLayoutUtilTest {
 			});
 		dataLayout.setPaginationMode("wizard");
 
-		DDMFormRuleDeserializer ddmFormRuleDeserializer = Mockito.mock(
+		DDMFormRuleDeserializer ddmFormRuleDeserializer = PowerMockito.mock(
 			DDMFormRuleDeserializer.class);
 
 		Mockito.when(
 			ddmFormRuleDeserializer.deserialize(
 				Mockito.anyObject(), Mockito.anyObject())
 		).thenReturn(
-			new ArrayList<>()
+			new ArrayList<DDMFormRule>()
 		);
 
 		Assert.assertEquals(
 			ddmFormLayout,
 			DataLayoutUtil.toDDMFormLayout(
 				dataLayout, ddmForm,
-				Mockito.mock(DDMFormFieldTypeServicesTracker.class),
+				PowerMockito.mock(DDMFormFieldTypeServicesTracker.class),
 				ddmFormRuleDeserializer));
 	}
 
-	private static void _setUpJSONFactoryUtil() {
+	private void _setUpJSONFactoryUtil() {
 		JSONFactoryUtil jsonFactoryUtil = new JSONFactoryUtil();
 
 		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
 	}
 
-	private static void _setUpLocaleUtil() {
-		LocaleUtil localeUtil = ReflectionTestUtil.getFieldValue(
-			LocaleUtil.class, "_localeUtil");
+	private void _setUpLocaleUtil() {
+		mockStatic(LocaleUtil.class);
 
-		Map<String, Locale> locales = ReflectionTestUtil.getFieldValue(
-			localeUtil, "_locales");
+		when(
+			LocaleUtil.fromLanguageId("en_US")
+		).thenReturn(
+			LocaleUtil.US
+		);
 
-		locales.clear();
-
-		locales.put("en_US", LocaleUtil.US);
+		when(
+			LocaleUtil.toLanguageId(LocaleUtil.US)
+		).thenReturn(
+			"en_US"
+		);
 	}
 
 }

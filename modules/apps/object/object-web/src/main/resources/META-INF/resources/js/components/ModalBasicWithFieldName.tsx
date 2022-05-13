@@ -20,7 +20,6 @@ import {fetch} from 'frontend-js-web';
 import React, {useState} from 'react';
 
 import useForm from '../hooks/useForm';
-import {defaultLanguageId} from '../utils/locale';
 import Input from './Form/Input';
 
 interface IProps extends React.HTMLAttributes<HTMLElement> {
@@ -34,6 +33,8 @@ interface IProps extends React.HTMLAttributes<HTMLElement> {
 type TInitialValues = {
 	name: LocalizedValue<string>;
 };
+
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId() as Locale;
 
 export function ModalBasicWithFieldName({
 	apiURL,

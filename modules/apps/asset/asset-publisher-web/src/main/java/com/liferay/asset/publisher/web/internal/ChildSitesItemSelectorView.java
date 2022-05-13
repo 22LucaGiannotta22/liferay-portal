@@ -26,10 +26,11 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.site.item.selector.criteria.SiteItemSelectorReturnType;
 
 import java.io.IOException;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -121,8 +122,9 @@ public class ChildSitesItemSelectorView
 	}
 
 	private static final List<ItemSelectorReturnType>
-		_supportedItemSelectorReturnTypes = Collections.singletonList(
-			new GroupItemSelectorReturnType());
+		_supportedItemSelectorReturnTypes = Arrays.asList(
+			new GroupItemSelectorReturnType(),
+			new SiteItemSelectorReturnType());
 
 	@Reference
 	private AssetPublisherHelper _assetPublisherHelper;

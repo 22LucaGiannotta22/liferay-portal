@@ -79,7 +79,7 @@ public class SegmentsExperimentRelServiceTest {
 
 		_user = UserTestUtil.addGroupUser(_group, _role.getName());
 
-		Layout layout = LayoutTestUtil.addTypeContentLayout(_group);
+		Layout layout = LayoutTestUtil.addTypePortletLayout(_group);
 
 		_classNameId = _classNameLocalService.getClassNameId(Layout.class);
 
@@ -118,12 +118,12 @@ public class SegmentsExperimentRelServiceTest {
 	}
 
 	private SegmentsExperience _addSegmentsExperience() throws Exception {
-		Layout layout = LayoutTestUtil.addTypeContentLayout(_group);
+		long classNameId = _classNameLocalService.getClassNameId(
+			Layout.class.getName());
+		Layout layout = LayoutTestUtil.addTypePortletLayout(_group);
 
 		return SegmentsTestUtil.addSegmentsExperience(
-			_group.getGroupId(),
-			_classNameLocalService.getClassNameId(Layout.class.getName()),
-			layout.getPlid());
+			_group.getGroupId(), classNameId, layout.getPlid());
 	}
 
 	private SegmentsExperiment _addSegmentsExperiment() throws Exception {

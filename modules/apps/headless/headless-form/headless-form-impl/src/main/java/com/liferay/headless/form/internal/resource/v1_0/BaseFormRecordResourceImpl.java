@@ -54,7 +54,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -346,21 +345,9 @@ public abstract class BaseFormRecordResourceImpl
 			Map<String, Serializable> parameters)
 		throws Exception {
 
-		UnsafeConsumer<FormRecord, Exception> formRecordUnsafeConsumer = null;
-
-		String createStrategy = (String)parameters.getOrDefault(
-			"createStrategy", "INSERT");
-
-		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			formRecordUnsafeConsumer = formRecord -> postFormFormRecord(
+		UnsafeConsumer<FormRecord, Exception> formRecordUnsafeConsumer =
+			formRecord -> postFormFormRecord(
 				Long.parseLong((String)parameters.get("formId")), formRecord);
-		}
-
-		if (formRecordUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Create strategy \"" + createStrategy +
-					"\" is not supported for FormRecord");
-		}
 
 		if (contextBatchUnsafeConsumer != null) {
 			contextBatchUnsafeConsumer.accept(
@@ -437,32 +424,11 @@ public abstract class BaseFormRecordResourceImpl
 			Map<String, Serializable> parameters)
 		throws Exception {
 
-		UnsafeConsumer<FormRecord, Exception> formRecordUnsafeConsumer = null;
-
-		String updateStrategy = (String)parameters.getOrDefault(
-			"updateStrategy", "UPDATE");
-
-		if ("UPDATE".equalsIgnoreCase(updateStrategy)) {
-			formRecordUnsafeConsumer = formRecord -> putFormRecord(
+		for (FormRecord formRecord : formRecords) {
+			putFormRecord(
 				formRecord.getId() != null ? formRecord.getId() :
 					Long.parseLong((String)parameters.get("formRecordId")),
 				formRecord);
-		}
-
-		if (formRecordUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Update strategy \"" + updateStrategy +
-					"\" is not supported for FormRecord");
-		}
-
-		if (contextBatchUnsafeConsumer != null) {
-			contextBatchUnsafeConsumer.accept(
-				formRecords, formRecordUnsafeConsumer);
-		}
-		else {
-			for (FormRecord formRecord : formRecords) {
-				formRecordUnsafeConsumer.accept(formRecord);
-			}
 		}
 	}
 

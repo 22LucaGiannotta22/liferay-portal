@@ -189,7 +189,6 @@ TrashManagementToolbarDisplayContext trashManagementToolbarDisplayContext = new 
 							<c:when test="<%= trashDisplayContext.isIconView() %>">
 								<liferay-ui:search-container-column-text>
 									<clay:vertical-card
-										propsTransformer="js/EntriesPropsTransformer"
 										verticalCard="<%= new TrashEntryVerticalCard(trashEntry, trashRenderer, liferayPortletResponse, renderRequest, searchContainer.getRowChecker(), viewContentURLString) %>"
 									/>
 								</liferay-ui:search-container-column-text>

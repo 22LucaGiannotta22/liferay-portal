@@ -154,14 +154,15 @@ if (portletTitleBasedNavigation) {
 		<liferay-ui:error exception="<%= DuplicateFileEntryException.class %>" message="please-enter-a-unique-document-name" />
 
 		<liferay-ui:error exception="<%= LiferayFileItemException.class %>">
-			<liferay-ui:message arguments="<%= LanguageUtil.formatStorageSize(FileItem.THRESHOLD_SIZE, locale) %>" key="please-enter-valid-content-with-valid-content-size-no-larger-than-x" translateArguments="<%= false %>" />
+			<liferay-ui:message arguments="<%= LanguageUtil.formatStorageSize(LiferayFileItem.THRESHOLD_SIZE, locale) %>" key="please-enter-valid-content-with-valid-content-size-no-larger-than-x" translateArguments="<%= false %>" />
 		</liferay-ui:error>
 
-		<%
-		DLConfiguration dlConfiguration = ConfigurationProviderUtil.getSystemConfiguration(DLConfiguration.class);
-		%>
-
 		<liferay-ui:error exception="<%= FileExtensionException.class %>">
+
+			<%
+			DLConfiguration dlConfiguration = ConfigurationProviderUtil.getSystemConfiguration(DLConfiguration.class);
+			%>
+
 			<liferay-ui:message key="document-names-must-end-with-one-of-the-following-extensions" /><%= StringUtil.merge(dlConfiguration.fileExtensions(), StringPool.COMMA_AND_SPACE) %>.
 		</liferay-ui:error>
 
@@ -242,7 +243,7 @@ if (portletTitleBasedNavigation) {
 
 			<c:if test="<%= MBCategoryPermission.contains(permissionChecker, scopeGroupId, categoryId, ActionKeys.ADD_FILE) %>">
 				<aui:fieldset collapsed="<%= true %>" collapsible="<%= true %>" label="attachments">
-					<%@ include file="/message_boards/edit_message_attachment.jspf" %>
+					<liferay-util:include page="/message_boards/edit_message_attachment.jsp" servletContext="<%= application %>" />
 
 					<div class="<%= (existingAttachmentsFileEntries.size() == 0) ? "hide" : StringPool.BLANK %>" id="<portlet:namespace />fileAttachments">
 						<liferay-ui:search-container

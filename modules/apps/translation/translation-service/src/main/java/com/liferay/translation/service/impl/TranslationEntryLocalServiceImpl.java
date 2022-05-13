@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.service.WorkflowInstanceLinkLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -176,16 +175,9 @@ public class TranslationEntryLocalServiceImpl
 					RestrictionsFactoryUtil.eq("classPK", classPK));
 			});
 		actionableDynamicQuery.setPerformActionMethod(
-			(TranslationEntry translationEntry) -> {
+			(TranslationEntry translationEntry) ->
 				translationEntryLocalService.deleteTranslationEntry(
-					translationEntry);
-
-				_workflowInstanceLinkLocalService.deleteWorkflowInstanceLink(
-					translationEntry.getCompanyId(),
-					translationEntry.getGroupId(),
-					TranslationEntry.class.getName(),
-					translationEntry.getTranslationEntryId());
-			});
+					translationEntry));
 
 		actionableDynamicQuery.performActions();
 	}
@@ -196,22 +188,6 @@ public class TranslationEntryLocalServiceImpl
 
 		translationEntryLocalService.deleteTranslationEntries(
 			_portal.getClassNameId(className), classPK);
-	}
-
-	@Indexable(type = IndexableType.DELETE)
-	@Override
-	public TranslationEntry deleteTranslationEntry(long translationEntryId)
-		throws PortalException {
-
-		TranslationEntry translationEntry = translationEntryPersistence.remove(
-			translationEntryId);
-
-		_workflowInstanceLinkLocalService.deleteWorkflowInstanceLink(
-			translationEntry.getCompanyId(), translationEntry.getGroupId(),
-			TranslationEntry.class.getName(),
-			translationEntry.getTranslationEntryId());
-
-		return translationEntry;
 	}
 
 	@Override
@@ -374,9 +350,6 @@ public class TranslationEntryLocalServiceImpl
 
 	@Reference
 	private UserLocalService _userLocalService;
-
-	@Reference
-	private WorkflowInstanceLinkLocalService _workflowInstanceLinkLocalService;
 
 	@Reference(target = "(content.type=application/xliff+xml)")
 	private TranslationInfoItemFieldValuesExporter

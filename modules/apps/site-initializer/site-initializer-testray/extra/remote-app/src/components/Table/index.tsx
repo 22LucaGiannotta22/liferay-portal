@@ -51,18 +51,17 @@ const Table: React.FC<TableProps> = ({
 	rowSelectable = false,
 }) => {
 	const [activeRow, setActiveRow] = useState<number | undefined>();
-	const displayActionColumn = !!actions?.length;
 
 	const navigate = useNavigate();
 
 	const onMouseLeaveRow = () => {
-		if (displayActionColumn) {
+		if (actions) {
 			setActiveRow(undefined);
 		}
 	};
 
 	const onMouseOverRow = (rowIndex: number) => {
-		if (displayActionColumn) {
+		if (actions) {
 			setActiveRow(rowIndex);
 		}
 	};
@@ -79,7 +78,7 @@ const Table: React.FC<TableProps> = ({
 						</Cell>
 					))}
 
-					{displayActionColumn && <Cell headingCell />}
+					{actions && <Cell headingCell />}
 				</Row>
 			</Head>
 
@@ -128,7 +127,7 @@ const Table: React.FC<TableProps> = ({
 							</Cell>
 						))}
 
-						{displayActionColumn && (
+						{actions && (
 							<Cell
 								align="right"
 								className="py-0 table-action-column table-cell-expand"

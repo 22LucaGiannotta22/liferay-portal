@@ -14,6 +14,7 @@
 
 package com.liferay.object.service.impl;
 
+import com.liferay.object.constants.ObjectValidationRuleConstants;
 import com.liferay.object.exception.ObjectValidationRuleEngineException;
 import com.liferay.object.exception.ObjectValidationRuleNameException;
 import com.liferay.object.exception.ObjectValidationRuleScriptException;
@@ -42,6 +43,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -207,18 +209,35 @@ public class ObjectValidationRuleLocalServiceImpl
 					getObjectValidationRuleEngine(
 						objectValidationRule.getEngine());
 
-			Map<String, Object> results = objectValidationRuleEngine.execute(
-				hashMapWrapper.build(), objectValidationRule.getScript());
+			if (Objects.equals(
+					objectValidationRule.getEngine(),
+					ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY)) {
 
-			if (GetterUtil.getBoolean(results.get("invalidScript"))) {
-				throw new ObjectValidationRuleScriptException(
-					"Script is invalid");
+				Map<String, Object> results =
+					objectValidationRuleEngine.execute(
+						hashMapWrapper.build(),
+						objectValidationRule.getScript());
+
+				if (GetterUtil.getBoolean(results.get("invalidScript"))) {
+					throw new ObjectValidationRuleScriptException(
+						"Script is invalid");
+				}
+
+				if (GetterUtil.getBoolean(results.get("invalidFields"))) {
+					throw new ObjectValidationRuleEngineException(
+						objectValidationRule.getErrorLabel(
+							LocaleUtil.getMostRelevantLocale()));
+				}
 			}
+			else {
+				if (!objectValidationRuleEngine.evaluate(
+						hashMapWrapper.build(),
+						objectValidationRule.getScript())) {
 
-			if (GetterUtil.getBoolean(results.get("invalidFields"))) {
-				throw new ObjectValidationRuleEngineException(
-					objectValidationRule.getErrorLabel(
-						LocaleUtil.getMostRelevantLocale()));
+					throw new ObjectValidationRuleEngineException(
+						objectValidationRule.getErrorLabel(
+							LocaleUtil.getMostRelevantLocale()));
+				}
 			}
 		}
 	}

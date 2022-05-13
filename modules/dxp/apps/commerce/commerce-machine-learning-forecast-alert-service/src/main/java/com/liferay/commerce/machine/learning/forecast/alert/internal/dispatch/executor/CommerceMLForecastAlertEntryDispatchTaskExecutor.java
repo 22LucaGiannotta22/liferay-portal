@@ -87,10 +87,12 @@ public class CommerceMLForecastAlertEntryDispatchTaskExecutor
 					COMMERCE_ML_FORECAST_ALERT_ENTRY_THRESHOLD),
 			_DEFAULT_COMMERCE_ML_FORECAST_ALERT_ENTRY_THRESHOLD);
 
-		long[] commerceAccountIds = ListUtil.toLongArray(
+		List<CommerceAccount> commerceAccounts =
 			_commerceAccountLocalService.getCommerceAccounts(
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS),
-			CommerceAccount::getCommerceAccountId);
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		long[] commerceAccountIds = ListUtil.toLongArray(
+			commerceAccounts, CommerceAccount::getCommerceAccountId);
 
 		List<CommerceAccountCommerceMLForecast>
 			commerceAccountCommerceMLForecasts =

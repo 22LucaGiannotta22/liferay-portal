@@ -62,7 +62,7 @@ public class PLOOriginalTranslationProviderTest {
 		Assert.assertEquals(
 			originalValue, _ploOriginalTranslationProvider.get(locale, key));
 
-		// Nonexistent key
+		// Non-existent key
 
 		Assert.assertNull(
 			_ploOriginalTranslationProvider.get(

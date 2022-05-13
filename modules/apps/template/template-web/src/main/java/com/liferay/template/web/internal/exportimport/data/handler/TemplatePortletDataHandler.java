@@ -167,11 +167,10 @@ public class TemplatePortletDataHandler extends BasePortletDataHandler {
 		List<Element> ddmTemplateElements = ddmTemplatesElement.elements();
 
 		for (Element ddmTemplateElement : ddmTemplateElements) {
-			if (classNameIds.contains(
-					_portal.getClassNameId(
-						ddmTemplateElement.attributeValue(
-							"attached-class-name")))) {
+			long classNameId = _portal.getClassNameId(
+				ddmTemplateElement.attributeValue("attached-class-name"));
 
+			if (classNameIds.contains(classNameId)) {
 				StagedModelDataHandlerUtil.importStagedModel(
 					portletDataContext, ddmTemplateElement);
 			}

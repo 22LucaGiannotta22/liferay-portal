@@ -40,12 +40,12 @@ public class BatchPlannerPlanServiceWrapper
 	@Override
 	public com.liferay.batch.planner.model.BatchPlannerPlan addBatchPlannerPlan(
 			boolean export, String externalType, String externalURL,
-			String internalClassName, String name, int size,
-			String taskItemDelegateName, boolean template)
+			String internalClassName, String name, String taskItemDelegateName,
+			boolean template)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _batchPlannerPlanService.addBatchPlannerPlan(
-			export, externalType, externalURL, internalClassName, name, size,
+			export, externalType, externalURL, internalClassName, name,
 			taskItemDelegateName, template);
 	}
 
@@ -90,13 +90,12 @@ public class BatchPlannerPlanServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.batch.planner.model.BatchPlannerPlan>
-			getBatchPlannerPlans(
-				long companyId, boolean export, boolean template,
-				String searchByKeyword, int start, int end,
-				com.liferay.portal.kernel.util.OrderByComparator
-					<com.liferay.batch.planner.model.BatchPlannerPlan>
-						orderByComparator)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		getBatchPlannerPlans(
+			long companyId, boolean export, boolean template,
+			String searchByKeyword, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.batch.planner.model.BatchPlannerPlan>
+					orderByComparator) {
 
 		return _batchPlannerPlanService.getBatchPlannerPlans(
 			companyId, export, template, searchByKeyword, start, end,
@@ -117,13 +116,12 @@ public class BatchPlannerPlanServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.batch.planner.model.BatchPlannerPlan>
-			getBatchPlannerPlans(
-				long companyId, boolean template, String searchByKeyword,
-				int start, int end,
-				com.liferay.portal.kernel.util.OrderByComparator
-					<com.liferay.batch.planner.model.BatchPlannerPlan>
-						orderByComparator)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		getBatchPlannerPlans(
+			long companyId, boolean template, String searchByKeyword, int start,
+			int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.batch.planner.model.BatchPlannerPlan>
+					orderByComparator) {
 
 		return _batchPlannerPlanService.getBatchPlannerPlans(
 			companyId, template, searchByKeyword, start, end,
@@ -171,9 +169,8 @@ public class BatchPlannerPlanServiceWrapper
 
 	@Override
 	public int getBatchPlannerPlansCount(
-			long companyId, boolean export, boolean template,
-			String searchByKeyword)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		long companyId, boolean export, boolean template,
+		String searchByKeyword) {
 
 		return _batchPlannerPlanService.getBatchPlannerPlansCount(
 			companyId, export, template, searchByKeyword);
@@ -181,8 +178,7 @@ public class BatchPlannerPlanServiceWrapper
 
 	@Override
 	public int getBatchPlannerPlansCount(
-			long companyId, boolean template, String searchByKeyword)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		long companyId, boolean template, String searchByKeyword) {
 
 		return _batchPlannerPlanService.getBatchPlannerPlansCount(
 			companyId, template, searchByKeyword);

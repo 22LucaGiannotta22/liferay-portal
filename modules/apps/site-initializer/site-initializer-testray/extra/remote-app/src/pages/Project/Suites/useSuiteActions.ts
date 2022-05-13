@@ -13,7 +13,6 @@
  */
 
 import {useMutation} from '@apollo/client';
-import {useNavigate} from 'react-router-dom';
 
 import {DeleteSuite} from '../../../graphql/mutations';
 import {TestraySuite} from '../../../graphql/queries';
@@ -22,7 +21,6 @@ import i18n from '../../../i18n';
 
 const useSuiteActions = () => {
 	const [onDeleteSuite] = useMutation(DeleteSuite);
-	const navigate = useNavigate();
 
 	const formModal = useFormModal();
 	const modal = formModal.modal;
@@ -30,7 +28,7 @@ const useSuiteActions = () => {
 	return {
 		actions: [
 			{
-				action: ({id}: TestraySuite) => navigate(`${id}/update`),
+				action: () => modal.open(),
 				name: i18n.translate('edit'),
 			},
 			{

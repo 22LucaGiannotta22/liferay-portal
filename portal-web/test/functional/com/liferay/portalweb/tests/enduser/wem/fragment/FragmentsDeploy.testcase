@@ -54,15 +54,9 @@ definition {
 		}
 
 		task ("Delete the deployed collection") {
-			LexiconEntry.gotoEllipsisMenuItem(menuItem = "Delete");
+			LexiconEntry.gotoEllipsisMenuItemNoError(menuItem = "Delete");
 
-			AssertTextEquals(
-				locator1 = "Modal#BODY",
-				value1 = "Deleting a fragment set is an action impossible to revert. All the fragments in the set will be removed and it will not be possible to recover them.");
-
-			Click(
-				key_text = "Delete",
-				locator1 = "Modal#MODAL_FOOTER_BUTTON");
+			AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 		}
 
 		task ("Assert the deployed collection is not present") {
@@ -99,15 +93,9 @@ definition {
 		}
 
 		task ("Delete the deployed collection") {
-			LexiconEntry.gotoEllipsisMenuItem(menuItem = "Delete");
+			LexiconEntry.gotoEllipsisMenuItemNoError(menuItem = "Delete");
 
-			AssertTextEquals(
-				locator1 = "Modal#BODY",
-				value1 = "Deleting a fragment set is an action impossible to revert. All the fragments in the set will be removed and it will not be possible to recover them.");
-
-			Click(
-				key_text = "Delete",
-				locator1 = "Modal#MODAL_FOOTER_BUTTON");
+			AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 		}
 
 		task ("Assert the deployed collection is not present") {
@@ -144,15 +132,9 @@ definition {
 		}
 
 		task ("Delete the deployed collection") {
-			LexiconEntry.gotoEllipsisMenuItem(menuItem = "Delete");
+			LexiconEntry.gotoEllipsisMenuItemNoError(menuItem = "Delete");
 
-			AssertTextEquals(
-				locator1 = "Modal#BODY",
-				value1 = "Deleting a fragment set is an action impossible to revert. All the fragments in the set will be removed and it will not be possible to recover them.");
-
-			Click(
-				key_text = "Delete",
-				locator1 = "Modal#MODAL_FOOTER_BUTTON");
+			AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 		}
 
 		task ("Assert the deployed collection is not present") {

@@ -341,8 +341,7 @@ public class FragmentCollectionContributorTrackerImpl
 	}
 
 	private static final int[] _SUPPORTED_FRAGMENT_TYPES = {
-		FragmentConstants.TYPE_COMPONENT, FragmentConstants.TYPE_INPUT,
-		FragmentConstants.TYPE_SECTION
+		FragmentConstants.TYPE_COMPONENT, FragmentConstants.TYPE_SECTION
 	};
 
 	private static final Log _log = LogFactoryUtil.getLog(

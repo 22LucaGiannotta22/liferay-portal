@@ -56,6 +56,7 @@ const ProjectModal: React.FC<FormModalComponent> = ({
 	const inputProps = {
 		errors,
 		register,
+		required: true,
 	};
 
 	return (
@@ -81,12 +82,7 @@ const ProjectModal: React.FC<FormModalComponent> = ({
 			)}
 			visible
 		>
-			<Input
-				label={i18n.translate('name')}
-				name="name"
-				required
-				{...inputProps}
-			/>
+			<Input label={i18n.translate('name')} name="name" {...inputProps} />
 
 			<Input
 				label={i18n.translate('description')}

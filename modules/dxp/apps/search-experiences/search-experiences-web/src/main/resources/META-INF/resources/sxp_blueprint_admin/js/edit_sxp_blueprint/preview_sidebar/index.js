@@ -129,10 +129,10 @@ function PreviewSidebar({
 				</ClayPaginationBar.Results>
 
 				<ClayPaginationWithBasicItems
-					active={activePage}
+					activePage={activePage}
 					alignmentPosition={Align.TopCenter}
 					ellipsisBuffer={1}
-					onActiveChange={setActivePage}
+					onPageChange={setActivePage}
 					totalPages={Math.ceil(totalHits / activeDelta)}
 				/>
 			</ClayPaginationBar>

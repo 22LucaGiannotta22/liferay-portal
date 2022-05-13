@@ -10,119 +10,49 @@
  */
 
 import {HashRouter, Route, Routes} from 'react-router-dom';
-import DeactivateKeysTable from '../../../containers/DeactivateKeysTable';
-import GenerateNewKey from '../../../containers/GenerateNewKey';
 import Layout from '../../../layouts/BaseLayout';
-import {PRODUCT_TYPES} from '../../../utils/constants';
-import getKebabCase from '../../../utils/getKebabCase';
-import Commerce from '../ActivationKeys/Commerce';
-import EnterpriseSearch from '../ActivationKeys/EnterpriseSearch';
-import AnalyticsCloud from '../AnalyticsCloud';
-import DXP from '../DXP';
-import DXPCloud from '../DXPCloud';
+import {PAGE_TYPES} from '../../../utils/constants';
 import Overview from '../Overview';
-import Portal from '../Portal';
 import TeamMembers from '../TeamMembers';
 import ActivationOutlet from './Outlets/ActivationOutlet';
-import ProductOutlet from './Outlets/ProductOutlet';
+import DeactivateOutlet from './Outlets/DeactivateOutlet';
+import ProductsMiddlewareOutlet from './Outlets/ProductsMiddlewareOutlet';
+import NewProductOutlet from './Outlets/useNewProductOutlet';
+import ProductsOutlet from './Outlets/useProductsOutlet';
 
-const ProjectRoutes = () => (
-	<HashRouter>
-		<Routes>
-			<Route element={<Layout />} path="/:accountKey">
-				<Route element={<Overview />} index />
+const ProjectRoutes = () => {
+	return (
+		<HashRouter>
+			<Routes>
+				<Route element={<Layout />} path="/:accountKey">
+					<Route element={<Overview />} index />
 
-				<Route element={<ActivationOutlet />} path="activation">
-					<Route
-						element={
-							<ProductOutlet product={PRODUCT_TYPES.dxpCloud} />
-						}
-						path={getKebabCase(PRODUCT_TYPES.dxpCloud)}
-					>
-						<Route element={<DXPCloud />} index />
-					</Route>
-
-					<Route
-						element={
-							<ProductOutlet product={PRODUCT_TYPES.portal} />
-						}
-						path={getKebabCase(PRODUCT_TYPES.portal)}
-					>
-						<Route element={<Portal />} index />
-
+					<Route element={<ActivationOutlet />} path="activation">
 						<Route
-							element={
-								<GenerateNewKey
-									productGroupName={PRODUCT_TYPES.portal}
-								/>
-							}
-							path="new"
-						/>
-					</Route>
+							element={<ProductsMiddlewareOutlet />}
+							path=":productId"
+						>
+							<Route element={<ProductsOutlet />} index />
 
-					<Route
-						element={<ProductOutlet product={PRODUCT_TYPES.dxp} />}
-						path={getKebabCase(PRODUCT_TYPES.dxp)}
-					>
-						<Route element={<DXP />} index />
-
-						<Route
-							element={
-								<GenerateNewKey
-									productGroupName={PRODUCT_TYPES.dxp}
-								/>
-							}
-							path="new"
-						/>
-
-						<Route
-							element={
-								<DeactivateKeysTable
-									productName={PRODUCT_TYPES.dxp}
-								/>
-							}
-							path="deactivate"
-						/>
-					</Route>
-
-					<Route
-						element={
-							<ProductOutlet
-								product={PRODUCT_TYPES.analyticsCloud}
+							<Route
+								element={<DeactivateOutlet />}
+								path="deactivate"
 							/>
-						}
-						path={getKebabCase(PRODUCT_TYPES.analyticsCloud)}
-					>
-						<Route element={<AnalyticsCloud />} index />
+
+							<Route element={<NewProductOutlet />} path="new" />
+						</Route>
 					</Route>
 
 					<Route
-						element={
-							<ProductOutlet product={PRODUCT_TYPES.commerce} />
-						}
-						path={getKebabCase(PRODUCT_TYPES.commerce)}
-					>
-						<Route element={<Commerce />} index />
-					</Route>
+						element={<TeamMembers />}
+						path={PAGE_TYPES.teamMembers}
+					/>
 
-					<Route
-						element={
-							<ProductOutlet
-								product={PRODUCT_TYPES.enterpriseSearch}
-							/>
-						}
-						path={getKebabCase(PRODUCT_TYPES.enterpriseSearch)}
-					>
-						<Route element={<EnterpriseSearch />} index />
-					</Route>
+					<Route element={<h3>Page not found</h3>} path="*" />
 				</Route>
-
-				<Route element={<TeamMembers />} path="team-members" />
-
-				<Route element={<h3>Page not found</h3>} path="*" />
-			</Route>
-		</Routes>
-	</HashRouter>
-);
+			</Routes>
+		</HashRouter>
+	);
+};
 
 export default ProjectRoutes;

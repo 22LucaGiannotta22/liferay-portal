@@ -110,34 +110,25 @@ definition {
 			wikiPageContent = "Wiki Page Content",
 			wikiPageName = "Wiki Page Title");
 
-		JSONWiki.addWikiChildPage(
+		WikiNavigator.openToEditPage(
 			groupName = "Guest",
-			wikiChildPageContent = "Wiki Child Page Content",
-			wikiChildPageName = "Wiki Child Page Title",
+			layoutURLKey = "wiki-test-page",
+			siteURLKey = "guest",
 			wikiNodeName = "Main",
-			wikiParentPageName = "Wiki Page Title");
+			wikiPageTitle = "Wiki Page Title");
 
-		for (var wikiPageTitle : list "Wiki Page Title,Wiki Child Page Title") {
-			WikiNavigator.openToEditPage(
-				groupName = "Guest",
-				layoutURLKey = "wiki-test-page",
-				siteURLKey = "guest",
-				wikiNodeName = "Main",
-				wikiPageTitle = "${wikiPageTitle}");
+		WikiEntry.addPageSummary(wikiPageSummary = "Wiki Page Summary");
 
-			WikiEntry.addPageSummary(wikiPageSummary = "${wikiPageTitle} Summary");
+		WikiNavigator.openToWikiPage(
+			layoutURLKey = "wiki-test-page",
+			siteURLKey = "guest",
+			wikiNodeName = "Main",
+			wikiPageTitle = "Wiki Page Title");
 
-			WikiNavigator.openToWikiPage(
-				layoutURLKey = "wiki-test-page",
-				siteURLKey = "guest",
-				wikiNodeName = "Main",
-				wikiPageTitle = "${wikiPageTitle}");
-
-			WikiPage.viewSummary(
-				wikiPageRevision = "1.1",
-				wikiPageTitle = "${wikiPageTitle}",
-				wikiVersionSummary = "${wikiPageTitle} Summary");
-		}
+		WikiPage.viewSummary(
+			wikiPageRevision = "1.1",
+			wikiPageTitle = "Wiki Page Title",
+			wikiVersionSummary = "Wiki Page Summary");
 	}
 
 	@description = "This is a test for LPS-136988. It checks that a table of contents can be added to a page."

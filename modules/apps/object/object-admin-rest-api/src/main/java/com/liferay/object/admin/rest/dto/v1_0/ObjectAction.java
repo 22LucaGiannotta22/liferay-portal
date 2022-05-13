@@ -177,34 +177,6 @@ public class ObjectAction implements Serializable {
 	protected Date dateModified;
 
 	@Schema
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	@JsonIgnore
-	public void setDescription(
-		UnsafeSupplier<String, Exception> descriptionUnsafeSupplier) {
-
-		try {
-			description = descriptionUnsafeSupplier.get();
-		}
-		catch (RuntimeException re) {
-			throw re;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String description;
-
-	@Schema
 	public Long getId() {
 		return id;
 	}
@@ -418,20 +390,6 @@ public class ObjectAction implements Serializable {
 			sb.append("\"");
 
 			sb.append(liferayToJSONDateFormat.format(dateModified));
-
-			sb.append("\"");
-		}
-
-		if (description != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"description\": ");
-
-			sb.append("\"");
-
-			sb.append(_escape(description));
 
 			sb.append("\"");
 		}

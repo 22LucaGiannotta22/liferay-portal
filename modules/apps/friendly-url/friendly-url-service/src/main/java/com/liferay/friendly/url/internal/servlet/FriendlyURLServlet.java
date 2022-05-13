@@ -14,12 +14,12 @@
 
 package com.liferay.friendly.url.internal.servlet;
 
+import com.liferay.petra.encryptor.Encryptor;
+import com.liferay.petra.encryptor.EncryptorException;
 import com.liferay.petra.lang.HashUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.encryptor.Encryptor;
-import com.liferay.portal.kernel.encryptor.EncryptorException;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -136,22 +136,10 @@ public class FriendlyURLServlet extends HttpServlet {
 			}
 
 			if (redirectEntryLocalService != null) {
-				HttpServletRequest originalHttpServletRequest =
-					portal.getOriginalServletRequest(httpServletRequest);
-
 				RedirectEntry redirectEntry =
 					redirectEntryLocalService.fetchRedirectEntry(
 						group.getGroupId(),
-						_normalizeFriendlyURL(
-							originalHttpServletRequest.getRequestURI()),
-						false);
-
-				if (redirectEntry == null) {
-					redirectEntry =
-						redirectEntryLocalService.fetchRedirectEntry(
-							group.getGroupId(),
-							_normalizeFriendlyURL(layoutFriendlyURL), true);
-				}
+						_normalizeFriendlyURL(layoutFriendlyURL), true);
 
 				if (redirectEntry != null) {
 					return new Redirect(
@@ -348,7 +336,7 @@ public class FriendlyURLServlet extends HttpServlet {
 			try {
 				Company company = portal.getCompany(httpServletRequest);
 
-				String encDoAsUserId = encryptor.encrypt(
+				String encDoAsUserId = Encryptor.encrypt(
 					company.getKeyObj(), String.valueOf(userId));
 
 				actualURL = HttpComponentsUtil.setParameter(
@@ -594,9 +582,6 @@ public class FriendlyURLServlet extends HttpServlet {
 		private final boolean _permanent;
 
 	}
-
-	@Reference
-	protected Encryptor encryptor;
 
 	@Reference
 	protected FriendlyURLNormalizer friendlyURLNormalizer;

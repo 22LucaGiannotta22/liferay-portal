@@ -14,6 +14,7 @@
 
 package com.liferay.object.web.internal.object.definitions.portlet.action;
 
+import com.liferay.dynamic.data.mapping.form.renderer.DDMFormRenderer;
 import com.liferay.object.action.executor.ObjectActionExecutorRegistry;
 import com.liferay.object.action.trigger.ObjectActionTriggerRegistry;
 import com.liferay.object.constants.ObjectPortletKeys;
@@ -70,6 +71,7 @@ public class EditObjectActionMVCRenderCommand implements MVCRenderCommand {
 			renderRequest.setAttribute(
 				WebKeys.PORTLET_DISPLAY_CONTEXT,
 				new ObjectDefinitionsActionsDisplayContext(
+					_ddmFormRenderer,
 					_portal.getHttpServletRequest(renderRequest),
 					_objectActionExecutorRegistry, _objectActionTriggerRegistry,
 					_objectDefinitionModelResourcePermission, _jsonFactory));
@@ -80,6 +82,9 @@ public class EditObjectActionMVCRenderCommand implements MVCRenderCommand {
 
 		return "/object_definitions/edit_object_action.jsp";
 	}
+
+	@Reference
+	private DDMFormRenderer _ddmFormRenderer;
 
 	@Reference
 	private JSONFactory _jsonFactory;

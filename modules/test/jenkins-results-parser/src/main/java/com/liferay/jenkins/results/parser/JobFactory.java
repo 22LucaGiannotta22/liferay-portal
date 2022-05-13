@@ -533,9 +533,7 @@ public class JobFactory {
 		if (jobName.startsWith("test-portal-testsuite-upstream-controller(") ||
 			jobName.equals("test-results-consistency-report-controller") ||
 			jobName.startsWith(
-				"test-qa-websites-functional-daily-controller(") ||
-			jobName.startsWith(
-				"test-qa-websites-functional-weekly-controller(")) {
+				"test-qa-websites-functional-daily-controller(")) {
 
 			if (jsonObject != null) {
 				job = new SimpleJob(jsonObject);
@@ -559,7 +557,7 @@ public class JobFactory {
 			}
 		}
 
-		if (jobName.startsWith("test-subrepository-acceptance-pullrequest")) {
+		if (jobName.startsWith("test-subrepository-acceptance-pullrequest(")) {
 			if (jsonObject != null) {
 				job = new SubrepositoryAcceptancePullRequestJob(jsonObject);
 			}

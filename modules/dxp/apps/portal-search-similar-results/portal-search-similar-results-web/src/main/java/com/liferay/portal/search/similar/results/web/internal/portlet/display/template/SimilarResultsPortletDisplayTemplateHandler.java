@@ -66,11 +66,10 @@ public class SimilarResultsPortletDisplayTemplateHandler
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		return LanguageUtil.format(
-			locale, "x-template",
-			_portal.getPortletTitle(
-				SimilarResultsPortletKeys.SIMILAR_RESULTS, resourceBundle),
-			false);
+		String portletTitle = _portal.getPortletTitle(
+			SimilarResultsPortletKeys.SIMILAR_RESULTS, resourceBundle);
+
+		return LanguageUtil.format(locale, "x-template", portletTitle, false);
 	}
 
 	@Override

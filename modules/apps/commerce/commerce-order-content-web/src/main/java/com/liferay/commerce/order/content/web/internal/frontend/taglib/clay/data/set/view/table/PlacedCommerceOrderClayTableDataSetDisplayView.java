@@ -41,13 +41,13 @@ public class PlacedCommerceOrderClayTableDataSetDisplayView
 		ClayTableSchemaBuilder clayTableSchemaBuilder =
 			_clayTableSchemaBuilderFactory.create();
 
-		ClayTableSchemaField titleClayTableSchemaField =
+		ClayTableSchemaField clayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField("title", "order-id");
 
 		clayTableSchemaBuilder.addClayTableSchemaField(
 			"orderType", "order-type");
 
-		titleClayTableSchemaField.setContentRenderer("actionLink");
+		clayTableSchemaField.setContentRenderer("actionLink");
 
 		clayTableSchemaBuilder.addClayTableSchemaField(
 			"externalReferenceCode", "erc");

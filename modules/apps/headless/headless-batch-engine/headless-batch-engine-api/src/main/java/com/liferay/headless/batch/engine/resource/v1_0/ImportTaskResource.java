@@ -80,28 +80,26 @@ public interface ImportTaskResource {
 		throws Exception;
 
 	public ImportTask postImportTask(
-			String className, String callbackURL, String createStrategy,
-			String externalReferenceCode, String fieldNameMapping,
-			String importStrategy, String taskItemDelegateName, Object object)
+			String className, String callbackURL, String externalReferenceCode,
+			String fieldNameMapping, String importStrategy,
+			String taskItemDelegateName, Object object)
 		throws Exception;
 
 	public ImportTask postImportTask(
-			String className, String callbackURL, String createStrategy,
-			String externalReferenceCode, String fieldNameMapping,
+			String className, String callbackURL, String externalReferenceCode,
+			String fieldNameMapping, String importStrategy,
+			String taskItemDelegateName, MultipartBody multipartBody)
+		throws Exception;
+
+	public ImportTask putImportTask(
+			String className, String callbackURL, String externalReferenceCode,
+			String importStrategy, String taskItemDelegateName, Object object)
+		throws Exception;
+
+	public ImportTask putImportTask(
+			String className, String callbackURL, String externalReferenceCode,
 			String importStrategy, String taskItemDelegateName,
 			MultipartBody multipartBody)
-		throws Exception;
-
-	public ImportTask putImportTask(
-			String className, String callbackURL, String externalReferenceCode,
-			String importStrategy, String taskItemDelegateName,
-			String updateStrategy, Object object)
-		throws Exception;
-
-	public ImportTask putImportTask(
-			String className, String callbackURL, String externalReferenceCode,
-			String importStrategy, String taskItemDelegateName,
-			String updateStrategy, MultipartBody multipartBody)
 		throws Exception;
 
 	public ImportTask getImportTask(Long importTaskId) throws Exception;

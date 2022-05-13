@@ -18,21 +18,9 @@ export type TName = {
 	[key: string]: string;
 };
 
-export type TWorkflowStatus = {
-	label: string;
-	value: string;
-};
-
-export type TLabelValueObject = {
-	label: string;
-	value: string;
-};
-
 export type TObjectField = {
-	businessType: string;
 	checked: boolean;
-	filtered?: boolean;
-	hasFilter?: boolean;
+	filtered?: boolean | undefined;
 	id: number;
 	indexed: boolean;
 	indexedAsKeyword: boolean;
@@ -49,13 +37,12 @@ export type TObjectColumn = {
 	filterBy?: string;
 	isDefaultSort?: boolean;
 	label: TName;
-	objectFieldBusinessType?: string;
 	objectFieldName: string;
 	priority?: number;
 	sortOrder?: string;
 	type?: string;
 	value?: string;
-	valueList?: TLabelValueObject[];
+	valueList?: string[];
 };
 
 export type TObjectViewColumn = {
@@ -75,15 +62,13 @@ export type TObjectViewSortColumn = {
 };
 
 export type TObjectViewFilterColumn = {
-	definition: {[key: string]: string[]};
 	fieldLabel: string;
 	filterBy: string;
-	filterType: string;
 	label: TName;
-	objectFieldBusinessType?: string;
 	objectFieldName: string;
+	type: string;
 	value?: string;
-	valueList?: TLabelValueObject[];
+	valueList?: string[];
 };
 
 export type TObjectView = {
@@ -99,7 +84,6 @@ export type TState = {
 	objectFields: TObjectField[];
 	objectView: TObjectView;
 	objectViewId: string;
-	workflowStatusJSONArray: TWorkflowStatus[];
 };
 
 export type TAction = {

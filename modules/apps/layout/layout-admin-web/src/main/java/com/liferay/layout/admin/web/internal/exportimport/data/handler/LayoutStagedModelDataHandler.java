@@ -134,6 +134,7 @@ import com.liferay.portal.service.impl.LayoutLocalServiceHelper;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.segments.service.SegmentsExperienceLocalService;
 import com.liferay.sites.kernel.util.Sites;
+import com.liferay.sites.kernel.util.SitesUtil;
 import com.liferay.staging.configuration.StagingConfiguration;
 
 import java.util.Collection;
@@ -569,7 +570,7 @@ public class LayoutStagedModelDataHandler
 			existingLayout = _layoutLocalService.fetchLayoutByUuidAndGroupId(
 				uuid, groupId, privateLayout);
 
-			if (_sites.isLayoutModifiedSinceLastMerge(existingLayout) ||
+			if (SitesUtil.isLayoutModifiedSinceLastMerge(existingLayout) ||
 				!_isLayoutOutdated(existingLayout, layout)) {
 
 				layouts.put(oldLayoutId, existingLayout);
@@ -585,7 +586,7 @@ public class LayoutStagedModelDataHandler
 				Layout mergeFailFriendlyURLLayout =
 					_layoutLocalService.getLayout(layoutFriendlyURL.getPlid());
 
-				_sites.addMergeFailFriendlyURLLayout(
+				SitesUtil.addMergeFailFriendlyURLLayout(
 					mergeFailFriendlyURLLayout);
 
 				if (!_log.isWarnEnabled()) {
@@ -2056,7 +2057,7 @@ public class LayoutStagedModelDataHandler
 		if (layoutSetPrototypeLinkEnabled &&
 			Validator.isNotNull(
 				portletDataContext.getLayoutSetPrototypeUuid()) &&
-			_sites.isLayoutModifiedSinceLastMerge(layout)) {
+			SitesUtil.isLayoutModifiedSinceLastMerge(layout)) {
 
 			return;
 		}
@@ -2856,9 +2857,6 @@ public class LayoutStagedModelDataHandler
 
 	@Reference
 	private SegmentsExperienceLocalService _segmentsExperienceLocalService;
-
-	@Reference
-	private Sites _sites;
 
 	@Reference
 	private Staging _staging;

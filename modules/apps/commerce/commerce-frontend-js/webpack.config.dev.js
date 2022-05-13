@@ -38,7 +38,6 @@ module.exports = {
 		},
 		compress: false,
 		contentBase: './dev/public',
-		disableHostCheck: true,
 		open: true,
 		openPage: 'index.html',
 		port: 8888,

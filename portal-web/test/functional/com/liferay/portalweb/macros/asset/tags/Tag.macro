@@ -71,37 +71,9 @@ definition {
 		Button.clickCancel();
 	}
 
-	macro deleteByIconCP {
-		for (var tagName : list "${tagNameList}") {
-			LexiconEntry.selectEntry(key_rowEntry = "${tagName}");
-		}
-
-		Click(locator1 = "Icon#DELETE");
-
-		AssertTextEquals(
-			locator1 = "Modal#BODY",
-			value1 = "Are you sure you want to delete this? It will be deleted immediately.");
-
-		Click(
-			key_text = "Delete",
-			locator1 = "Modal#MODAL_FOOTER_BUTTON");
-
-		Alert.viewSuccessMessage();
-	}
-
 	macro deleteCP {
 		for (var tagName : list "${tagNameList}") {
-			LexiconEntry.gotoEntryMenuItem(
-				menuItem = "Delete",
-				rowEntry = "${tagName}");
-
-			AssertTextEquals(
-				locator1 = "Modal#BODY",
-				value1 = "Are you sure you want to delete this? It will be deleted immediately.");
-
-			Click(
-				key_text = "Delete",
-				locator1 = "Modal#MODAL_FOOTER_BUTTON");
+			PortletEntry.deleteViaMenuItem(rowEntry = "${tagName}");
 
 			Alert.viewSuccessMessage();
 		}
@@ -196,17 +168,9 @@ definition {
 		while (IsElementNotPresent(locator1 = "Message#EMPTY_INFO")) {
 			PortletEntry.selectAll();
 
-			Click(
-				key_text = "trash",
-				locator1 = "ManagementBar#ANY_ICON");
+			ClickNoError(locator1 = "Icon#DELETE");
 
-			AssertTextEquals(
-				locator1 = "Modal#BODY",
-				value1 = "Are you sure you want to delete this? It will be deleted immediately.");
-
-			Click(
-				key_text = "Delete",
-				locator1 = "Modal#MODAL_FOOTER_BUTTON");
+			AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 		}
 
 		AssertTextEquals.assertPartialText(

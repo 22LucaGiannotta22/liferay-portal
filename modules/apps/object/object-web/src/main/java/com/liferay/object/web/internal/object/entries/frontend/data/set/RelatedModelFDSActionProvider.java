@@ -72,16 +72,7 @@ public class RelatedModelFDSActionProvider implements FDSActionProvider {
 		return DropdownItemListBuilder.add(
 			dropdownItem -> {
 				dropdownItem.setHref(
-					_getViewURL(relatedModel.getId(), httpServletRequest));
-				dropdownItem.setIcon("view");
-				dropdownItem.setLabel(
-					LanguageUtil.get(httpServletRequest, Constants.VIEW));
-			}
-		).add(
-			dropdownItem -> {
-				dropdownItem.setHref(
 					_getDeleteURL(relatedModel.getId(), httpServletRequest));
-				dropdownItem.setIcon("trash");
 				dropdownItem.setLabel(
 					LanguageUtil.get(httpServletRequest, Constants.DELETE));
 			}
@@ -121,29 +112,6 @@ public class RelatedModelFDSActionProvider implements FDSActionProvider {
 			ParamUtil.getLong(httpServletRequest, "objectRelationshipId")
 		).setParameter(
 			"relatedModelId", id
-		).buildPortletURL();
-	}
-
-	private PortletURL _getViewURL(
-			long id, HttpServletRequest httpServletRequest)
-		throws PortalException {
-
-		ObjectEntry objectEntry = _objectEntryLocalService.getObjectEntry(id);
-
-		ObjectDefinition objectDefinition =
-			_objectDefinitionLocalService.getObjectDefinition(
-				objectEntry.getObjectDefinitionId());
-
-		return PortletURLBuilder.create(
-			_portal.getControlPanelPortletURL(
-				httpServletRequest, objectDefinition.getPortletId(),
-				PortletRequest.ACTION_PHASE)
-		).setMVCRenderCommandName(
-			"/object_entries/edit_object_entry"
-		).setParameter(
-			"objectDefinitionId", objectDefinition.getObjectDefinitionId()
-		).setParameter(
-			"objectEntryId", id
 		).buildPortletURL();
 	}
 

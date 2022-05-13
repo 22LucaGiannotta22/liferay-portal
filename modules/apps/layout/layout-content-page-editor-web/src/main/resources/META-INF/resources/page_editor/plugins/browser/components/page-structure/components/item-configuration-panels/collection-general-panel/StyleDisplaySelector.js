@@ -16,6 +16,7 @@ import ClayForm, {ClaySelectWithOption} from '@clayui/form';
 import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 
+import {config} from '../../../../../../../app/config/index';
 import InfoItemService from '../../../../../../../app/services/InfoItemService';
 import {useId} from '../../../../../../../app/utils/useId';
 
@@ -61,11 +62,17 @@ export function StyleDisplaySelector({
 	return (
 		<ClayForm.Group small>
 			<label htmlFor={listStyleId}>
-				{Liferay.Language.get('style-display')}
+				{config.featureFlagLps119551
+					? Liferay.Language.get('style-display')
+					: Liferay.Language.get('list-style')}
 			</label>
 
 			<ClaySelectWithOption
-				aria-label={Liferay.Language.get('style-display')}
+				aria-label={
+					config.featureFlagLps119551
+						? Liferay.Language.get('style-display')
+						: Liferay.Language.get('list-style')
+				}
 				id={listStyleId}
 				onChange={(event) =>
 					handleConfigurationChanged({

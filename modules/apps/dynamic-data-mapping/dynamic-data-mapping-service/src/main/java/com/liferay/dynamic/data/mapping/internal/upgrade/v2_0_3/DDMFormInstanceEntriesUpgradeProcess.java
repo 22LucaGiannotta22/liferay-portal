@@ -95,7 +95,7 @@ public class DDMFormInstanceEntriesUpgradeProcess extends UpgradeProcess {
 			}
 		}
 
-		return ddmFormValuesJSONObject.toString();
+		return ddmFormValuesJSONObject.toJSONString();
 	}
 
 	private final JSONFactory _jsonFactory;

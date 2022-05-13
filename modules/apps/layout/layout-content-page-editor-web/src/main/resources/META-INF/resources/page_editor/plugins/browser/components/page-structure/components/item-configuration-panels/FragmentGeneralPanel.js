@@ -16,7 +16,9 @@ import PropTypes from 'prop-types';
 import React, {useCallback} from 'react';
 
 import {COMMON_STYLES_ROLES} from '../../../../../../app/config/constants/commonStylesRoles';
+import {FRAGMENT_CONFIGURATION_ROLES} from '../../../../../../app/config/constants/fragmentConfigurationRoles';
 import {VIEWPORT_SIZES} from '../../../../../../app/config/constants/viewportSizes';
+import {config} from '../../../../../../app/config/index';
 import {
 	useDispatch,
 	useSelector,
@@ -45,8 +47,11 @@ export function FragmentGeneralPanel({item}) {
 	const languageId = useSelector(selectLanguageId);
 
 	const fieldSets =
-		fragmentEntryLink.configuration?.fieldSets?.filter(
-			(fieldSet) => !fieldSet.configurationRole
+		fragmentEntryLink.configuration?.fieldSets?.filter((fieldSet) =>
+			config.fragmentAdvancedOptionsEnabled
+				? !fieldSet.configurationRole
+				: fieldSet.configurationRole !==
+				  FRAGMENT_CONFIGURATION_ROLES.style
 		) ?? [];
 
 	const itemConfig = getResponsiveConfig(item.config, selectedViewportSize);

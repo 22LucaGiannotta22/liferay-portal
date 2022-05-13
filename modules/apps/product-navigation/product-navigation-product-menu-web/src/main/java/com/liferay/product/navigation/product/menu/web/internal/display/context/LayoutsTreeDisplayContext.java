@@ -724,7 +724,7 @@ public class LayoutsTreeDisplayContext {
 					"GroupId: ", getGroupId(), " SiteNavigationMenuId: ",
 					_getSiteNavigationMenuId(),
 					" SiteNavigationMenuItemHierarchy: ",
-					_siteNavigationMenuItemsJSONArray.toString()));
+					_siteNavigationMenuItemsJSONArray.toJSONString()));
 		}
 
 		return _siteNavigationMenuItemsJSONArray;

@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.jsonwebservice.NoSuchJSONWebServiceException;
 import com.liferay.portal.kernel.servlet.HttpMethods;
 import com.liferay.portal.kernel.util.MethodParametersResolverUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.MethodParametersResolverImpl;
 import com.liferay.portal.util.PropsImpl;
 
@@ -117,9 +116,8 @@ public abstract class BaseJSONWebServiceTestCase extends PowerMockito {
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest30();
 
-		mockHttpServletRequest.setAttribute(
-			WebKeys.ORIGINAL_PATH_INFO, pathInfo);
 		mockHttpServletRequest.setMethod(HttpMethods.GET);
+		mockHttpServletRequest.setPathInfo(pathInfo);
 
 		return mockHttpServletRequest;
 	}
@@ -130,9 +128,8 @@ public abstract class BaseJSONWebServiceTestCase extends PowerMockito {
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest30();
 
-		mockHttpServletRequest.setAttribute(
-			WebKeys.ORIGINAL_PATH_INFO, pathInfo);
 		mockHttpServletRequest.setMethod(method);
+		mockHttpServletRequest.setPathInfo(pathInfo);
 
 		return mockHttpServletRequest;
 	}

@@ -297,10 +297,13 @@ public class ExpandoSearchTest {
 	protected FileEntry addDLFileEntry(String columnName, String columnValue)
 		throws Exception {
 
+		ServiceContext serviceContext = getServiceContext(
+			columnName, columnValue);
+
 		FileEntry fileEntry = DLAppTestUtil.addFileEntryWithWorkflow(
 			TestPropsValues.getUserId(), TestPropsValues.getGroupId(), 0,
 			StringPool.BLANK, RandomTestUtil.randomString(), true,
-			getServiceContext(columnName, columnValue));
+			serviceContext);
 
 		_fileEntries.add(fileEntry);
 
@@ -384,7 +387,10 @@ public class ExpandoSearchTest {
 	protected User addUser(String columnName, String columnValue)
 		throws Exception {
 
-		return addUser(getServiceContext(columnName, columnValue));
+		ServiceContext serviceContext = getServiceContext(
+			columnName, columnValue);
+
+		return addUser(serviceContext);
 	}
 
 	protected void assertNoHits(String keywords) throws Exception {

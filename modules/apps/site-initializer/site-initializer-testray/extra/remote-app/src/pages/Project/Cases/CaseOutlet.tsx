@@ -24,16 +24,27 @@ import {
 import {TestrayCase, getCase} from '../../../graphql/queries';
 import useHeader from '../../../hooks/useHeader';
 import i18n from '../../../i18n';
-import {isIncludingFormPage} from '../../../util';
 
 const CaseOutlet = () => {
 	const {testrayProject}: any = useOutletContext();
 	const {caseId, projectId} = useParams();
 	const {pathname} = useLocation();
 	const basePath = `/project/${projectId}/cases/${caseId}`;
-	const isFormPage = isIncludingFormPage(pathname);
 
-	const {setHeading, setTabs} = useHeader();
+	const {setHeading} = useHeader({
+		useTabs: [
+			{
+				active: pathname === basePath,
+				path: basePath,
+				title: i18n.translate('case-details'),
+			},
+			{
+				active: pathname === `${basePath}/requirements`,
+				path: `${basePath}/requirements`,
+				title: i18n.translate('requirements'),
+			},
+		],
+	});
 
 	const {data} = useQuery<{case: TestrayCase}>(getCase, {
 		variables: {
@@ -60,23 +71,6 @@ const CaseOutlet = () => {
 			}, 0);
 		}
 	}, [testrayProject, testrayCase, setHeading]);
-
-	useEffect(() => {
-		if (!isFormPage) {
-			setTabs([
-				{
-					active: pathname === basePath,
-					path: basePath,
-					title: i18n.translate('case-details'),
-				},
-				{
-					active: pathname === `${basePath}/requirements`,
-					path: `${basePath}/requirements`,
-					title: i18n.translate('requirements'),
-				},
-			]);
-		}
-	}, [basePath, isFormPage, pathname, setTabs]);
 
 	if (testrayCase) {
 		return <Outlet context={{testrayCase}} />;

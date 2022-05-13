@@ -302,15 +302,18 @@ public class BaseUpgradePortletIdTest extends BasePortletIdUpgradeProcess {
 					layout.getPlid(), " via primKey ", oldPortletPrimaryKey),
 				resourcePermission);
 
+			resourcePermission =
+				_resourcePermissionLocalService.fetchResourcePermission(
+					TestPropsValues.getCompanyId(), newRootPortletId,
+					ResourceConstants.SCOPE_INDIVIDUAL, newPortletPrimaryKey,
+					role.getRoleId());
+
 			Assert.assertNotNull(
 				StringBundler.concat(
 					newPortletId, " does not have a resource permission on ",
 					"page ", layout.getPlid(), " via primKey ",
 					newPortletPrimaryKey),
-				_resourcePermissionLocalService.fetchResourcePermission(
-					TestPropsValues.getCompanyId(), newRootPortletId,
-					ResourceConstants.SCOPE_INDIVIDUAL, newPortletPrimaryKey,
-					role.getRoleId()));
+				resourcePermission);
 
 			boolean hasViewPermission =
 				_resourcePermissionLocalService.hasResourcePermission(

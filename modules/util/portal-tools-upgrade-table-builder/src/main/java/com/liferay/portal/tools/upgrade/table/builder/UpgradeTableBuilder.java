@@ -179,10 +179,13 @@ public class UpgradeTableBuilder {
 				_getAuthor(content));
 		}
 		else {
+			String author = _getAuthor(content);
+
+			String[] addIndexes = _getAddIndexes(
+				_getIndexesFilePath(upgradeFileVersion), tableName);
+
 			content = _getOldContent(
-				packagePath, className, upgradeFileContent, _getAuthor(content),
-				_getAddIndexes(
-					_getIndexesFilePath(upgradeFileVersion), tableName));
+				packagePath, className, upgradeFileContent, author, addIndexes);
 		}
 
 		Files.write(path, content.getBytes(StandardCharsets.UTF_8));

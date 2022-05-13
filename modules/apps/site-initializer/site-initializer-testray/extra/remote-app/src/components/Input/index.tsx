@@ -15,11 +15,12 @@
 import {TypedDocumentNode, useLazyQuery} from '@apollo/client';
 import ClayAutocomplete from '@clayui/autocomplete';
 import ClayDropDown from '@clayui/drop-down';
-import {ClayDualListBox, ClayInput} from '@clayui/form';
+import ClayForm, {ClayDualListBox, ClayInput} from '@clayui/form';
+import classNames from 'classnames';
 import {InputHTMLAttributes, useEffect, useMemo, useState} from 'react';
 
 import useDebounce from '../../hooks/useDebounce';
-import InputWrapper from './InputWrapper';
+import InputWarning from './InputWarning';
 
 type InputProps = {
 	errors?: any;
@@ -30,6 +31,46 @@ type InputProps = {
 	required?: boolean;
 	type?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
+
+type InputWrapper = {
+	description?: string;
+	error?: string;
+	label?: string;
+	required?: boolean;
+};
+
+const InputWrapper: React.FC<InputWrapper> = ({
+	children,
+	description,
+	error,
+	label,
+	required,
+}) => {
+	return (
+		<ClayForm.Group>
+			{label && (
+				<label
+					className={classNames(
+						'font-weight-normal mb-1 mx-0 text-paragraph',
+						{required}
+					)}
+				>
+					{label}
+				</label>
+			)}
+
+			{children}
+
+			{description && (
+				<small className="form-text text-muted" id="emailHelp">
+					{description}
+				</small>
+			)}
+
+			{error && <InputWarning>{error}</InputWarning>}
+		</ClayForm.Group>
+	);
+};
 
 const Input: React.FC<InputProps> = ({
 	errors = {},

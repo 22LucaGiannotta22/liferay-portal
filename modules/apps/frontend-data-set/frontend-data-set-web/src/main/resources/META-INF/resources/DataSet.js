@@ -79,10 +79,9 @@ const DataSet = ({
 	nestedItemsKey,
 	nestedItemsReferenceKey,
 	onActionDropdownItemClick,
-	onBulkActionItemClick,
 	overrideEmptyResultView,
 	pagination,
-	selectedItems: initialSelectedItemsValues,
+	selectedItems,
 	selectedItemsKey,
 	selectionType,
 	showManagementBar,
@@ -122,7 +121,7 @@ const DataSet = ({
 	});
 
 	const [highlightedItemsValue, setHighlightedItemsValue] = useState([]);
-	const [items, setItems] = useState(itemsProp || []);
+	const [items, setItems] = useState(itemsProp);
 	const [itemsChanges, setItemsChanges] = useState({});
 	const [pageNumber, setPageNumber] = useState(
 		showPagination &&
@@ -130,9 +129,8 @@ const DataSet = ({
 	);
 	const [searchParam, setSearchParam] = useState('');
 	const [selectedItemsValue, setSelectedItemsValue] = useState(
-		initialSelectedItemsValues || []
+		selectedItems || []
 	);
-	const [selectedItems, setSelectedItems] = useState([]);
 	const [sorting, setSorting] = useState(sortingProp);
 	const [total, setTotal] = useState(0);
 	const [{activeView}, dispatch] = useContext(ViewsContext);
@@ -291,24 +289,6 @@ const DataSet = ({
 	}
 
 	useEffect(() => {
-		setSelectedItems((selectedItems) => {
-			return selectedItemsValue.map((value) => {
-				let selectedItem = items.find(
-					(item) => item[selectedItemsKey] === value
-				);
-
-				if (!selectedItem) {
-					selectedItem = selectedItems.find(
-						(item) => item[selectedItemsKey] === value
-					);
-				}
-
-				return selectedItem;
-			});
-		});
-	}, [selectedItemsValue, items, selectedItemsKey]);
-
-	useEffect(() => {
 		setComponentLoading(true);
 
 		requestComponent().then((component) => {
@@ -393,7 +373,6 @@ const DataSet = ({
 				selectAllItems={() =>
 					selectItems(items.map((item) => item[selectedItemsKey]))
 				}
-				selectedItems={selectedItems}
 				selectedItemsKey={selectedItemsKey}
 				selectedItemsValue={selectedItemsValue}
 				selectionType={selectionType}
@@ -439,6 +418,11 @@ const DataSet = ({
 		) : (
 			<span aria-hidden="true" className="loading-animation my-7" />
 		);
+
+	const formRef = useRef(null);
+
+	const wrappedView =
+		formId || formName ? view : <form ref={formRef}>{view}</form>;
 
 	const paginationComponent =
 		showPagination && pagination && items?.length && total ? (
@@ -645,6 +629,7 @@ const DataSet = ({
 				filters,
 				formId,
 				formName,
+				formRef,
 				highlightItems,
 				highlightedItemsValue,
 				id,
@@ -658,7 +643,6 @@ const DataSet = ({
 				nestedItemsKey,
 				nestedItemsReferenceKey,
 				onActionDropdownItemClick,
-				onBulkActionItemClick,
 				openModal,
 				openSidePanel,
 				searchParam,
@@ -693,7 +677,7 @@ const DataSet = ({
 						<div className="data-set data-set-inline">
 							{managementBar}
 
-							{view}
+							{wrappedView}
 
 							{paginationComponent}
 						</div>
@@ -703,7 +687,7 @@ const DataSet = ({
 						<div className="data-set data-set-stacked">
 							{managementBar}
 
-							{view}
+							{wrappedView}
 
 							{paginationComponent}
 						</div>
@@ -714,7 +698,7 @@ const DataSet = ({
 							{managementBar}
 
 							<div className="container-fluid container-xl mt-3">
-								{view}
+								{wrappedView}
 
 								{paginationComponent}
 							</div>
@@ -741,7 +725,6 @@ DataSet.propTypes = {
 	formId: PropTypes.string,
 	formName: PropTypes.string,
 	id: PropTypes.string.isRequired,
-	initialSelectedItemsValues: PropTypes.array,
 	inlineAddingSettings: PropTypes.shape({
 		apiURL: PropTypes.string.isRequired,
 		defaultBodyContent: PropTypes.object,
@@ -768,6 +751,7 @@ DataSet.propTypes = {
 		),
 		initialDelta: PropTypes.number.isRequired,
 	}),
+	selectedItems: PropTypes.array,
 	selectedItemsKey: PropTypes.string,
 	selectionType: PropTypes.oneOf(['single', 'multiple']),
 	showManagementBar: PropTypes.bool,

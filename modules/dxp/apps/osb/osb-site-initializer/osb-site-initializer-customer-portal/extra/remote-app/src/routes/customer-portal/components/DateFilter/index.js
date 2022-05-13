@@ -11,7 +11,6 @@
 import ClayButton from '@clayui/button';
 import ClayDatePicker from '@clayui/date-picker';
 import {useEffect, useState} from 'react';
-import i18n from '../../../../common/I18n';
 
 const NAVIGATION_YEARS_RANGE = 5;
 
@@ -52,8 +51,7 @@ const DateFilter = ({
 	return (
 		<div className="p-3 w-100">
 			<div className="font-weight-semi-bold pb-3 text-paragraph">
-				{i18n.translate('on-or-after')}
-
+				On or after
 				<ClayDatePicker
 					dateFormat="MM/dd/yyyy"
 					disabled={onOrAfterDisabled}
@@ -66,7 +64,7 @@ const DateFilter = ({
 							setExpandedOnOrAfter(false);
 						}
 					}}
-					placeholder={i18n.translate('mm-dd-yyyy')}
+					placeholder="MM/DD/YYYY"
 					value={onOrAfterValue}
 					years={{
 						end: now.getFullYear() + NAVIGATION_YEARS_RANGE,
@@ -76,8 +74,7 @@ const DateFilter = ({
 			</div>
 
 			<div className="font-weight-semi-bold pb-3 text-paragraph">
-				{i18n.translate('on-or-before')}
-
+				On or before
 				<ClayDatePicker
 					dateFormat="MM/dd/yyyy"
 					disabled={onOrBeforeDisabled}
@@ -90,7 +87,7 @@ const DateFilter = ({
 							setExpandedOnOrBefore(false);
 						}
 					}}
-					placeholder={i18n.translate('mm-dd-yyyy')}
+					placeholder="MM/DD/YYYY"
 					value={onOrBeforeValue}
 					years={{
 						end: now.getFullYear() + NAVIGATION_YEARS_RANGE,
@@ -120,7 +117,7 @@ const DateFilter = ({
 					required
 					small={true}
 				>
-					{i18n.translate('apply')}
+					Apply
 				</ClayButton>
 			</div>
 		</div>

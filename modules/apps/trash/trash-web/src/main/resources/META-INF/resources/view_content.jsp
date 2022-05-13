@@ -105,7 +105,6 @@ TrashHandler trashHandler = trashDisplayContext.getTrashHandler();
 										<c:when test="<%= !curTrashHandler.isContainerModel() %>">
 											<liferay-ui:search-container-column-text>
 												<clay:vertical-card
-													propsTransformer="js/EntriesPropsTransformer"
 													verticalCard="<%= new TrashContentVerticalCard(curTrashedModel, curTrashRenderer, liferayPortletResponse, renderRequest, rowURL.toString()) %>"
 												/>
 											</liferay-ui:search-container-column-text>
@@ -119,7 +118,6 @@ TrashHandler trashHandler = trashDisplayContext.getTrashHandler();
 
 												<clay:horizontal-card
 													horizontalCard="<%= new TrashContentHorizontalCard(curTrashedModel, curTrashRenderer, liferayPortletResponse, renderRequest, rowURL.toString()) %>"
-													propsTransformer="js/EntriesPropsTransformer"
 												/>
 											</liferay-ui:search-container-column-text>
 										</c:otherwise>

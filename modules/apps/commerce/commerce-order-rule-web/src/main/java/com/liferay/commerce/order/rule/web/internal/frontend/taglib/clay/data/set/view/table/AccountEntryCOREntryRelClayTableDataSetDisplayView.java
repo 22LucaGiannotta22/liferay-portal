@@ -41,11 +41,11 @@ public class AccountEntryCOREntryRelClayTableDataSetDisplayView
 		ClayTableSchemaBuilder clayTableSchemaBuilder =
 			_clayTableSchemaBuilderFactory.create();
 
-		ClayTableSchemaField accountNameClayTableSchemaField =
+		ClayTableSchemaField clayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField(
 				"account.name", "name");
 
-		accountNameClayTableSchemaField.setContentRenderer("actionLink");
+		clayTableSchemaField.setContentRenderer("actionLink");
 
 		return clayTableSchemaBuilder.build();
 	}

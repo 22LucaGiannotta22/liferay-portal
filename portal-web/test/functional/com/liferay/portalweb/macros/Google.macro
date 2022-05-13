@@ -1,12 +1,7 @@
 definition {
 
 	macro enableGoogleDrive {
-		if (isSet(instanceSettings)) {
-			DMNavigator.openToConfigInInstanceSettings(portlet = "Google Drive");
-		}
-		else {
-			DMNavigator.openToConfigInSystemSettings(portlet = "Google Drive");
-		}
+		DMNavigator.openToConfigInSystemSettings(portlet = "Google Drive");
 
 		var num = MathUtil.randomNumber(3);
 

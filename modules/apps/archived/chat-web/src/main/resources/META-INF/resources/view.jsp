@@ -31,7 +31,7 @@
 			<c:if test="<%= themeDisplay.isSignedIn() %>">
 				Liferay.Poller.init({
 					encryptedUserId:
-						'<%= EncryptorUtil.encrypt(company.getKeyObj(), String.valueOf(themeDisplay.getUserId())) %>',
+						'<%= Encryptor.encrypt(company.getKeyObj(), String.valueOf(themeDisplay.getUserId())) %>',
 				});
 			</c:if>
 		</aui:script>

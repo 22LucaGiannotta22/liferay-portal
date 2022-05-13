@@ -193,7 +193,7 @@ definition {
 
 		FormsAdminNavigator.gotoPublishedForm();
 
-		FormPortlet.waitFormRenderer(text = "Submit");
+		FormPortlet.waitFormRenderer(text = "Enviar");
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Text Field On Spanish Portal",
@@ -203,9 +203,7 @@ definition {
 			fieldName = "${fieldTextField}",
 			fieldValue = "Text Field Value");
 
-		FormPortlet.submit();
-
-		Alert.viewSuccessMessage();
+		FormPortlet.submitLocalizedSuccessfully(buttonName = "Enviar");
 
 		Navigator.openURL();
 
@@ -433,9 +431,7 @@ definition {
 			fieldName = "Text ES",
 			fieldValue = "Text ES");
 
-		FormPortlet.submit();
-
-		Alert.viewSuccessMessage();
+		FormPortlet.submitLocalizedSuccessfully(buttonName = "Enviar");
 
 		Navigator.openURL();
 
@@ -749,9 +745,7 @@ definition {
 			fieldName = "${textFieldRequiredName2}",
 			fieldValue = "文本再次输入中文");
 
-		FormPortlet.submit();
-
-		Alert.viewSuccessMessage();
+		FormPortlet.submitLocalizedSuccessfully(buttonName = "提交");
 
 		Navigator.openURL();
 
@@ -857,9 +851,7 @@ definition {
 			fieldName = "Text ES",
 			fieldValue = "Text ES");
 
-		FormPortlet.submit();
-
-		Alert.viewSuccessMessage();
+		FormPortlet.submitLocalizedSuccessfully(buttonName = "Enviar");
 
 		Navigator.openURL();
 
@@ -1689,9 +1681,7 @@ definition {
 
 		FormFields.selectAutoCompleteOption(autocompleteOption = "Manzana");
 
-		FormPortlet.submit();
-
-		Alert.viewSuccessMessage();
+		Button.click(button = "Enviar");
 
 		FormPortlet.viewSuccessPage(
 			successPageDescription = "Your information was successfully received. Thank you for filling out the form.",

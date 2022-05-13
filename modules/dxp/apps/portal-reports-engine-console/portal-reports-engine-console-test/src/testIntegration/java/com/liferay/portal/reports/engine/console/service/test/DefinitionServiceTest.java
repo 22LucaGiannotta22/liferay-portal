@@ -180,10 +180,11 @@ public class DefinitionServiceTest {
 			}
 		}
 
-		serviceContext.setModelPermissions(
-			ModelPermissionsFactory.create(
-				_DEFINITION_GROUP_PERMISSIONS, new String[] {"VIEW"},
-				Definition.class.getName()));
+		modelPermissions = ModelPermissionsFactory.create(
+			_DEFINITION_GROUP_PERMISSIONS, new String[] {"VIEW"},
+			Definition.class.getName());
+
+		serviceContext.setModelPermissions(modelPermissions);
 
 		for (int i = 0; i < 5; i++) {
 			Map<Locale, String> nameMap = HashMapBuilder.put(

@@ -151,7 +151,7 @@ public class DSEnvelope {
 
 	@Override
 	public String toString() {
-		return toJSONObject().toString();
+		return toJSONObject().toJSONString();
 	}
 
 	protected LocalDateTime createdLocalDateTime;

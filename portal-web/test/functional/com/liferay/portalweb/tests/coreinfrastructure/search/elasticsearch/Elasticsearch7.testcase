@@ -29,7 +29,7 @@ definition {
 
 	@priority = "4"
 	test AssertIndexOnStartup {
-		property search.environment.suite.exclude = "true";
+		property environment.acceptance = "false";
 		property test.assert.warning.exceptions = "true";
 		property test.name.skip.portal.instance = "Elasticsearch7#AssertIndexOnStartup";
 
@@ -235,7 +235,6 @@ definition {
 		property embedded.elasticsearch.only = "true";
 		property environment.acceptance = "true";
 		property portal.acceptance = "true";
-		property search.environment.suite.exclude = "true";
 		property test.assert.warning.exceptions = "true";
 
 		AssertConsoleTextPresent(value1 = "Sidecar Elasticsearch liferay started at [\d\.]+:9201");
@@ -257,8 +256,8 @@ definition {
 		property app.server.bundles.size = "1";
 		property cluster.enabled = "true";
 		property embedded.elasticsearch.only = "true";
+		property environment.acceptance = "false";
 		property minimum.slave.ram = "24";
-		property search.environment.suite.exclude = "true";
 		property test.assert.warning.exceptions = "true";
 		property test.name.skip.portal.instance = "Elasticsearch7#AssertSidecarDoesNotCluster";
 
@@ -381,10 +380,10 @@ definition {
 	@priority = "5"
 	test ElasticsearchClusteringSmokeTest {
 		property elasticsearch.cluster.size = "2";
+		property environment.acceptance = "false";
 		property minimum.slave.ram = "24";
 		property portal.acceptance = "true";
 		property remote.elasticsearch.enabled = "true";
-		property search.environment.suite.exclude = "true";
 		property test.name.skip.portal.instance = "Elasticsearch7#ElasticsearchClusteringSmokeTest";
 
 		Elasticsearch.viewClusterStatusViaClusterHealthAPI(
@@ -440,8 +439,8 @@ definition {
 	@priority = "5"
 	test MultipleConnectionsSmokeTest {
 		property elasticsearch.multiple.connections = "true";
+		property environment.acceptance = "false";
 		property remote.elasticsearch.enabled = "true";
-		property search.environment.suite.exclude = "true";
 
 		SearchAdministration.openSearchAdmin();
 
@@ -541,10 +540,10 @@ definition {
 	@priority = "5"
 	test OSGiConfigSmokeTest {
 		property embedded.elasticsearch.only = "true";
+		property environment.acceptance = "false";
 		property osgi.module.configuration.file.names = "com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config";
 		property osgi.module.configurations = "clusterName=&quot;LiferayElasticsearchCluster1&quot;";
 		property portal.acceptance = "true";
-		property search.environment.suite.exclude = "true";
 
 		var portalHostname = PropsUtil.get("portal.hostname");
 
@@ -556,7 +555,7 @@ definition {
 	@priority = "5"
 	test SearchWithNonLiferayIndex {
 		property embedded.elasticsearch.only = "true";
-		property search.environment.suite.exclude = "true";
+		property environment.acceptance = "false";
 		property test.name.skip.portal.instance = "Elasticsearch7#SearchWithNonLiferayIndex";
 
 		var portalHostname = PropsUtil.get("portal.hostname");
@@ -612,7 +611,7 @@ definition {
 	@priority = "4"
 	test SwitchSidecarToRemote {
 		property embedded.elasticsearch.only = "true";
-		property search.environment.suite.exclude = "true";
+		property environment.acceptance = "false";
 		property test.name.skip.portal.instance = "Elasticsearch7#SwitchSidecarToRemote";
 
 		JSONWebcontent.addWebContent(

@@ -19,6 +19,7 @@ import React, {useMemo} from 'react';
 import {COLUMN_SIZE_MODULE_PER_ROW_SIZES} from '../../../../../../app/config/constants/columnSizes';
 import {COMMON_STYLES_ROLES} from '../../../../../../app/config/constants/commonStylesRoles';
 import {VIEWPORT_SIZES} from '../../../../../../app/config/constants/viewportSizes';
+import {config} from '../../../../../../app/config/index';
 import {
 	useDispatch,
 	useSelector,
@@ -34,7 +35,9 @@ import Collapse from '../../../../../../common/components/Collapse';
 import {getLayoutDataItemPropTypes} from '../../../../../../prop-types/index';
 import {CommonStyles} from './CommonStyles';
 
-const NUMBER_OF_COLUMNS_OPTIONS = [1, 2, 3, 4, 5, 6, 12];
+const NUMBER_OF_COLUMNS_OPTIONS = config.featureFlagLps119551
+	? [1, 2, 3, 4, 5, 6, 12]
+	: [1, 2, 3, 4, 5, 6];
 
 const ROW_CONFIGURATION_IDENTIFIERS = {
 	gutters: 'gutters',

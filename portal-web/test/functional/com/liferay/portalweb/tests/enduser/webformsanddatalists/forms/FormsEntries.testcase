@@ -655,7 +655,7 @@ definition {
 
 		Form.configureWorkflow(workflowDefinition = "Single Approver");
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",

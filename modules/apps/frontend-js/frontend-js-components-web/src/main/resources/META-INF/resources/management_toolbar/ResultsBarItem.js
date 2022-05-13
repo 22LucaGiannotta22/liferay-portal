@@ -13,7 +13,6 @@
  */
 
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 const ResultsBarItem = ({
@@ -33,7 +32,7 @@ const ResultsBarItem = ({
 );
 
 ResultsBarItem.propTypes = {
-	expand: PropTypes.bool,
+	expand: Boolean,
 };
 
 export default ResultsBarItem;

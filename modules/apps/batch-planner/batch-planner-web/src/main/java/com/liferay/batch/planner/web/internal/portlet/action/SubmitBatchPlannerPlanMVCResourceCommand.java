@@ -77,20 +77,17 @@ public class SubmitBatchPlannerPlanMVCResourceCommand
 		throws Exception {
 
 		BatchPlannerPlan batchPlannerPlan =
-			_batchPlannerPlanHelper.addExportBatchPlannerPlan(
-				resourceRequest, null);
+			_batchPlannerPlanHelper.addExportBatchPlannerPlan(resourceRequest);
 
-		if (batchPlannerPlan.isTemplate()) {
-			return;
+		if (!batchPlannerPlan.isTemplate()) {
+			_batchEngineBroker.submit(batchPlannerPlan.getBatchPlannerPlanId());
+
+			JSONPortletResponseUtil.writeJSON(
+				resourceRequest, resourceResponse,
+				JSONUtil.put(
+					"externalReferenceCode",
+					batchPlannerPlan.getBatchPlannerPlanId()));
 		}
-
-		_batchEngineBroker.submit(batchPlannerPlan.getBatchPlannerPlanId());
-
-		JSONPortletResponseUtil.writeJSON(
-			resourceRequest, resourceResponse,
-			JSONUtil.put(
-				"externalReferenceCode",
-				batchPlannerPlan.getBatchPlannerPlanId()));
 	}
 
 	private void _submitImportBatchPlannerPlan(

@@ -86,7 +86,7 @@ export function ImageSelectorField({field, onValueSelect, value = {}}) {
 				<>
 					<ImageSelector
 						fileEntryId={value.fileEntryId}
-						imageTitle={value.title || value.url}
+						imageTitle={value.title}
 						label={field.label}
 						onClearButtonPressed={() => handleImageChanged({})}
 						onImageSelected={handleImageChanged}

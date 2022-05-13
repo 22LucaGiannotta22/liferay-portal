@@ -50,7 +50,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.mockito.Matchers;
-import org.mockito.Mockito;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -133,27 +134,27 @@ public class DDMFormJSONDeserializerTest
 
 		setUpDefaultDDMFormFieldType();
 
-		DDMFormFieldTypeServicesTracker ddmFormFieldTypeServicesTracker =
-			Mockito.mock(DDMFormFieldTypeServicesTracker.class);
+		DDMFormFieldTypeServicesTracker ddmFormFieldTypeServicesTracker = mock(
+			DDMFormFieldTypeServicesTracker.class);
 
-		DDMFormFieldRenderer ddmFormFieldRenderer = Mockito.mock(
+		DDMFormFieldRenderer ddmFormFieldRenderer = mock(
 			DDMFormFieldRenderer.class);
 
-		Mockito.when(
+		when(
 			ddmFormFieldTypeServicesTracker.getDDMFormFieldRenderer(
 				Matchers.anyString())
 		).thenReturn(
 			ddmFormFieldRenderer
 		);
 
-		Mockito.when(
+		when(
 			ddmFormFieldTypeServicesTracker.getDDMFormFieldType(
 				Matchers.anyString())
 		).thenReturn(
 			_defaultDDMFormFieldType
 		);
 
-		Mockito.when(
+		when(
 			ddmFormFieldTypeServicesTracker.getDDMFormFieldTypeProperties(
 				Matchers.anyString())
 		).thenReturn(
@@ -175,23 +176,31 @@ public class DDMFormJSONDeserializerTest
 	}
 
 	protected void setUpDefaultDDMFormFieldType() {
-		Mockito.when(
+		when(
 			_defaultDDMFormFieldType.getDDMFormFieldTypeSettings()
 		).then(
-			(Answer<Class<? extends DDMFormFieldTypeSettings>>)
-				invocationOnMock ->
-					DDMFormFieldTypeSettingsTestUtil.getSettings()
+			new Answer<Class<? extends DDMFormFieldTypeSettings>>() {
+
+				@Override
+				public Class<? extends DDMFormFieldTypeSettings> answer(
+						InvocationOnMock invocationOnMock)
+					throws Throwable {
+
+					return DDMFormFieldTypeSettingsTestUtil.getSettings();
+				}
+
+			}
 		);
 	}
 
 	protected void setUpPortalUtil() {
 		PortalUtil portalUtil = new PortalUtil();
 
-		Portal portal = Mockito.mock(Portal.class);
+		Portal portal = mock(Portal.class);
 
-		ResourceBundle resourceBundle = Mockito.mock(ResourceBundle.class);
+		ResourceBundle resourceBundle = mock(ResourceBundle.class);
 
-		Mockito.when(
+		when(
 			portal.getResourceBundle(Matchers.any(Locale.class))
 		).thenReturn(
 			resourceBundle
@@ -291,7 +300,8 @@ public class DDMFormJSONDeserializerTest
 
 	private final DDMFormJSONDeserializer _ddmFormJSONDeserializer =
 		new DDMFormJSONDeserializer();
-	private final DDMFormFieldType _defaultDDMFormFieldType = Mockito.mock(
-		DDMFormFieldType.class);
+
+	@Mock
+	private DDMFormFieldType _defaultDDMFormFieldType;
 
 }

@@ -89,15 +89,6 @@ public class SiteNavigationMenuPortletUtil {
 						siteNavigationMenuItemId, siteNavigationMenuId,
 						siteNavigationMenuItemTypeRegistry, themeDisplay)
 				).put(
-					"dynamic",
-					() -> {
-						if (siteNavigationMenuItemType != null) {
-							return siteNavigationMenuItemType.isDynamic();
-						}
-
-						return false;
-					}
-				).put(
 					"icon",
 					() -> {
 						if (siteNavigationMenuItemType != null) {

@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.settings.SystemSettingsLocator;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.taglib.util.IncludeTag;
 
@@ -74,6 +75,10 @@ public class MiniCartTag extends IncludeTag {
 			themeDisplay.getCompanyId());
 
 		_siteDefaultURL = _getSiteDefaultURL(themeDisplay);
+
+		if (Validator.isNull(_spritemap)) {
+			_spritemap = themeDisplay.getPathThemeImages() + "/clay/icons.svg";
+		}
 
 		try {
 			CommerceOrder commerceOrder = commerceContext.getCommerceOrder();
@@ -136,6 +141,10 @@ public class MiniCartTag extends IncludeTag {
 		return _labels;
 	}
 
+	public String getSpritemap() {
+		return _spritemap;
+	}
+
 	public Map<String, String> getViews() {
 		return _views;
 	}
@@ -169,6 +178,10 @@ public class MiniCartTag extends IncludeTag {
 			ServletContextUtil.getCommerceOrderHttpHelper();
 	}
 
+	public void setSpritemap(String spritemap) {
+		_spritemap = spritemap;
+	}
+
 	public void setToggleable(boolean toggleable) {
 		_toggleable = toggleable;
 	}
@@ -191,6 +204,7 @@ public class MiniCartTag extends IncludeTag {
 		_orderId = 0;
 		_productURLSeparator = StringPool.BLANK;
 		_siteDefaultURL = StringPool.BLANK;
+		_spritemap = null;
 		_toggleable = true;
 		_views = new HashMap<>();
 	}
@@ -224,6 +238,8 @@ public class MiniCartTag extends IncludeTag {
 			"liferay-commerce:cart:productURLSeparator", _productURLSeparator);
 		httpServletRequest.setAttribute(
 			"liferay-commerce:cart:siteDefaultURL", _siteDefaultURL);
+		httpServletRequest.setAttribute(
+			"liferay-commerce:cart:spritemap", _spritemap);
 		httpServletRequest.setAttribute(
 			"liferay-commerce:cart:toggleable", _toggleable);
 	}
@@ -283,6 +299,7 @@ public class MiniCartTag extends IncludeTag {
 	private long _orderId;
 	private String _productURLSeparator = StringPool.BLANK;
 	private String _siteDefaultURL = StringPool.BLANK;
+	private String _spritemap;
 	private boolean _toggleable = true;
 	private Map<String, String> _views = new HashMap<>();
 

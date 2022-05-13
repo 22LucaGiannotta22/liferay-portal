@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.util.MethodParameter;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.spring.context.PortalContextLoaderListener;
 import com.liferay.portal.util.PropsValues;
 
@@ -72,8 +71,7 @@ public class JSONWebServiceActionsManagerImpl
 			HttpServletRequest httpServletRequest)
 		throws NoSuchJSONWebServiceException {
 
-		String path = GetterUtil.getString(
-			httpServletRequest.getAttribute(WebKeys.ORIGINAL_PATH_INFO));
+		String path = GetterUtil.getString(httpServletRequest.getPathInfo());
 
 		String method = GetterUtil.getString(httpServletRequest.getMethod());
 

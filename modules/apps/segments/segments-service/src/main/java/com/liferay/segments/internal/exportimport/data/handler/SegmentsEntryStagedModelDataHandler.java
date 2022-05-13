@@ -116,11 +116,14 @@ public class SegmentsEntryStagedModelDataHandler
 
 		importedSegmentsEntry.setGroupId(portletDataContext.getScopeGroupId());
 		importedSegmentsEntry.setCompanyId(portletDataContext.getCompanyId());
-		importedSegmentsEntry.setCriteria(
+
+		String criteria =
 			_segmentsEntryExportImportContentProcessor.
 				replaceImportContentReferences(
 					portletDataContext, segmentsEntry,
-					segmentsEntry.getCriteria()));
+					segmentsEntry.getCriteria());
+
+		importedSegmentsEntry.setCriteria(criteria);
 
 		SegmentsEntry existingSegmentsEntry =
 			_stagedModelRepository.fetchStagedModelByUuidAndGroupId(

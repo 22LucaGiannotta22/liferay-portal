@@ -41,12 +41,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>TITLE_SUCCESS</td>
+	<td>FIELD_SUCCESS</td>
 	<td>//label[contains(@class, 'text-success') and contains(., '${key_fieldName}')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>TITLE_FAILED</td>
+	<td>FIELD_FAILED</td>
 	<td>//label[contains(@class, 'text-danger') and contains(., '${key_fieldName}')]</td>
 	<td></td>
 </tr>

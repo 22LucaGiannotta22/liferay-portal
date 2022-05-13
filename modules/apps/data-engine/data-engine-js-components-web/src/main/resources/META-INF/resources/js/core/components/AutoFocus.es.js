@@ -34,7 +34,7 @@ export function AutoFocus({children}) {
 				setTimeout(() => setIncrement((value) => value + 1), 5);
 			}
 			else {
-				if (!document.activeElement) {
+				if (!document.activeElement.id) {
 					const firstInput = childRef.current.querySelector('input');
 					const sidebarOpen = document.querySelector(
 						'.ddm-form-builder--sidebar-open'

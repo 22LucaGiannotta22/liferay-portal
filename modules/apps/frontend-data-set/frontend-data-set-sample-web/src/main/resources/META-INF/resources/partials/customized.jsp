@@ -27,14 +27,11 @@ FDSSampleDisplayContext fdsSampleDisplayContext = (FDSSampleDisplayContext)reque
 		).build()
 	%>'
 	apiURL="<%= fdsSampleDisplayContext.getAPIURL() %>"
-	bulkActionDropdownItems="<%= fdsSampleDisplayContext.getBulkActionDropdownItems() %>"
 	customViewsEnabled="<%= true %>"
 	fdsActionDropdownItems="<%= fdsSampleDisplayContext.getFDSActionDropdownItems() %>"
 	formId="fm"
 	id="<%= FDSSampleFDSNames.CUSTOMIZED %>"
 	itemsPerPage="<%= 10 %>"
 	propsTransformer="js/SampleFDSPropsTransformer"
-	selectedItemsKey="id"
-	selectionType="multiple"
 	style="fluid"
 />

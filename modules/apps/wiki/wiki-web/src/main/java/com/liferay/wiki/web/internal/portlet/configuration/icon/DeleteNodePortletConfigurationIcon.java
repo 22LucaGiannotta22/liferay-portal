@@ -55,8 +55,17 @@ public class DeleteNodePortletConfigurationIcon
 
 	@Override
 	public String getMessage(PortletRequest portletRequest) {
+		String key = "delete";
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		if (isTrashEnabled(themeDisplay.getScopeGroupId())) {
+			key = "move-to-recycle-bin";
+		}
+
 		return LanguageUtil.get(
-			getResourceBundle(getLocale(portletRequest)), "delete");
+			getResourceBundle(getLocale(portletRequest)), key);
 	}
 
 	@Override

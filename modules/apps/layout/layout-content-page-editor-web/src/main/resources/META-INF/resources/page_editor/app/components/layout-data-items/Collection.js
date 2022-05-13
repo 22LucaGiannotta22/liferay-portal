@@ -135,12 +135,15 @@ const Grid = ({
 		<>
 			{Array.from({length: numberOfRows}).map((_, i) => (
 				<ClayLayout.Row
-					className={classNames(
-						`align-items-${collectionConfig.verticalAlignment}`,
-						{
-							'no-gutters': !collectionConfig.gutters,
-						}
-					)}
+					className={
+						config.featureFlagLps119551 &&
+						classNames(
+							`align-items-${collectionConfig.verticalAlignment}`,
+							{
+								'no-gutters': !collectionConfig.gutters,
+							}
+						)
+					}
 					key={`row-${i}`}
 				>
 					{Array.from({length: collectionConfig.numberOfColumns}).map(
@@ -417,7 +420,11 @@ const Collection = React.memo(
 						<Grid
 							child={child}
 							collection={collection}
-							collectionConfig={responsiveConfig}
+							collectionConfig={
+								config.featureFlagLps119551
+									? responsiveConfig
+									: collectionConfig
+							}
 							collectionId={item.itemId}
 							collectionLength={collection.items.length}
 							customCollectionSelectorURL={

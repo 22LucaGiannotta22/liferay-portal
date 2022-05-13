@@ -167,12 +167,13 @@ public class PublishLayoutsMVCActionCommand extends BaseMVCActionCommand {
 
 		String treeId = ParamUtil.getString(actionRequest, "treeId");
 
-		actionRequest.setAttribute(
-			"layoutIdMap",
-			_exportImportHelper.getSelectedLayoutsJSON(
-				groupId, privateLayout,
-				SessionTreeJSClicks.getOpenNodes(
-					httpServletRequest, treeId + "SelectedNode")));
+		String openNodes = SessionTreeJSClicks.getOpenNodes(
+			httpServletRequest, treeId + "SelectedNode");
+
+		String selectedLayoutsJSON = _exportImportHelper.getSelectedLayoutsJSON(
+			groupId, privateLayout, openNodes);
+
+		actionRequest.setAttribute("layoutIdMap", selectedLayoutsJSON);
 	}
 
 	@Reference

@@ -641,7 +641,7 @@ definition {
 		Navigator.gotoPage(pageName = "Message Boards Page");
 
 		DMDocument.viewNoPermission(
-			menuItem = "Delete",
+			menuItem = "Move to Recycle Bin",
 			rowEntry = "MB Category Name");
 	}
 
@@ -687,7 +687,7 @@ definition {
 		Navigator.gotoPage(pageName = "Message Boards Page");
 
 		DMDocument.viewNoPermission(
-			menuItem = "Delete",
+			menuItem = "Move to Recycle Bin",
 			rowEntry = "Message Boards Thread");
 	}
 

@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchResult;
 import com.liferay.portal.kernel.search.SearchResultUtil;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
@@ -130,10 +131,12 @@ public class WikiPageTitleSearcherTest {
 	protected void addPage(long nodeId, String title, String content)
 		throws Exception {
 
-		WikiTestUtil.addPage(
-			_user.getUserId(), nodeId, title, content, true,
+		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
-				_group.getGroupId(), _user.getUserId()));
+				_group.getGroupId(), _user.getUserId());
+
+		WikiTestUtil.addPage(
+			_user.getUserId(), nodeId, title, content, true, serviceContext);
 	}
 
 	protected void addPage(String title, String content) throws Exception {

@@ -41,9 +41,10 @@ public class CommerceDiscountAccountGroupTableFDSView extends BaseTableFDSView {
 		FDSTableSchemaBuilder fdsTableSchemaBuilder =
 			_fdsTableSchemaBuilderFactory.create();
 
-		return fdsTableSchemaBuilder.add(
-			"accountGroup.name", "name"
-		).build();
+		fdsTableSchemaBuilder.addFDSTableSchemaField(
+			"accountGroup.name", "name");
+
+		return fdsTableSchemaBuilder.build();
 	}
 
 	@Reference

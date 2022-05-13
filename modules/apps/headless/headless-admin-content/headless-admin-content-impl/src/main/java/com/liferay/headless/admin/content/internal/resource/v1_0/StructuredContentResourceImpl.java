@@ -321,7 +321,7 @@ public class StructuredContentResourceImpl
 				StructuredContentUtil.getJournalArticleContent(
 					_ddm,
 					DDMFormValuesUtil.toDDMFormValues(
-						titleMap.keySet(), structuredContent.getContentFields(),
+						structuredContent.getContentFields(),
 						ddmStructure.getDDMForm(), _dlAppService, siteId,
 						_journalArticleService, _layoutLocalService,
 						contextAcceptLanguage.getPreferredLocale(),

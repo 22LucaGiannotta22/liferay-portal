@@ -67,15 +67,21 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.mockito.InOrder;
 import org.mockito.Matchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import org.powermock.api.mockito.PowerMockito;
 
 /**
  * @author Leonardo Barros
  */
-public class DDMFormInstanceRecordExporterImplTest {
+@RunWith(MockitoJUnitRunner.class)
+public class DDMFormInstanceRecordExporterImplTest extends PowerMockito {
 
 	@ClassRule
 	@Rule
@@ -91,7 +97,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 	@Test
 	public void testExport() throws Exception {
 		DDMFormInstanceRecordExporterImpl ddmFormInstanceRecordExporterImpl =
-			Mockito.mock(DDMFormInstanceRecordExporterImpl.class);
+			mock(DDMFormInstanceRecordExporterImpl.class);
 
 		ddmFormInstanceRecordExporterImpl.ddmFormInstanceRecordLocalService =
 			_ddmFormInstanceRecordLocalService;
@@ -99,8 +105,8 @@ public class DDMFormInstanceRecordExporterImplTest {
 		DDMFormInstanceRecordExporterRequest.Builder builder =
 			DDMFormInstanceRecordExporterRequest.Builder.newBuilder(1, "csv");
 
-		OrderByComparator<DDMFormInstanceRecord> orderByComparator =
-			Mockito.mock(OrderByComparator.class);
+		OrderByComparator<DDMFormInstanceRecord> orderByComparator = mock(
+			OrderByComparator.class);
 
 		Locale locale = new Locale("pt", "BR");
 
@@ -120,7 +126,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 		List<DDMFormInstanceRecord> ddmFormInstanceRecords =
 			Collections.emptyList();
 
-		Mockito.when(
+		when(
 			_ddmFormInstanceRecordLocalService.getFormInstanceRecords(
 				1, WorkflowConstants.STATUS_APPROVED, 1, 5, orderByComparator)
 		).thenReturn(
@@ -129,7 +135,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		Map<String, DDMFormField> ddmFormFields = Collections.emptyMap();
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.getDistinctFields(1)
 		).thenReturn(
 			ddmFormFields
@@ -137,7 +143,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		Map<String, String> ddmFormFieldsLabel = Collections.emptyMap();
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.getDDMFormFieldsLabel(
 				ddmFormFields, locale)
 		).thenReturn(
@@ -146,21 +152,21 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		List<Map<String, String>> ddmFormFieldsValues = Collections.emptyList();
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.getDDMFormFieldValues(
 				ddmFormFields, ddmFormInstanceRecords, locale)
 		).thenReturn(
 			ddmFormFieldsValues
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.write(
 				"csv", ddmFormFieldsLabel, ddmFormFieldsValues)
 		).thenReturn(
 			new byte[] {1, 2, 3}
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.export(
 				ddmFormInstanceRecordExporterRequest)
 		).thenCallRealMethod();
@@ -217,7 +223,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 		ddmFormInstanceRecordExporterImpl.ddmFormInstanceRecordLocalService =
 			_ddmFormInstanceRecordLocalService;
 
-		Mockito.when(
+		when(
 			_ddmFormInstanceRecordLocalService.getFormInstanceRecords(
 				Matchers.anyLong(), Matchers.anyInt(), Matchers.anyInt(),
 				Matchers.anyInt(), Matchers.any(OrderByComparator.class))
@@ -238,25 +244,25 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		Locale locale = new Locale("pt", "BR");
 
-		Mockito.when(
+		when(
 			_language.get(locale, "status")
 		).thenReturn(
 			"Estado"
 		);
 
-		Mockito.when(
+		when(
 			_language.get(locale, "modified-date")
 		).thenReturn(
 			"Data de Modificação"
 		);
 
-		Mockito.when(
+		when(
 			_language.get(locale, "author")
 		).thenReturn(
 			"Autor"
 		);
 
-		Mockito.when(
+		when(
 			_language.get(locale, "default-language")
 		).thenReturn(
 			"Idioma"
@@ -316,7 +322,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 		ddmFormInstanceRecordExporterImpl.ddmFormFieldTypeServicesTracker =
 			_ddmFormFieldTypeServicesTracker;
 
-		DDMFormFieldValueRenderer ddmFormFieldValueRenderer = Mockito.mock(
+		DDMFormFieldValueRenderer ddmFormFieldValueRenderer = mock(
 			DDMFormFieldValueRenderer.class);
 
 		DDMFormField ddmFormField = new DDMFormField("field1", "text");
@@ -334,14 +340,14 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		Locale locale = new Locale("pt", "BR");
 
-		Mockito.when(
+		when(
 			_ddmFormFieldTypeServicesTracker.getDDMFormFieldValueRenderer(
 				"text")
 		).thenReturn(
 			ddmFormFieldValueRenderer
 		);
 
-		Mockito.when(
+		when(
 			ddmFormFieldValueRenderer.render(ddmFormFieldValue, locale)
 		).thenReturn(
 			"value1"
@@ -350,7 +356,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 		ReflectionTestUtil.setFieldValue(
 			ddmFormInstanceRecordExporterImpl, "_html", _html);
 
-		Mockito.when(
+		when(
 			_html.unescape("value1")
 		).thenReturn(
 			"value1"
@@ -384,13 +390,13 @@ public class DDMFormInstanceRecordExporterImplTest {
 	@Test
 	public void testGetDDMFormFieldValues() throws Exception {
 		DDMFormInstanceRecordExporterImpl ddmFormInstanceRecordExporterImpl =
-			Mockito.mock(DDMFormInstanceRecordExporterImpl.class);
+			mock(DDMFormInstanceRecordExporterImpl.class);
 
 		Locale locale = new Locale("pt", "BR");
 
 		List<DDMFormInstanceRecord> ddmFormInstanceRecords = new ArrayList<>();
 
-		DDMFormInstanceRecord ddmFormInstanceRecord = Mockito.mock(
+		DDMFormInstanceRecord ddmFormInstanceRecord = mock(
 			DDMFormInstanceRecord.class);
 
 		ddmFormInstanceRecords.add(ddmFormInstanceRecord);
@@ -425,16 +431,16 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		ddmFormValues1.addDDMFormFieldValue(ddmFormFieldValue2);
 
-		DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion =
-			Mockito.mock(DDMFormInstanceRecordVersion.class);
+		DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion = mock(
+			DDMFormInstanceRecordVersion.class);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecord.getDDMFormValues()
 		).thenReturn(
 			ddmFormValues1
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.getDDMFormFieldValue(
 				Matchers.any(DDMFormField.class), Matchers.anyMap(),
 				Matchers.any(Locale.class))
@@ -442,13 +448,13 @@ public class DDMFormInstanceRecordExporterImplTest {
 			"value"
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecord.getFormInstanceRecordVersion()
 		).thenReturn(
 			ddmFormInstanceRecordVersion
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordVersion.getStatus()
 		).thenReturn(
 			WorkflowConstants.STATUS_APPROVED
@@ -456,26 +462,26 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		Date statusDate = new Date();
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordVersion.getStatusDate()
 		).thenReturn(
 			statusDate
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordVersion.getUserName()
 		).thenReturn(
 			"User Name"
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.getStatusMessage(
 				Matchers.anyInt(), Matchers.any(Locale.class))
 		).thenReturn(
 			"aprovado"
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.getDDMFormFieldValues(
 				ddmFormFields, ddmFormInstanceRecords, locale)
 		).thenCallRealMethod();
@@ -542,12 +548,12 @@ public class DDMFormInstanceRecordExporterImplTest {
 	@Test
 	public void testGetDistinctFields() throws Exception {
 		DDMFormInstanceRecordExporterImpl ddmFormInstanceRecordExporterImpl =
-			Mockito.mock(DDMFormInstanceRecordExporterImpl.class);
+			mock(DDMFormInstanceRecordExporterImpl.class);
 
-		DDMStructureVersion ddmStructureVersion = Mockito.mock(
+		DDMStructureVersion ddmStructureVersion = mock(
 			DDMStructureVersion.class);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.getStructureVersions(1L)
 		).thenReturn(
 			ListUtil.fromArray(ddmStructureVersion)
@@ -561,7 +567,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		ddmFormField2.setFieldReference("reference2");
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.
 				getNontransientDDMFormFieldsReferencesMap(ddmStructureVersion)
 		).thenReturn(
@@ -572,7 +578,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 			).build()
 		);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordExporterImpl.getDistinctFields(1L)
 		).thenCallRealMethod();
 
@@ -602,12 +608,12 @@ public class DDMFormInstanceRecordExporterImplTest {
 		DDMFormInstanceRecordExporterImpl ddmFormInstanceRecordExporterImpl =
 			new DDMFormInstanceRecordExporterImpl();
 
-		DDMStructureVersion ddmStructureVersion = Mockito.mock(
+		DDMStructureVersion ddmStructureVersion = mock(
 			DDMStructureVersion.class);
 
-		DDMForm ddmForm = Mockito.mock(DDMForm.class);
+		DDMForm ddmForm = mock(DDMForm.class);
 
-		Mockito.when(
+		when(
 			ddmStructureVersion.getDDMForm()
 		).thenReturn(
 			ddmForm
@@ -636,7 +642,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 
 		Locale locale = new Locale("pt", "BR");
 
-		Mockito.when(
+		when(
 			_language.get(locale, "approved")
 		).thenReturn(
 			"approvado"
@@ -665,22 +671,22 @@ public class DDMFormInstanceRecordExporterImplTest {
 		List<DDMFormInstanceVersion> ddmFormInstanceVersions =
 			new ArrayList<>();
 
-		DDMFormInstanceVersion ddmFormInstanceVersion = Mockito.mock(
+		DDMFormInstanceVersion ddmFormInstanceVersion = mock(
 			DDMFormInstanceVersion.class);
 
 		ddmFormInstanceVersions.add(ddmFormInstanceVersion);
 
-		Mockito.when(
+		when(
 			_ddmFormInstanceVersionLocalService.getFormInstanceVersions(
 				1, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)
 		).thenReturn(
 			ddmFormInstanceVersions
 		);
 
-		DDMStructureVersion ddmStructureVersion = Mockito.mock(
+		DDMStructureVersion ddmStructureVersion = mock(
 			DDMStructureVersion.class);
 
-		Mockito.when(
+		when(
 			ddmFormInstanceVersion.getStructureVersion()
 		).thenReturn(
 			ddmStructureVersion
@@ -713,10 +719,10 @@ public class DDMFormInstanceRecordExporterImplTest {
 		ddmFormInstanceRecordExporterImpl.ddmFormInstanceRecordWriterTracker =
 			_ddmFormInstanceRecordWriterTracker;
 
-		DDMFormInstanceRecordWriter ddmFormInstanceRecordWriter = Mockito.mock(
+		DDMFormInstanceRecordWriter ddmFormInstanceRecordWriter = mock(
 			DDMFormInstanceRecordWriter.class);
 
-		Mockito.when(
+		when(
 			_ddmFormInstanceRecordWriterTracker.getDDMFormInstanceRecordWriter(
 				"txt")
 		).thenReturn(
@@ -727,7 +733,7 @@ public class DDMFormInstanceRecordExporterImplTest {
 			DDMFormInstanceRecordWriterResponse.Builder.newBuilder(
 				new byte[] {1, 2, 3});
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordWriter.write(
 				Matchers.any(DDMFormInstanceRecordWriterRequest.class))
 		).thenReturn(
@@ -769,19 +775,25 @@ public class DDMFormInstanceRecordExporterImplTest {
 		languageUtil.setLanguage(_language);
 	}
 
-	private final DDMFormFieldTypeServicesTracker
-		_ddmFormFieldTypeServicesTracker = Mockito.mock(
-			DDMFormFieldTypeServicesTracker.class);
-	private final DDMFormInstanceRecordLocalService
-		_ddmFormInstanceRecordLocalService = Mockito.mock(
-			DDMFormInstanceRecordLocalService.class);
-	private final DDMFormInstanceRecordWriterTracker
-		_ddmFormInstanceRecordWriterTracker = Mockito.mock(
-			DDMFormInstanceRecordWriterTracker.class);
-	private final DDMFormInstanceVersionLocalService
-		_ddmFormInstanceVersionLocalService = Mockito.mock(
-			DDMFormInstanceVersionLocalService.class);
-	private final Html _html = Mockito.mock(Html.class);
-	private final Language _language = Mockito.mock(Language.class);
+	@Mock
+	private DDMFormFieldTypeServicesTracker _ddmFormFieldTypeServicesTracker;
+
+	@Mock
+	private DDMFormInstanceRecordLocalService
+		_ddmFormInstanceRecordLocalService;
+
+	@Mock
+	private DDMFormInstanceRecordWriterTracker
+		_ddmFormInstanceRecordWriterTracker;
+
+	@Mock
+	private DDMFormInstanceVersionLocalService
+		_ddmFormInstanceVersionLocalService;
+
+	@Mock
+	private Html _html;
+
+	@Mock
+	private Language _language;
 
 }

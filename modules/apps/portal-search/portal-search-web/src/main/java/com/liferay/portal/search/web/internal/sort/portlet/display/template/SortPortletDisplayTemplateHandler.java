@@ -56,10 +56,10 @@ public class SortPortletDisplayTemplateHandler
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		return LanguageUtil.format(
-			locale, "x-template",
-			_portal.getPortletTitle(SortPortletKeys.SORT, resourceBundle),
-			false);
+		String portletTitle = _portal.getPortletTitle(
+			SortPortletKeys.SORT, resourceBundle);
+
+		return LanguageUtil.format(locale, "x-template", portletTitle, false);
 	}
 
 	@Override

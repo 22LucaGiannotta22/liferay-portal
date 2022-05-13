@@ -1010,16 +1010,17 @@ public class DataLayoutTaglibUtil {
 				StringUtil.replace(
 					dataDefinitionJSON, "defaultValue", "predefinedValue"));
 
-			ddmStructure.setDefinition(
-				jsonObject.put(
-					"availableLanguageIds",
-					JSONUtil.toJSONArray(
-						_availableLocales,
-						availableLocale -> LanguageUtil.getLanguageId(
-							availableLocale))
-				).put(
-					"defaultLanguageId", ddmStructure.getDefaultLanguageId()
-				).toString());
+			jsonObject = jsonObject.put(
+				"availableLanguageIds",
+				JSONUtil.toJSONArray(
+					_availableLocales,
+					availableLocale -> LanguageUtil.getLanguageId(
+						availableLocale))
+			).put(
+				"defaultLanguageId", ddmStructure.getDefaultLanguageId()
+			);
+
+			ddmStructure.setDefinition(jsonObject.toJSONString());
 
 			return ddmStructure.getDDMForm();
 		}
@@ -1047,7 +1048,7 @@ public class DataLayoutTaglibUtil {
 					},
 					new String[] {"size", "columns", "pages", "rows"}));
 
-			return _deserializeDDMFormLayout(jsonObject.toString());
+			return _deserializeDDMFormLayout(jsonObject.toJSONString());
 		}
 
 		private List<Map<String, Object>> _getNestedFields(

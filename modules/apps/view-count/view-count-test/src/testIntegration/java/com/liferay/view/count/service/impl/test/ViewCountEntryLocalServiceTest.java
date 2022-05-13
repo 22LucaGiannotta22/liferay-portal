@@ -41,10 +41,8 @@ import com.liferay.view.count.service.persistence.ViewCountEntryPK;
 
 import java.lang.reflect.InvocationTargetException;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
 
 import org.hibernate.engine.jdbc.batch.internal.BatchingBatch;
@@ -73,14 +71,15 @@ public class ViewCountEntryLocalServiceTest {
 	public void setUp() {
 		_className = _classNameLocalService.getClassName(
 			ViewCountEntryLocalServiceTest.class.getName());
-		_db = DBManagerUtil.getDB();
 	}
 
 	@Test
 	public void testLazyCreationWithRaceCondition() throws Throwable {
+		DB db = DBManagerUtil.getDB();
+
 		Assume.assumeFalse(
 			"HSQL does not allow concurrent Session assess, skip test.",
-			_db.getDBType() == DBType.HYPERSONIC);
+			db.getDBType() == DBType.HYPERSONIC);
 
 		long classPK = 0;
 		int viewCount = 100;
@@ -92,15 +91,14 @@ public class ViewCountEntryLocalServiceTest {
 		Assert.assertNull(
 			_viewCountEntryLocalService.fetchViewCountEntry(viewCountEntryPK));
 
-		CountDownLatch countDownLatch = new CountDownLatch(2);
 		SessionFactory sessionFactory = ReflectionTestUtil.getFieldValue(
 			_viewCountEntryFinder, "_sessionFactory");
-		List<ViewCountEntry> viewCountEntries = new CopyOnWriteArrayList<>();
+
+		CyclicBarrier cyclicBarrier = new CyclicBarrier(2);
 
 		ReflectionTestUtil.setFieldValue(
 			_viewCountEntryFinder, "_sessionFactory",
-			_createSessionFactoryProxy(
-				countDownLatch, sessionFactory, viewCountEntries));
+			_createSessionFactoryProxy(sessionFactory, cyclicBarrier));
 
 		try (LogCapture logCapture1 = LoggerTestUtil.configureLog4JLogger(
 				SqlExceptionHelper.class.getName(), LoggerTestUtil.OFF);
@@ -146,8 +144,7 @@ public class ViewCountEntryLocalServiceTest {
 	}
 
 	private Object _createSessionFactoryProxy(
-		CountDownLatch countDownLatch, SessionFactory sessionFactory,
-		List<ViewCountEntry> viewCountEntries) {
+		SessionFactory sessionFactory, CyclicBarrier cyclicBarrier) {
 
 		return ProxyUtil.newProxyInstance(
 			SessionFactory.class.getClassLoader(),
@@ -155,8 +152,7 @@ public class ViewCountEntryLocalServiceTest {
 			(proxy, method, args) -> {
 				if (Objects.equals("openSession", method.getName())) {
 					return _createSessionProxy(
-						countDownLatch, sessionFactory.openSession(),
-						viewCountEntries);
+						sessionFactory.openSession(), cyclicBarrier);
 				}
 
 				return method.invoke(sessionFactory, args);
@@ -164,34 +160,13 @@ public class ViewCountEntryLocalServiceTest {
 	}
 
 	private Object _createSessionProxy(
-		CountDownLatch countDownLatch, Session session,
-		List<ViewCountEntry> viewCountEntries) {
+		Session session, CyclicBarrier cyclicBarrier) {
 
 		return ProxyUtil.newProxyInstance(
 			Session.class.getClassLoader(), new Class<?>[] {Session.class},
 			(proxy, method, args) -> {
-				if (Objects.equals("get", method.getName()) &&
-					(countDownLatch.getCount() > 0)) {
-
-					ViewCountEntry viewCountEntry =
-						(ViewCountEntry)method.invoke(session, args);
-
-					viewCountEntries.add(viewCountEntry);
-
-					countDownLatch.countDown();
-
-					countDownLatch.await();
-
-					Assert.assertNull(viewCountEntries.get(0));
-
-					if (_db.getDBType() == DBType.SQLSERVER) {
-						Assert.assertNotNull(viewCountEntries.get(1));
-					}
-					else {
-						Assert.assertNull(viewCountEntries.get(1));
-					}
-
-					return viewCountEntry;
+				if (Objects.equals("flush", method.getName())) {
+					cyclicBarrier.await();
 				}
 
 				try {
@@ -214,8 +189,6 @@ public class ViewCountEntryLocalServiceTest {
 
 	@Inject
 	private static ViewCountEntryLocalService _viewCountEntryLocalService;
-
-	private DB _db;
 
 	@DeleteAfterTestRun
 	private ViewCountEntry _viewCountEntry;

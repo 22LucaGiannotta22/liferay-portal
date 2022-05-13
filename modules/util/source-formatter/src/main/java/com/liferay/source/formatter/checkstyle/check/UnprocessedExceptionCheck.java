@@ -202,10 +202,10 @@ public class UnprocessedExceptionCheck extends BaseCheck {
 		DetailAST parameterDefinitionDetailAST = parentDetailAST.findFirstToken(
 			TokenTypes.PARAMETER_DEF);
 
-		if (Objects.equals(
-				_getExceptionClassName(parameterDefinitionDetailAST),
-				"JSONException")) {
+		String exceptionClassName = _getExceptionClassName(
+			parameterDefinitionDetailAST);
 
+		if (Objects.equals(exceptionClassName, "JSONException")) {
 			return;
 		}
 

@@ -78,19 +78,16 @@ export const getCase = gql`
 		case(caseId: $caseId)
 			@rest(
 				type: "C_Case"
-				path: "cases/{args.caseId}?nestedFields=component.team,caseType&nestedFieldsDepth=2"
+				path: "cases/{args.caseId}?nestedFields=Component.Team,CaseType&nestedFieldsDepth=2"
 			) {
 			caseNumber
 			caseResult
-			caseType: r_caseTypeToCases_c_caseType {
-				id
+			caseType: r_caseCaseType_c_CaseType {
 				name
 			}
-			component: r_componentToCases_c_component {
-				id
+			component: r_casesComponents_c_Component {
 				name
-				team: r_teamToComponents_c_team {
-					id
+				team: r_componentTeam_c_Team {
 					name
 				}
 			}

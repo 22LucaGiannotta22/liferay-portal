@@ -3186,7 +3186,6 @@
 		<exception>DuplicateOpenId</exception>
 		<exception>DuplicateOrganization</exception>
 		<exception>DuplicatePasswordPolicy</exception>
-		<exception>DuplicateRegion</exception>
 		<exception>DuplicateRole</exception>
 		<exception>DuplicateTeam</exception>
 		<exception>DuplicateUserGroup</exception>

@@ -54,12 +54,13 @@ public class YarnPlugin implements Plugin<Project> {
 
 				@Override
 				public void execute(YarnInstallTask yarnInstallTask) {
+					boolean frozenLockfile = Boolean.parseBoolean(
+						System.getProperty(
+							"frozen.lockfile", Boolean.TRUE.toString()));
+
 					yarnInstallTask.setDescription(
 						"Installs Node packages from package.json.");
-					yarnInstallTask.setFrozenLockFile(
-						Boolean.parseBoolean(
-							System.getProperty(
-								"frozen.lockfile", Boolean.TRUE.toString())));
+					yarnInstallTask.setFrozenLockFile(frozenLockfile);
 				}
 
 			});

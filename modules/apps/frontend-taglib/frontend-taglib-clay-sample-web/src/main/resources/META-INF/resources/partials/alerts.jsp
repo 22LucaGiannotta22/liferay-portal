@@ -73,9 +73,3 @@
 	message="This is a warning message."
 	title="Warning"
 />
-
-<div>
-	<react:component
-		module="js/ClaySampleToastAlert"
-	/>
-</div>

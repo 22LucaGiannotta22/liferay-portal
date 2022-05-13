@@ -1,6 +1,6 @@
 ## JavaForLoopCheck
 
-When possible, use an enhanced for-loop.
+When possible, use an Enhanced For-Loop.
 
 ### Arrays
 

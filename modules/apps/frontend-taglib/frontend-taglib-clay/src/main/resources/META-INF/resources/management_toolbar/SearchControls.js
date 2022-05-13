@@ -62,7 +62,6 @@ const SearchControls = ({
 								disabled={disabled}
 								displayType="unstyled"
 								symbol="search"
-								title={Liferay.Language.get('search-for')}
 								type="submit"
 							/>
 						</ClayInput.GroupInsetItem>

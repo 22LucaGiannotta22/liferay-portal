@@ -24,10 +24,7 @@ import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.portlet.SearchDisplayStyleUtil;
 import com.liferay.portal.kernel.portlet.SearchOrderByUtil;
 import com.liferay.portal.kernel.search.Field;
@@ -40,7 +37,6 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.segments.configuration.provider.SegmentsConfigurationProvider;
 import com.liferay.segments.constants.SegmentsActionKeys;
 import com.liferay.segments.constants.SegmentsEntryConstants;
 import com.liferay.segments.constants.SegmentsPortletKeys;
@@ -67,14 +63,13 @@ public class SegmentsDisplayContext {
 
 	public SegmentsDisplayContext(
 		HttpServletRequest httpServletRequest, RenderRequest renderRequest,
-		RenderResponse renderResponse,
-		SegmentsConfigurationProvider segmentsConfigurationProvider,
+		RenderResponse renderResponse, boolean roleSegmentationEnabled,
 		SegmentsEntryService segmentsEntryService) {
 
 		_httpServletRequest = httpServletRequest;
 		_renderRequest = renderRequest;
 		_renderResponse = renderResponse;
-		_segmentsConfigurationProvider = segmentsConfigurationProvider;
+		_roleSegmentationEnabled = roleSegmentationEnabled;
 		_segmentsEntryService = segmentsEntryService;
 
 		_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
@@ -289,16 +284,8 @@ public class SegmentsDisplayContext {
 		return true;
 	}
 
-	public boolean isRoleSegmentationEnabled(long companyId) {
-		try {
-			return _segmentsConfigurationProvider.isRoleSegmentationEnabled(
-				companyId);
-		}
-		catch (ConfigurationException configurationException) {
-			_log.error(configurationException);
-		}
-
-		return false;
+	public boolean isRoleSegmentationEnabled() {
+		return _roleSegmentationEnabled;
 	}
 
 	public boolean isShowCreationMenu() {
@@ -450,9 +437,6 @@ public class SegmentsDisplayContext {
 		return false;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		SegmentsDisplayContext.class);
-
 	private String _displayStyle;
 	private final HttpServletRequest _httpServletRequest;
 	private String _keywords;
@@ -460,8 +444,8 @@ public class SegmentsDisplayContext {
 	private String _orderByType;
 	private final RenderRequest _renderRequest;
 	private final RenderResponse _renderResponse;
+	private final boolean _roleSegmentationEnabled;
 	private SearchContainer<SegmentsEntry> _searchContainer;
-	private final SegmentsConfigurationProvider _segmentsConfigurationProvider;
 	private final SegmentsEntryService _segmentsEntryService;
 	private final ThemeDisplay _themeDisplay;
 

@@ -281,7 +281,7 @@ public class ExportMasterLayoutsMVCResourceCommandTest {
 			_read(expectedFileName));
 
 		Assert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString());
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString());
 	}
 
 	private void _validateZipEntry(ZipEntry zipEntry, ZipFile zipFile)

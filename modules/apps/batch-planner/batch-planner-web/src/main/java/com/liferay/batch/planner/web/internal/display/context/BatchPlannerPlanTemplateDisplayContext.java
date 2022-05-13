@@ -20,7 +20,6 @@ import com.liferay.batch.planner.service.BatchPlannerPlanServiceUtil;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.SearchOrderByUtil;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -58,9 +57,7 @@ public class BatchPlannerPlanTemplateDisplayContext extends BaseDisplayContext {
 		).buildPortletURL();
 	}
 
-	public SearchContainer<BatchPlannerPlan> getSearchContainer()
-		throws PortalException {
-
+	public SearchContainer<BatchPlannerPlan> getSearchContainer() {
 		if (_searchContainer != null) {
 			return _searchContainer;
 		}

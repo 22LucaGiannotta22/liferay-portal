@@ -11,7 +11,6 @@
 
 import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import i18n from '../../../../common/I18n';
 
 const SearchProject = ({onChange, props}) => {
 	return (
@@ -19,7 +18,7 @@ const SearchProject = ({onChange, props}) => {
 			<ClayInput
 				className="cp-search-project font-weight-semi-bold h5 rounded-pill shadow-lg"
 				onChange={(ex) => onChange(ex.target.value)}
-				placeholder={i18n.translate('find-a-project')}
+				placeholder="Find a project"
 				type="text"
 				{...props}
 			/>

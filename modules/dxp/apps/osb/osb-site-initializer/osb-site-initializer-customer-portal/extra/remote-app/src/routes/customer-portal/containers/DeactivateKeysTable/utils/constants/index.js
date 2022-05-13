@@ -9,16 +9,14 @@
  * distribution rights of the Software.
  */
 
-import i18n from '../../../../../../common/I18n';
-
 export const DEACTIVATE_COLUMNS = [
 	{
 		accessor: 'envName',
 		bodyClass: 'border-0 cursor-pointer',
 		expanded: true,
 		header: {
-			description: i18n.translate('description'),
-			name: i18n.translate('environment-name'),
+			description: 'Description',
+			name: 'Environment Name',
 			styles: 'bg-transparent',
 		},
 	},
@@ -26,8 +24,8 @@ export const DEACTIVATE_COLUMNS = [
 		accessor: 'keyType',
 		bodyClass: 'border-0 cursor-pointer',
 		header: {
-			description: i18n.translate('host-name-cluster-size'),
-			name: i18n.translate('key-type'),
+			description: 'Host Name / Cluster Size',
+			name: 'Key Type',
 			noWrap: true,
 			styles: 'bg-transparent',
 		},
@@ -36,7 +34,7 @@ export const DEACTIVATE_COLUMNS = [
 		accessor: 'envType',
 		bodyClass: 'border-0 cursor-pointer',
 		header: {
-			name: i18n.translate('environment-type'),
+			name: 'Environment Type',
 			styles: 'bg-transparent text-neutral-10 font-weight-bold',
 		},
 	},
@@ -44,7 +42,7 @@ export const DEACTIVATE_COLUMNS = [
 		accessor: 'expirationDate',
 		bodyClass: 'border-0 cursor-pointer',
 		header: {
-			name: i18n.translate('exp-date'),
+			name: 'Exp. Date',
 			styles: 'bg-transparent text-neutral-10 font-weight-bold',
 		},
 		noWrap: true,
@@ -54,7 +52,7 @@ export const DEACTIVATE_COLUMNS = [
 		align: 'center',
 		bodyClass: 'border-0 cursor-pointer',
 		header: {
-			name: i18n.translate('status'),
+			name: 'Status',
 			styles: 'bg-transparent text-neutral-10 font-weight-bold',
 		},
 	},

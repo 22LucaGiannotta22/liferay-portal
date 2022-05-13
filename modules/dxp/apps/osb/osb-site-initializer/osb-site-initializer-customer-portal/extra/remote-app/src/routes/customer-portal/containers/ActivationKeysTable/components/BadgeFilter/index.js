@@ -10,7 +10,6 @@
  */
 
 import {useCallback} from 'react';
-import i18n from '../../../../../../common/I18n';
 import Button from '../../../../../../common/components/Button';
 import getCurrentEndDate from '../../../../../../common/utils/getCurrentEndDate';
 import BadgePillFilter from '../../../../components/BadgePillFilter';
@@ -31,7 +30,7 @@ const BadgeFilter = ({
 			todayDNE.setFullYear(todayDNE.getFullYear() + DNE_YEARS);
 
 			if (new Date(dateFilterState.value?.onOrAfter) >= todayDNE) {
-				return i18n.translate('dne');
+				return 'DNE';
 			}
 
 			dateDisplays.push(
@@ -53,7 +52,7 @@ const BadgeFilter = ({
 			const keyTypesDisplay = [];
 
 			if (filterKeyType.value?.hasOnPremise) {
-				keyTypesDisplay.push(i18n.translate('on-premise'));
+				keyTypesDisplay.push('On-Premise');
 			}
 
 			if (filterKeyType.value?.hasVirtualCluster) {
@@ -63,16 +62,14 @@ const BadgeFilter = ({
 						filterKeyType.value?.maxNodes
 					)
 				) {
-					keyTypesDisplay.push(i18n.translate('virtual-cluster'));
+					keyTypesDisplay.push(`Virtual Cluster`);
 				}
 				else if (
 					filterKeyType.value?.minNodes ===
 					filterKeyType.value?.maxNodes
 				) {
 					keyTypesDisplay.push(
-						i18n.sub('virtual-cluster-x-nodes', [
-							filterKeyType.value?.minNodes,
-						])
+						`Virtual Cluster (${filterKeyType.value?.minNodes} nodes)`
 					);
 				}
 				else {
@@ -87,9 +84,7 @@ const BadgeFilter = ({
 					}
 
 					keyTypesDisplay.push(
-						i18n.sub('virtual-cluster-x-nodes', [
-							nodesDisplay.join('-'),
-						])
+						`Virtual Cluster (${nodesDisplay.join('-')} nodes)`
 					);
 				}
 			}
@@ -123,15 +118,11 @@ const BadgeFilter = ({
 			<div className="d-flex">
 				{!!filters.searchTerm && !loading && (
 					<p className="font-weight-semi-bold m-0 mt-3 text-paragraph-sm">
-						{activationKeysLength > 1
-							? `${i18n.sub('x-results-for-x', [
-									activationKeysLength,
-									`"${filters.searchTerm}"`,
-							  ])}`
-							: `${i18n.sub('x-result-for-x', [
-									activationKeysLength,
-									`"${filters.searchTerm}"`,
-							  ])}`}
+						{activationKeysLength} {}
+						result
+						{activationKeysLength > 1 ? 's ' : ' '}
+						for &quot;
+						{filters.searchTerm}&quot;
 					</p>
 				)}
 			</div>
@@ -270,7 +261,7 @@ const BadgeFilter = ({
 							prependIcon="times-circle"
 							small
 						>
-							{i18n.translate('clear-all-filters')}
+							Clear All Filters
 						</Button>
 					)}
 				</div>

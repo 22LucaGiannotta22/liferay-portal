@@ -41,11 +41,11 @@ public class CommerceOrderTypeCOREntryRelClayTableDataSetDisplayView
 		ClayTableSchemaBuilder clayTableSchemaBuilder =
 			_clayTableSchemaBuilderFactory.create();
 
-		ClayTableSchemaField orderTypeNameLangClayTableSchemaField =
+		ClayTableSchemaField clayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField(
 				"orderType.name.LANG", "name");
 
-		orderTypeNameLangClayTableSchemaField.setContentRenderer("actionLink");
+		clayTableSchemaField.setContentRenderer("actionLink");
 
 		return clayTableSchemaBuilder.build();
 	}

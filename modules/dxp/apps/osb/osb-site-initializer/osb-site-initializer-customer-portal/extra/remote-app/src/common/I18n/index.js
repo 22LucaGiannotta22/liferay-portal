@@ -11,7 +11,7 @@
 
 import {Liferay} from '../services/liferay';
 
-import en_US from './en_US.json';
+import en_US from './en_US';
 
 export const languages = {
 	en_US,

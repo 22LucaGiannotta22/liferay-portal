@@ -24,7 +24,6 @@ import com.liferay.info.item.InfoItemServiceTracker;
 import com.liferay.info.item.provider.InfoItemFormProvider;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -79,9 +78,24 @@ public class MappingContentUtil {
 				infoForm.getInfoFieldSetEntries()) {
 
 			if (infoFieldSetEntry instanceof InfoField) {
+				InfoField infoField = (InfoField)infoFieldSetEntry;
+
 				defaultFieldSetFieldsJSONArray.put(
-					_getInfoFieldJSONObject(
-						(InfoField)infoFieldSetEntry, locale));
+					JSONUtil.put(
+						"key", infoField.getUniqueId()
+					).put(
+						"label", infoField.getLabel(locale)
+					).put(
+						"name", infoField.getName()
+					).put(
+						"type",
+						() -> {
+							InfoFieldType infoFieldType =
+								infoField.getInfoFieldType();
+
+							return infoFieldType.getName();
+						}
+					));
 			}
 			else if (infoFieldSetEntry instanceof InfoFieldSet) {
 				JSONArray fieldSetFieldsJSONArray =
@@ -91,7 +105,21 @@ public class MappingContentUtil {
 
 				for (InfoField infoField : infoFieldSet.getAllInfoFields()) {
 					fieldSetFieldsJSONArray.put(
-						_getInfoFieldJSONObject(infoField, locale));
+						JSONUtil.put(
+							"key", infoField.getUniqueId()
+						).put(
+							"label", infoField.getLabel(locale)
+						).put(
+							"name", infoField.getName()
+						).put(
+							"type",
+							() -> {
+								InfoFieldType infoFieldType =
+									infoField.getInfoFieldType();
+
+								return infoFieldType.getName();
+							}
+						));
 				}
 
 				if (fieldSetFieldsJSONArray.length() > 0) {
@@ -106,27 +134,6 @@ public class MappingContentUtil {
 		}
 
 		return fieldSetsJSONArray;
-	}
-
-	private static JSONObject _getInfoFieldJSONObject(
-		InfoField infoField, Locale locale) {
-
-		return JSONUtil.put(
-			"key", infoField.getUniqueId()
-		).put(
-			"label", infoField.getLabel(locale)
-		).put(
-			"name", infoField.getName()
-		).put(
-			"required", infoField.isRequired()
-		).put(
-			"type",
-			() -> {
-				InfoFieldType infoFieldType = infoField.getInfoFieldType();
-
-				return infoFieldType.getName();
-			}
-		);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

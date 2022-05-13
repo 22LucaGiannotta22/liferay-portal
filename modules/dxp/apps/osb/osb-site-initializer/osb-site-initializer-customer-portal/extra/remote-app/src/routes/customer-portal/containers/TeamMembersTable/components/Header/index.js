@@ -12,7 +12,6 @@
 import {useModal} from '@clayui/core';
 import classNames from 'classnames';
 import {useEffect, useState} from 'react';
-import i18n from '../../../../../../common/I18n';
 import {Button} from '../../../../../../common/components';
 import {ROLE_TYPES} from '../../../../../../common/utils/constants';
 import BadgeFilter from '../BadgeFilter';
@@ -86,7 +85,7 @@ const TeamMembersTableHeader = ({
 							<PopoverIconButton alignPosition="top" />
 
 							<p className="font-weight-bold m-0">
-								{i18n.translate('support-seats')}: &nbsp;
+								Support seats: &nbsp;
 							</p>
 
 							<p
@@ -97,14 +96,11 @@ const TeamMembersTableHeader = ({
 									}
 								)}
 							>
-								{`${i18n.sub('x-of-x-available', [
-									`${
-										administratorsAvailable < 0
-											? '0'
-											: administratorsAvailable
-									}`,
-									project.maxRequestors,
-								])}`}
+								{`${
+									administratorsAvailable < 0
+										? '0'
+										: administratorsAvailable
+								} of ${project.maxRequestors} available`}
 							</p>
 						</>
 					)}
@@ -116,7 +112,7 @@ const TeamMembersTableHeader = ({
 							prependIcon="user-plus"
 							prependIconClassName="mr-2"
 						>
-							{i18n.translate('invite')}
+							Invite
 						</Button>
 					)}
 				</div>

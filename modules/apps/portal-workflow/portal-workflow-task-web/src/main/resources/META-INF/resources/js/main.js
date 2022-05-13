@@ -94,7 +94,6 @@ AUI.add(
 											dialog.destroy();
 										},
 									},
-									title: Liferay.Language.get('close'),
 								},
 							],
 						},

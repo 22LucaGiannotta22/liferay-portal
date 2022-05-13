@@ -20,6 +20,7 @@ import com.liferay.layout.seo.internal.util.AlternateURLMapperProvider;
 import com.liferay.layout.seo.kernel.LayoutSEOLink;
 import com.liferay.layout.seo.kernel.LayoutSEOLinkManager;
 import com.liferay.layout.seo.model.LayoutSEOEntry;
+import com.liferay.layout.seo.open.graph.OpenGraphConfiguration;
 import com.liferay.layout.seo.service.LayoutSEOEntryLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
@@ -64,6 +65,16 @@ public class LayoutSEOLinkManagerImpl implements LayoutSEOLinkManager {
 	@Override
 	public LayoutSEOLink getCanonicalLayoutSEOLink(
 			Layout layout, Locale locale, String canonicalURL,
+			Map<Locale, String> alternateURLs)
+		throws PortalException {
+
+		return getCanonicalLayoutSEOLink(
+			layout, locale, canonicalURL, _getThemeDisplay());
+	}
+
+	@Override
+	public LayoutSEOLink getCanonicalLayoutSEOLink(
+			Layout layout, Locale locale, String canonicalURL,
 			ThemeDisplay themeDisplay)
 		throws PortalException {
 
@@ -93,6 +104,16 @@ public class LayoutSEOLinkManagerImpl implements LayoutSEOLinkManager {
 	@Override
 	public List<LayoutSEOLink> getLocalizedLayoutSEOLinks(
 			Layout layout, Locale locale, String canonicalURL,
+			Map<Locale, String> alternateURLs)
+		throws PortalException {
+
+		return getLocalizedLayoutSEOLinks(
+			layout, locale, canonicalURL, alternateURLs.keySet());
+	}
+
+	@Override
+	public List<LayoutSEOLink> getLocalizedLayoutSEOLinks(
+			Layout layout, Locale locale, String canonicalURL,
 			Set<Locale> availableLocales)
 		throws PortalException {
 
@@ -110,7 +131,7 @@ public class LayoutSEOLinkManagerImpl implements LayoutSEOLinkManager {
 
 		layoutSEOLinks.add(
 			getCanonicalLayoutSEOLink(
-				layout, locale, canonicalURL, themeDisplay));
+				layout, locale, canonicalURL, alternateURLs));
 
 		alternateURLs.forEach(
 			(urlLocale, url) -> layoutSEOLinks.add(
@@ -154,6 +175,16 @@ public class LayoutSEOLinkManagerImpl implements LayoutSEOLinkManager {
 		throws PortalException {
 
 		return _html.escape(_getPageTitleSuffix(layout, companyName));
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             OpenGraphConfiguration#isOpenGraphEnabled(Group)}
+	 */
+	@Deprecated
+	@Override
+	public boolean isOpenGraphEnabled(Layout layout) throws PortalException {
+		return _openGraphConfiguration.isOpenGraphEnabled(layout.getGroup());
 	}
 
 	@Activate
@@ -324,6 +355,9 @@ public class LayoutSEOLinkManagerImpl implements LayoutSEOLinkManager {
 
 	@Reference
 	private LayoutSEOEntryLocalService _layoutSEOEntryLocalService;
+
+	@Reference
+	private OpenGraphConfiguration _openGraphConfiguration;
 
 	@Reference
 	private Portal _portal;

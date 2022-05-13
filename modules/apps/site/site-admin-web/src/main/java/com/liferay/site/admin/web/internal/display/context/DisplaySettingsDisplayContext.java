@@ -77,8 +77,12 @@ public class DisplaySettingsDisplayContext {
 			"currentLanguages", _getCurrentLanguagesJSONArray()
 		).put(
 			"defaultLanguageId",
-			() -> LocaleUtil.toLanguageId(
-				PortalUtil.getSiteDefaultLocale(liveGroup.getGroupId()))
+			() -> {
+				Locale siteDefaultLocale = PortalUtil.getSiteDefaultLocale(
+					liveGroup.getGroupId());
+
+				return LocaleUtil.toLanguageId(siteDefaultLocale);
+			}
 		).put(
 			"inheritLocales",
 			() -> {

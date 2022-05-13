@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.trash.kernel.util.TrashUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -98,7 +99,7 @@ public abstract class BaseAssetRenderer<T> implements AssetRenderer<T> {
 
 	@Override
 	public String getNewName(String oldName, String token) {
-		return StringBundler.concat(oldName, StringPool.SPACE, token);
+		return TrashUtil.getNewName(oldName, token);
 	}
 
 	@Override

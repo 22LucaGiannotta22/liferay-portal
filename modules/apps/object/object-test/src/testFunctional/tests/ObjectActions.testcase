@@ -37,11 +37,11 @@ definition {
 
 		ObjectAdmin.goToActionsTab();
 
-		ObjectAdmin.gotoAddObjectAction();
+		LexiconEntry.gotoAdd();
 
 		Button.clickCancel();
 
-		Refresh();
+		AssertElementNotPresent(locator1 = "Portlet#MODAL_TITLE");
 
 		ObjectAdmin.assertNoResultsWereFound();
 	}
@@ -68,11 +68,17 @@ definition {
 
 		ObjectAdmin.goToActionDetails(viewEntry = "Action Name");
 
-		ObjectAdmin.viewDetails();
+		ObjectAdmin.viewFieldDetails();
 
-		ObjectAdmin.fillObjectAction(
-			actionName = "Update Action Name",
-			click = "cancel");
+		Type(
+			locator1 = "ObjectAdmin#VIEW_ACTION_NAME_ON_SIDE_PANEL",
+			value1 = "Update Action Name");
+
+		Button.clickCancel();
+
+		AssertElementNotPresent(locator1 = "ObjectAdmin#FIELDS_DETAILS_IFRAME");
+
+		Refresh();
 
 		ObjectAdmin.assertObjectActions(
 			actionActive = "Yes",
@@ -159,9 +165,13 @@ definition {
 			urlAction = "http://localhost:8080",
 			whenAction = "On After Add");
 
-		ObjectAdmin.editObjectAction(
-			active = "false",
-			viewEntry = "Action Name");
+		ObjectAdmin.editObjectAction(viewEntry = "Action Name");
+
+		CreateObject.checkToggleInactive();
+
+		Button.clickSave();
+
+		Refresh();
 
 		ObjectAdmin.assertObjectActions(
 			actionActive = "No",
@@ -182,16 +192,13 @@ definition {
 
 		ObjectAdmin.goToActionsTab();
 
-		ObjectAdmin.gotoAddObjectAction();
-
-		ObjectAdmin.fillObjectAction(
+		ObjectAdmin.addObjectActionViaUI(
+			actionName = "",
 			thenAction = "Webhook",
 			urlAction = "http://localhost:8080",
 			whenAction = "On After Add");
 
-		Button.clickSave();
-
-		ObjectAdmin.assertRequiredErrorPresent();
+		ObjectAdmin.viewRequiredAlert(requiredAlert = "Required");
 	}
 
 	@description = "LPS-139008 - Verify it is not possible to leave the Action Then field blank"
@@ -208,15 +215,11 @@ definition {
 
 		ObjectAdmin.goToActionsTab();
 
-		ObjectAdmin.gotoAddObjectAction();
-
-		ObjectAdmin.fillObjectAction(
+		ObjectAdmin.addObjectActionViaUI(
 			actionName = "Action Name",
 			whenAction = "On After Add");
 
-		Button.clickSave();
-
-		ObjectAdmin.assertRequiredErrorPresent();
+		ObjectAdmin.viewRequiredAlert(requiredAlert = "Required");
 	}
 
 	@description = "LPS-139008 - Verify it is not possible to leave the Action When field blank"
@@ -233,16 +236,12 @@ definition {
 
 		ObjectAdmin.goToActionsTab();
 
-		ObjectAdmin.gotoAddObjectAction();
-
-		ObjectAdmin.fillObjectAction(
+		ObjectAdmin.addObjectActionViaUI(
 			actionName = "Action Name",
 			thenAction = "Webhook",
 			urlAction = "http://localhost:8080");
 
-		Button.clickSave();
-
-		ObjectAdmin.assertRequiredErrorPresent();
+		ObjectAdmin.viewRequiredAlert(requiredAlert = "Required");
 	}
 
 	@description = "LPS-139008 - Verify it is not possible to leave the URL field blank when Webhook is selected"
@@ -259,16 +258,12 @@ definition {
 
 		ObjectAdmin.goToActionsTab();
 
-		ObjectAdmin.gotoAddObjectAction();
-
-		ObjectAdmin.fillObjectAction(
+		ObjectAdmin.addObjectActionViaUI(
 			actionName = "Action Name",
 			thenAction = "Webhook",
 			whenAction = "On After Add");
 
-		Button.clickSave();
-
-		ObjectAdmin.assertRequiredErrorPresent();
+		ObjectAdmin.viewRequiredAlert(requiredAlert = "Required");
 	}
 
 	@description = "LPS-139008 - Verify that it is possible to reactivate an Action"
@@ -287,14 +282,25 @@ definition {
 
 		ObjectAdmin.addObjectActionViaUI(
 			actionName = "Action Name",
-			active = "false",
 			thenAction = "Webhook",
 			urlAction = "http://localhost:8080",
 			whenAction = "On After Add");
 
-		ObjectAdmin.editObjectAction(
-			active = "true",
-			viewEntry = "Action Name");
+		ObjectAdmin.editObjectAction(viewEntry = "Action Name");
+
+		CreateObject.checkToggleInactive();
+
+		Button.clickSave();
+
+		Refresh();
+
+		ObjectAdmin.editObjectAction(viewEntry = "Action Name");
+
+		CreateObject.checkToggleActive();
+
+		Button.clickSave();
+
+		Refresh();
 
 		ObjectAdmin.assertObjectActions(
 			actionActive = "Yes",
@@ -359,7 +365,7 @@ definition {
 			actionName = "Action Name");
 
 		ObjectAdmin.editObjectAction(
-			actionName = "Update Action Name",
+			newActionName = "Update Action Name",
 			viewEntry = "Action Name");
 
 		ObjectAdmin.assertObjectActions(

@@ -54,7 +54,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -340,21 +339,7 @@ public abstract class BaseOptionCategoryResourceImpl
 		throws Exception {
 
 		UnsafeConsumer<OptionCategory, Exception> optionCategoryUnsafeConsumer =
-			null;
-
-		String createStrategy = (String)parameters.getOrDefault(
-			"createStrategy", "INSERT");
-
-		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			optionCategoryUnsafeConsumer = optionCategory -> postOptionCategory(
-				optionCategory);
-		}
-
-		if (optionCategoryUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Create strategy \"" + createStrategy +
-					"\" is not supported for OptionCategory");
-		}
+			optionCategory -> postOptionCategory(optionCategory);
 
 		if (contextBatchUnsafeConsumer != null) {
 			contextBatchUnsafeConsumer.accept(
@@ -433,37 +418,6 @@ public abstract class BaseOptionCategoryResourceImpl
 			java.util.Collection<OptionCategory> optionCategories,
 			Map<String, Serializable> parameters)
 		throws Exception {
-
-		UnsafeConsumer<OptionCategory, Exception> optionCategoryUnsafeConsumer =
-			null;
-
-		String updateStrategy = (String)parameters.getOrDefault(
-			"updateStrategy", "UPDATE");
-
-		if ("PARTIAL_UPDATE".equalsIgnoreCase(updateStrategy)) {
-			optionCategoryUnsafeConsumer =
-				optionCategory -> patchOptionCategory(
-					optionCategory.getId() != null ? optionCategory.getId() :
-						Long.parseLong(
-							(String)parameters.get("optionCategoryId")),
-					optionCategory);
-		}
-
-		if (optionCategoryUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Update strategy \"" + updateStrategy +
-					"\" is not supported for OptionCategory");
-		}
-
-		if (contextBatchUnsafeConsumer != null) {
-			contextBatchUnsafeConsumer.accept(
-				optionCategories, optionCategoryUnsafeConsumer);
-		}
-		else {
-			for (OptionCategory optionCategory : optionCategories) {
-				optionCategoryUnsafeConsumer.accept(optionCategory);
-			}
-		}
 	}
 
 	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {

@@ -62,8 +62,8 @@ const CheckinModal = ({
 
 						<ClayRadioGroup
 							name="versionIncrease"
-							onChange={setVersionIncrease}
-							value={versionIncrease}
+							onSelectedValueChange={setVersionIncrease}
+							selectedValue={versionIncrease}
 						>
 							<ClayRadio
 								label={Liferay.Language.get('major-version')}

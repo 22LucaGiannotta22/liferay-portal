@@ -4246,7 +4246,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "View");
 
-		ObjectAdmin.viewDetails();
+		ObjectAdmin.viewFieldDetails();
 	}
 
 	@description = "LPS-135549 - Verify it is possible to view the Details of a Field by clicking on its name"
@@ -4273,7 +4273,7 @@ definition {
 
 		ObjectAdmin.goToFieldsDetails(label = "Custom Field");
 
-		AssertElementPresent(locator1 = "ObjectAdmin#SIDE_PANEL");
+		AssertElementPresent(locator1 = "ObjectAdmin#FIELDS_DETAILS_IFRAME");
 	}
 
 	@description = "LPS-139803 - Verify it the Object Entry Title of a BigDecimal type is displayed on the Relationship field when adding an entry"
@@ -4950,7 +4950,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "View");
 
-		ObjectAdmin.viewDetails();
+		ObjectAdmin.viewFieldDetails();
 	}
 
 	@description = "LPS-135397 - Verify if it's possible to view a tab of relationship with entries"
@@ -6317,8 +6317,8 @@ definition {
 
 		PageEditor.editCollectionDisplay(
 			fragmentName = "Collection Display",
-			selectedName = "Custom Objects 145",
-			styleDisplay = "Table");
+			listStyle = "Table",
+			selectedName = "Custom Objects 145");
 
 		PageEditor.clickPublish();
 
@@ -7848,8 +7848,8 @@ definition {
 
 		PageEditor.editCollectionDisplay(
 			fragmentName = "Collection Display",
-			selectedName = "Custom Objects B 169",
-			styleDisplay = "Table");
+			listStyle = "Table",
+			selectedName = "Custom Objects B 169");
 
 		PageEditor.clickPublish();
 

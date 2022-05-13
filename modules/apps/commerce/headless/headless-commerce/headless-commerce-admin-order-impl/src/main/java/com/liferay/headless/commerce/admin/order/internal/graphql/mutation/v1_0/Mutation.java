@@ -1307,6 +1307,9 @@ public class Mutation {
 		billingAddressResource.setContextUser(_user);
 		billingAddressResource.setGroupLocalService(_groupLocalService);
 		billingAddressResource.setRoleLocalService(_roleLocalService);
+
+		billingAddressResource.setVulcanBatchEngineImportTaskResource(
+			_vulcanBatchEngineImportTaskResource);
 	}
 
 	private void _populateResourceContext(OrderResource orderResource)
@@ -1498,6 +1501,9 @@ public class Mutation {
 		shippingAddressResource.setContextUser(_user);
 		shippingAddressResource.setGroupLocalService(_groupLocalService);
 		shippingAddressResource.setRoleLocalService(_roleLocalService);
+
+		shippingAddressResource.setVulcanBatchEngineImportTaskResource(
+			_vulcanBatchEngineImportTaskResource);
 	}
 
 	private void _populateResourceContext(TermResource termResource)

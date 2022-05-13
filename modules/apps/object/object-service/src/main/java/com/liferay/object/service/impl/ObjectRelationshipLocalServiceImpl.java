@@ -38,8 +38,6 @@ import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
-import com.liferay.portal.kernel.search.Indexer;
-import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -190,12 +188,6 @@ public class ObjectRelationshipLocalServiceImpl
 
 			objectRelationshipPersistence.remove(
 				reverseObjectRelationship.getObjectRelationshipId());
-
-			Indexer<ObjectRelationship> indexer =
-				IndexerRegistryUtil.nullSafeGetIndexer(
-					ObjectRelationship.class);
-
-			indexer.delete(reverseObjectRelationship);
 		}
 
 		return objectRelationship;
@@ -506,25 +498,10 @@ public class ObjectRelationshipLocalServiceImpl
 			throw new ObjectRelationshipTypeException("Invalid type " + type);
 		}
 
-		if (Objects.equals(
-				type, ObjectRelationshipConstants.TYPE_MANY_TO_MANY) &&
-			(objectDefinitionId1 == objectDefinitionId2)) {
-
-			throw new ObjectRelationshipTypeException(
-				"Many to many self relationships are not allowed");
-		}
-
-		ObjectDefinition objectDefinition1 =
+		ObjectDefinition objectDefinition =
 			_objectDefinitionPersistence.fetchByPrimaryKey(objectDefinitionId1);
-		ObjectDefinition objectDefinition2 =
-			_objectDefinitionPersistence.fetchByPrimaryKey(objectDefinitionId2);
 
-		if (objectDefinition1.isSystem() && objectDefinition2.isSystem()) {
-			throw new ObjectRelationshipTypeException(
-				"Relationships are not allowed between system objects");
-		}
-
-		if (objectDefinition1.isSystem() &&
+		if (objectDefinition.isSystem() &&
 			!Objects.equals(
 				type, ObjectRelationshipConstants.TYPE_ONE_TO_MANY)) {
 

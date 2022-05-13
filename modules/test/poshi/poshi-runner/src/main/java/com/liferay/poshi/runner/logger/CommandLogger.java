@@ -110,8 +110,11 @@ public final class CommandLogger {
 	public void logNamespacedClassCommandName(
 		String namespacedClassCommandName) {
 
+		LoggerElement dividerLineLoggerElement = _getDividerLineLoggerElement(
+			namespacedClassCommandName);
+
 		_commandLogLoggerElement.addChildLoggerElement(
-			_getDividerLineLoggerElement(namespacedClassCommandName));
+			dividerLineLoggerElement);
 	}
 
 	public void logSeleniumCommand(Element element, List<String> arguments) {

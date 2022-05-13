@@ -42,7 +42,7 @@ portletDisplay.setURLBack(redirect);
 renderResponse.setTitle(LanguageUtil.get(request, "search-results"));
 %>
 
-<div class="sticky-top" style="top: 56px; z-index: 999;">
+<div class="sticky-top" style="top: 56px;">
 	<clay:management-toolbar
 		clearResultsURL="<%= redirect %>"
 		itemsTotal="<%= configurationEntryIterator.getTotal() %>"

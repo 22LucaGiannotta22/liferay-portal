@@ -10,7 +10,6 @@
  */
 
 import {useCallback} from 'react';
-import i18n from '../../../../../../../common/I18n';
 import {useCustomerPortal} from '../../../../../context';
 import {hasCluster} from '../../hasCluster';
 import {hasVirtualCluster} from '../../index';
@@ -28,14 +27,14 @@ const KeyTypeColumn = ({activationKey}) => {
 
 	const getColumnTitle = useCallback(() => {
 		if (hasVirtualClusterForActivationKeys) {
-			return i18n.translate('virtual-cluster');
+			return 'Virtual Cluster';
 		}
 
 		if (hasClusterForActivationKeys) {
-			return i18n.translate('cluster');
+			return 'Cluster';
 		}
 
-		return i18n.translate('on-premise');
+		return 'On-Premise';
 	}, [hasClusterForActivationKeys, hasVirtualClusterForActivationKeys]);
 
 	return (
@@ -55,9 +54,7 @@ const KeyTypeColumn = ({activationKey}) => {
 				<p className="font-weight-normal m-0 text-neutral-7 text-paragraph-sm text-truncate">
 					{hasVirtualClusterForActivationKeys ||
 					hasClusterForActivationKeys
-						? i18n.sub('x-cluster-nodes-keys', [
-								activationKey.maxClusterNodes,
-						  ])
+						? `${activationKey.maxClusterNodes} Cluster Nodes (Keys)`
 						: activationKey.hostName || '-'}
 				</p>
 			</div>

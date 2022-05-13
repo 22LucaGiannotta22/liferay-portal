@@ -26,20 +26,11 @@ definition {
 			portlet = "Pages",
 			site = "Site Name");
 
-		if (IsElementPresent(locator1 = "Icon#HEADER_VERTICAL_ELLIPSIS")) {
-			PagesAdmin.addPage(pageName = "Test Page1");
+		PagesAdmin.addPage(pageName = "Test Page1");
 
-			PagesAdmin.addPage(pageName = "Test Page2");
+		PagesAdmin.addPage(pageName = "Test Page2");
 
-			PagesAdmin.addPage(pageName = "Test Page3");
-		}
-		else {
-			PagesAdmin.addPublicPage(pageName = "Test Page1");
-
-			PagesAdmin.addPublicPage(pageName = "Test Page2");
-
-			PagesAdmin.addPublicPage(pageName = "Test Page3");
-		}
+		PagesAdmin.addPage(pageName = "Test Page3");
 
 		var pageName = "Test Page1";
 		var portletBody = "Test Page1";
@@ -81,12 +72,7 @@ definition {
 			task ("Create a Content Page") {
 				PagesAdmin.openPagesAdmin(siteURLKey = "${siteName}");
 
-				if (IsElementPresent(locator1 = "Icon#HEADER_VERTICAL_ELLIPSIS")) {
-					ContentPages.addPage(pageName = "${contentPageName}");
-				}
-				else {
-					ContentPages.addPublicPage(pageName = "${contentPageName}");
-				}
+				ContentPages.addPage(pageName = "${contentPageName}");
 			}
 
 			task ("Add a basic '${fragmentName}' component") {

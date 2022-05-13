@@ -55,7 +55,7 @@ public class BatchPlannerPlanLocalServiceImpl
 	@Override
 	public BatchPlannerPlan addBatchPlannerPlan(
 			long userId, boolean export, String externalType,
-			String externalURL, String internalClassName, String name, int size,
+			String externalURL, String internalClassName, String name,
 			String taskItemDelegateName, boolean template)
 		throws PortalException {
 
@@ -76,13 +76,11 @@ public class BatchPlannerPlanLocalServiceImpl
 		batchPlannerPlan.setCompanyId(user.getCompanyId());
 		batchPlannerPlan.setUserId(userId);
 		batchPlannerPlan.setUserName(user.getFullName());
-		batchPlannerPlan.setActive(true);
 		batchPlannerPlan.setExport(export);
 		batchPlannerPlan.setExternalType(externalType);
 		batchPlannerPlan.setExternalURL(externalURL);
 		batchPlannerPlan.setInternalClassName(internalClassName);
 		batchPlannerPlan.setName(name);
-		batchPlannerPlan.setSize(size);
 		batchPlannerPlan.setTaskItemDelegateName(taskItemDelegateName);
 		batchPlannerPlan.setTemplate(template);
 
@@ -94,28 +92,6 @@ public class BatchPlannerPlanLocalServiceImpl
 			batchPlannerPlan.getBatchPlannerPlanId(), false, true, false);
 
 		return batchPlannerPlan;
-	}
-
-	@Override
-	public void deactivateBatchPlannerPlan(String batchEngineTaskERC) {
-		BatchPlannerPlan batchPlannerPlan =
-			batchPlannerPlanPersistence.fetchByPrimaryKey(
-				GetterUtil.getLong(batchEngineTaskERC));
-
-		if (batchPlannerPlan == null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					StringBundler.concat(
-						"Unable to update batch planner plan for batch engine ",
-						"task ERC ", batchEngineTaskERC));
-			}
-
-			return;
-		}
-
-		batchPlannerPlan.setActive(false);
-
-		batchPlannerPlanPersistence.update(batchPlannerPlan);
 	}
 
 	@Override
@@ -138,6 +114,43 @@ public class BatchPlannerPlanLocalServiceImpl
 	}
 
 	@Override
+	public BatchPlannerPlan updateActive(
+			boolean active, String batchEngineTaskERC)
+		throws PortalException {
+
+		BatchPlannerPlan batchPlannerPlan =
+			batchPlannerPlanPersistence.fetchByPrimaryKey(
+				GetterUtil.getLong(batchEngineTaskERC));
+
+		if (batchPlannerPlan == null) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					StringBundler.concat(
+						"Unable to update batch planner plan for batch engine ",
+						"task ERC ", batchEngineTaskERC));
+			}
+
+			return null;
+		}
+
+		return batchPlannerPlanLocalService.updateActive(
+			batchPlannerPlan.getBatchPlannerPlanId(), active);
+	}
+
+	@Override
+	public BatchPlannerPlan updateActive(
+			long batchPlannerPlanId, boolean active)
+		throws PortalException {
+
+		BatchPlannerPlan batchPlannerPlan =
+			batchPlannerPlanPersistence.findByPrimaryKey(batchPlannerPlanId);
+
+		batchPlannerPlan.setActive(active);
+
+		return batchPlannerPlanPersistence.update(batchPlannerPlan);
+	}
+
+	@Override
 	public BatchPlannerPlan updateBatchPlannerPlan(
 			long batchPlannerPlanId, String externalType,
 			String internalClassName, String name)
@@ -157,18 +170,6 @@ public class BatchPlannerPlanLocalServiceImpl
 		batchPlannerPlan.setExternalType(externalType);
 		batchPlannerPlan.setInternalClassName(internalClassName);
 		batchPlannerPlan.setName(name);
-
-		return batchPlannerPlanPersistence.update(batchPlannerPlan);
-	}
-
-	@Override
-	public BatchPlannerPlan updateStatus(long batchPlannerPlanId, int status)
-		throws PortalException {
-
-		BatchPlannerPlan batchPlannerPlan =
-			batchPlannerPlanPersistence.findByPrimaryKey(batchPlannerPlanId);
-
-		batchPlannerPlan.setStatus(status);
 
 		return batchPlannerPlanPersistence.update(batchPlannerPlan);
 	}

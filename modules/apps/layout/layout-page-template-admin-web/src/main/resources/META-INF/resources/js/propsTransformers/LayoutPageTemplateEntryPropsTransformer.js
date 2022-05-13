@@ -18,16 +18,15 @@ import {
 	openSimpleInputModal,
 } from 'frontend-js-web';
 
-import openDeletePageTemplateModal from '../modal/openDeletePageTemplateModal';
-
 const ACTIONS = {
 	deleteLayoutPageTemplateEntry({deleteLayoutPageTemplateEntryURL}) {
-		openDeletePageTemplateModal({
-			onDelete: () => {
-				send(deleteLayoutPageTemplateEntryURL);
-			},
-			title: Liferay.Language.get('page-template'),
-		});
+		if (
+			confirm(
+				Liferay.Language.get('are-you-sure-you-want-to-delete-this')
+			)
+		) {
+			send(deleteLayoutPageTemplateEntryURL);
+		}
 	},
 
 	deleteLayoutPageTemplateEntryPreview({

@@ -141,18 +141,7 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 			}
 		}
 		else {
-			try {
-				testDatabaseClass(driverClassName);
-			}
-			catch (ClassNotFoundException classNotFoundException) {
-				_log.error(
-					StringBundler.concat(
-						"Unable to find the JDBC driver class ",
-						driverClassName, " in a JAR in the directory ",
-						PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR));
-
-				throw classNotFoundException;
-			}
+			testDatabaseClass(driverClassName);
 
 			_waitForJDBCConnection(properties);
 		}

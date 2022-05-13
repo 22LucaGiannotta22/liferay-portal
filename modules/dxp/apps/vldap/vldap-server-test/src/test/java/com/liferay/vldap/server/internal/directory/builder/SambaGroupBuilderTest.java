@@ -16,7 +16,6 @@ package com.liferay.vldap.server.internal.directory.builder;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.vldap.server.internal.BaseVLDAPTestCase;
 import com.liferay.vldap.server.internal.directory.FilterConstraint;
 import com.liferay.vldap.server.internal.directory.ldap.Directory;
@@ -27,29 +26,26 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
+
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author William Newbury
  * @author Matthew Tambara
  */
+@RunWith(PowerMockRunner.class)
 public class SambaGroupBuilderTest extends BaseVLDAPTestCase {
-
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
 
 	@Before
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 
-		Mockito.when(
+		when(
 			searchBase.getCompany()
 		).thenReturn(
 			company
@@ -185,15 +181,15 @@ public class SambaGroupBuilderTest extends BaseVLDAPTestCase {
 
 	@Test
 	public void testBuildDirectoriesWithNullOrganization() throws Exception {
-		Organization organization = Mockito.mock(Organization.class);
+		Organization organization = mock(Organization.class);
 
-		Mockito.when(
+		when(
 			organization.getName()
 		).thenReturn(
 			"testName"
 		);
 
-		Mockito.when(
+		when(
 			organizationLocalService.dynamicQuery(
 				Mockito.any(DynamicQuery.class))
 		).thenReturn(
@@ -257,15 +253,15 @@ public class SambaGroupBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpOrganization() throws Exception {
-		Organization organization = Mockito.mock(Organization.class);
+		Organization organization = mock(Organization.class);
 
-		Mockito.when(
+		when(
 			organization.getName()
 		).thenReturn(
 			"testName"
 		);
 
-		Mockito.when(
+		when(
 			searchBase.getOrganization()
 		).thenReturn(
 			organization

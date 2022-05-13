@@ -54,7 +54,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -239,25 +238,13 @@ public abstract class BaseDSEnvelopeResourceImpl
 			Map<String, Serializable> parameters)
 		throws Exception {
 
-		UnsafeConsumer<DSEnvelope, Exception> dsEnvelopeUnsafeConsumer = null;
-
-		String createStrategy = (String)parameters.getOrDefault(
-			"createStrategy", "INSERT");
-
-		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			dsEnvelopeUnsafeConsumer = dsEnvelope -> {
+		UnsafeConsumer<DSEnvelope, Exception> dsEnvelopeUnsafeConsumer =
+			dsEnvelope -> {
 			};
 
-			if (parameters.containsKey("siteId")) {
-				dsEnvelopeUnsafeConsumer = dsEnvelope -> postSiteDSEnvelope(
-					(Long)parameters.get("siteId"), dsEnvelope);
-			}
-		}
-
-		if (dsEnvelopeUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Create strategy \"" + createStrategy +
-					"\" is not supported for DsEnvelope");
+		if (parameters.containsKey("siteId")) {
+			dsEnvelopeUnsafeConsumer = dsEnvelope -> postSiteDSEnvelope(
+				(Long)parameters.get("siteId"), dsEnvelope);
 		}
 
 		if (contextBatchUnsafeConsumer != null) {

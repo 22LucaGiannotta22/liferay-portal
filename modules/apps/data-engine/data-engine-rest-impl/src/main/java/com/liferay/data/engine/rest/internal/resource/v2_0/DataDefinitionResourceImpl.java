@@ -297,7 +297,7 @@ public class DataDefinitionResourceImpl
 			jsonArray::put
 		);
 
-		return jsonArray.toString();
+		return jsonArray.toJSONString();
 	}
 
 	@Override

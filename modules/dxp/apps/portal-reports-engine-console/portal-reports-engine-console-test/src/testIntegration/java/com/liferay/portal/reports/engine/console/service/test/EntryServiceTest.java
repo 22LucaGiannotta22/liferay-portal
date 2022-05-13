@@ -227,10 +227,11 @@ public class EntryServiceTest {
 				serviceContext);
 		}
 
-		serviceContext.setModelPermissions(
-			ModelPermissionsFactory.create(
-				_ENTRY_GROUP_PERMISSIONS, new String[] {"VIEW"},
-				Entry.class.getName()));
+		modelPermissions = ModelPermissionsFactory.create(
+			_ENTRY_GROUP_PERMISSIONS, new String[] {"VIEW"},
+			Entry.class.getName());
+
+		serviceContext.setModelPermissions(modelPermissions);
 
 		for (int i = 0; i < 5; i++) {
 			EntryLocalServiceUtil.addEntry(

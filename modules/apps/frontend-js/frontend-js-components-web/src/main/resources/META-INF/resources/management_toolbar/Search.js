@@ -14,7 +14,6 @@
 
 import ClayLayout from '@clayui/layout';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 const Search = ({children, onlySearch, showMobile, ...otherProps}) => {
@@ -41,8 +40,8 @@ const Search = ({children, onlySearch, showMobile, ...otherProps}) => {
 };
 
 Search.propTypes = {
-	onlySearch: PropTypes.bool,
-	showMobile: PropTypes.bool,
+	onlySearch: Boolean,
+	showMobile: Boolean,
 };
 
 export default Search;

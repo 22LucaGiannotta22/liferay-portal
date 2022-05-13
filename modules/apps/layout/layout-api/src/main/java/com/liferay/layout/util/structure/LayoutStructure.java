@@ -25,9 +25,11 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.util.PropsUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -193,17 +195,6 @@ public class LayoutStructure {
 		_updateLayoutStructure(dropZoneLayoutStructureItem, position);
 
 		return dropZoneLayoutStructureItem;
-	}
-
-	public LayoutStructureItem addFormStyledLayoutStructureItem(
-		String parentItemId, int position) {
-
-		FormStyledLayoutStructureItem formStyledLayoutStructureItem =
-			new FormStyledLayoutStructureItem(parentItemId);
-
-		_updateLayoutStructure(formStyledLayoutStructureItem, position);
-
-		return formStyledLayoutStructureItem;
 	}
 
 	public LayoutStructureItem addFragmentDropZoneLayoutStructureItem(
@@ -524,7 +515,7 @@ public class LayoutStructure {
 	public String toString() {
 		JSONObject jsonObject = toJSONObject();
 
-		return jsonObject.toString();
+		return jsonObject.toJSONString();
 	}
 
 	public void unmarkLayoutStructureItemForDeletion(String itemId) {
@@ -702,9 +693,12 @@ public class LayoutStructure {
 			new ColumnLayoutStructureItem(parentItemId);
 
 		columnLayoutStructureItem.setSize(size);
-		columnLayoutStructureItem.setViewportConfiguration(
-			ViewportSize.MOBILE_LANDSCAPE.getViewportSizeId(),
-			JSONUtil.put("size", 12));
+
+		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-119551"))) {
+			columnLayoutStructureItem.setViewportConfiguration(
+				ViewportSize.MOBILE_LANDSCAPE.getViewportSizeId(),
+				JSONUtil.put("size", 12));
+		}
 
 		_updateLayoutStructure(columnLayoutStructureItem, position);
 	}
@@ -800,6 +794,8 @@ public class LayoutStructure {
 			}
 
 			if (!updateEmpty &&
+				GetterUtil.getBoolean(
+					PropsUtil.get("feature.flag.LPS-119551")) &&
 				Objects.equals(
 					ViewportSize.MOBILE_LANDSCAPE.getViewportSizeId(),
 					viewportSizeId)) {
@@ -830,6 +826,8 @@ public class LayoutStructure {
 
 			if (columnViewportConfigurationJSONObject.has("size") &&
 				!updateEmpty &&
+				GetterUtil.getBoolean(
+					PropsUtil.get("feature.flag.LPS-119551")) &&
 				Objects.equals(
 					ViewportSize.PORTRAIT_MOBILE.getViewportSizeId(),
 					viewportSizeId)) {
@@ -879,15 +877,18 @@ public class LayoutStructure {
 
 		viewportConfigurationJSONObject.put("numberOfColumns", numberOfColumns);
 
-		if (Objects.equals(
+		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-119551")) &&
+			Objects.equals(
 				ViewportSize.MOBILE_LANDSCAPE.getViewportSizeId(),
 				viewportSizeId)) {
 
 			viewportConfigurationJSONObject.put("modulesPerRow", 1);
 		}
-		else if (Objects.equals(
-					ViewportSize.PORTRAIT_MOBILE.getViewportSizeId(),
-					viewportSizeId) &&
+		else if (GetterUtil.getBoolean(
+					PropsUtil.get("feature.flag.LPS-119551")) &&
+				 Objects.equals(
+					 ViewportSize.PORTRAIT_MOBILE.getViewportSizeId(),
+					 viewportSizeId) &&
 				 viewportConfigurationJSONObject.has("modulesPerRow")) {
 
 			viewportConfigurationJSONObject.remove("modulesPerRow");

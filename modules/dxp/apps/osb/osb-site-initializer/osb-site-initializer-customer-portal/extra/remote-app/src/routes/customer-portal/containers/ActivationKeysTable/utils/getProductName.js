@@ -9,22 +9,14 @@
  * distribution rights of the Software.
  */
 
-import i18n from '../../../../../common/I18n';
-
-import getKebabCase from '../../../utils/getKebabCase';
 import {getPascalCase} from '../../../utils/getPascalCase';
 
 export function getProductName(activationKey) {
 	const productName = activationKey.productName.replace('DXP', '').trim();
-
 	const formatProductName = getPascalCase(productName).replace(
 		'Production',
 		'Prod'
 	);
 
-	const translateProductName = i18n.translate(
-		getKebabCase(formatProductName)
-	);
-
-	return translateProductName;
+	return formatProductName;
 }

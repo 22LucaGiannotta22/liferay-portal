@@ -77,7 +77,7 @@ public class ObjectActionCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -99,8 +99,6 @@ public class ObjectActionCacheModel
 		sb.append(objectDefinitionId);
 		sb.append(", active=");
 		sb.append(active);
-		sb.append(", description=");
-		sb.append(description);
 		sb.append(", name=");
 		sb.append(name);
 		sb.append(", objectActionExecutorKey=");
@@ -155,13 +153,6 @@ public class ObjectActionCacheModel
 		objectActionImpl.setObjectDefinitionId(objectDefinitionId);
 		objectActionImpl.setActive(active);
 
-		if (description == null) {
-			objectActionImpl.setDescription("");
-		}
-		else {
-			objectActionImpl.setDescription(description);
-		}
-
 		if (name == null) {
 			objectActionImpl.setName("");
 		}
@@ -215,7 +206,6 @@ public class ObjectActionCacheModel
 		objectDefinitionId = objectInput.readLong();
 
 		active = objectInput.readBoolean();
-		description = objectInput.readUTF();
 		name = objectInput.readUTF();
 		objectActionExecutorKey = objectInput.readUTF();
 		objectActionTriggerKey = objectInput.readUTF();
@@ -252,13 +242,6 @@ public class ObjectActionCacheModel
 		objectOutput.writeLong(objectDefinitionId);
 
 		objectOutput.writeBoolean(active);
-
-		if (description == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(description);
-		}
 
 		if (name == null) {
 			objectOutput.writeUTF("");
@@ -299,7 +282,6 @@ public class ObjectActionCacheModel
 	public long modifiedDate;
 	public long objectDefinitionId;
 	public boolean active;
-	public String description;
 	public String name;
 	public String objectActionExecutorKey;
 	public String objectActionTriggerKey;

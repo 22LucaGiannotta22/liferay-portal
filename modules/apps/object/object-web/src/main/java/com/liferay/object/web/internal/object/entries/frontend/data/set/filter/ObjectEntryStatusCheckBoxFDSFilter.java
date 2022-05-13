@@ -21,18 +21,11 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * @author Marco Leo
  */
 public class ObjectEntryStatusCheckBoxFDSFilter extends BaseCheckBoxFDSFilter {
-
-	public ObjectEntryStatusCheckBoxFDSFilter(
-		Map<String, Object> preloadedData) {
-
-		_preloadedData = preloadedData;
-	}
 
 	@Override
 	public List<CheckBoxFDSFilterItem> getCheckBoxFDSFilterItems(
@@ -40,31 +33,17 @@ public class ObjectEntryStatusCheckBoxFDSFilter extends BaseCheckBoxFDSFilter {
 
 		return ListUtil.fromArray(
 			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_APPROVED,
+				WorkflowConstants.getStatusLabel(
+					WorkflowConstants.STATUS_APPROVED),
 				WorkflowConstants.STATUS_APPROVED),
 			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_DENIED,
-				WorkflowConstants.STATUS_DENIED),
+				WorkflowConstants.getStatusLabel(
+					WorkflowConstants.STATUS_DRAFT),
+				WorkflowConstants.STATUS_DRAFT),
 			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_DRAFT, WorkflowConstants.STATUS_DRAFT),
-			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_EXPIRED,
-				WorkflowConstants.STATUS_EXPIRED),
-			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_IN_TRASH,
-				WorkflowConstants.STATUS_IN_TRASH),
-			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_INACTIVE,
-				WorkflowConstants.STATUS_INACTIVE),
-			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_INCOMPLETE,
-				WorkflowConstants.STATUS_INCOMPLETE),
-			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_PENDING,
-				WorkflowConstants.STATUS_PENDING),
-			new CheckBoxFDSFilterItem(
-				WorkflowConstants.LABEL_SCHEDULED,
-				WorkflowConstants.STATUS_SCHEDULED));
+				WorkflowConstants.getStatusLabel(
+					WorkflowConstants.STATUS_PENDING),
+				WorkflowConstants.STATUS_PENDING));
 	}
 
 	@Override
@@ -76,12 +55,5 @@ public class ObjectEntryStatusCheckBoxFDSFilter extends BaseCheckBoxFDSFilter {
 	public String getLabel() {
 		return "status";
 	}
-
-	@Override
-	public Map<String, Object> getPreloadedData() {
-		return _preloadedData;
-	}
-
-	private final Map<String, Object> _preloadedData;
 
 }

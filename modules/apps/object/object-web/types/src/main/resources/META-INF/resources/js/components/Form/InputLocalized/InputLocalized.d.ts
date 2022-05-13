@@ -24,7 +24,6 @@ export default function InputLocalized({
 	name,
 	onSelectedLocaleChange,
 	onTranslationsChange,
-	placeholder,
 	required,
 	selectedLocale,
 	translations,
@@ -44,7 +43,6 @@ interface IProps {
 	name?: string;
 	onSelectedLocaleChange: (value: ILocale) => void;
 	onTranslationsChange: (value: LocalizedValue<string>) => void;
-	placeholder?: string;
 	required?: boolean;
 	selectedLocale: ILocale;
 	translations: LocalizedValue<string>;

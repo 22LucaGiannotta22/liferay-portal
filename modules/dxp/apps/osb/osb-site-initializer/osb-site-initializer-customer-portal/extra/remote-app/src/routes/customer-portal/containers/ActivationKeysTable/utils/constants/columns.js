@@ -10,7 +10,6 @@
  */
 
 import ClayIcon from '@clayui/icon';
-import i18n from '../../../../../../common/I18n';
 
 export const ACTIVATE_COLUMNS = [
 	{
@@ -18,8 +17,8 @@ export const ACTIVATE_COLUMNS = [
 		bodyClass: 'border-0 cursor-pointer',
 		expanded: true,
 		header: {
-			description: i18n.translate('description'),
-			name: i18n.translate('environment-name'),
+			description: 'Description',
+			name: 'Environment Name',
 			styles: 'bg-transparent',
 		},
 	},
@@ -27,8 +26,8 @@ export const ACTIVATE_COLUMNS = [
 		accessor: 'keyType',
 		bodyClass: 'border-0 cursor-pointer',
 		header: {
-			description: i18n.translate('host-name-cluster-size'),
-			name: i18n.translate('key-type'),
+			description: 'Host Name / Cluster Size',
+			name: 'Key Type',
 			noWrap: true,
 			styles: 'bg-transparent',
 		},
@@ -37,7 +36,7 @@ export const ACTIVATE_COLUMNS = [
 		accessor: 'envType',
 		bodyClass: 'border-0 cursor-pointer',
 		header: {
-			name: i18n.translate('environment-type'),
+			name: 'Environment Type',
 			styles: 'bg-transparent text-neutral-10 font-weight-bold',
 		},
 	},
@@ -45,7 +44,7 @@ export const ACTIVATE_COLUMNS = [
 		accessor: 'expirationDate',
 		bodyClass: 'border-0 cursor-pointer',
 		header: {
-			name: i18n.translate('exp-date'),
+			name: 'Exp. Date',
 			styles: 'bg-transparent text-neutral-10 font-weight-bold',
 		},
 		noWrap: true,
@@ -55,7 +54,7 @@ export const ACTIVATE_COLUMNS = [
 		align: 'center',
 		bodyClass: 'border-0 cursor-pointer',
 		header: {
-			name: i18n.translate('status'),
+			name: 'Status',
 			styles: 'bg-transparent text-neutral-10 font-weight-bold',
 		},
 	},

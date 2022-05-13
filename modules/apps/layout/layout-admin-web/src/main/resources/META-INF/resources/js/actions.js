@@ -14,8 +14,6 @@
 
 import {openModal} from 'frontend-js-web';
 
-import openDeleteLayoutModal from './openDeleteLayoutModal';
-
 const ACTIONS = {
 	copyLayout: ({copyLayoutURL}, portletNamespace) => {
 		openModal({
@@ -28,12 +26,9 @@ const ACTIONS = {
 	},
 
 	deleteLayout: ({deleteLayoutURL, message}) => {
-		openDeleteLayoutModal({
-			message,
-			onDelete: () => {
-				Liferay.Util.navigate(deleteLayoutURL);
-			},
-		});
+		if (confirm(message)) {
+			Liferay.Util.navigate(deleteLayoutURL);
+		}
 	},
 
 	discardDraft: ({discardDraftURL}) => {

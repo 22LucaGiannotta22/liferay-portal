@@ -1182,13 +1182,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 				return trashEntry;
 			}
 
-			com.liferay.portal.kernel.trash.TrashHandler trashHandler =
-
-			<#if serviceBuilder.isVersionLTE_7_3_0()>
-				getTrashHandler();
-			<#else>
-				com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil.getTrashHandler(getModelClassName());
-			</#if>
+			com.liferay.portal.kernel.trash.TrashHandler trashHandler = getTrashHandler();
 
 			if (Validator.isNotNull(trashHandler.getContainerModelClassName(getPrimaryKey()))) {
 				ContainerModel containerModel = null;
@@ -1225,16 +1219,14 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			return getPrimaryKey();
 		}
 
-		<#if serviceBuilder.isVersionLTE_7_3_0()>
-			/**
-			* @deprecated As of Judson (7.1.x), with no direct replacement
-			*/
-			@Deprecated
-			@Override
-			public com.liferay.portal.kernel.trash.TrashHandler getTrashHandler() {
-				return com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil.getTrashHandler(getModelClassName());
-			}
-		</#if>
+		/**
+		* @deprecated As of Judson (7.1.x), with no direct replacement
+		*/
+		@Deprecated
+		@Override
+		public com.liferay.portal.kernel.trash.TrashHandler getTrashHandler() {
+			return com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil.getTrashHandler(getModelClassName());
+		}
 
 		@Override
 		public boolean isInTrash() {
@@ -1248,13 +1240,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 		@Override
 		public boolean isInTrashContainer() {
-			com.liferay.portal.kernel.trash.TrashHandler trashHandler =
-
-			<#if serviceBuilder.isVersionLTE_7_3_0()>
-				getTrashHandler();
-			<#else>
-				com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil.getTrashHandler(getModelClassName());
-			</#if>
+			com.liferay.portal.kernel.trash.TrashHandler trashHandler = getTrashHandler();
 
 			if ((trashHandler == null) || Validator.isNull(trashHandler.getContainerModelClassName(getPrimaryKey()))) {
 				return false;

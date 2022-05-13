@@ -1,10 +1,8 @@
 {
 	"dependencies": {
-		"clipboard": "2.0.4",
-		"uuid": "^3.3.2"
+		"clipboard": "2.0.4"
 	},
-	"main": "document_library/js/index.js",
-	"name": "@liferay/document-library-web",
+	"name": "document-library-web",
 	"private": true,
 	"scripts": {
 		"build": "liferay-npm-scripts build",
@@ -12,5 +10,5 @@
 		"format": "liferay-npm-scripts fix",
 		"test": "liferay-npm-scripts test"
 	},
-	"version": "6.0.82"
+	"version": "6.0.79"
 }

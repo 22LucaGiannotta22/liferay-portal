@@ -63,8 +63,8 @@ definition {
 		Translations.assertFileNameFromTempFolder(pageName = "TranslationContentPage");
 
 		AntCommand(
-			locator1 = "build-test-translation.xml",
-			value1 = "unzip-translation-file -DfileName=TranslationContentPage-en_US.zip");
+			locator1 = "build-test.xml",
+			value1 = "unzip-temp-file -DfileName=TranslationContentPage-en_US.zip");
 
 		for (var fileName : list "TranslationContentPage (NewAnyoneExperience1)-en_US-es_ES.xlf,TranslationContentPage (NewAnyoneExperience2)-en_US-es_ES.xlf") {
 			DMDocument.assertFileNameFromTempFolder(fileName = "${fileName}");
@@ -105,8 +105,8 @@ definition {
 		Translations.assertFileNameFromTempFolder(pageName = "TranslationContentPage");
 
 		AntCommand(
-			locator1 = "build-test-translation.xml",
-			value1 = "unzip-translation-file -DfileName=TranslationContentPage-en_US.zip");
+			locator1 = "build-test.xml",
+			value1 = "unzip-temp-file -DfileName=TranslationContentPage-en_US.zip");
 
 		for (var fileName : list "TranslationContentPage (NewAnyoneExperience)-en_US-ja_JP.xlf,TranslationContentPage (NewAnyoneExperience)-en_US-es_ES.xlf") {
 			DMDocument.assertFileNameFromTempFolder(fileName = "${fileName}");
@@ -146,10 +146,10 @@ definition {
 		Translations.assertFileNameFromTempFolder(pageName = "TranslationContentPage");
 
 		AntCommand(
-			locator1 = "build-test-translation.xml",
-			value1 = "unzip-translation-file -DfileName=TranslationContentPage-en_US.zip");
+			locator1 = "build-test.xml",
+			value1 = "unzip-temp-file -DfileName=TranslationContentPage-en_US.zip");
 
-		for (var fileName : list "TranslationContentPage (Default)-en_US-ja_JP.xlf,TranslationContentPage (Default)-en_US-es_ES.xlf,TranslationContentPage (NewAnyoneExperience)-en_US-ja_JP.xlf,TranslationContentPage (NewAnyoneExperience)-en_US-es_ES.xlf") {
+		for (var fileName : list "TranslationContentPage-en_US-ja_JP.xlf,TranslationContentPage-en_US-es_ES.xlf,TranslationContentPage (NewAnyoneExperience)-en_US-ja_JP.xlf,TranslationContentPage (NewAnyoneExperience)-en_US-es_ES.xlf") {
 			DMDocument.assertFileNameFromTempFolder(fileName = "${fileName}");
 		}
 	}
@@ -817,7 +817,7 @@ definition {
 				fragmentContent = "Heading",
 				fragmentContentTranslation = "Headinges_ES",
 				operation = "zip",
-				translationFileName = "TranslationContentPage${i} (Default)-en_US-es_ES",
+				translationFileName = "TranslationContentPage${i}-en_US-es_ES",
 				translationZipFileName = "TranslationContentPage${i}-en_US");
 		}
 
@@ -889,8 +889,8 @@ definition {
 			languageList = "Spanish (Spain)");
 
 		AntCommand(
-			locator1 = "build-test-translation.xml",
-			value1 = "unzip-translation-file -DfileName=TranslationContentPage1-en_US.zip");
+			locator1 = "build-test.xml",
+			value1 = "unzip-temp-file -DfileName=TranslationContentPage1-en_US.zip");
 
 		Translations.importTranslation(
 			contentPageTranslation = "true",
@@ -936,8 +936,8 @@ definition {
 			languageList = "Spanish (Spain)");
 
 		AntCommand(
-			locator1 = "build-test-translation.xml",
-			value1 = "unzip-translation-file -DfileName=TranslationContentPage-en_US.zip");
+			locator1 = "build-test.xml",
+			value1 = "unzip-temp-file -DfileName=TranslationContentPage-en_US.zip");
 
 		ContentPagesNavigator.openEditContentPage(
 			pageName = "TranslationContentPage",
@@ -1059,7 +1059,7 @@ definition {
 			translationZipFileName = "TranslationContentPage3-en_US");
 
 		AntCommand(
-			locator1 = "build-test-translation.xml",
+			locator1 = "build-test.xml",
 			value1 = "copy-translation-file -Dtranslation.zip.file.name=TranslationContentPage3-en_US -Dtranslation.file.name=TranslationContentPage3-en_US-es_ES.xlf");
 
 		PagesAdmin.openPagesAdmin(siteURLKey = "guest");
@@ -1505,8 +1505,8 @@ definition {
 		var fileName = StringUtil.replace("Page Translations-en_US.zip", " ", "*");
 
 		AntCommand(
-			locator1 = "build-test-translation.xml",
-			value1 = "unzip-translation-file -DfileName=${fileName}");
+			locator1 = "build-test.xml",
+			value1 = "unzip-temp-file -DfileName=${fileName}");
 
 		for (var fileName : list "TranslationContentPage1-en_US-es_ES.xlf,TranslationContentPage2-en_US-es_ES.xlf") {
 			DMDocument.assertFileNameFromTempFolder(fileName = "${fileName}");

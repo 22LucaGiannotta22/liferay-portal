@@ -320,7 +320,11 @@ definition {
 			productName = "ABS Sensor",
 			productQuantity = "1");
 
-		CommerceCheckout.gotoCheckout();
+		CommerceNavigator.gotoMiniCart();
+
+		Button.click(button = "View Details");
+
+		Button.click(button = "Checkout");
 
 		CommerceCheckout.initializersCheckout(
 			newAddressAddress = "Test Address",
@@ -472,7 +476,11 @@ definition {
 			productName = "U-Joint",
 			productQuantity = "2");
 
-		CommerceCheckout.gotoCheckout();
+		CommerceNavigator.gotoMiniCart();
+
+		Button.click(button = "View Details");
+
+		Button.click(button = "Checkout");
 
 		CommerceCheckout.initializersCheckout(
 			newAddressAddress = "Test Address",
@@ -854,7 +862,7 @@ definition {
 		}
 
 		Uncheck.uncheckToggleSwitch(
-			key_toggleSwitchLabel = "${commerceChannel2}",
+			key_toggleSwitchLabel = "${channel2}",
 			locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
 
 		Button.clickSave();
@@ -870,7 +878,7 @@ definition {
 		}
 
 		Uncheck.uncheckToggleSwitch(
-			key_toggleSwitchLabel = "${commerceChannel1}",
+			key_toggleSwitchLabel = "${channel1}",
 			locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
 
 		Button.clickSave();

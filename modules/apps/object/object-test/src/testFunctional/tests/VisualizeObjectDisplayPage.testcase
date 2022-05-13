@@ -92,9 +92,9 @@ definition {
 			fieldLabel = "Field",
 			filterCollection = "true",
 			fragmentName = "Collection Display",
+			listStyle = "Table",
 			option = "True",
-			selectedName = "Custom Objects 314",
-			styleDisplay = "Table");
+			selectedName = "Custom Objects 314");
 
 		PageEditor.clickPublish();
 
@@ -110,8 +110,6 @@ definition {
 	@description = "LPS-133867|LPS-135004 - Verify it is possible to define a fixed filters with Picklist type for table view on the Display Page"
 	@priority = "4"
 	test CanDefineFixedFilterForPicklistType {
-		property portal.upstream = "quarantine";
-
 		Picklist.addPicklistViaAPI(picklistName = "Custom Picklist");
 
 		for (var itemsName : list "1,2") {
@@ -161,8 +159,8 @@ definition {
 
 		PageEditor.editCollectionDisplay(
 			fragmentName = "Collection Display",
-			selectedName = "Custom Objects 315",
-			styleDisplay = "Table");
+			listStyle = "Table",
+			selectedName = "Custom Objects 315");
 
 		PageEditor.gotoEllipsisMenuItemInItemSelector(
 			fieldLabel = "Collection",

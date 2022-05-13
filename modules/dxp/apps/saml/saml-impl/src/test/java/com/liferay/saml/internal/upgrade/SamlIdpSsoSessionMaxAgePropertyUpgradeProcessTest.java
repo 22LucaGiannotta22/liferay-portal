@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.util.PropsImpl;
 import com.liferay.saml.internal.constants.LegacySamlPropsKeys;
 import com.liferay.saml.internal.upgrade.v1_0_0.SamlIdpSsoSessionMaxAgePropertyUpgradeProcess;
@@ -30,9 +29,8 @@ import java.util.Hashtable;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -40,15 +38,15 @@ import org.mockito.Mockito;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
+
 /**
  * @author Tomas Polesovsky
  */
-public class SamlIdpSsoSessionMaxAgePropertyUpgradeProcessTest {
-
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
+@RunWith(PowerMockRunner.class)
+public class SamlIdpSsoSessionMaxAgePropertyUpgradeProcessTest
+	extends PowerMockito {
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -74,20 +72,19 @@ public class SamlIdpSsoSessionMaxAgePropertyUpgradeProcessTest {
 
 	@Test
 	public void testUpgradeWithDefaultProperty() throws Exception {
-		ConfigurationAdmin configurationAdmin = Mockito.mock(
-			ConfigurationAdmin.class);
+		ConfigurationAdmin configurationAdmin = mock(ConfigurationAdmin.class);
 
-		Configuration configuration = Mockito.mock(Configuration.class);
+		Configuration configuration = mock(Configuration.class);
 
-		Mockito.when(
+		when(
 			configurationAdmin.listConfigurations(Mockito.anyString())
 		).thenReturn(
 			new Configuration[] {configuration}
 		);
 
-		Props props = Mockito.mock(Props.class);
+		Props props = mock(Props.class);
 
-		Mockito.when(
+		when(
 			props.get(LegacySamlPropsKeys.SAML_IDP_SSO_SESSION_MAX_AGE)
 		).thenReturn(
 			null
@@ -113,12 +110,11 @@ public class SamlIdpSsoSessionMaxAgePropertyUpgradeProcessTest {
 
 	@Test
 	public void testUpgradeWithEmptyProperty() throws Exception {
-		ConfigurationAdmin configurationAdmin = Mockito.mock(
-			ConfigurationAdmin.class);
+		ConfigurationAdmin configurationAdmin = mock(ConfigurationAdmin.class);
 
-		Configuration configuration = Mockito.mock(Configuration.class);
+		Configuration configuration = mock(Configuration.class);
 
-		Mockito.when(
+		when(
 			configurationAdmin.listConfigurations(Mockito.anyString())
 		).thenReturn(
 			new Configuration[] {configuration}
@@ -128,15 +124,15 @@ public class SamlIdpSsoSessionMaxAgePropertyUpgradeProcessTest {
 
 		properties.put(LegacySamlPropsKeys.SAML_IDP_SESSION_MAXIMUM_AGE, "0");
 
-		Mockito.when(
+		when(
 			configuration.getProperties()
 		).thenReturn(
 			properties
 		);
 
-		Props props = Mockito.mock(Props.class);
+		Props props = mock(Props.class);
 
-		Mockito.when(
+		when(
 			props.get(LegacySamlPropsKeys.SAML_IDP_SSO_SESSION_MAX_AGE)
 		).thenReturn(
 			""
@@ -162,23 +158,22 @@ public class SamlIdpSsoSessionMaxAgePropertyUpgradeProcessTest {
 
 	@Test
 	public void testUpgradeWithProperty() throws Exception {
-		ConfigurationAdmin configurationAdmin = Mockito.mock(
-			ConfigurationAdmin.class);
+		ConfigurationAdmin configurationAdmin = mock(ConfigurationAdmin.class);
 
-		Configuration configuration = Mockito.mock(Configuration.class);
+		Configuration configuration = mock(Configuration.class);
 
-		Mockito.when(
+		when(
 			configurationAdmin.listConfigurations(Mockito.anyString())
 		).thenReturn(
 			new Configuration[] {configuration}
 		);
 
-		Props props = Mockito.mock(Props.class);
+		Props props = mock(Props.class);
 
 		String samlIdpSsoSessionMaxAge = String.valueOf(
 			RandomTestUtil.randomInt());
 
-		Mockito.when(
+		when(
 			props.get(LegacySamlPropsKeys.SAML_IDP_SSO_SESSION_MAX_AGE)
 		).thenReturn(
 			samlIdpSsoSessionMaxAge
@@ -205,12 +200,11 @@ public class SamlIdpSsoSessionMaxAgePropertyUpgradeProcessTest {
 
 	@Test
 	public void testUpgradeWithPropertyAlreadyOverwritten() throws Exception {
-		ConfigurationAdmin configurationAdmin = Mockito.mock(
-			ConfigurationAdmin.class);
+		ConfigurationAdmin configurationAdmin = mock(ConfigurationAdmin.class);
 
-		Configuration configuration = Mockito.mock(Configuration.class);
+		Configuration configuration = mock(Configuration.class);
 
-		Mockito.when(
+		when(
 			configurationAdmin.listConfigurations(Mockito.anyString())
 		).thenReturn(
 			new Configuration[] {configuration}
@@ -225,15 +219,15 @@ public class SamlIdpSsoSessionMaxAgePropertyUpgradeProcessTest {
 			LegacySamlPropsKeys.SAML_IDP_SESSION_MAXIMUM_AGE,
 			samlIdpSsoSessionMaxAge);
 
-		Mockito.when(
+		when(
 			configuration.getProperties()
 		).thenReturn(
 			properties
 		);
 
-		Props props = Mockito.mock(Props.class);
+		Props props = mock(Props.class);
 
-		Mockito.when(
+		when(
 			props.get(LegacySamlPropsKeys.SAML_IDP_SSO_SESSION_MAX_AGE)
 		).thenReturn(
 			String.valueOf(RandomTestUtil.randomInt())

@@ -151,12 +151,14 @@ export function ModalAddDefaultSortColumn({
 
 					<CustomSelect
 						label={Liferay.Language.get('sorting')}
-						onChange={(item: TSortOptions) => {
+						onChange={(item: any) => {
 							setSelectedObjetSort(item);
 						}}
 						options={SORT_OPTIONS}
 						value={selectedObjetSort.label}
-					/>
+					>
+						{({label}: any) => <div>{label}</div>}
+					</CustomSelect>
 				</ClayModal.Body>
 
 				<ClayModal.Footer

@@ -512,61 +512,43 @@ public abstract class BaseBuild implements Build {
 
 			JSONArray buildResultsJSONArray = new JSONArray();
 
-			for (Build build : getDownstreamBuilds(null)) {
+			for (Build downstreamBuild : getDownstreamBuilds(null)) {
 				JSONObject buildResultJSONObject = new JSONObject();
 
-				String axisName = null;
+				if (downstreamBuild instanceof AxisBuild) {
+					AxisBuild downstreamAxisBuild = (AxisBuild)downstreamBuild;
 
-				if (build instanceof AxisBuild) {
-					AxisBuild axisBuild = (AxisBuild)build;
-
-					axisName = axisBuild.getAxisName();
-				}
-				else if (build instanceof DownstreamBuild) {
-					DownstreamBuild downstreamBuild = (DownstreamBuild)build;
-
-					axisName = downstreamBuild.getAxisName();
-				}
-
-				if (!JenkinsResultsParserUtil.isNullOrEmpty(axisName)) {
-					buildResultJSONObject.put("axisName", axisName);
+					buildResultJSONObject.put(
+						"axisName", downstreamAxisBuild.getAxisName());
 				}
 
 				if (dataTypesList.contains("buildURL")) {
-					buildResultJSONObject.put("buildURL", build.getBuildURL());
+					buildResultJSONObject.put(
+						"buildURL", downstreamBuild.getBuildURL());
 				}
 
 				if (dataTypesList.contains("duration")) {
-					buildResultJSONObject.put("duration", build.getDuration());
+					buildResultJSONObject.put(
+						"duration", downstreamBuild.getDuration());
 				}
 
-				buildResultJSONObject.put("result", build.getResult());
+				buildResultJSONObject.put(
+					"result", downstreamBuild.getResult());
 
-				if (dataTypesList.contains("stopWatchRecords")) {
-					StopWatchRecordsGroup stopWatchRecordsGroup = null;
+				if ((downstreamBuild instanceof AxisBuild) &&
+					dataTypesList.contains("stopWatchRecords")) {
 
-					if (build instanceof AxisBuild) {
-						AxisBuild axisBuild = (AxisBuild)build;
+					AxisBuild downstreamAxisBuild = (AxisBuild)downstreamBuild;
 
-						stopWatchRecordsGroup =
-							axisBuild.getStopWatchRecordsGroup();
-					}
-					else if (build instanceof DownstreamBuild) {
-						DownstreamBuild downstreamBuild =
-							(DownstreamBuild)build;
+					StopWatchRecordsGroup stopWatchRecordsGroup =
+						downstreamAxisBuild.getStopWatchRecordsGroup();
 
-						stopWatchRecordsGroup =
-							downstreamBuild.getStopWatchRecordsGroup();
-					}
+					JSONArray stopWatchRecordsGroupJSONArray =
+						stopWatchRecordsGroup.getJSONArray();
 
-					if (stopWatchRecordsGroup != null) {
-						JSONArray jsonArray =
-							stopWatchRecordsGroup.getJSONArray();
-
-						if (jsonArray.length() > 0) {
-							buildResultJSONObject.put(
-								"stopWatchRecords", jsonArray);
-						}
+					if (stopWatchRecordsGroupJSONArray.length() > 0) {
+						buildResultJSONObject.put(
+							"stopWatchRecords", stopWatchRecordsGroupJSONArray);
 					}
 				}
 
@@ -574,38 +556,6 @@ public abstract class BaseBuild implements Build {
 			}
 
 			buildResultsJSONObject.put("buildResults", buildResultsJSONArray);
-		}
-		else if (dataTypesList.contains("buildResults") &&
-				 (this instanceof DownstreamBuild)) {
-
-			DownstreamBuild downstreamBuild = (DownstreamBuild)this;
-
-			buildResultsJSONObject.put(
-				"axisName", downstreamBuild.getAxisName());
-
-			if (dataTypesList.contains("buildURL")) {
-				buildResultsJSONObject.put("buildURL", getBuildURL());
-			}
-
-			if (dataTypesList.contains("duration")) {
-				buildResultsJSONObject.put("duration", getDuration());
-			}
-
-			buildResultsJSONObject.put("result", getResult());
-
-			if (dataTypesList.contains("stopWatchRecords")) {
-				StopWatchRecordsGroup stopWatchRecordsGroup =
-					downstreamBuild.getStopWatchRecordsGroup();
-
-				if (stopWatchRecordsGroup != null) {
-					JSONArray jsonArray = stopWatchRecordsGroup.getJSONArray();
-
-					if (jsonArray.length() > 0) {
-						buildResultsJSONObject.put(
-							"stopWatchRecords", jsonArray);
-					}
-				}
-			}
 		}
 
 		if (dataTypesList.contains("testResults")) {
@@ -660,6 +610,7 @@ public abstract class BaseBuild implements Build {
 
 		buildResultsJSONObject.put("jobVariant", getJobVariant());
 		buildResultsJSONObject.put("result", getResult());
+		buildResultsJSONObject.put("testSuiteName", getTestSuiteName());
 
 		return buildResultsJSONObject;
 	}
@@ -894,7 +845,9 @@ public abstract class BaseBuild implements Build {
 
 		return Dom4JUtil.getNewAnchorElement(
 			getBuildURL(), null,
-			Dom4JUtil.getNewElement("strike", null, getDisplayName()));
+			Dom4JUtil.getNewElement(
+				"strike", null,
+				Dom4JUtil.getNewElement("strong", null, getDisplayName())));
 	}
 
 	@Override
@@ -2088,78 +2041,11 @@ public abstract class BaseBuild implements Build {
 
 		@Override
 		public int compare(Build build1, Build build2) {
-			String axisName1 = _getAxisName(build1);
-			String axisName2 = _getAxisName(build2);
+			String displayName1 = build1.getDisplayName();
+			String displayName2 = build2.getDisplayName();
 
-			if (JenkinsResultsParserUtil.isNullOrEmpty(axisName1) ||
-				JenkinsResultsParserUtil.isNullOrEmpty(axisName2)) {
-
-				String displayName1 = build1.getDisplayName();
-				String displayName2 = build2.getDisplayName();
-
-				return displayName1.compareTo(displayName2);
-			}
-
-			Matcher matcher1 = _pattern.matcher(axisName1);
-			Matcher matcher2 = _pattern.matcher(axisName2);
-
-			if (!matcher1.find() || !matcher2.find()) {
-				String displayName1 = build1.getDisplayName();
-				String displayName2 = build2.getDisplayName();
-
-				return displayName1.compareTo(displayName2);
-			}
-
-			String batchName1 = matcher1.group("batchName");
-			String batchName2 = matcher2.group("batchName");
-
-			if (!batchName1.equals(batchName2)) {
-				return batchName1.compareTo(batchName2);
-			}
-
-			Integer segment1 = Integer.valueOf(matcher1.group("segment"));
-			Integer segment2 = Integer.valueOf(matcher2.group("segment"));
-
-			if (!segment1.equals(segment2)) {
-				return segment1.compareTo(segment2);
-			}
-
-			String axisString1 = matcher1.group("axis");
-			String axisString2 = matcher2.group("axis");
-
-			if (JenkinsResultsParserUtil.isNullOrEmpty(axisString1) ||
-				JenkinsResultsParserUtil.isNullOrEmpty(axisString2)) {
-
-				String displayName1 = build1.getDisplayName();
-				String displayName2 = build2.getDisplayName();
-
-				return displayName1.compareTo(displayName2);
-			}
-
-			Integer axis1 = Integer.valueOf(axisString1);
-			Integer axis2 = Integer.valueOf(axisString2);
-
-			return axis1.compareTo(axis2);
+			return displayName1.compareTo(displayName2);
 		}
-
-		private String _getAxisName(Build build) {
-			if (build instanceof AxisBuild) {
-				AxisBuild axisBuild = (AxisBuild)build;
-
-				return axisBuild.getAxisNumber();
-			}
-
-			if (build instanceof DownstreamBuild) {
-				DownstreamBuild downstreamBuild = (DownstreamBuild)build;
-
-				return downstreamBuild.getAxisName();
-			}
-
-			return build.getJobVariant();
-		}
-
-		private static final Pattern _pattern = Pattern.compile(
-			"(?<batchName>[^/]+)/(?<segment>\\d+)(/(?<axis>\\d+))?");
 
 	}
 
@@ -2886,35 +2772,21 @@ public abstract class BaseBuild implements Build {
 			tableRowElements.addAll(getJenkinsReportStopWatchRecordElements());
 		}
 
-		List<Build> builds = getDownstreamBuilds(result, status);
+		List<Build> downstreamBuilds = getDownstreamBuilds(result, status);
 
-		Collections.sort(builds, new BaseBuild.BuildDisplayNameComparator());
+		Collections.sort(
+			downstreamBuilds, new BaseBuild.BuildDisplayNameComparator());
 
-		String batchName = null;
-
-		for (Build build : builds) {
-			if (!(build instanceof BaseBuild)) {
+		for (Build downstreamBuild : downstreamBuilds) {
+			if (!(downstreamBuild instanceof BaseBuild)) {
 				continue;
 			}
 
-			if (build instanceof DownstreamBuild) {
-				DownstreamBuild downstreamBuild = (DownstreamBuild)build;
-
-				String downstreamBatchName = downstreamBuild.getBatchName();
-
-				if (!Objects.equals(batchName, downstreamBatchName)) {
-					tableRowElements.add(
-						Dom4JUtil.getNewElement(
-							"th", null, downstreamBatchName));
-
-					batchName = downstreamBatchName;
-				}
-			}
-
-			BaseBuild baseBuild = (BaseBuild)build;
+			BaseBuild downstreamBaseBuild = (BaseBuild)downstreamBuild;
 
 			tableRowElements.addAll(
-				baseBuild.getJenkinsReportTableRowElements(result, status));
+				downstreamBaseBuild.getJenkinsReportTableRowElements(
+					result, status));
 		}
 
 		return tableRowElements;

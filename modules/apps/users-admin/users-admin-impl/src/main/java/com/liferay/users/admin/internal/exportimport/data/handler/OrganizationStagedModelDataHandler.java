@@ -44,7 +44,7 @@ import com.liferay.portal.kernel.service.WebsiteLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.users.admin.kernel.util.UsersAdmin;
+import com.liferay.users.admin.kernel.util.UsersAdminUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -339,10 +339,12 @@ public class OrganizationStagedModelDataHandler
 			return;
 		}
 
-		StagedModelDataHandlerUtil.exportReferenceStagedModel(
-			portletDataContext, organization,
+		PasswordPolicy passwordPolicy =
 			_passwordPolicyLocalService.getPasswordPolicy(
-				passwordPolicyRel.getPasswordPolicyId()),
+				passwordPolicyRel.getPasswordPolicyId());
+
+		StagedModelDataHandlerUtil.exportReferenceStagedModel(
+			portletDataContext, organization, passwordPolicy,
 			PortletDataContext.REFERENCE_TYPE_STRONG);
 	}
 
@@ -407,7 +409,7 @@ public class OrganizationStagedModelDataHandler
 			addresses.add(address);
 		}
 
-		_usersAdmin.updateAddresses(
+		UsersAdminUtil.updateAddresses(
 			Organization.class.getName(),
 			importedOrganization.getOrganizationId(), addresses);
 	}
@@ -449,7 +451,7 @@ public class OrganizationStagedModelDataHandler
 			emailAddresses.add(emailAddress);
 		}
 
-		_usersAdmin.updateEmailAddresses(
+		UsersAdminUtil.updateEmailAddresses(
 			Organization.class.getName(),
 			importedOrganization.getOrganizationId(), emailAddresses);
 	}
@@ -469,7 +471,7 @@ public class OrganizationStagedModelDataHandler
 			orgLabor.setOrgLaborId(0);
 		}
 
-		_usersAdmin.updateOrgLabors(
+		UsersAdminUtil.updateOrgLabors(
 			importedOrganization.getOrganizationId(), orgLabors);
 	}
 
@@ -541,7 +543,7 @@ public class OrganizationStagedModelDataHandler
 			phones.add(phone);
 		}
 
-		_usersAdmin.updatePhones(
+		UsersAdminUtil.updatePhones(
 			Organization.class.getName(),
 			importedOrganization.getOrganizationId(), phones);
 	}
@@ -577,7 +579,7 @@ public class OrganizationStagedModelDataHandler
 			websites.add(website);
 		}
 
-		_usersAdmin.updateWebsites(
+		UsersAdminUtil.updateWebsites(
 			Organization.class.getName(),
 			importedOrganization.getOrganizationId(), websites);
 	}
@@ -590,10 +592,6 @@ public class OrganizationStagedModelDataHandler
 	private PasswordPolicyLocalService _passwordPolicyLocalService;
 	private PasswordPolicyRelLocalService _passwordPolicyRelLocalService;
 	private PhoneLocalService _phoneLocalService;
-
-	@Reference
-	private UsersAdmin _usersAdmin;
-
 	private WebsiteLocalService _websiteLocalService;
 
 }

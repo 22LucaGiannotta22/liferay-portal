@@ -19,7 +19,6 @@ import ClayModal from '@clayui/modal';
 import {ManagementToolbar} from 'frontend-js-components-web';
 import React, {FormEvent, useContext, useEffect, useState} from 'react';
 
-import {defaultLanguageId} from '../../../utils/locale';
 import {ManagementToolbarSearch} from '../ManagementToolbarSearch/ManagementToolbarSearch';
 import ViewContext, {TYPES} from '../context';
 
@@ -29,6 +28,8 @@ interface IProps extends React.HTMLAttributes<HTMLElement> {
 	observer: any;
 	onClose: () => void;
 }
+
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 	observer,

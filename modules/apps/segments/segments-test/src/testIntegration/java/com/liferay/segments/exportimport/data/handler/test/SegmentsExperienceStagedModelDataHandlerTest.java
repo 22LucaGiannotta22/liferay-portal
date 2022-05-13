@@ -20,6 +20,7 @@ import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.StagedModel;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
@@ -59,7 +60,11 @@ public class SegmentsExperienceStagedModelDataHandlerTest
 		_classNameId = _classNameLocalService.getClassNameId(
 			Layout.class.getName());
 
-		Layout layout = LayoutTestUtil.addTypeContentLayout(stagingGroup);
+		Layout layout = LayoutTestUtil.addTypePortletLayout(stagingGroup);
+
+		layout.setType(LayoutConstants.TYPE_CONTENT);
+
+		layout = _layoutLocalService.updateLayout(layout);
 
 		_classPK = layout.getPlid();
 	}

@@ -39,7 +39,6 @@ import com.liferay.portal.vulcan.yaml.YAMLUtil;
 import com.liferay.portal.vulcan.yaml.openapi.OpenAPIYAML;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -84,13 +83,10 @@ public class PlanResourceImpl extends BasePlanResourceImpl {
 
 	@Override
 	public Response getPlanTemplate(String internalClassName) throws Exception {
-		String simpleClassName = internalClassName.substring(
-			internalClassName.lastIndexOf(StringPool.PERIOD) + 1);
-
 		Map<String, Field> dtoEntityFields = OpenAPIUtil.getDTOEntityFields(
-			simpleClassName, _getOpenAPIYAML(internalClassName));
+			internalClassName, _getOpenAPIYAML(internalClassName));
 
-		return _getResponse(simpleClassName, dtoEntityFields);
+		return _getResponse(dtoEntityFields);
 	}
 
 	@Override
@@ -127,7 +123,7 @@ public class PlanResourceImpl extends BasePlanResourceImpl {
 		BatchPlannerPlan batchPlannerPlan =
 			_batchPlannerPlanService.addBatchPlannerPlan(
 				plan.getExport(), plan.getExternalType(), plan.getExternalURL(),
-				plan.getInternalClassName(), plan.getName(), 0,
+				plan.getInternalClassName(), plan.getName(),
 				plan.getTaskItemDelegateName(), plan.getTemplate());
 
 		Mapping[] mappings = plan.getMappings();
@@ -177,19 +173,8 @@ public class PlanResourceImpl extends BasePlanResourceImpl {
 		return YAMLUtil.loadOpenAPIYAML((String)response.getEntity());
 	}
 
-	private Response _getResponse(
-		String dtoEntityName, Map<String, Field> dtoEntityFields) {
-
-		Map<String, Field> effectiveDTOEntityFields = new HashMap<>();
-
-		dtoEntityFields.forEach(
-			(name, field) -> {
-				if (!name.startsWith("x-")) {
-					effectiveDTOEntityFields.put(name, field);
-				}
-			});
-
-		Set<Map.Entry<String, Field>> set = effectiveDTOEntityFields.entrySet();
+	private Response _getResponse(Map<String, Field> dtoEntityFields) {
+		Set<Map.Entry<String, Field>> set = dtoEntityFields.entrySet();
 
 		Iterator<Map.Entry<String, Field>> iterator = set.iterator();
 
@@ -217,9 +202,7 @@ public class PlanResourceImpl extends BasePlanResourceImpl {
 				headerSB.toString(), System.lineSeparator(), lineSB.toString())
 		).header(
 			"content-disposition",
-			StringBundler.concat(
-				"attachment; filename=", StringUtil.toLowerCase(dtoEntityName),
-				"-", StringUtil.randomString(), ".csv")
+			"attachment; filename=" + StringUtil.randomString() + ".csv"
 		).build();
 	}
 

@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutTypePortlet;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.Theme;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
@@ -316,9 +317,11 @@ public class PortalInstancesLocalServiceImpl
 			company.getCompanyId(),
 			PropsKeys.CONTROL_PANEL_LAYOUT_REGULAR_THEME_ID);
 
+		Theme theme = _themeLocalService.getTheme(
+			company.getCompanyId(), themeId);
+
 		themeDisplay.setLookAndFeel(
-			_themeLocalService.getTheme(company.getCompanyId(), themeId),
-			_colorSchemeFactory.getDefaultRegularColorScheme());
+			theme, _colorSchemeFactory.getDefaultRegularColorScheme());
 
 		themeDisplay.setPermissionChecker(permissionChecker);
 		themeDisplay.setPlid(controlPanelPlid);

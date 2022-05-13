@@ -83,8 +83,10 @@ function QuerySettings({
 					>
 						<ClayPanel.Body>
 							<ClayRadioGroup
-								onChange={_handleSelectAllTypesChange}
-								value={selectAllTypes}
+								onSelectedValueChange={
+									_handleSelectAllTypesChange
+								}
+								selectedValue={selectAllTypes}
 							>
 								<ClayRadio
 									label={Liferay.Language.get(
@@ -197,8 +199,10 @@ function QuerySettings({
 					>
 						<ClayPanel.Body>
 							<ClayRadioGroup
-								onChange={_handleEnableAllContributorsChange}
-								value={enableAllContributors}
+								onSelectedValueChange={
+									_handleEnableAllContributorsChange
+								}
+								selectedValue={enableAllContributors}
 							>
 								<ClayRadio
 									label={Liferay.Language.get('enable-all')}

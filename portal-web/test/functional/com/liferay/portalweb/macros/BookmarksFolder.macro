@@ -137,7 +137,7 @@ definition {
 
 		Click.waitForMenuToggleJSClick(locator1 = "Icon#VERTICAL_ELLIPSIS");
 
-		MenuItem.click(menuItem = "Delete");
+		MenuItem.click(menuItem = "Move to Recycle Bin");
 
 		VerifyElementPresent(locator1 = "Message#SUCCESS");
 
@@ -264,7 +264,7 @@ definition {
 
 	macro moveSubfolderToRecycleBinPG {
 		LexiconEntry.gotoEntryMenuItem(
-			menuItem = "Delete",
+			menuItem = "Move to Recycle Bin",
 			rowEntry = "${subfolderName}");
 
 		VerifyElementPresent(locator1 = "Message#SUCCESS");
@@ -283,7 +283,7 @@ definition {
 			value1 = "${folderName}");
 
 		LexiconEntry.gotoEntryMenuItem(
-			menuItem = "Delete",
+			menuItem = "Move to Recycle Bin",
 			rowEntry = "${folderName}");
 
 		VerifyElementPresent(locator1 = "Message#SUCCESS");

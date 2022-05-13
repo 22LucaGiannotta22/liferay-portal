@@ -71,36 +71,21 @@ public class TrashManagementToolbarDisplayContext
 
 	@Override
 	public List<DropdownItem> getActionDropdownItems() {
-		return DropdownItemListBuilder.addGroup(
-			dropdownGroupItem -> {
-				dropdownGroupItem.setDropdownItems(
-					DropdownItemListBuilder.add(
-						dropdownItem -> {
-							dropdownItem.putData(
-								"action", "restoreSelectedEntries");
-							dropdownItem.setIcon("restore");
-							dropdownItem.setLabel(
-								LanguageUtil.get(
-									httpServletRequest, "restore"));
-							dropdownItem.setQuickAction(true);
-						}
-					).build());
-				dropdownGroupItem.setSeparator(true);
+		return DropdownItemListBuilder.add(
+			dropdownItem -> {
+				dropdownItem.putData("action", "deleteSelectedEntries");
+				dropdownItem.setIcon("times-circle");
+				dropdownItem.setLabel(
+					LanguageUtil.get(httpServletRequest, "delete"));
+				dropdownItem.setQuickAction(true);
 			}
-		).addGroup(
-			dropdownGroupItem -> {
-				dropdownGroupItem.setDropdownItems(
-					DropdownItemListBuilder.add(
-						dropdownItem -> {
-							dropdownItem.putData(
-								"action", "deleteSelectedEntries");
-							dropdownItem.setIcon("trash");
-							dropdownItem.setLabel(
-								LanguageUtil.get(httpServletRequest, "delete"));
-							dropdownItem.setQuickAction(true);
-						}
-					).build());
-				dropdownGroupItem.setSeparator(true);
+		).add(
+			dropdownItem -> {
+				dropdownItem.putData("action", "restoreSelectedEntries");
+				dropdownItem.setIcon("restore");
+				dropdownItem.setLabel(
+					LanguageUtil.get(httpServletRequest, "restore"));
+				dropdownItem.setQuickAction(true);
 			}
 		).build();
 	}

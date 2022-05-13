@@ -165,8 +165,7 @@ public class CPDefinitionLocalServiceImpl
 			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
 			int deliverySubscriptionLength, String deliverySubscriptionType,
 			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles, int status,
-			ServiceContext serviceContext)
+			long deliveryMaxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Commerce product definition
@@ -254,7 +253,7 @@ public class CPDefinitionLocalServiceImpl
 		cpDefinition.setVersion(1);
 
 		if ((expirationDate == null) || expirationDate.after(date)) {
-			cpDefinition.setStatus(status);
+			cpDefinition.setStatus(WorkflowConstants.STATUS_DRAFT);
 		}
 		else {
 			cpDefinition.setStatus(WorkflowConstants.STATUS_EXPIRED);
@@ -289,8 +288,8 @@ public class CPDefinitionLocalServiceImpl
 				displayDateYear, displayDateHour, displayDateMinute,
 				expirationDateMonth, expirationDateDay, expirationDateYear,
 				expirationDateHour, expirationDateMinute, neverExpire, false,
-				false, 1, StringPool.BLANK, null, 0, false, 1, null, null, 0,
-				null, false, null, 0, 0, 0, 0, cpInstanceServiceContext);
+				false, 1, StringPool.BLANK, null, 0, null,
+				cpInstanceServiceContext);
 		}
 
 		// Friendly URL
@@ -323,9 +322,9 @@ public class CPDefinitionLocalServiceImpl
 
 		// Workflow
 
-		if (_workflowDefinitionLinkLocalService.hasWorkflowDefinitionLink(
+		if (_isWorkflowEnabled(
 				serviceContext.getCompanyId(), serviceContext.getScopeGroupId(),
-				CPDefinition.class.getName(), 0)) {
+				CPDefinition.class.getName())) {
 
 			serviceContext.setWorkflowAction(
 				WorkflowConstants.ACTION_SAVE_DRAFT);
@@ -335,6 +334,7 @@ public class CPDefinitionLocalServiceImpl
 			user.getUserId(), cpDefinition, serviceContext);
 	}
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinition addCPDefinition(
 			String externalReferenceCode, long groupId, long userId,
@@ -357,8 +357,7 @@ public class CPDefinitionLocalServiceImpl
 			boolean neverExpire, String defaultSku, boolean subscriptionEnabled,
 			int subscriptionLength, String subscriptionType,
 			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, int status,
-			ServiceContext serviceContext)
+			long maxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
 		return cpDefinitionLocalService.addCPDefinition(
@@ -373,8 +372,7 @@ public class CPDefinitionLocalServiceImpl
 			expirationDateYear, expirationDateHour, expirationDateMinute,
 			neverExpire, defaultSku, subscriptionEnabled, subscriptionLength,
 			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
-			maxSubscriptionCycles, false, 1, null, null, 0, status,
-			serviceContext);
+			maxSubscriptionCycles, false, 1, null, null, 0, serviceContext);
 	}
 
 	@Override
@@ -402,8 +400,7 @@ public class CPDefinitionLocalServiceImpl
 			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
 			int deliverySubscriptionLength, String deliverySubscriptionType,
 			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles, int status,
-			ServiceContext serviceContext)
+			long deliveryMaxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
 		if (Validator.isBlank(externalReferenceCode)) {
@@ -456,7 +453,7 @@ public class CPDefinitionLocalServiceImpl
 			maxSubscriptionCycles, deliverySubscriptionEnabled,
 			deliverySubscriptionLength, deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
-			deliveryMaxSubscriptionCycles, status, serviceContext);
+			deliveryMaxSubscriptionCycles, serviceContext);
 	}
 
 	@Override
@@ -481,8 +478,7 @@ public class CPDefinitionLocalServiceImpl
 			boolean neverExpire, String defaultSku, boolean subscriptionEnabled,
 			int subscriptionLength, String subscriptionType,
 			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, int status,
-			ServiceContext serviceContext)
+			long maxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
 		return cpDefinitionLocalService.addOrUpdateCPDefinition(
@@ -497,8 +493,7 @@ public class CPDefinitionLocalServiceImpl
 			expirationDateYear, expirationDateHour, expirationDateMinute,
 			neverExpire, defaultSku, subscriptionEnabled, subscriptionLength,
 			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
-			maxSubscriptionCycles, false, 1, null, null, 0, status,
-			serviceContext);
+			maxSubscriptionCycles, false, 1, null, null, 0, serviceContext);
 	}
 
 	@Override
@@ -572,7 +567,12 @@ public class CPDefinitionLocalServiceImpl
 			cProductPersistence.update(newCProduct);
 		}
 
-		newCPDefinition.setStatus(WorkflowConstants.STATUS_DRAFT);
+		if (_isWorkflowEnabled(
+				serviceContext.getCompanyId(), serviceContext.getScopeGroupId(),
+				CPDefinition.class.getName())) {
+
+			newCPDefinition.setStatus(WorkflowConstants.STATUS_INACTIVE);
+		}
 
 		newCPDefinition = cpDefinitionPersistence.update(newCPDefinition);
 
@@ -2622,6 +2622,18 @@ public class CPDefinitionLocalServiceImpl
 		}
 		catch (PortalException portalException) {
 			_log.error(portalException);
+		}
+
+		return false;
+	}
+
+	private boolean _isWorkflowEnabled(
+		long companyId, long groupId, String className) {
+
+		if (_workflowDefinitionLinkLocalService.hasWorkflowDefinitionLink(
+				companyId, groupId, className, 0)) {
+
+			return true;
 		}
 
 		return false;

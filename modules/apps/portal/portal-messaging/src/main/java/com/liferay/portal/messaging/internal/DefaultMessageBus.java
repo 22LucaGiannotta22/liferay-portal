@@ -203,7 +203,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 						message.put("companyId", id);
 
-						destination.send(message.clone());
+						destination.send(message);
 					}
 				}
 				finally {

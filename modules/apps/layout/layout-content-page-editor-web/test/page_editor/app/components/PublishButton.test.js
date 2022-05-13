@@ -35,7 +35,11 @@ const ERRORS = {
 	defaultId: {background: {error: 'I am an error', value: 'error'}},
 };
 
-const renderComponent = ({onPublish = () => {}, errors, canPublish = true}) => {
+const renderComponent = ({
+	handleSubmit = () => {},
+	errors,
+	canPublish = true,
+}) => {
 	const ref = React.createRef();
 
 	return render(
@@ -43,8 +47,8 @@ const renderComponent = ({onPublish = () => {}, errors, canPublish = true}) => {
 			<PublishButton
 				canPublish={canPublish}
 				formRef={ref}
+				handleSubmit={handleSubmit}
 				label="publish"
-				onPublish={onPublish}
 			/>
 		</StyleErrorsContextProvider>
 	);
@@ -57,14 +61,14 @@ describe('PublishButton', () => {
 		expect(getByLabelText('publish')).toBeInTheDocument();
 	});
 
-	it('calls onPublish when the button is clicked', () => {
-		const onPublish = jest.fn(() => {});
-		const {getByLabelText} = renderComponent({onPublish});
+	it('calls handleSubmit when the button is clicked', () => {
+		const handleSubmit = jest.fn((event) => event.preventDefault());
+		const {getByLabelText} = renderComponent({handleSubmit});
 		const button = getByLabelText('publish');
 
 		fireEvent.click(button);
 
-		expect(onPublish).toHaveBeenCalled();
+		expect(handleSubmit).toHaveBeenCalled();
 	});
 
 	it('opens a modal when the button is clicked and there are errors', async () => {
@@ -77,16 +81,16 @@ describe('PublishButton', () => {
 	});
 
 	it('does not allow to publish if canPublish is false', () => {
-		const onPublish = jest.fn(() => {});
+		const handleSubmit = jest.fn((event) => event.preventDefault());
 		const {getByLabelText} = renderComponent({
 			canPublish: false,
-			onPublish,
+			handleSubmit,
 		});
 		const button = getByLabelText('publish');
 
 		fireEvent.click(button);
 
-		expect(onPublish).not.toHaveBeenCalled();
+		expect(handleSubmit).not.toHaveBeenCalled();
 		expect(button).toBeDisabled();
 	});
 });

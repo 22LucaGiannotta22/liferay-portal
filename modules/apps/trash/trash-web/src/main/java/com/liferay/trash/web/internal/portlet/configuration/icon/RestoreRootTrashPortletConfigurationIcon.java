@@ -47,11 +47,6 @@ public class RestoreRootTrashPortletConfigurationIcon
 	extends BasePortletConfigurationIcon {
 
 	@Override
-	public String getIconCssClass() {
-		return "restore";
-	}
-
-	@Override
 	public String getMessage(PortletRequest portletRequest) {
 		return LanguageUtil.get(
 			getResourceBundle(getLocale(portletRequest)), "restore");

@@ -606,8 +606,7 @@ public class ReadingTimeEntryModelImpl
 		}
 
 		com.liferay.portal.kernel.trash.TrashHandler trashHandler =
-			com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil.
-				getTrashHandler(getModelClassName());
+			getTrashHandler();
 
 		if (Validator.isNotNull(
 				trashHandler.getContainerModelClassName(getPrimaryKey()))) {
@@ -651,6 +650,16 @@ public class ReadingTimeEntryModelImpl
 		return getPrimaryKey();
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
+	@Override
+	public com.liferay.portal.kernel.trash.TrashHandler getTrashHandler() {
+		return com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil.
+			getTrashHandler(getModelClassName());
+	}
+
 	@Override
 	public boolean isInTrash() {
 		if (getStatus() == WorkflowConstants.STATUS_IN_TRASH) {
@@ -664,8 +673,7 @@ public class ReadingTimeEntryModelImpl
 	@Override
 	public boolean isInTrashContainer() {
 		com.liferay.portal.kernel.trash.TrashHandler trashHandler =
-			com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil.
-				getTrashHandler(getModelClassName());
+			getTrashHandler();
 
 		if ((trashHandler == null) ||
 			Validator.isNull(

@@ -30,29 +30,26 @@ const BASE_PROPS = {
 	portletNamespace: 'test',
 };
 
-const SCHEMA = [
-	{
-		name: 'currencyCode',
+const SCHEMA = {
+	'currencyCode': {
 		type: 'string',
 	},
-	{
-		name: 'id',
+	'id': {
+		format: 'int64',
 		type: 'integer',
 	},
-	{
-		name: 'name',
+	'name': {
 		type: 'string',
 	},
-	{
-		name: 'type',
+	'type': {
 		type: 'string',
 	},
-	{
-		name: 'x-class-name',
+	'x-class-name': {
+		default: 'com.liferay.headless.commerce.admin.channel.dto.v1_0.Channel',
 		readOnly: true,
 		type: 'string',
 	},
-];
+};
 
 const FILE_SCHEMA = ['currencyCode', 'type', 'name'];
 const fileContent = [

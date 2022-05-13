@@ -351,11 +351,13 @@ public class MetadataTypeBuilderTest {
 
 	@Test
 	public void testBuildMetadataType_StringField() throws Exception {
-		Assert.assertTrue(
-			getFieldMetadataType(
-				getEntityMetadataType(
-					"/entities/{id}", OASConstants.OPERATION_GET),
-				"stringField") instanceof StringType);
+		MetadataType entityMetadataType = getEntityMetadataType(
+			"/entities/{id}", OASConstants.OPERATION_GET);
+
+		MetadataType fieldMetadataType = getFieldMetadataType(
+			entityMetadataType, "stringField");
+
+		Assert.assertTrue(fieldMetadataType instanceof StringType);
 	}
 
 	@Test

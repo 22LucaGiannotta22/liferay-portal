@@ -20,6 +20,7 @@ import com.liferay.frontend.data.set.view.table.BaseTableFDSView;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
+import com.liferay.frontend.data.set.view.table.FDSTableSchemaField;
 
 import java.util.Locale;
 
@@ -41,21 +42,24 @@ public class CommerceDiscountTableFDSView extends BaseTableFDSView {
 		FDSTableSchemaBuilder fdsTableSchemaBuilder =
 			_fdsTableSchemaBuilderFactory.create();
 
-		return fdsTableSchemaBuilder.add(
-			"title", "name",
-			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
-				"actionLink")
-		).add(
-			"target", "target"
-		).add(
-			"amountFormatted", "amount"
-		).add(
-			"level", "discount-level"
-		).add(
-			"active", "active",
-			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
-				"boolean")
-		).build();
+		FDSTableSchemaField nameFDSTableSchemaField =
+			fdsTableSchemaBuilder.addFDSTableSchemaField("title", "name");
+
+		nameFDSTableSchemaField.setContentRenderer("actionLink");
+
+		fdsTableSchemaBuilder.addFDSTableSchemaField("target", "target");
+
+		fdsTableSchemaBuilder.addFDSTableSchemaField(
+			"amountFormatted", "amount");
+
+		fdsTableSchemaBuilder.addFDSTableSchemaField("level", "discount-level");
+
+		FDSTableSchemaField activeField =
+			fdsTableSchemaBuilder.addFDSTableSchemaField("active", "active");
+
+		activeField.setContentRenderer("boolean");
+
+		return fdsTableSchemaBuilder.build();
 	}
 
 	@Reference

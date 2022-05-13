@@ -405,7 +405,7 @@ public class ExportDisplayPagesMVCResourceCommandTest {
 			expectedContent);
 
 		Assert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString());
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString());
 	}
 
 	private void _validateContent(
@@ -421,19 +421,20 @@ public class ExportDisplayPagesMVCResourceCommandTest {
 		for (String expectedDisplayPageTemplateName :
 				expectedDisplayPageTemplateNames) {
 
-			String expectedJSON = String.valueOf(
-				JSONFactoryUtil.createJSONObject(
-					StringUtil.replace(
-						_read(expectedFileName), "\"${", "}\"",
-						HashMapBuilder.putAll(
-							inputValuesMap
-						).put(
-							"DISPLAY_PAGE_TEMPLATE_NAME",
-							StringPool.QUOTE + expectedDisplayPageTemplateName +
-								StringPool.QUOTE
-						).build())));
+			JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
+				StringUtil.replace(
+					_read(expectedFileName), "\"${", "}\"",
+					HashMapBuilder.putAll(
+						inputValuesMap
+					).put(
+						"DISPLAY_PAGE_TEMPLATE_NAME",
+						StringPool.QUOTE + expectedDisplayPageTemplateName +
+							StringPool.QUOTE
+					).build()));
 
-			equals = expectedJSON.equals(jsonObject.toString());
+			String expectedJSON = expectedJSONObject.toJSONString();
+
+			equals = expectedJSON.equals(jsonObject.toJSONString());
 
 			if (equals) {
 				break;

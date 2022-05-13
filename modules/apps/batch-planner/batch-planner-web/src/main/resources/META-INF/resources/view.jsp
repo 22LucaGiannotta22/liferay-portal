@@ -31,8 +31,6 @@ SearchContainer<BatchPlannerPlanDisplay> batchPlannerPlanDisplaySearchContainer 
 />
 
 <clay:container-fluid>
-	<liferay-ui:error exception="<%= BatchPlannerPlanInternalClassNameException.class %>" message="unable-to-perform-the-search-because-the-provided-search-term-is-too-ambiguous" />
-
 	<liferay-ui:search-container
 		cssClass="mt-3"
 		searchContainer="<%= batchPlannerPlanDisplaySearchContainer %>"
@@ -88,12 +86,12 @@ SearchContainer<BatchPlannerPlanDisplay> batchPlannerPlanDisplaySearchContainer 
 			</liferay-ui:search-container-column-text>
 
 			<liferay-ui:search-container-column-text
-				name="successful-rows"
+				name="rows-processed"
 				value="<%= String.valueOf(batchPlannerPlanDisplay.getProcessedItemsCount()) %>"
 			/>
 
 			<liferay-ui:search-container-column-text
-				name="failed-rows"
+				name="rows-failed"
 				value="<%= String.valueOf(batchPlannerPlanDisplay.getFailedItemsCount()) %>"
 			/>
 

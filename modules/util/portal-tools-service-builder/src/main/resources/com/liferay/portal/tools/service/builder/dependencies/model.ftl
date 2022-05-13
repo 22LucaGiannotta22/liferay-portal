@@ -333,17 +333,15 @@ public interface ${entity.name}Model extends ${entity.getModelBaseInterfaceNames
 		@Override
 		public long getTrashEntryClassPK();
 
-		<#if serviceBuilder.isVersionLTE_7_3_0()>
-			/**
-			 * Returns the trash handler for this ${entity.humanName}.
-			 *
-			 * @return the trash handler for this ${entity.humanName}
-			 * @deprecated As of Judson (7.1.x), with no direct replacement
-			 */
-			@Deprecated
-			@Override
-			public com.liferay.portal.kernel.trash.TrashHandler getTrashHandler();
-		</#if>
+		/**
+		 * Returns the trash handler for this ${entity.humanName}.
+		 *
+		 * @return the trash handler for this ${entity.humanName}
+		 * @deprecated As of Judson (7.1.x), with no direct replacement
+		 */
+		@Deprecated
+		@Override
+		public com.liferay.portal.kernel.trash.TrashHandler getTrashHandler();
 
 		/**
 		 * Returns <code>true</code> if this ${entity.humanName} is in the Recycle Bin.

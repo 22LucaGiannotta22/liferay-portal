@@ -21,7 +21,6 @@ import React, {useEffect, useState} from 'react';
 
 import useForm from '../hooks/useForm';
 import {ERRORS} from '../utils/errors';
-import {defaultLanguageId} from '../utils/locale';
 import {
 	firstLetterUppercase,
 	removeAllSpecialCharacters,
@@ -54,6 +53,8 @@ const ModalAddObjectDefinition: React.FC<IProps> = ({
 		pluralLabel: '',
 	};
 	const [error, setError] = useState<string>('');
+
+	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 	const onSubmit = async ({label, name, pluralLabel}: TInitialValues) => {
 		const response = await fetch(apiURL, {

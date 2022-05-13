@@ -169,12 +169,12 @@ public class KaleoFormsDDMDisplay extends BaseDDMDisplay {
 			long classPK, long resourceClassNameId)
 		throws Exception {
 
+		String portletId = PortletProviderUtil.getPortletId(
+			DDMStructure.class.getName(), PortletProvider.Action.VIEW);
+
 		PortletURL portletURL = PortletURLBuilder.create(
 			_portal.getControlPanelPortletURL(
-				liferayPortletRequest,
-				PortletProviderUtil.getPortletId(
-					DDMStructure.class.getName(), PortletProvider.Action.VIEW),
-				PortletRequest.RENDER_PHASE)
+				liferayPortletRequest, portletId, PortletRequest.RENDER_PHASE)
 		).setMVCPath(
 			"/select_template.jsp"
 		).setParameter(

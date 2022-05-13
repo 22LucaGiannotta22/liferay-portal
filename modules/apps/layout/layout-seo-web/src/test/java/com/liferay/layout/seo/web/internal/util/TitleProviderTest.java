@@ -27,6 +27,7 @@ import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -71,6 +72,14 @@ public class TitleProviderTest {
 					String companyName, Locale locale) {
 
 					return "htmlTitle";
+				}
+
+				@Override
+				public List<LayoutSEOLink> getLocalizedLayoutSEOLinks(
+					Layout layout, Locale locale, String canonicalURL,
+					Map<Locale, String> alternateURLs) {
+
+					return Collections.emptyList();
 				}
 
 				@Override

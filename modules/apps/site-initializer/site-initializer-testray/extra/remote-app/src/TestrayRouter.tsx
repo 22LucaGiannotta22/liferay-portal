@@ -16,18 +16,15 @@ import {ClayModalProvider} from '@clayui/modal';
 import {HashRouter, Route, Routes} from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
+import CompareRunsComponents from './pages/CompareRuns/CompareRunsComponents';
 import CompareRunsOutlet from './pages/CompareRuns/CompareRunsOutlet';
 import CompareRunsRedirect from './pages/CompareRuns/CompareRunsRedirect';
-import CompareRunsComponents from './pages/CompareRuns/Components';
-import CompareRunsDetails from './pages/CompareRuns/Details';
-import CompareRunsTeams from './pages/CompareRuns/Teams';
 import Users from './pages/Manage/User';
 import UserManagement from './pages/Manage/User/User';
 import OutletBridge from './pages/OutletBridge';
 import Projects from './pages/Project';
 import Cases from './pages/Project/Cases';
 import Case from './pages/Project/Cases/Case';
-import CaseForm from './pages/Project/Cases/CaseForm';
 import CaseOutlet from './pages/Project/Cases/CaseOutlet';
 import CaseRequirement from './pages/Project/Cases/CaseRequirement';
 import Overview from './pages/Project/Overview';
@@ -49,8 +46,6 @@ import RoutineArchived from './pages/Project/Routines/RoutineArchived';
 import RoutineOutlet from './pages/Project/Routines/RoutineOutlet';
 import Suites from './pages/Project/Suites';
 import Suite from './pages/Project/Suites/Suite';
-import SuiteForm from './pages/Project/Suites/SuiteForm';
-import SuiteOutlet from './pages/Project/Suites/SuiteOutlet';
 import Testflow from './pages/Testflow';
 import Subtasks from './pages/Testflow/Subtask';
 import TestflowArchived from './pages/Testflow/TestflowArchived';
@@ -75,27 +70,14 @@ const TestrayRoute = () => (
 						<Route element={<OutletBridge />} path="suites">
 							<Route element={<Suites />} index />
 
-							<Route element={<SuiteForm />} path="create" />
-
-							<Route
-								element={<SuiteOutlet />}
-								path=":testraySuiteId"
-							>
-								<Route element={<Suite />} index />
-
-								<Route element={<SuiteForm />} path="update" />
-							</Route>
+							<Route element={<Suite />} path=":testraySuiteId" />
 						</Route>
 
 						<Route element={<OutletBridge />} path="cases">
 							<Route element={<Cases />} index />
 
-							<Route element={<CaseForm />} path="create" />
-
 							<Route element={<CaseOutlet />} path=":caseId">
 								<Route element={<Case />} index />
-
-								<Route element={<CaseForm />} path="update" />
 
 								<Route
 									element={<CaseRequirement />}
@@ -193,11 +175,14 @@ const TestrayRoute = () => (
 						/>
 
 						<Route
-							element={<CompareRunsDetails />}
+							element={<CompareRunsComponents />}
 							path="details"
 						/>
 
-						<Route element={<CompareRunsTeams />} path="teams" />
+						<Route
+							element={<CompareRunsComponents />}
+							path="teams"
+						/>
 					</Route>
 
 					<Route element={<div>Page not found</div>} path="*" />

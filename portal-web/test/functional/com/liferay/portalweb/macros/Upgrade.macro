@@ -436,7 +436,7 @@ definition {
 
 		Form.closeSidebar();
 
-		PortletEntry.publish();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Content & Data",
@@ -450,7 +450,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPage(pageName = "Form Page");
+		PagesAdmin.addPublicPage(pageName = "Form Page");
 
 		Navigator.gotoPage(pageName = "Form Page");
 
@@ -1556,21 +1556,19 @@ definition {
 
 		WebContentNavigator.gotoEditStructure(structureName = "WC Structure Name");
 
-		DataEngine.editFieldLabel(
-			fieldFieldLabel = "Boolean",
-			fieldFieldLabelEdit = "Boolean Edit",
-			fieldName = "Boolean");
-
-		if ("${webContentColor}" == "true") {
-			DataEngine.editFieldLabel(
-				fieldFieldLabel = "Color",
-				fieldFieldLabelEdit = "Color Edit");
+		if ("${webContentColor}" == "false") {
+			for (var fieldFieldLabel : list "Boolean,Date,Decimal,Documents and Media,Geolocation,HTML,Image,Integer,Link to Page,Number,Radio,Select,Separator,Text,Text Box,Web Content") {
+				DataEngine.editFieldLabel(
+					fieldFieldLabel = "${fieldFieldLabel}",
+					fieldFieldLabelEdit = "${fieldFieldLabel} Edit");
+			}
 		}
-
-		for (var fieldFieldLabel : list "Date,Decimal,Documents and Media,Geolocation,HTML,Image,Integer,Link to Page,Number,Radio,Select,Separator,Text,Text Box,Web Content") {
-			DataEngine.editFieldLabel(
-				fieldFieldLabel = "${fieldFieldLabel}",
-				fieldFieldLabelEdit = "${fieldFieldLabel} Edit");
+		else {
+			for (var fieldFieldLabel : list "Boolean,Color,Date,Decimal,Documents and Media,Geolocation,HTML,Image,Integer,Link to Page,Number,Radio,Select,Separator,Text,Text Box,Web Content") {
+				DataEngine.editFieldLabel(
+					fieldFieldLabel = "${fieldFieldLabel}",
+					fieldFieldLabelEdit = "${fieldFieldLabel} Edit");
+			}
 		}
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
@@ -4161,80 +4159,6 @@ definition {
 		AssertVisible(locator1 = "ControlMenu#ADD");
 	}
 
-	macro viewDefinedGridLayout {
-		task ("Navigate to page in edit mode") {
-			ContentPagesNavigator.openEditContentPage(
-				pageName = "Content Page Name",
-				siteName = "Test Site Name");
-		}
-
-		task ("View the Grid Styles") {
-			PageEditor.gotoConfiguration(fragmentName = "Grid");
-
-			PageEditor.viewGridStyle(
-				columnCount = "6",
-				position = "1");
-
-			PageEditor.switchViewport(deviceType = "Tablet");
-
-			AssertSelectedLabel(
-				key_fieldLabel = "Layout",
-				locator1 = "Select#GENERIC_SELECT_FIELD",
-				value1 = "1 Module per Row");
-
-			PageEditor.switchViewport(deviceType = "Landscape Phone");
-
-			AssertSelectedLabel(
-				key_fieldLabel = "Layout",
-				locator1 = "Select#GENERIC_SELECT_FIELD",
-				value1 = "3 Modules per Row");
-
-			PageEditor.switchViewport(deviceType = "Portrait Phone");
-
-			AssertSelectedLabel(
-				key_fieldLabel = "Layout",
-				locator1 = "Select#GENERIC_SELECT_FIELD",
-				value1 = "2 Modules per Row");
-		}
-
-		task ("Change to the Desktop viewport") {
-			PageEditor.switchViewport(deviceType = "Desktop");
-		}
-
-		task ("Configure the Grid") {
-			PageEditor.editLayoutGrid(
-				columnCount = "3",
-				panel = "General");
-		}
-
-		task ("View the Grid Styles after updating") {
-			PageEditor.viewGridStyle(
-				columnCount = "3",
-				position = "1");
-
-			PageEditor.switchViewport(deviceType = "Tablet");
-
-			AssertSelectedLabel(
-				key_fieldLabel = "Layout",
-				locator1 = "Select#GENERIC_SELECT_FIELD",
-				value1 = "3 Modules per Row");
-
-			PageEditor.switchViewport(deviceType = "Landscape Phone");
-
-			AssertSelectedLabel(
-				key_fieldLabel = "Layout",
-				locator1 = "Select#GENERIC_SELECT_FIELD",
-				value1 = "1 Module per Row");
-
-			PageEditor.switchViewport(deviceType = "Portrait Phone");
-
-			AssertSelectedLabel(
-				key_fieldLabel = "Layout",
-				locator1 = "Select#GENERIC_SELECT_FIELD",
-				value1 = "1 Module per Row");
-		}
-	}
-
 	macro viewDocument {
 		Navigator.gotoPage(pageName = "Document");
 
@@ -4390,7 +4314,9 @@ definition {
 
 		WaitForPageLoad();
 
-		FormFields.viewBooleanField(fieldValue = "Boolean");
+		DataEngine.viewField(
+			fieldFieldLabel = "Boolean",
+			fieldName = "Multiple Selection");
 
 		DataEngine.viewField(
 			fieldFieldLabel = "Number",
@@ -5049,7 +4975,10 @@ definition {
 	}
 
 	macro viewResultRankingsEntry {
-		SearchTuning.openResultRankingsAdmin();
+		ApplicationsMenu.gotoPortlet(
+			category = "Search Tuning",
+			panel = "Applications",
+			portlet = "Result Rankings");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
@@ -5912,8 +5841,8 @@ definition {
 		}
 
 		WebContent.viewWithStructureCP(
-			webContentBoolean = "true",
-			webContentBooleanFieldLabel = "Boolean",
+			webContentMultipleSelection = "Boolean",
+			webContentMultipleSelectionFieldLabel = "Boolean",
 			webContentTitle = "Boolean Web Content");
 
 		Navigator.gotoBack();

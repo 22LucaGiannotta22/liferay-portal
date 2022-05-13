@@ -58,9 +58,11 @@ definition {
 		if (isSet(displayPageTemplateDisabled)) {
 			Portlet.waitForForm();
 
-			var key_panel = "Display Page";
+			var key_panel = "Display Page Template";
 
-			AssertElementNotPresent(locator1 = "Panel#PANEL");
+			AssertElementNotPresent(locator1 = "Panel#PANEL_COLLAPSED");
+
+			AssertElementNotPresent(locator1 = "Panel#PANEL_EXPANDED");
 		}
 
 		if (isSet(vocabularyName)) {
@@ -676,19 +678,6 @@ definition {
 				value1 = "${viewableBy}");
 		}
 
-		if (isSet(textField)) {
-			if (isSet(fieldFieldLabel)) {
-				var key_fieldLabel = "${fieldFieldLabel}";
-			}
-			else {
-				var key_fieldLabel = "Text";
-			}
-
-			Type(
-				locator1 = "TextInput#GENERIC_TEXT_INPUT",
-				value1 = "${textField}");
-		}
-
 		AssertClick(
 			locator1 = "Button#PUBLISH",
 			value1 = "Publish");
@@ -824,17 +813,6 @@ definition {
 		var key_dmDocumentTitle = "${dmDocumentTitle}";
 
 		LexiconEntry.viewEntryName(rowEntry = "${dmDocumentTitle}");
-	}
-
-	macro assertDownloadedFileContent {
-		var fileContent = TestCase.getTempFileContent(fileName = "${fileName}");
-
-		if (contains("${fileContent}", "${downloadedContent}")) {
-			echo("The downloaded file content matches the expected file content.");
-		}
-		else {
-			fail("The downloaded file content does not match the expected file content.");
-		}
 	}
 
 	macro assertFileNameFromTempFolder {
@@ -1256,7 +1234,7 @@ definition {
 		}
 		else {
 			LexiconEntry.gotoEntryMenuItem(
-				menuItem = "Delete",
+				menuItem = "Move to Recycle Bin",
 				rowEntry = "${dmDocumentTitle}");
 
 			Alert.viewSuccessMessage();
@@ -1274,7 +1252,7 @@ definition {
 
 		AssertClick(
 			locator1 = "Button#MOVE_TO_RECYCLE_BIN",
-			value1 = "Delete");
+			value1 = "Move to Recycle Bin");
 
 		Alert.viewSuccessMessage();
 	}
@@ -1284,7 +1262,7 @@ definition {
 			key_rowEntry = "${mgDocumentTitle}",
 			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS");
 
-		MenuItem.click(menuItem = "Delete");
+		MenuItem.click(menuItem = "Move to Recycle Bin");
 
 		VerifyElementPresent(locator1 = "Message#SUCCESS");
 
@@ -1363,19 +1341,6 @@ definition {
 		AssertClick.assertPartialTextClickAt(
 			locator1 = "Button#DOWNLOAD_SIDEBAR",
 			value1 = "Download");
-	}
-
-	macro downloadWithDirectoryIndexing {
-		var portalURL = PropsUtil.get("portal.url");
-
-		Navigator.openSpecificURL(url = "${portalURL}/documents/${siteURLKey}/");
-
-		AssertClick(
-			key_text = "${dmDocumentTitle}",
-			locator1 = "Link#ANY",
-			value1 = "${dmDocumentTitle}");
-
-		DownloadTempFile();
 	}
 
 	macro editCategoryTags {
@@ -1579,9 +1544,11 @@ definition {
 		if (isSet(displayPageTemplateDisabled)) {
 			Portlet.waitForForm();
 
-			var key_panel = "Display Page";
+			var key_panel = "Display Page Template";
 
-			AssertElementNotPresent(locator1 = "Panel#PANEL");
+			AssertElementNotPresent(locator1 = "Panel#PANEL_COLLAPSED");
+
+			AssertElementNotPresent(locator1 = "Panel#PANEL_EXPANDED");
 		}
 
 		if (isSet(customFieldTextEdit)) {
@@ -1844,18 +1811,6 @@ definition {
 		PortletEntry.save();
 
 		IFrame.closeFrame();
-	}
-
-	macro enableDirectoryIndexing {
-		DMNavigator.openToConfigInSiteSettings(
-			portlet = "Documents and Media",
-			siteURLKey = "${siteURLKey}");
-
-		FormFields.enableSwitch(fieldName = "Enable Directory Indexing");
-
-		Button.clickSave();
-
-		Alert.viewSuccessMessage();
 	}
 
 	macro expandInfo {
@@ -2196,13 +2151,7 @@ definition {
 	macro revertPG {
 		DMNavigator.gotoDocumentVersion();
 
-		var key_dmDocumentVersionNumber = "${dmDocumentVersionNumber}";
-		var documentCreationDate = DateUtil.getFormattedCurrentDate("M/d/yy");
-
-		AssertTextEquals.assertPartialText(
-			locator1 = "DocumentsAndMediaDocument#DOCUMENT_VERSIONS_CREATION_DATE",
-			value1 = "${documentCreationDate}",
-			versionNumber = "${key_dmDocumentVersionNumber}");
+		var key_dmDocumentVersionNumber = "Version ${dmDocumentVersionNumber}";
 
 		Click(locator1 = "DocumentsAndMedia#DOCUMENT_VERSION_VERTICAL_ELLIPSIS");
 
@@ -2508,7 +2457,7 @@ definition {
 
 			Click(locator1 = "DocumentsAndMedia#TOOLBAR_ACTIONS");
 
-			MenuItem.viewPresent(menuItem = "Delete");
+			MenuItem.viewPresent(menuItem = "Move to Recycle Bin");
 
 			PortletEntry.clickMoveToRecycleBin();
 		}
@@ -2546,23 +2495,10 @@ definition {
 			key_text = "fileExtensions",
 			locator1 = "TextArea#ANY");
 
-		if ("${indexNumber}" == "2") {
-			Click(
-				key_label = "Add Duplicate Field File Extensions",
-				locator1 = "Button#DUPLICATE_SPECIFIC");
-
-			Type(
-				key_indexNumber = "${indexNumber}",
-				key_label = "File Extensions",
-				locator1 = "TextArea#ANY_LABELED_N",
-				value1 = "${fieldValue}");
-		}
-		else {
-			Type(
-				key_text = "fileExtensions",
-				locator1 = "TextArea#ANY",
-				value1 = "${fieldValue}");
-		}
+		Type(
+			key_text = "fileExtensions",
+			locator1 = "TextArea#ANY",
+			value1 = "${fieldValue}");
 
 		SystemSettings.saveConfiguration();
 	}
@@ -2570,11 +2506,6 @@ definition {
 	macro updateMaximumFileSize {
 		if (isSet(instanceSettings)) {
 			DMNavigator.openToConfigInInstanceSettings(portlet = "Documents and Media Size Limits");
-		}
-		else if (isSet(siteSettings)) {
-			DMNavigator.openToConfigInSiteSettings(
-				portlet = "Documents and Media Size Limits",
-				siteURLKey = "${siteURLKey}");
 		}
 		else {
 			DMNavigator.openToConfigInSystemSettings(portlet = "Documents and Media Size Limits");
@@ -2600,17 +2531,10 @@ definition {
 	}
 
 	macro updateMimeTypeSizeLimit {
-		if (isSet(instanceSettings)) {
-			DMNavigator.openToConfigInInstanceSettings(portlet = "Documents and Media Size Limits");
-		}
-		else if (isSet(siteSettings)) {
-			DMNavigator.openToConfigInSiteSettings(
-				portlet = "Documents and Media Size Limits",
-				siteURLKey = "${siteURLKey}");
-		}
-		else {
-			DMNavigator.openToConfigInSystemSettings(portlet = "Documents and Media Size Limits");
-		}
+		PortalSettings.gotoConfiguration(
+			configurationCategory = "Documents and Media",
+			configurationName = "Documents and Media Size Limits",
+			configurationScope = "Site Scope");
 
 		if ("${indexNumber}" == "2") {
 			Click(locator1 = "Button#DUPLICATE");
@@ -3066,7 +2990,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Button#MOVE_TO_RECYCLE_BIN",
-			value1 = "Delete");
+			value1 = "Move to Recycle Bin");
 	}
 
 	macro viewDocumentTypePG {
@@ -3797,7 +3721,7 @@ definition {
 
 		MenuItem.viewPresent(menuItem = "Checkout");
 
-		MenuItem.viewPresent(menuItem = "Delete");
+		MenuItem.viewPresent(menuItem = "Move to Recycle Bin");
 	}
 
 	macro viewStagingDetailsPG {
@@ -3833,7 +3757,7 @@ definition {
 
 		MenuItem.viewPresent(menuItem = "Permissions");
 
-		MenuItem.viewPresent(menuItem = "Delete");
+		MenuItem.viewPresent(menuItem = "Move to Recycle Bin");
 
 		Check(locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_CHECKBOX");
 
@@ -3845,7 +3769,7 @@ definition {
 
 		MenuItem.viewPresent(menuItem = "Move");
 
-		MenuItem.viewPresent(menuItem = "Delete");
+		MenuItem.viewPresent(menuItem = "Move to Recycle Bin");
 
 		Navigator.gotoSitePage(
 			pageName = "Staging Test Page",
@@ -3861,7 +3785,7 @@ definition {
 			locator1 = "MenuItem#DOWNLOAD",
 			value1 = "Download");
 
-		MenuItem.viewPresent(menuItem = "Delete");
+		MenuItem.viewPresent(menuItem = "Move to Recycle Bin");
 
 		Click(locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_CHECKBOX");
 

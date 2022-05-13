@@ -54,7 +54,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -175,7 +174,7 @@ public abstract class BaseObjectActionResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PATCH' 'http://localhost:8080/o/object-admin/v1.0/object-actions/{objectActionId}' -d $'{"active": ___, "description": ___, "name": ___, "objectActionExecutorKey": ___, "objectActionTriggerKey": ___, "parameters": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PATCH' 'http://localhost:8080/o/object-admin/v1.0/object-actions/{objectActionId}' -d $'{"active": ___, "name": ___, "objectActionExecutorKey": ___, "objectActionTriggerKey": ___, "parameters": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -220,10 +219,6 @@ public abstract class BaseObjectActionResourceImpl
 				objectAction.getDateModified());
 		}
 
-		if (objectAction.getDescription() != null) {
-			existingObjectAction.setDescription(objectAction.getDescription());
-		}
-
 		if (objectAction.getName() != null) {
 			existingObjectAction.setName(objectAction.getName());
 		}
@@ -250,7 +245,7 @@ public abstract class BaseObjectActionResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/object-admin/v1.0/object-actions/{objectActionId}' -d $'{"active": ___, "description": ___, "name": ___, "objectActionExecutorKey": ___, "objectActionTriggerKey": ___, "parameters": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/object-admin/v1.0/object-actions/{objectActionId}' -d $'{"active": ___, "name": ___, "objectActionExecutorKey": ___, "objectActionTriggerKey": ___, "parameters": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -372,7 +367,7 @@ public abstract class BaseObjectActionResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/object-admin/v1.0/object-definitions/{objectDefinitionId}/object-actions' -d $'{"active": ___, "description": ___, "name": ___, "objectActionExecutorKey": ___, "objectActionTriggerKey": ___, "parameters": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/object-admin/v1.0/object-definitions/{objectDefinitionId}/object-actions' -d $'{"active": ___, "name": ___, "objectActionExecutorKey": ___, "objectActionTriggerKey": ___, "parameters": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -463,24 +458,9 @@ public abstract class BaseObjectActionResourceImpl
 		throws Exception {
 
 		UnsafeConsumer<ObjectAction, Exception> objectActionUnsafeConsumer =
-			null;
-
-		String createStrategy = (String)parameters.getOrDefault(
-			"createStrategy", "INSERT");
-
-		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			objectActionUnsafeConsumer =
-				objectAction -> postObjectDefinitionObjectAction(
-					Long.parseLong(
-						(String)parameters.get("objectDefinitionId")),
-					objectAction);
-		}
-
-		if (objectActionUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Create strategy \"" + createStrategy +
-					"\" is not supported for ObjectAction");
-		}
+			objectAction -> postObjectDefinitionObjectAction(
+				Long.parseLong((String)parameters.get("objectDefinitionId")),
+				objectAction);
 
 		if (contextBatchUnsafeConsumer != null) {
 			contextBatchUnsafeConsumer.accept(
@@ -562,40 +542,11 @@ public abstract class BaseObjectActionResourceImpl
 			Map<String, Serializable> parameters)
 		throws Exception {
 
-		UnsafeConsumer<ObjectAction, Exception> objectActionUnsafeConsumer =
-			null;
-
-		String updateStrategy = (String)parameters.getOrDefault(
-			"updateStrategy", "UPDATE");
-
-		if ("PARTIAL_UPDATE".equalsIgnoreCase(updateStrategy)) {
-			objectActionUnsafeConsumer = objectAction -> patchObjectAction(
+		for (ObjectAction objectAction : objectActions) {
+			putObjectAction(
 				objectAction.getId() != null ? objectAction.getId() :
 					Long.parseLong((String)parameters.get("objectActionId")),
 				objectAction);
-		}
-
-		if ("UPDATE".equalsIgnoreCase(updateStrategy)) {
-			objectActionUnsafeConsumer = objectAction -> putObjectAction(
-				objectAction.getId() != null ? objectAction.getId() :
-					Long.parseLong((String)parameters.get("objectActionId")),
-				objectAction);
-		}
-
-		if (objectActionUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Update strategy \"" + updateStrategy +
-					"\" is not supported for ObjectAction");
-		}
-
-		if (contextBatchUnsafeConsumer != null) {
-			contextBatchUnsafeConsumer.accept(
-				objectActions, objectActionUnsafeConsumer);
-		}
-		else {
-			for (ObjectAction objectAction : objectActions) {
-				objectActionUnsafeConsumer.accept(objectAction);
-			}
 		}
 	}
 

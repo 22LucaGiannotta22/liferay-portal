@@ -17,7 +17,6 @@ package com.liferay.commerce.internal.events;
 import com.liferay.commerce.constants.CommerceWebKeys;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.context.CommerceContextFactory;
-import com.liferay.commerce.context.CommerceContextThreadLocal;
 import com.liferay.commerce.context.CommerceGroupThreadLocal;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.LifecycleAction;
@@ -55,8 +54,6 @@ public class CommerceContextPreAction extends Action {
 			CommerceWebKeys.COMMERCE_CONTEXT, commerceContext);
 
 		try {
-			CommerceContextThreadLocal.set(commerceContext);
-
 			CommerceGroupThreadLocal.set(
 				_groupLocalService.fetchGroup(
 					commerceContext.getCommerceChannelGroupId()));

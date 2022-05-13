@@ -82,14 +82,18 @@ public class AsahSegmentsEntryProviderTest {
 			_portal.getClassNameId(User.class.getName()), _user1.getUserId(),
 			serviceContext);
 
-		Assert.assertEquals(
-			1,
+		int segmentsEntryClassPKsCount =
 			_segmentsEntryProvider.getSegmentsEntryClassPKsCount(
-				segmentsEntry.getSegmentsEntryId()));
-		Assert.assertArrayEquals(
-			new long[] {_user1.getUserId()},
+				segmentsEntry.getSegmentsEntryId());
+
+		Assert.assertEquals(1, segmentsEntryClassPKsCount);
+
+		long[] segmentsEntryClassPKs =
 			_segmentsEntryProvider.getSegmentsEntryClassPKs(
-				segmentsEntry.getSegmentsEntryId(), 0, 1));
+				segmentsEntry.getSegmentsEntryId(), 0, 1);
+
+		Assert.assertArrayEquals(
+			new long[] {_user1.getUserId()}, segmentsEntryClassPKs);
 	}
 
 	@Test

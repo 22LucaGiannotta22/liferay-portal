@@ -16,7 +16,6 @@ package com.liferay.frontend.data.set.filter;
 
 import com.liferay.portal.kernel.json.JSONArray;
 
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -24,7 +23,6 @@ import java.util.Locale;
  */
 public interface FDSFilterSerializer {
 
-	public JSONArray serialize(
-		String fdsDisplayName, List<FDSFilter> fdsFilters, Locale locale);
+	public JSONArray serialize(String fdsDisplayName, Locale locale);
 
 }

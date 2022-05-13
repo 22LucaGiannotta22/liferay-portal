@@ -36,7 +36,7 @@ const ImportMappingItem = ({
 	return (
 		<ClayTable.Row>
 			<ClayTable.Cell>
-				<label htmlFor={inputId}>{dbField.name}</label>
+				<label htmlFor={inputId}>{dbField.label}</label>
 
 				{dbField.description && (
 					<p className="mb-0">{dbField.description}</p>
@@ -106,6 +106,7 @@ const ImportMappingItem = ({
 ImportMappingItem.propTypes = {
 	dbField: PropTypes.shape({
 		description: PropTypes.string,
+		label: PropTypes.string.isRequired,
 		name: PropTypes.string.isRequired,
 	}),
 	fileFields: PropTypes.arrayOf(

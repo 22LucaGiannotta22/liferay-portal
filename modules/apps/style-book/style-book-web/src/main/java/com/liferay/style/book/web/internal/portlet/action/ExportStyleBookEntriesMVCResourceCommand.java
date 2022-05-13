@@ -92,9 +92,11 @@ public class ExportStyleBookEntriesMVCResourceCommand
 
 		if (ArrayUtil.isNotEmpty(exportStyleBookEntryIds)) {
 			for (long exportStyleBookEntryId : exportStyleBookEntryIds) {
-				styleBookEntries.add(
+				StyleBookEntry styleBookEntry =
 					_styleBookEntryLocalService.fetchStyleBookEntry(
-						exportStyleBookEntryId));
+						exportStyleBookEntryId);
+
+				styleBookEntries.add(styleBookEntry);
 			}
 		}
 

@@ -185,10 +185,10 @@ public class JavaVariableTypeCheck extends BaseJavaTermCheck {
 			parentJavaClass = parentJavaClass.getParentJavaClass();
 		}
 
-		if (!_isFinalableField(
-				javaClass, javaVariable,
-				_getAllChildJavaTerms(parentJavaClass))) {
+		List<JavaTerm> allChildJavaTerms = _getAllChildJavaTerms(
+			parentJavaClass);
 
+		if (!_isFinalableField(javaClass, javaVariable, allChildJavaTerms)) {
 			return classContent;
 		}
 

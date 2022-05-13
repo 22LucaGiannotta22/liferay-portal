@@ -116,9 +116,9 @@ const TestFlowTasks: React.FC = () => {
 
 	return (
 		<>
-			<Container collapsable title="Task Details">
+			<Container className="pb-6" title="Task Details">
 				<div className="d-flex flex-wrap">
-					<div className="col-4 col-lg-4 col-md-12 p-0">
+					<div className="col-4 col-lg-4 col-md-12 pb-5">
 						<QATable
 							items={[
 								{
@@ -158,7 +158,7 @@ const TestFlowTasks: React.FC = () => {
 						/>
 					</div>
 
-					<div className="col-8 col-lg-8 col-md-12 mb-3 p-0">
+					<div className="col-8 col-lg-8 col-md-12">
 						<QATable
 							items={[
 								{
@@ -203,19 +203,17 @@ const TestFlowTasks: React.FC = () => {
 							]}
 						/>
 
-						<div className="pb-4">
-							<ProgressBar
-								displayTotalCompleted={false}
-								items={tasks[1]}
-								legend
-							/>
-						</div>
+						<ProgressBar
+							displayTotalCompleted={false}
+							items={tasks[1]}
+							legend
+						/>
 					</div>
 				</div>
 			</Container>
 
-			<Container className="mt-3" collapsable title="Progress (Score)">
-				<div className="pb-5">
+			<Container className="mt-3" title="Progress (Score)">
+				<div className="my-4">
 					<ProgressBar items={progressScore} legend />
 				</div>
 			</Container>

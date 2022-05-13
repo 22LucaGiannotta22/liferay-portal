@@ -392,13 +392,11 @@ SiteNavigationMenu siteNavigationMenu = siteNavigationMenuDisplayContext.getSite
 			Liferay.Util.openSelectionModal({
 				id: '<portlet:namespace />selectSiteNavigationMenu',
 				onSelect: function (selectedItem) {
-					const itemValue = JSON.parse(selectedItem.value);
-
-					if (itemValue) {
-						navigationMenuName.innerText = itemValue.name;
+					if (selectedItem) {
+						navigationMenuName.innerText = selectedItem.name;
 						rootMenuItemIdInput.value = '0';
-						rootMenuItemNameSpan.innerText = itemValue.name;
-						siteNavigationMenuIdInput.value = itemValue.id;
+						rootMenuItemNameSpan.innerText = selectedItem.name;
+						siteNavigationMenuIdInput.value = selectedItem.id;
 
 						removeSiteNavigationMenu.classList.toggle('hide');
 

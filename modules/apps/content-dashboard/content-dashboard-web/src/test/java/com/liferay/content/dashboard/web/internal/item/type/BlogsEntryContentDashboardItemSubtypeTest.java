@@ -96,7 +96,7 @@ public class BlogsEntryContentDashboardItemSubtypeTest {
 				"title",
 				blogsEntryContentDashboardItemSubtype.getFullLabel(
 					LocaleUtil.US)
-			).toString(),
+			).toJSONString(),
 			blogsEntryContentDashboardItemSubtype.toJSONString(LocaleUtil.US));
 	}
 

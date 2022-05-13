@@ -139,21 +139,13 @@ definition {
 
 		LexiconEntry.gotoEntry(rowEntry = "${categoryName}");
 
-		Check(
-			key_listEntry = "${subcategoryName}",
-			locator1 = "LexiconList#LIST_ENTRY_CHECKBOX");
+		var key_subcategoryName = "${subcategoryName}";
 
-		Click(
-			key_text = "trash",
-			locator1 = "ManagementBar#ANY_ICON");
+		Check(locator1 = "Categories#SUBCATEGORY_CHECKBOX");
 
-		AssertTextEquals(
-			locator1 = "Modal#BODY",
-			value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+		ClickNoError(locator1 = "Icon#DELETE");
 
-		Click(
-			key_text = "Delete",
-			locator1 = "Modal#MODAL_FOOTER_BUTTON");
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 
@@ -169,13 +161,7 @@ definition {
 			menuItem = "Delete",
 			rowEntry = "${subcategoryName}");
 
-		AssertTextEquals(
-			locator1 = "Modal#BODY",
-			value1 = "This category might be being used in some contents. If you delete it, this category and all of its subcategories will also be deleted and removed from those contents. Do you want to continue deleting this category?");
-
-		Click(
-			key_text = "Delete",
-			locator1 = "Modal#MODAL_FOOTER_BUTTON");
+		AssertConfirm(value1 = "This category might be being used in some contents. If you delete it, this category and all of its subcategories will also be deleted and removed from those contents. Do you want to continue deleting this category?");
 
 		Alert.viewSuccessMessage();
 

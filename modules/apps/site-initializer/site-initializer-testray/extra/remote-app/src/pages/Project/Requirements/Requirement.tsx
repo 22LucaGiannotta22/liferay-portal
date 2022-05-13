@@ -69,7 +69,7 @@ const Requirement = () => {
 
 	return (
 		<>
-			<Container collapsable title={i18n.translate('details')}>
+			<Container title={i18n.translate('details')}>
 				<QATable
 					items={[
 						{

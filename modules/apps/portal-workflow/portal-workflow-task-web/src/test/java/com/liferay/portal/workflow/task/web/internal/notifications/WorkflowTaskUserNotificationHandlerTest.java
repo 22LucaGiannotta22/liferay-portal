@@ -193,7 +193,7 @@ public class WorkflowTaskUserNotificationHandlerTest {
 
 			@Override
 			public String getPayload() {
-				return jsonObject.toString();
+				return jsonObject.toJSONString();
 			}
 
 			@Override

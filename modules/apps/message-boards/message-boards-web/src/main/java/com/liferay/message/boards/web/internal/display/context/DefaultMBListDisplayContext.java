@@ -22,7 +22,6 @@ import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.service.MBCategoryServiceUtil;
 import com.liferay.message.boards.service.MBThreadServiceUtil;
 import com.liferay.message.boards.settings.MBGroupServiceSettings;
-import com.liferay.message.boards.web.internal.util.MBRequestUtil;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -227,8 +226,8 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 			Calendar calendar = Calendar.getInstance();
 
 			MBGroupServiceSettings mbGroupServiceSettings =
-				MBRequestUtil.getMBGroupServiceSettings(
-					_httpServletRequest, themeDisplay.getSiteGroupId());
+				MBGroupServiceSettings.getInstance(
+					themeDisplay.getSiteGroupId());
 
 			int offset = GetterUtil.getInteger(
 				mbGroupServiceSettings.getRecentPostsDateOffset());

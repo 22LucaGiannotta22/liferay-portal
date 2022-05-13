@@ -57,9 +57,7 @@ public class BuildRunnerFactory {
 		}
 
 		if (jobName.startsWith(
-				"test-qa-websites-functional-daily-controller") ||
-			jobName.startsWith(
-				"test-qa-websites-functional-weekly-controller")) {
+				"test-qa-websites-functional-daily-controller")) {
 
 			buildRunner = new QAWebsitesControllerBuildRunner(buildData);
 		}

@@ -44,7 +44,6 @@ import com.liferay.message.boards.web.internal.upload.format.MBMessageFormatUplo
 import com.liferay.message.boards.web.internal.upload.format.MBMessageFormatUploadHandlerProvider;
 import com.liferay.message.boards.web.internal.util.MBAttachmentFileEntryReference;
 import com.liferay.message.boards.web.internal.util.MBAttachmentFileEntryUtil;
-import com.liferay.message.boards.web.internal.util.MBRequestUtil;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.captcha.CaptchaConfigurationException;
 import com.liferay.portal.kernel.captcha.CaptchaException;
@@ -475,9 +474,7 @@ public class EditMessageMVCActionCommand extends BaseMVCActionCommand {
 		String body = ParamUtil.getString(actionRequest, "body");
 
 		MBGroupServiceSettings mbGroupServiceSettings =
-			MBRequestUtil.getMBGroupServiceSettings(
-				_portal.getHttpServletRequest(actionRequest),
-				themeDisplay.getSiteGroupId());
+			MBGroupServiceSettings.getInstance(themeDisplay.getSiteGroupId());
 
 		List<ObjectValuePair<String, InputStream>> inputStreamOVPs =
 			new ArrayList<>(5);

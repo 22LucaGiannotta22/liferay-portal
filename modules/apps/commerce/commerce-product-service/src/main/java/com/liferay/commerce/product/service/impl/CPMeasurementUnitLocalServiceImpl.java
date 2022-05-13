@@ -16,7 +16,6 @@ package com.liferay.commerce.product.service.impl;
 
 import com.liferay.commerce.product.constants.CPMeasurementUnitConstants;
 import com.liferay.commerce.product.exception.CPMeasurementUnitKeyException;
-import com.liferay.commerce.product.exception.DuplicateCPMeasurementUnitException;
 import com.liferay.commerce.product.model.CPMeasurementUnit;
 import com.liferay.commerce.product.service.base.CPMeasurementUnitLocalServiceBaseImpl;
 import com.liferay.commerce.product.util.comparator.CPMeasurementUnitPriorityComparator;
@@ -27,7 +26,6 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +41,8 @@ public class CPMeasurementUnitLocalServiceImpl
 
 	@Override
 	public CPMeasurementUnit addCPMeasurementUnit(
-			String externalReferenceCode, Map<Locale, String> nameMap,
-			String key, double rate, boolean primary, double priority, int type,
+			Map<Locale, String> nameMap, String key, double rate,
+			boolean primary, double priority, int type,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -54,16 +52,13 @@ public class CPMeasurementUnitLocalServiceImpl
 			rate = 1;
 		}
 
-		validate(
-			externalReferenceCode, 0, serviceContext.getCompanyId(), key,
-			primary, type);
+		validate(0, serviceContext.getCompanyId(), key, primary, type);
 
 		long cpMeasurementUnitId = counterLocalService.increment();
 
 		CPMeasurementUnit cpMeasurementUnit =
 			cpMeasurementUnitPersistence.create(cpMeasurementUnitId);
 
-		cpMeasurementUnit.setExternalReferenceCode(externalReferenceCode);
 		cpMeasurementUnit.setGroupId(serviceContext.getScopeGroupId());
 		cpMeasurementUnit.setCompanyId(user.getCompanyId());
 		cpMeasurementUnit.setUserId(user.getUserId());
@@ -220,9 +215,8 @@ public class CPMeasurementUnitLocalServiceImpl
 			cpMeasurementUnitPersistence.findByPrimaryKey(cpMeasurementUnitId);
 
 		validate(
-			cpMeasurementUnit.getExternalReferenceCode(), cpMeasurementUnitId,
-			cpMeasurementUnit.getCompanyId(), cpMeasurementUnit.getKey(),
-			primary, cpMeasurementUnit.getType());
+			cpMeasurementUnitId, cpMeasurementUnit.getCompanyId(),
+			cpMeasurementUnit.getKey(), primary, cpMeasurementUnit.getType());
 
 		cpMeasurementUnit.setPrimary(primary);
 
@@ -244,7 +238,6 @@ public class CPMeasurementUnitLocalServiceImpl
 		}
 
 		validate(
-			cpMeasurementUnit.getExternalReferenceCode(),
 			cpMeasurementUnit.getCPMeasurementUnitId(),
 			serviceContext.getCompanyId(), key, primary, type);
 
@@ -259,8 +252,8 @@ public class CPMeasurementUnitLocalServiceImpl
 	}
 
 	protected void validate(
-			String externalReferenceCode, long cpMeasurementUnitId,
-			long companyId, String key, boolean primary, int type)
+			long cpMeasurementUnitId, long companyId, String key,
+			boolean primary, int type)
 		throws PortalException {
 
 		CPMeasurementUnit cpMeasurementUnit =
@@ -271,17 +264,6 @@ public class CPMeasurementUnitLocalServiceImpl
 				cpMeasurementUnitId)) {
 
 			throw new CPMeasurementUnitKeyException();
-		}
-
-		if (Validator.isNotNull(externalReferenceCode)) {
-			cpMeasurementUnit = cpMeasurementUnitPersistence.fetchByC_ERC(
-				companyId, externalReferenceCode);
-
-			if (cpMeasurementUnit != null) {
-				throw new DuplicateCPMeasurementUnitException(
-					"There is another commerce product measurement unit with " +
-						"external reference code " + externalReferenceCode);
-			}
 		}
 
 		if (primary) {
@@ -316,8 +298,7 @@ public class CPMeasurementUnitLocalServiceImpl
 
 		if (cpMeasurementUnit == null) {
 			cpMeasurementUnitLocalService.addCPMeasurementUnit(
-				null, nameMap, key, rate, primary, priority, type,
-				serviceContext);
+				nameMap, key, rate, primary, priority, type, serviceContext);
 		}
 	}
 

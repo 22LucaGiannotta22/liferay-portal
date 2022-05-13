@@ -17,15 +17,11 @@ declare module 'data-engine-js-components-web' {
 		errorMessage,
 		helpMessage,
 		warningMessage,
-	}: {
-		errorMessage?: string;
-		helpMessage?: string;
-		warningMessage?: string;
-	}): JSX.Element;
-
-	function useFeatureFlag(): {
-		[key in Flags]: boolean;
-	};
+	}: IProps): JSX.Element;
 }
 
-type Flags = 'LPS-144957' | 'LPS-146871' | 'LPS-147651';
+interface IProps {
+	errorMessage?: string;
+	helpMessage?: string;
+	warningMessage?: string;
+}

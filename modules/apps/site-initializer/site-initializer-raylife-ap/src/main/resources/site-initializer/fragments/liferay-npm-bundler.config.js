@@ -11,22 +11,5 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-const config = require('generator-liferay-fragments').getBundlerConfig();
 
-module.exports = {
-	...config,
-
-	webpack: {
-		...config.webpack,
-		module: {
-			...config.webpack.module,
-			rules: [
-				...config.webpack.module.rules,
-				{
-					test: /\.css$/i,
-					use: ['style-loader', 'css-loader'],
-				},
-			],
-		},
-	},
-};
+module.exports = require('generator-liferay-fragments').getBundlerConfig();

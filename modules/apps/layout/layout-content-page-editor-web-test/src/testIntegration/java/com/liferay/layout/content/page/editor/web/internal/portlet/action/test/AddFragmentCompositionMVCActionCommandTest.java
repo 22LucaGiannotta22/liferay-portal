@@ -392,9 +392,9 @@ public class AddFragmentCompositionMVCActionCommandTest {
 
 		Assert.assertEquals(
 			_objectMapper.readTree(
-				expectedFragmentCompositionDataJSONObject.toString()),
+				expectedFragmentCompositionDataJSONObject.toJSONString()),
 			_objectMapper.readTree(
-				fragmentCompositionDataJSONObject.toString()));
+				fragmentCompositionDataJSONObject.toJSONString()));
 	}
 
 	@Test

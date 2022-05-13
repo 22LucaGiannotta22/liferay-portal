@@ -210,6 +210,7 @@ function AssetVocabulariesCategoriesSelector({
 					<ClayInput.GroupItem>
 						<ClayMultiSelect
 							inputName={inputName}
+							inputValue={inputValue}
 							items={selectedItems}
 							onChange={setInputValue}
 							onItemsChange={handleItemsChange}
@@ -227,7 +228,6 @@ function AssetVocabulariesCategoriesSelector({
 									  )
 									: []
 							}
-							value={inputValue}
 						/>
 
 						{invalidItems && invalidItems.length > 0 && (

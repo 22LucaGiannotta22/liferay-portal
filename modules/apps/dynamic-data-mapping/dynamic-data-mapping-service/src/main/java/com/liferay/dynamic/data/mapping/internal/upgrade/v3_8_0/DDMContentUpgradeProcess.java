@@ -190,7 +190,7 @@ public class DDMContentUpgradeProcess extends UpgradeProcess {
 
 		dataJSONObject.put("fieldValues", fieldValuesJSONArray);
 
-		return dataJSONObject.toString();
+		return dataJSONObject.toJSONString();
 	}
 
 	private final DDMFormDeserializer _ddmFormDeserializer;

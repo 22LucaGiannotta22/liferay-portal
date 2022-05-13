@@ -104,11 +104,6 @@ public class AssetAutoTaggerCompanyConfigurationModelListenerTest {
 					return true;
 				}
 
-				@Override
-				public boolean isUpdateAutoTags() {
-					return false;
-				}
-
 			};
 
 		Mockito.doReturn(

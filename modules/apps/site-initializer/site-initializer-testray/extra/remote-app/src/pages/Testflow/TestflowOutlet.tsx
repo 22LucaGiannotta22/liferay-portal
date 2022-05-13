@@ -23,7 +23,7 @@ const TestflowOutlet = () => {
 	const currentPathIsActive = pathname === '/testflow';
 	const archivedPathIsActive = pathname === '/testflow/archived';
 
-	const {setDropdownIcon, setHeading, setTabs} = useHeader({
+	const {setHeading, setTabs} = useHeader({
 		shouldUpdate: currentPathIsActive || archivedPathIsActive,
 		useDropdown: [],
 		useHeading: [
@@ -46,7 +46,7 @@ const TestflowOutlet = () => {
 		],
 	});
 
-	return <Outlet context={{setDropdownIcon, setHeading, setTabs}} />;
+	return <Outlet context={{setHeading, setTabs}} />;
 };
 
 export default TestflowOutlet;

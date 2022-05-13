@@ -16,6 +16,7 @@ package com.liferay.user.service.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -122,9 +123,11 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 	public void setUp() throws Exception {
 		_user = UserTestUtil.addUser();
 
-		ServiceContextThreadLocal.pushServiceContext(
+		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
-				_user.getGroupId(), _user.getUserId()));
+				_user.getGroupId(), _user.getUserId());
+
+		ServiceContextThreadLocal.pushServiceContext(serviceContext);
 	}
 
 	@After

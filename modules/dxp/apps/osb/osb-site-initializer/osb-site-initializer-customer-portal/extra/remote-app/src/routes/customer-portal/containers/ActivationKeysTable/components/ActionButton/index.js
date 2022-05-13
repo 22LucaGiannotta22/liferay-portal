@@ -11,7 +11,6 @@
 
 import {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
-import i18n from '../../../../../../common/I18n';
 import {Button, ButtonDropDown} from '../../../../../../common/components';
 import {useApplicationProvider} from '../../../../../../common/context/AppPropertiesProvider';
 import {ALERT_DOWNLOAD_TYPE} from '../../../../utils/constants';
@@ -35,18 +34,7 @@ const ActionButton = ({
 		(hasSuccessfullyDownloadedKeys) =>
 			setStatus((previousStatus) => ({
 				...previousStatus,
-				downloadAggregated: hasSuccessfullyDownloadedKeys
-					? ALERT_DOWNLOAD_TYPE.success
-					: ALERT_DOWNLOAD_TYPE.danger,
-			})),
-		[setStatus]
-	);
-
-	const handleMultipleAlertStatus = useCallback(
-		(hasSuccessfullyDownloadedKeys) =>
-			setStatus((previousStatus) => ({
-				...previousStatus,
-				downloadMultiple: hasSuccessfullyDownloadedKeys
+				download: hasSuccessfullyDownloadedKeys
 					? ALERT_DOWNLOAD_TYPE.success
 					: ALERT_DOWNLOAD_TYPE.danger,
 			})),
@@ -59,7 +47,6 @@ const ActionButton = ({
 			filterCheckedActivationKeys,
 			licenseKeyDownloadURL,
 			sessionId,
-			handleMultipleAlertStatus,
 			handleAlertStatus,
 			activationKeysByStatusPaginatedChecked,
 			project.name
@@ -68,9 +55,9 @@ const ActionButton = ({
 		return (
 			<ButtonDropDown
 				items={activationKeysDownloadItems}
-				label={i18n.translate('download')}
+				label="Download"
 				menuElementAttrs={{
-					className: 'p-0 cp-drop-down-action-button',
+					className: 'p-0',
 				}}
 			/>
 		);
@@ -90,7 +77,7 @@ const ActionButton = ({
 					)
 				}
 			>
-				{i18n.translate('download')}
+				Download
 			</Button>
 		);
 	}
@@ -111,7 +98,7 @@ const ActionButton = ({
 	return (
 		<ButtonDropDown
 			items={activationKeysActionsItems}
-			label={i18n.translate('actions')}
+			label="Actions"
 			menuElementAttrs={{
 				className: 'p-0',
 			}}

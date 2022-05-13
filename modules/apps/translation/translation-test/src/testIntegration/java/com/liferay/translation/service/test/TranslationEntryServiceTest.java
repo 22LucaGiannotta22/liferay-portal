@@ -111,14 +111,16 @@ public class TranslationEntryServiceTest {
 								InfoItemFieldValuesProvider.class,
 								JournalArticle.class.getName());
 
+				InfoItemFieldValues infoItemFieldValues =
+					infoItemFieldValuesProvider.getInfoItemFieldValues(
+						journalArticle);
+
 				_translationEntry =
 					_translationEntryService.addOrUpdateTranslationEntry(
 						_group.getGroupId(),
 						LocaleUtil.toBCP47LanguageId(
 							LocaleUtil.SIMPLIFIED_CHINESE),
-						infoItemReference,
-						infoItemFieldValuesProvider.getInfoItemFieldValues(
-							journalArticle),
+						infoItemReference, infoItemFieldValues,
 						ServiceContextTestUtil.getServiceContext());
 			});
 	}
@@ -152,13 +154,15 @@ public class TranslationEntryServiceTest {
 								InfoItemFieldValuesProvider.class,
 								JournalArticle.class.getName());
 
+				InfoItemFieldValues infoItemFieldValues =
+					infoItemFieldValuesProvider.getInfoItemFieldValues(
+						journalArticle);
+
 				_translationEntry =
 					_translationEntryService.addOrUpdateTranslationEntry(
 						_group.getGroupId(),
 						LocaleUtil.toLanguageId(LocaleUtil.SPAIN),
-						infoItemReference,
-						infoItemFieldValuesProvider.getInfoItemFieldValues(
-							journalArticle),
+						infoItemReference, infoItemFieldValues,
 						ServiceContextTestUtil.getServiceContext());
 			});
 	}

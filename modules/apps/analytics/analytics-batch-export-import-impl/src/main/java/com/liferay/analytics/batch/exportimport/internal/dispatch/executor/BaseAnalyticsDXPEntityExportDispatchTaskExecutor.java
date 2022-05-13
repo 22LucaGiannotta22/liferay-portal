@@ -45,10 +45,6 @@ public abstract class BaseAnalyticsDXPEntityExportDispatchTaskExecutor
 			DispatchTaskExecutorOutput dispatchTaskExecutorOutput)
 		throws Exception {
 
-		if (!shouldExport(dispatchTrigger.getCompanyId())) {
-			return;
-		}
-
 		DispatchLog dispatchLog =
 			dispatchLogLocalService.fetchLatestDispatchLog(
 				dispatchTrigger.getDispatchTriggerId(),
@@ -76,10 +72,6 @@ public abstract class BaseAnalyticsDXPEntityExportDispatchTaskExecutor
 	}
 
 	protected abstract String getBatchEngineExportTaskItemDelegateName();
-
-	protected boolean shouldExport(long companyId) {
-		return true;
-	}
 
 	@Reference
 	protected AnalyticsBatchExportImportManager

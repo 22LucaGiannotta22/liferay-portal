@@ -105,11 +105,12 @@ public class UADExportProcessManagementToolbarDisplayContext
 					).buildString());
 
 				labelItem.setCloseable(true);
-				labelItem.setLabel(
-					String.format(
-						"%s: %s",
-						LanguageUtil.get(httpServletRequest, "status"),
-						LanguageUtil.get(httpServletRequest, navigation)));
+
+				String label = String.format(
+					"%s: %s", LanguageUtil.get(httpServletRequest, "status"),
+					LanguageUtil.get(httpServletRequest, navigation));
+
+				labelItem.setLabel(label);
 			}
 		).build();
 	}

@@ -109,7 +109,7 @@ public class AMJournalEditorConfigContributorTest {
 			"journalItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -162,7 +162,7 @@ public class AMJournalEditorConfigContributorTest {
 			"journalItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -209,13 +209,15 @@ public class AMJournalEditorConfigContributorTest {
 			_getBlogsItemSelectorCriterionFileEntryItemSelectorReturnType()
 		);
 
+		JSONObject originalJSONObject = JSONUtil.put(
+			"extraPlugins", "ae_placeholder,ae_selectionregion,ae_uicore"
+		).put(
+			"filebrowserImageBrowseLinkUrl",
+			"journalItemSelectorCriterionFileEntryItemSelectorReturnType"
+		);
+
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			JSONUtil.put(
-				"extraPlugins", "ae_placeholder,ae_selectionregion,ae_uicore"
-			).put(
-				"filebrowserImageBrowseLinkUrl",
-				"journalItemSelectorCriterionFileEntryItemSelectorReturnType"
-			).toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -272,7 +274,7 @@ public class AMJournalEditorConfigContributorTest {
 			"allowedContent", "a[*](*); div(*);");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -285,7 +287,7 @@ public class AMJournalEditorConfigContributorTest {
 			"allowedContent", "a[*](*); div(*); img[*](*){*};");
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -293,7 +295,7 @@ public class AMJournalEditorConfigContributorTest {
 		JSONObject originalJSONObject = JSONFactoryUtil.createJSONObject();
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -305,7 +307,7 @@ public class AMJournalEditorConfigContributorTest {
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject();
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -315,7 +317,7 @@ public class AMJournalEditorConfigContributorTest {
 		JSONObject originalJSONObject = JSONUtil.put("allowedContent", true);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -327,7 +329,7 @@ public class AMJournalEditorConfigContributorTest {
 		JSONObject expectedJSONObject = JSONUtil.put("allowedContent", true);
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -338,7 +340,7 @@ public class AMJournalEditorConfigContributorTest {
 			"filebrowserImageBrowseLinkUrl", StringPool.BLANK);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -358,10 +360,10 @@ public class AMJournalEditorConfigContributorTest {
 		);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -380,7 +382,7 @@ public class AMJournalEditorConfigContributorTest {
 			"audioItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -400,10 +402,10 @@ public class AMJournalEditorConfigContributorTest {
 		);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -444,7 +446,7 @@ public class AMJournalEditorConfigContributorTest {
 			"journalItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();
@@ -502,7 +504,7 @@ public class AMJournalEditorConfigContributorTest {
 			"fileItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
 			new AMJournalEditorConfigContributor();

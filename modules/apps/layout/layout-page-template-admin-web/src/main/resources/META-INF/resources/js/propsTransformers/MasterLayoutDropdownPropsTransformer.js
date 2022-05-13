@@ -18,20 +18,19 @@ import {
 	openSimpleInputModal,
 } from 'frontend-js-web';
 
-import openDeletePageTemplateModal from '../modal/openDeletePageTemplateModal';
-
 const ACTIONS = {
 	copyMasterLayout({copyMasterLayoutURL}) {
 		send(copyMasterLayoutURL);
 	},
 
 	deleteMasterLayout({deleteMasterLayoutURL}) {
-		openDeletePageTemplateModal({
-			onDelete: () => {
-				send(deleteMasterLayoutURL);
-			},
-			title: Liferay.Language.get('master'),
-		});
+		if (
+			confirm(
+				Liferay.Language.get('are-you-sure-you-want-to-delete-this')
+			)
+		) {
+			send(deleteMasterLayoutURL);
+		}
 	},
 
 	deleteMasterLayoutPreview({deleteMasterLayoutPreviewURL}) {

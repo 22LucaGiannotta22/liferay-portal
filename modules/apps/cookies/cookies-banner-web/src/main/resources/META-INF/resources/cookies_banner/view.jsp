@@ -18,7 +18,6 @@
 
 <%
 CookiesBannerDisplayContext cookiesBannerDisplayContext = (CookiesBannerDisplayContext)request.getAttribute(CookiesBannerWebKeys.COOKIES_BANNER_DISPLAY_CONTEXT);
-CookiesManager cookiesManager = (CookiesManager)request.getAttribute(CookiesBannerWebKeys.COOKIES_MANAGER);
 %>
 
 <clay:container-fluid
@@ -32,7 +31,7 @@ CookiesManager cookiesManager = (CookiesManager)request.getAttribute(CookiesBann
 			<clay:content-col
 				expand="<%= true %>"
 			>
-				<span><liferay-ui:message key="cookies-banner-message" /></span>
+				<span><%= LanguageUtil.get(request, "cookies-banner-message") %></span>
 			</clay:content-col>
 
 			<clay:content-col>
@@ -55,7 +54,7 @@ CookiesManager cookiesManager = (CookiesManager)request.getAttribute(CookiesBann
 
 			<clay:content-col>
 				<clay:button
-					displayType="secondary"
+					displayType="primary"
 					id='<%= liferayPortletResponse.getNamespace() + "declineAllButton" %>'
 					label='<%= LanguageUtil.get(request, "decline-all") %>'
 					small="<%= true %>"
@@ -71,9 +70,9 @@ CookiesManager cookiesManager = (CookiesManager)request.getAttribute(CookiesBann
 		HashMapBuilder.<String, Object>put(
 			"configurationUrl", cookiesBannerDisplayContext.getConfigurationURL()
 		).put(
-			"optionalCookieNames", cookiesManager.getOptionalCookieNames()
+			"optionalCookies", cookiesBannerDisplayContext.getOptionalCookies()
 		).put(
-			"requiredCookieNames", cookiesManager.getRequiredCookieNames()
+			"requiredCookies", cookiesBannerDisplayContext.getRequiredCookies()
 		).build()
 	%>'
 	module="cookies_banner/js/CookiesBanner"

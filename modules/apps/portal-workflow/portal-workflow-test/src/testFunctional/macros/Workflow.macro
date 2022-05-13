@@ -136,7 +136,6 @@ definition {
 		Pause(locator1 = "1000");
 
 		Workflow.viewCompletedTask(
-			completedTask = "${completedTask}",
 			ddlDataDefinitionName = "${ddlDataDefinitionName}",
 			multipleTasks = "${multipleTasks}",
 			taskPosition = "${taskPosition}",
@@ -1250,17 +1249,6 @@ definition {
 		AssertElementPresent(locator1 = "MyWorkflowTasks#ASSIGNED_TO_ME_TABLE_LAST_ACTIVITY_DATE");
 
 		AssertElementPresent(locator1 = "MyWorkflowTasks#ASSIGNED_TO_ME_TABLE_DUE_DATE");
-
-		if ("${completedTask}" == "viewDetails") {
-			AssertClick(
-				key_workflowAssetTitle = "${workflowAssetTitle}",
-				locator1 = "MyWorkflowTasks#COMPLETED_TABLE_ASSET_TITLE",
-				value1 = "${workflowAssetTitle}");
-
-			AssertTextEquals.assertPartialText(
-				locator1 = "MyWorkflowTasksTask#PREVIEW_TITLE",
-				value1 = "${workflowAssetTitle}");
-		}
 	}
 
 	macro viewCompletedTasksTaskNotPresentCP {

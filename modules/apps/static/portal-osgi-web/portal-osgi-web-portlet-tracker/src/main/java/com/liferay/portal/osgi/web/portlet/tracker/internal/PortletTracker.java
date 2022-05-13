@@ -415,10 +415,12 @@ public class PortletTracker
 						"com.liferay.portlet.company"));
 
 			portletModel.setPortletName(portletName);
-			portletModel.setDisplayName(
-				GetterUtil.getString(
-					serviceReference.getProperty("javax.portlet.display-name"),
-					portletName));
+
+			String displayName = GetterUtil.getString(
+				serviceReference.getProperty("javax.portlet.display-name"),
+				portletName);
+
+			portletModel.setDisplayName(displayName);
 
 			Class<?> portletClazz = portlet.getClass();
 
@@ -530,9 +532,10 @@ public class PortletTracker
 		ServiceReference<Portlet> serviceReference,
 		com.liferay.portal.kernel.model.Portlet portletModel) {
 
-		portletModel.setAsyncSupported(
-			GetterUtil.getBoolean(
-				serviceReference.getProperty("javax.portlet.async-supported")));
+		boolean asyncSupported = GetterUtil.getBoolean(
+			serviceReference.getProperty("javax.portlet.async-supported"));
+
+		portletModel.setAsyncSupported(asyncSupported);
 	}
 
 	private void _collectContainerRuntimeOptions(
@@ -709,10 +712,13 @@ public class PortletTracker
 		portletModel.setAjaxable(
 			GetterUtil.getBoolean(
 				get(serviceReference, "ajaxable"), portletModel.isAjaxable()));
-		portletModel.setAutopropagatedParameters(
-			SetUtil.fromCollection(
-				StringPlus.asList(
-					get(serviceReference, "autopropagated-parameters"))));
+
+		Set<String> autopropagatedParameters = SetUtil.fromCollection(
+			StringPlus.asList(
+				get(serviceReference, "autopropagated-parameters")));
+
+		portletModel.setAutopropagatedParameters(autopropagatedParameters);
+
 		portletModel.setControlPanelEntryWeight(
 			GetterUtil.getDouble(
 				get(serviceReference, "control-panel-entry-weight"),

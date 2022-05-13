@@ -1093,10 +1093,11 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 
 					StringBuilder sb = new StringBuilder();
 
-					sb.append(
-						FileUtil.getJavaClassesDir(
-							GradleUtil.getSourceSet(
-								project, SourceSet.MAIN_SOURCE_SET_NAME)));
+					SourceSet sourceSet = GradleUtil.getSourceSet(
+						project, SourceSet.MAIN_SOURCE_SET_NAME);
+
+					sb.append(FileUtil.getJavaClassesDir(sourceSet));
+
 					sb.append("/META-INF/maven/");
 					sb.append(groupId);
 					sb.append('/');
@@ -1116,10 +1117,13 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 								String compileOnlyConfigurationName =
 									JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME;
 
+								Configuration configuration =
+									GradleUtil.getConfiguration(
+										project, compileOnlyConfigurationName);
+
 								conf2ScopeMappingContainer.addMapping(
 									MavenPlugin.PROVIDED_COMPILE_PRIORITY,
-									GradleUtil.getConfiguration(
-										project, compileOnlyConfigurationName),
+									configuration,
 									Conf2ScopeMappingContainer.PROVIDED);
 
 								mavenPom.setArtifactId(artifactId);
@@ -2954,12 +2958,15 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 		Map<Configuration, Conf2ScopeMapping> mappings =
 			conf2ScopeMappingContainer.getMappings();
 
-		mappings.remove(
-			GradleUtil.getConfiguration(
-				project, JavaPlugin.TEST_COMPILE_CONFIGURATION_NAME));
-		mappings.remove(
-			GradleUtil.getConfiguration(
-				project, JavaPlugin.TEST_RUNTIME_CONFIGURATION_NAME));
+		Configuration configuration = GradleUtil.getConfiguration(
+			project, JavaPlugin.TEST_COMPILE_CONFIGURATION_NAME);
+
+		mappings.remove(configuration);
+
+		configuration = GradleUtil.getConfiguration(
+			project, JavaPlugin.TEST_RUNTIME_CONFIGURATION_NAME);
+
+		mappings.remove(configuration);
 	}
 
 	private void _configurePmd(Project project) {
@@ -3151,11 +3158,10 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 					String versionOverrideRelativePath = project.relativePath(
 						versionOverrideFile);
 
-					if (Validator.isNotNull(
-							GitUtil.getGitResult(
-								project, "ls-files",
-								versionOverrideRelativePath))) {
+					String gitResult = GitUtil.getGitResult(
+						project, "ls-files", versionOverrideRelativePath);
 
+					if (Validator.isNotNull(gitResult)) {
 						addVersionOverrideFile = true;
 					}
 

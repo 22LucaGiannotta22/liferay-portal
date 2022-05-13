@@ -14,14 +14,18 @@
 
 package com.liferay.search.experiences.internal.upgrade;
 
+import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
-import com.liferay.search.experiences.internal.upgrade.v1_1_0.SXPBlueprintUpgradeProcess;
-import com.liferay.search.experiences.internal.upgrade.v1_1_0.SXPElementUpgradeProcess;
+import com.liferay.search.experiences.internal.model.listener.CompanyModelListener;
+import com.liferay.search.experiences.internal.search.SXPElementSearchRegistrar;
+import com.liferay.search.experiences.internal.upgrade.v1_0_0.SXPElementUpgradeProcess;
+import com.liferay.search.experiences.service.SXPElementLocalService;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Petteri Karttunen
+ * @author Shuyang Zhou
  */
 @Component(
 	enabled = true, immediate = true, service = UpgradeStepRegistrator.class
@@ -30,9 +34,22 @@ public class SXPUpgradeStepRegistrator implements UpgradeStepRegistrator {
 
 	@Override
 	public void register(Registry registry) {
-		registry.register(
-			"1.0.0", "1.1.0", new SXPElementUpgradeProcess(),
-			new SXPBlueprintUpgradeProcess());
+		registry.registerInitialUpgradeSteps(
+			new SXPElementUpgradeProcess(
+				_companyLocalService, _companyModelListener,
+				_sxpElementLocalService));
 	}
+
+	@Reference
+	private CompanyLocalService _companyLocalService;
+
+	@Reference
+	private CompanyModelListener _companyModelListener;
+
+	@Reference
+	private SXPElementLocalService _sxpElementLocalService;
+
+	@Reference
+	private SXPElementSearchRegistrar _sxpElementSearchRegistrar;
 
 }

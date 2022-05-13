@@ -1,21 +1,9 @@
 definition {
 
-	macro assertCreatedRoutine {
-		AssertElementPresent(
-			key_projectName = "${key_name}",
-			locator1 = "Testray#PROJECT_NAME_BUTTON");
-	}
-
 	macro assertItemsPerPageValue {
 		AssertElementPresent(
 			key_value = "${itemValue}",
 			locator1 = "Testray#ITEMS_PER_PAGE_VALUE_BUTTON");
-	}
-
-	macro assertNameTitle {
-		AssertElementPresent(
-			key_title = "${key_name}",
-			locator1 = "Testray#NAME_TITLE");
 	}
 
 	macro assertPageNumber {
@@ -105,11 +93,11 @@ definition {
 
 		Type(
 			locator1 = "TestrayTestflow#ADD_BUILD_TASKS",
-			value1 = "43015");
+			value1 = "41100");
 
 		Type(
 			locator1 = "ObjectPortlet#VIEW_EMPTY_LABEL_IN_DATE_ENTRY",
-			value1 = "04/01/2022");
+			value1 = "01/04/2022");
 
 		Click(locator1 = "Button#SAVE");
 	}
@@ -145,12 +133,6 @@ definition {
 			locator1 = "Testray#PROJECT_NAME_BUTTON");
 	}
 
-	macro goToRoutine {
-		Click(
-			key_projectName = "${key_name}",
-			locator1 = "Testray#PROJECT_NAME_BUTTON");
-	}
-
 	macro goToTestflow {
 		Click(locator1 = "Testray#TESTFLOW_SIDEBAR");
 	}
@@ -165,23 +147,6 @@ definition {
 		Click(locator1 = "TestrayUser#USER_ICON_SIDEBAR");
 
 		Click(locator1 = "TestrayUser#SIGN_OUT");
-	}
-
-	macro statusChangeTestray {
-		ApplicationsMenu.gotoPortlet(
-			category = "Object",
-			panel = "Control Panel",
-			portlet = "Testray Tasks");
-
-		Click(locator1 = "CommerceEntry#DROPDOWN");
-
-		MenuItem.click(menuItem = "View");
-
-		Type(
-			locator1 = "TestrayTestflow#STATUS_EDIT",
-			value1 = "${value}");
-
-		Click(locator1 = "Button#SAVE");
 	}
 
 	macro tearDownCP {
@@ -200,15 +165,9 @@ definition {
 
 		MenuItem.clickNoError(menuItem = "Delete");
 
-		Click(locator1 = "Button#MODAL_DELETE");
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
-	}
-
-	macro viewOverviewTab {
-		AssertElementPresent(
-			key_rowValue = "${rowValue}",
-			locator1 = "Testray#OVERVIEW_LAYOUT_VALUES");
 	}
 
 }

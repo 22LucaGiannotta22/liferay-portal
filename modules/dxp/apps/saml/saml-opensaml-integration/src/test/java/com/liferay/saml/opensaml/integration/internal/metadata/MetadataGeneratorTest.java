@@ -16,7 +16,6 @@ package com.liferay.saml.opensaml.integration.internal.metadata;
 
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.saml.opensaml.integration.internal.BaseSamlTestCase;
 import com.liferay.saml.opensaml.integration.internal.bootstrap.SecurityConfigurationBootstrap;
 
@@ -27,24 +26,23 @@ import java.util.stream.Stream;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.opensaml.core.xml.ElementExtensibleXMLObject;
 import org.opensaml.saml.ext.saml2alg.SigningMethod;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.RoleDescriptor;
 
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import org.springframework.mock.web.MockHttpServletRequest;
+
 /**
  * @author Mika Koivisto
  */
+@RunWith(PowerMockRunner.class)
 public class MetadataGeneratorTest extends BaseSamlTestCase {
-
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
 
 	@Before
 	@Override
@@ -56,10 +54,12 @@ public class MetadataGeneratorTest extends BaseSamlTestCase {
 	public void testMetadataGenerator() throws Exception {
 		prepareServiceProvider(SP_ENTITY_ID);
 
+		MockHttpServletRequest mockHttpServletRequest =
+			getMockHttpServletRequest(
+				"http://localhost:8080/c/portal/saml/metadata");
+
 		Assert.assertNotNull(
-			metadataManagerImpl.getEntityDescriptor(
-				getMockHttpServletRequest(
-					"http://localhost:8080/c/portal/saml/metadata")));
+			metadataManagerImpl.getEntityDescriptor(mockHttpServletRequest));
 	}
 
 	@Test
@@ -68,10 +68,12 @@ public class MetadataGeneratorTest extends BaseSamlTestCase {
 
 		prepareServiceProvider(SP_ENTITY_ID);
 
+		MockHttpServletRequest mockHttpServletRequest =
+			getMockHttpServletRequest(
+				"http://localhost:8080/c/portal/saml/metadata");
+
 		EntityDescriptor entityDescriptor =
-			metadataManagerImpl.getEntityDescriptor(
-				getMockHttpServletRequest(
-					"http://localhost:8080/c/portal/saml/metadata"));
+			metadataManagerImpl.getEntityDescriptor(mockHttpServletRequest);
 
 		List<RoleDescriptor> roleDescriptors =
 			entityDescriptor.getRoleDescriptors();
@@ -112,10 +114,12 @@ public class MetadataGeneratorTest extends BaseSamlTestCase {
 				}
 			).build());
 
+		MockHttpServletRequest mockHttpServletRequest =
+			getMockHttpServletRequest(
+				"http://localhost:8080/c/portal/saml/metadata");
+
 		EntityDescriptor entityDescriptor =
-			metadataManagerImpl.getEntityDescriptor(
-				getMockHttpServletRequest(
-					"http://localhost:8080/c/portal/saml/metadata"));
+			metadataManagerImpl.getEntityDescriptor(mockHttpServletRequest);
 
 		List<RoleDescriptor> roleDescriptors =
 			entityDescriptor.getRoleDescriptors();

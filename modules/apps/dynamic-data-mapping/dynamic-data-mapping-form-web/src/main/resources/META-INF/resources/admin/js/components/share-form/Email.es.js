@@ -78,6 +78,7 @@ const Email = ({
 									closeButtonAriaLabel={Liferay.Language.get(
 										'remove'
 									)}
+									inputValue={multiSelectValue}
 									items={addresses}
 									onChange={setMultiSelectValue}
 									onClearAllButtonClick={() => {
@@ -117,7 +118,6 @@ const Email = ({
 											  )
 											: []
 									}
-									value={multiSelectValue}
 								/>
 								<ClayForm.FeedbackGroup>
 									<ClayForm.Text>

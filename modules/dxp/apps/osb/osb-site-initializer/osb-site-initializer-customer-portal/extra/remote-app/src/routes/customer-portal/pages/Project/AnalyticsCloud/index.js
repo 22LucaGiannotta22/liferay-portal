@@ -14,12 +14,10 @@ import client from '../../../../../apolloClient';
 import {Liferay} from '../../../../../common/services/liferay';
 import {getAnalyticsCloudWorkspace} from '../../../../../common/services/liferay/graphql/queries';
 import ActivationStatus from '../../../components/ActivationStatus/index';
-import {useCustomerPortal} from '../../../context';
 import {PRODUCT_TYPES} from '../../../utils/constants';
 
-const AnalyticsCloud = () => {
+const AnalyticsCloud = ({project, subscriptionGroups, userAccount}) => {
 	const [analyticsCloudWorkspace, setAnalyticsCloudWorkspace] = useState();
-	const [{project, subscriptionGroups, userAccount}] = useCustomerPortal();
 
 	useEffect(() => {
 		const getAnalyticsCloudData = async () => {

@@ -327,27 +327,13 @@ public class LocaleUtil {
 		return _locale;
 	}
 
-	private String _getDisplayCountry(Locale displayLocale, Locale locale) {
-		String country = displayLocale.getDisplayCountry(locale);
-		String variant = displayLocale.getDisplayVariant(locale);
-
-		if (Validator.isNull(variant)) {
-			return country;
-		}
-
-		return StringUtil.merge(
-			new String[] {country, variant}, StringPool.COMMA_AND_SPACE);
-	}
-
 	private String _getDisplayName(
 		String language, String country, Locale locale,
 		Set<String> duplicateLanguages) {
 
 		String displayName = null;
 
-		if (duplicateLanguages.contains(locale.getLanguage()) &&
-			Validator.isNotNull(country)) {
-
+		if (duplicateLanguages.contains(locale.getLanguage())) {
 			displayName = StringUtil.appendParentheticalSuffix(
 				language, country);
 		}
@@ -385,23 +371,16 @@ public class LocaleUtil {
 			return displayLocale.getDisplayName(locale);
 		}
 
-		String country = _getDisplayCountry(displayLocale, locale);
-
-		if (Validator.isNull(country)) {
-			return displayName;
-		}
-
 		return StringBundler.concat(
-			displayName, StringPool.SPACE, StringPool.OPEN_PARENTHESIS, country,
-			StringPool.CLOSE_PARENTHESIS);
+			displayName, " (", displayLocale.getDisplayCountry(locale), ")");
 	}
 
 	private String _getLongDisplayName(
 		Locale locale, Set<String> duplicateLanguages) {
 
 		return _getDisplayName(
-			locale.getDisplayLanguage(locale),
-			_getDisplayCountry(locale, locale), locale, duplicateLanguages);
+			locale.getDisplayLanguage(locale), locale.getDisplayCountry(locale),
+			locale, duplicateLanguages);
 	}
 
 	private Locale _getMostRelevantLocale() {

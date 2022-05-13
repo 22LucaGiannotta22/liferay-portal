@@ -87,7 +87,7 @@ public class CPDefinitionLocalServiceUtil {
 			int deliverySubscriptionLength, String deliverySubscriptionType,
 			com.liferay.portal.kernel.util.UnicodeProperties
 				deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles, int status,
+			long deliveryMaxSubscriptionCycles,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
@@ -106,7 +106,7 @@ public class CPDefinitionLocalServiceUtil {
 			maxSubscriptionCycles, deliverySubscriptionEnabled,
 			deliverySubscriptionLength, deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
-			deliveryMaxSubscriptionCycles, status, serviceContext);
+			deliveryMaxSubscriptionCycles, serviceContext);
 	}
 
 	public static CPDefinition addCPDefinition(
@@ -132,7 +132,7 @@ public class CPDefinitionLocalServiceUtil {
 			int subscriptionLength, String subscriptionType,
 			com.liferay.portal.kernel.util.UnicodeProperties
 				subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, int status,
+			long maxSubscriptionCycles,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
@@ -148,7 +148,7 @@ public class CPDefinitionLocalServiceUtil {
 			expirationDateYear, expirationDateHour, expirationDateMinute,
 			neverExpire, defaultSku, subscriptionEnabled, subscriptionLength,
 			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
-			maxSubscriptionCycles, status, serviceContext);
+			maxSubscriptionCycles, serviceContext);
 	}
 
 	public static CPDefinition addOrUpdateCPDefinition(
@@ -178,7 +178,7 @@ public class CPDefinitionLocalServiceUtil {
 			int deliverySubscriptionLength, String deliverySubscriptionType,
 			com.liferay.portal.kernel.util.UnicodeProperties
 				deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles, int status,
+			long deliveryMaxSubscriptionCycles,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
@@ -197,7 +197,7 @@ public class CPDefinitionLocalServiceUtil {
 			maxSubscriptionCycles, deliverySubscriptionEnabled,
 			deliverySubscriptionLength, deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
-			deliveryMaxSubscriptionCycles, status, serviceContext);
+			deliveryMaxSubscriptionCycles, serviceContext);
 	}
 
 	public static CPDefinition addOrUpdateCPDefinition(
@@ -223,7 +223,7 @@ public class CPDefinitionLocalServiceUtil {
 			int subscriptionLength, String subscriptionType,
 			com.liferay.portal.kernel.util.UnicodeProperties
 				subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, int status,
+			long maxSubscriptionCycles,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
@@ -239,7 +239,7 @@ public class CPDefinitionLocalServiceUtil {
 			expirationDateYear, expirationDateHour, expirationDateMinute,
 			neverExpire, defaultSku, subscriptionEnabled, subscriptionLength,
 			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
-			maxSubscriptionCycles, status, serviceContext);
+			maxSubscriptionCycles, serviceContext);
 	}
 
 	public static void checkCPDefinitions() throws PortalException {

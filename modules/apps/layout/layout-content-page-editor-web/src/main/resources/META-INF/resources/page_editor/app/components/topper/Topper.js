@@ -30,14 +30,9 @@ import {
 	useSelectItem,
 } from '../../contexts/ControlsContext';
 import {useEditableProcessorUniqueId} from '../../contexts/EditableProcessorContext';
-import {
-	useDispatch,
-	useSelector,
-	useSelectorCallback,
-} from '../../contexts/StoreContext';
+import {useDispatch, useSelector} from '../../contexts/StoreContext';
 import selectCanUpdateItemConfiguration from '../../selectors/selectCanUpdateItemConfiguration';
 import selectCanUpdatePageStructure from '../../selectors/selectCanUpdatePageStructure';
-import selectLayoutDataItemLabel from '../../selectors/selectLayoutDataItemLabel';
 import selectSegmentsExperienceId from '../../selectors/selectSegmentsExperienceId';
 import moveItem from '../../thunks/moveItem';
 import {TARGET_POSITIONS} from '../../utils/drag-and-drop/constants/targetPositions';
@@ -45,6 +40,7 @@ import {
 	useDragItem,
 	useDropTarget,
 } from '../../utils/drag-and-drop/useDragAndDrop';
+import getLayoutDataItemLabel from '../../utils/getLayoutDataItemLabel';
 import {useId} from '../../utils/useId';
 import {fromControlsId} from '../layout-data-items/Collection';
 import TopperItemActions from './TopperItemActions';
@@ -52,8 +48,7 @@ import {TopperLabel} from './TopperLabel';
 
 function isItemHighlighted(item, layoutData, targetItemId, targetPosition) {
 	if (
-		(item.type === LAYOUT_DATA_ITEM_TYPES.container ||
-			item.type === LAYOUT_DATA_ITEM_TYPES.form) &&
+		item.type === LAYOUT_DATA_ITEM_TYPES.container &&
 		item.itemId === targetItemId &&
 		targetPosition === TARGET_POSITIONS.MIDDLE
 	) {
@@ -79,12 +74,7 @@ function isItemHighlighted(item, layoutData, targetItemId, targetPosition) {
 
 const MemoizedTopperContent = React.memo(TopperContent);
 
-export default function Topper({
-	children,
-	isDropTarget = true,
-	item,
-	...props
-}) {
+export default function Topper({children, item, ...props}) {
 	const canUpdatePageStructure = useSelector(selectCanUpdatePageStructure);
 	const canUpdateItemConfiguration = useSelector(
 		selectCanUpdateItemConfiguration
@@ -96,7 +86,6 @@ export default function Topper({
 		return (
 			<MemoizedTopperContent
 				isActive={isActive(item.itemId)}
-				isDropTarget={isDropTarget}
 				isHovered={isHovered(item.itemId)}
 				item={item}
 				{...props}
@@ -113,7 +102,6 @@ function TopperContent({
 	children,
 	className,
 	isActive,
-	isDropTarget,
 	isHovered,
 	item,
 	itemElement,
@@ -123,6 +111,7 @@ function TopperContent({
 	const commentsPanelId = config.sidebarPanels?.comments?.sidebarPanelId;
 	const dispatch = useDispatch();
 	const editableProcessorUniqueId = useEditableProcessorUniqueId();
+	const fragmentEntryLinks = useSelector((state) => state.fragmentEntryLinks);
 	const layoutData = useSelector((state) => state.layoutData);
 	const hoverItem = useHoverItem();
 	const {
@@ -142,10 +131,9 @@ function TopperContent({
 
 	const canBeDragged = canUpdatePageStructure && !editableProcessorUniqueId;
 
-	const name = useSelectorCallback(
-		(state) => selectLayoutDataItemLabel(state, item),
-		[item]
-	);
+	const name =
+		getLayoutDataItemLabel(item, fragmentEntryLinks) ||
+		Liferay.Language.get('element');
 
 	const onDragEnd = (parentItemId, position) =>
 		dispatch(
@@ -180,9 +168,7 @@ function TopperContent({
 				'drag-over-left':
 					isOverTarget && targetPosition === TARGET_POSITIONS.LEFT,
 				'drag-over-middle':
-					isDropTarget &&
-					isOverTarget &&
-					targetPosition === TARGET_POSITIONS.MIDDLE,
+					isOverTarget && targetPosition === TARGET_POSITIONS.MIDDLE,
 				'drag-over-right':
 					isOverTarget && targetPosition === TARGET_POSITIONS.RIGHT,
 				'drag-over-top':
@@ -280,10 +266,7 @@ function TopperContent({
 				</TopperLabel>
 			) : null}
 
-			<div
-				className="page-editor__topper__content"
-				ref={isDropTarget ? targetRef : null}
-			>
+			<div className="page-editor__topper__content" ref={targetRef}>
 				<TopperErrorBoundary>
 					{React.cloneElement(children, {
 						withinTopper: true,

@@ -821,6 +821,7 @@ const ManageCollaborators = ({
 								<ClayMultiSelect
 									filter={multiSelectFilter}
 									inputName={`${namespace}userEmailAddress`}
+									inputValue={multiSelectValue}
 									items={[]}
 									menuRenderer={SharingAutocomplete}
 									onChange={handleChange}
@@ -849,7 +850,6 @@ const ManageCollaborators = ({
 											: []
 									}
 									spritemap={spritemap}
-									value={multiSelectValue}
 								/>
 							</ClayInput.GroupItem>
 

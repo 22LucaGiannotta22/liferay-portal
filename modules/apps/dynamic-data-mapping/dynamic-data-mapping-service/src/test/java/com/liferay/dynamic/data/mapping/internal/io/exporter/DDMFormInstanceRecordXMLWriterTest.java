@@ -24,33 +24,31 @@ import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReader;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.mockito.InOrder;
 import org.mockito.Matchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Leonardo Barros
  */
-public class DDMFormInstanceRecordXMLWriterTest {
+@RunWith(PowerMockRunner.class)
+public class DDMFormInstanceRecordXMLWriterTest extends PowerMockito {
 
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
-
-	@BeforeClass
-	public static void setUpClass() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		_setUpPropsUtil();
 		_setUpSAXReaderUtil();
 	}
@@ -60,27 +58,27 @@ public class DDMFormInstanceRecordXMLWriterTest {
 		DDMFormInstanceRecordXMLWriter ddmFormInstanceRecordXMLWriter =
 			new DDMFormInstanceRecordXMLWriter();
 
-		Element element = Mockito.mock(Element.class);
+		Element element = mock(Element.class);
 
-		Element fieldElement = Mockito.mock(Element.class);
+		Element fieldElement = mock(Element.class);
 
-		Element labelElement = Mockito.mock(Element.class);
+		Element labelElement = mock(Element.class);
 
-		Element valueElement = Mockito.mock(Element.class);
+		Element valueElement = mock(Element.class);
 
-		Mockito.when(
+		when(
 			element.addElement("field")
 		).thenReturn(
 			fieldElement
 		);
 
-		Mockito.when(
+		when(
 			fieldElement.addElement("label")
 		).thenReturn(
 			labelElement
 		);
 
-		Mockito.when(
+		when(
 			fieldElement.addElement("value")
 		).thenReturn(
 			valueElement
@@ -121,10 +119,10 @@ public class DDMFormInstanceRecordXMLWriterTest {
 
 	@Test
 	public void testAddFieldElements() {
-		DDMFormInstanceRecordXMLWriter ddmFormInstanceRecordXMLWriter =
-			Mockito.mock(DDMFormInstanceRecordXMLWriter.class);
+		DDMFormInstanceRecordXMLWriter ddmFormInstanceRecordXMLWriter = mock(
+			DDMFormInstanceRecordXMLWriter.class);
 
-		Element element = Mockito.mock(Element.class);
+		Element element = mock(Element.class);
 
 		Map<String, String> ddmFormFieldsLabel = LinkedHashMapBuilder.put(
 			"field1", "Field 1"
@@ -173,8 +171,8 @@ public class DDMFormInstanceRecordXMLWriterTest {
 
 	@Test
 	public void testWrite() throws Exception {
-		DDMFormInstanceRecordXMLWriter ddmFormInstanceRecordXMLWriter =
-			Mockito.mock(DDMFormInstanceRecordXMLWriter.class);
+		DDMFormInstanceRecordXMLWriter ddmFormInstanceRecordXMLWriter = mock(
+			DDMFormInstanceRecordXMLWriter.class);
 
 		Map<String, String> ddmFormFieldsLabel = LinkedHashMapBuilder.put(
 			"field1", "Field 1"
@@ -217,23 +215,23 @@ public class DDMFormInstanceRecordXMLWriterTest {
 			DDMFormInstanceRecordWriterRequest.Builder.newBuilder(
 				ddmFormFieldsLabel, ddmFormFieldValues);
 
-		Document document = Mockito.mock(Document.class);
+		Document document = mock(Document.class);
 
-		Mockito.when(
+		when(
 			_saxReader.createDocument()
 		).thenReturn(
 			document
 		);
 
-		Element rootElement = Mockito.mock(Element.class);
+		Element rootElement = mock(Element.class);
 
-		Mockito.when(
+		when(
 			document.addElement("root")
 		).thenReturn(
 			rootElement
 		);
 
-		Mockito.when(
+		when(
 			document.asXML()
 		).thenReturn(
 			StringPool.BLANK
@@ -249,7 +247,7 @@ public class DDMFormInstanceRecordXMLWriterTest {
 		DDMFormInstanceRecordWriterRequest ddmFormInstanceRecordWriterRequest =
 			builder.build();
 
-		Mockito.when(
+		when(
 			ddmFormInstanceRecordXMLWriter.write(
 				ddmFormInstanceRecordWriterRequest)
 		).thenCallRealMethod();
@@ -297,17 +295,18 @@ public class DDMFormInstanceRecordXMLWriterTest {
 		).asXML();
 	}
 
-	private static void _setUpPropsUtil() {
+	private void _setUpPropsUtil() {
 		PropsTestUtil.setProps(
 			PropsKeys.XML_SECURITY_ENABLED, Boolean.TRUE.toString());
 	}
 
-	private static void _setUpSAXReaderUtil() {
+	private void _setUpSAXReaderUtil() {
 		SAXReaderUtil saxReaderUtil = new SAXReaderUtil();
 
 		saxReaderUtil.setSAXReader(_saxReader);
 	}
 
-	private static final SAXReader _saxReader = Mockito.mock(SAXReader.class);
+	@Mock
+	private SAXReader _saxReader;
 
 }

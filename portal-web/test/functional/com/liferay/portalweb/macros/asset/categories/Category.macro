@@ -226,21 +226,19 @@ definition {
 	}
 
 	macro deleteByIconCP {
+		var key_categoryName = "${categoryName}";
+
 		Navigator.gotoNavNested(navNested = "${vocabularyName}");
+
+		AssertTextEquals(
+			locator1 = "Categories#VOCABULARY_CATEGORY",
+			value1 = "${categoryName}");
 
 		PortletEntry.selectAll();
 
-		Click(
-			key_text = "trash",
-			locator1 = "ManagementBar#ANY_ICON");
+		ClickNoError(locator1 = "Icon#DELETE");
 
-		AssertTextEquals(
-			locator1 = "Modal#BODY",
-			value1 = "Are you sure you want to delete this? It will be deleted immediately.");
-
-		Click(
-			key_text = "Delete",
-			locator1 = "Modal#MODAL_FOOTER_BUTTON");
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 
@@ -254,17 +252,9 @@ definition {
 
 		PortletEntry.selectAll();
 
-		Click(
-			key_text = "trash",
-			locator1 = "ManagementBar#ANY_ICON");
+		ClickNoError(locator1 = "Icon#DELETE");
 
-		AssertTextEquals(
-			locator1 = "Modal#BODY",
-			value1 = "Are you sure you want to delete this? It will be deleted immediately.");
-
-		Click(
-			key_text = "Delete",
-			locator1 = "Modal#MODAL_FOOTER_BUTTON");
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 
@@ -274,17 +264,11 @@ definition {
 	macro deleteCategoryByMenuCP {
 		Navigator.gotoNavNested(navNested = "${vocabularyName}");
 
-		LexiconEntry.gotoEntryMenuItem(
+		LexiconEntry.gotoEntryMenuItemNoError(
 			menuItem = "Delete",
 			rowEntry = "${categoryName}");
 
-		AssertTextEquals(
-			locator1 = "Modal#BODY",
-			value1 = "This category might be being used in some contents. If you delete it, this category and all of its subcategories will also be deleted and removed from those contents. Do you want to continue deleting this category?");
-
-		Click(
-			key_text = "Delete",
-			locator1 = "Modal#MODAL_FOOTER_BUTTON");
+		AssertConfirm(value1 = "This category might be being used in some contents. If you delete it, this category and all of its subcategories will also be deleted and removed from those contents. Do you want to continue deleting this category?");
 
 		Alert.viewSuccessMessage();
 

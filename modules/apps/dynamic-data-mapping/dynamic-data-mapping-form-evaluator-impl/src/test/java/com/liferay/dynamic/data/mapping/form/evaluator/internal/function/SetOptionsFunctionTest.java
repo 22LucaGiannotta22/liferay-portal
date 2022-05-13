@@ -75,7 +75,7 @@ public class SetOptionsFunctionTest {
 
 		jsonObject.put("pt_BR", jsonArray);
 
-		String json = jsonObject.toString();
+		String json = jsonObject.toJSONString();
 
 		DefaultDDMExpressionObserver spyDefaultDDMExpressionObserver =
 			Mockito.spy(new DefaultDDMExpressionObserver());

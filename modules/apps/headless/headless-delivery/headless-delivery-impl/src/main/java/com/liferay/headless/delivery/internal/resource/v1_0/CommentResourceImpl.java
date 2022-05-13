@@ -460,7 +460,7 @@ public class CommentResourceImpl
 		}
 
 		return _postEntityComment(
-			externalReferenceCode, blogsEntry.getGroupId(),
+			comment.getExternalReferenceCode(), blogsEntry.getGroupId(),
 			BlogsEntry.class.getName(), blogsEntry.getEntryId(),
 			comment.getText());
 	}
@@ -490,7 +490,7 @@ public class CommentResourceImpl
 		}
 
 		return _postParentCommentComment(
-			externalReferenceCode, parentComment.getGroupId(),
+			comment.getExternalReferenceCode(), parentComment.getGroupId(),
 			parentComment.getCommentId(), parentComment.getClassName(),
 			parentComment.getClassPK(), comment.getText());
 	}
@@ -517,7 +517,7 @@ public class CommentResourceImpl
 		}
 
 		return _postEntityComment(
-			externalReferenceCode, dlFileEntry.getGroupId(),
+			comment.getExternalReferenceCode(), dlFileEntry.getGroupId(),
 			DLFileEntry.class.getName(), dlFileEntry.getFileEntryId(),
 			comment.getText());
 	}
@@ -544,7 +544,7 @@ public class CommentResourceImpl
 		}
 
 		return _postEntityComment(
-			externalReferenceCode, journalArticle.getGroupId(),
+			comment.getExternalReferenceCode(), journalArticle.getGroupId(),
 			JournalArticle.class.getName(), journalArticle.getResourcePrimKey(),
 			comment.getText());
 	}
@@ -669,11 +669,11 @@ public class CommentResourceImpl
 			StringBundler sb = new StringBundler(6);
 
 			sb.append("No comment exists with external reference code ");
-			sb.append(externalReferenceCode);
+			sb.append(comment.getExternalReferenceCode());
 			sb.append(", site ID ");
 			sb.append(parentComment.getGroupId());
 			sb.append(", and parent comment with external reference code ");
-			sb.append(parentExternalReferenceCode);
+			sb.append(parentComment.getExternalReferenceCode());
 
 			throw new NotFoundException(sb.toString());
 		}

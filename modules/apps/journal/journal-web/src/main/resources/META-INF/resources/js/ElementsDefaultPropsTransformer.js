@@ -14,8 +14,6 @@
 
 import {addParams, openModal, openSelectionModal} from 'frontend-js-web';
 
-import openDeleteArticleModal from './modals/openDeleteArticleModal';
-
 const ACTIONS = {
 	compareVersions({itemData, portletNamespace}) {
 		openSelectionModal({
@@ -44,17 +42,19 @@ const ACTIONS = {
 	},
 
 	delete({itemData, trashEnabled}) {
-		if (trashEnabled) {
-			this.send(itemData.deleteURL);
+		let message = Liferay.Language.get(
+			'are-you-sure-you-want-to-delete-this'
+		);
 
-			return;
+		if (trashEnabled) {
+			message = Liferay.Language.get(
+				'are-you-sure-you-want-to-move-this-to-the-recycle-bin'
+			);
 		}
 
-		openDeleteArticleModal({
-			onDelete: () => {
-				this.send(itemData.deleteURL);
-			},
-		});
+		if (confirm(message)) {
+			this.send(itemData.deleteURL);
+		}
 	},
 
 	deleteArticleTranslations({itemData, portletNamespace}) {

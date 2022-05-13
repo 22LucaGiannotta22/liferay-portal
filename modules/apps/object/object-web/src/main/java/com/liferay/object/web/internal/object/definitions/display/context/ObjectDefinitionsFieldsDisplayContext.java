@@ -202,8 +202,14 @@ public class ObjectDefinitionsFieldsDisplayContext
 
 		ListUtil.isNotEmptyForEach(
 			objectField.getObjectFieldSettings(),
-			objectFieldSetting -> _putObjectFieldSettingJSONObject(
-				objectField.getBusinessType(), jsonArray, objectFieldSetting));
+			objectFieldSetting -> jsonArray.put(
+				JSONUtil.put(
+					"name", objectFieldSetting.getName()
+				).put(
+					"value",
+					_getObjectFieldSettingValue(
+						objectField.getBusinessType(), objectFieldSetting)
+				)));
 
 		return jsonArray;
 	}
@@ -212,19 +218,10 @@ public class ObjectDefinitionsFieldsDisplayContext
 		String businessType, ObjectFieldSetting objectFieldSetting) {
 
 		if (Objects.equals(
-				ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT, businessType)) {
+				ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT, businessType) &&
+			Objects.equals(objectFieldSetting.getName(), "maximumFileSize")) {
 
-			if (Objects.equals(
-					objectFieldSetting.getName(), "maximumFileSize")) {
-
-				return GetterUtil.getInteger(objectFieldSetting.getValue());
-			}
-			else if (Objects.equals(
-						objectFieldSetting.getName(),
-						"showFilesInDocumentsAndMedia")) {
-
-				return GetterUtil.getBoolean(objectFieldSetting.getValue());
-			}
+			return GetterUtil.getInteger(objectFieldSetting.getValue());
 		}
 		else if (Objects.equals(
 					ObjectFieldConstants.BUSINESS_TYPE_LONG_TEXT,
@@ -243,19 +240,6 @@ public class ObjectDefinitionsFieldsDisplayContext
 		}
 
 		return objectFieldSetting.getValue();
-	}
-
-	private void _putObjectFieldSettingJSONObject(
-		String businessType, JSONArray jsonArray,
-		ObjectFieldSetting objectFieldSetting) {
-
-		jsonArray.put(
-			JSONUtil.put(
-				"name", objectFieldSetting.getName()
-			).put(
-				"value",
-				_getObjectFieldSettingValue(businessType, objectFieldSetting)
-			));
 	}
 
 	private final ObjectFieldBusinessTypeServicesTracker

@@ -46,7 +46,6 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.sites.kernel.util.Sites;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -158,18 +157,9 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 				friendlyURLMap, !deleteLogo, iconBytes, masterLayoutPlid,
 				styleBookEntryId, serviceContext);
 
-			UnicodeProperties formTypeSettingsUnicodeProperties =
-				PropertiesParamUtil.getProperties(
-					actionRequest, "TypeSettingsProperties--");
-
 			Layout draftLayout = layout.fetchDraftLayout();
 
 			if (draftLayout != null) {
-				serviceContext.setAttribute(
-					Sites.LAYOUT_UPDATEABLE,
-					formTypeSettingsUnicodeProperties.get(
-						Sites.LAYOUT_UPDATEABLE));
-
 				_layoutService.updateLayout(
 					groupId, privateLayout, draftLayout.getLayoutId(),
 					draftLayout.getParentLayoutId(), nameMap,
@@ -185,6 +175,10 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 
 			UnicodeProperties layoutTypeSettingsUnicodeProperties =
 				layout.getTypeSettingsProperties();
+
+			UnicodeProperties formTypeSettingsUnicodeProperties =
+				PropertiesParamUtil.getProperties(
+					actionRequest, "TypeSettingsProperties--");
 
 			String linkToLayoutUuid = ParamUtil.getString(
 				actionRequest, "linkToLayoutUuid");

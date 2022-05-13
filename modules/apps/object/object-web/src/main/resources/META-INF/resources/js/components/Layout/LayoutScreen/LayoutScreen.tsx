@@ -20,9 +20,9 @@ import ObjectLayoutTabs from './ObjectLayoutTabs';
 
 import './LayoutScreen.scss';
 
-export default function LayoutScreen() {
+const LayoutScreen: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 	return (
-		<div className="lfr-objects__side-panel-content-container">
+		<div className="layout-tab">
 			<ClayAlert
 				displayType="info"
 				title={`${Liferay.Language.get('info')}:`}
@@ -37,4 +37,6 @@ export default function LayoutScreen() {
 			<ObjectLayoutTabs />
 		</div>
 	);
-}
+};
+
+export default LayoutScreen;

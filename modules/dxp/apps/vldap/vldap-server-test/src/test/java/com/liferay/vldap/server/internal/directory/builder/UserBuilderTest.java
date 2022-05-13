@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.util.FastDateFormatFactory;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.comparator.UserScreenNameComparator;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.vldap.server.internal.BaseVLDAPTestCase;
 import com.liferay.vldap.server.internal.directory.FilterConstraint;
 import com.liferay.vldap.server.internal.directory.ldap.Attribute;
@@ -43,21 +42,18 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
+
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author William Newbury
  */
+@RunWith(PowerMockRunner.class)
 public class UserBuilderTest extends BaseVLDAPTestCase {
-
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
 
 	@Before
 	@Override
@@ -151,7 +147,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 
 	@Test
 	public void testBuildDirectoriesInvalidSambaSID() throws Exception {
-		Mockito.when(
+		when(
 			userLocalService.fetchUser(Mockito.anyLong())
 		).thenReturn(
 			_user
@@ -254,7 +250,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 
 	@Test
 	public void testBuildDirectoriesNonmatchingEmailAddress() throws Exception {
-		Mockito.when(
+		when(
 			userLocalService.search(
 				Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
 				Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
@@ -290,7 +286,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 
 	@Test
 	public void testBuildDirectoriesNonmatchingScreenName() throws Exception {
-		Mockito.when(
+		when(
 			userLocalService.search(
 				Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
 				Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
@@ -417,7 +413,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 
 	@Test
 	public void testBuildDirectoriesSizeLimit() throws Exception {
-		Mockito.when(
+		when(
 			userLocalService.search(
 				Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
 				Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
@@ -428,7 +424,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 			_users
 		);
 
-		Mockito.when(
+		when(
 			searchBase.getSizeLimit()
 		).thenReturn(
 			0L
@@ -481,7 +477,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 
 	@Test
 	public void testBuildDirectoriesValidSambaSID() throws Exception {
-		Mockito.when(
+		when(
 			userLocalService.fetchUser(Mockito.anyLong())
 		).thenReturn(
 			_user
@@ -539,7 +535,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 
 	@Test
 	public void testBuildDirectoriesValidUidNumber() throws Exception {
-		Mockito.when(
+		when(
 			userLocalService.fetchUser(Mockito.anyLong())
 		).thenReturn(
 			_user
@@ -603,7 +599,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 
 	@Test
 	public void testBuildDirectoriesValidUUID() throws Exception {
-		Mockito.when(
+		when(
 			userLocalService.getUserByUuidAndCompanyId(
 				Mockito.anyString(), Mockito.anyLong())
 		).thenReturn(
@@ -691,7 +687,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 			List<FilterConstraint> filterConstraints)
 		throws Exception {
 
-		Mockito.when(
+		when(
 			userLocalService.search(
 				Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
 				Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
@@ -711,23 +707,23 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpExpando() {
-		ExpandoBridge expandoBridge = Mockito.mock(ExpandoBridge.class);
+		ExpandoBridge expandoBridge = mock(ExpandoBridge.class);
 
-		Mockito.when(
+		when(
 			expandoBridge.getAttribute(
 				Mockito.eq("sambaLMPassword"), Mockito.eq(false))
 		).thenReturn(
 			"testLMPassword"
 		);
 
-		Mockito.when(
+		when(
 			expandoBridge.getAttribute(
 				Mockito.eq("sambaNTPassword"), Mockito.eq(false))
 		).thenReturn(
 			"testNTPassword"
 		);
 
-		Mockito.when(
+		when(
 			_user.getExpandoBridge()
 		).thenReturn(
 			expandoBridge
@@ -738,10 +734,10 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 		FastDateFormat fastDateFormat = FastDateFormat.getInstance(
 			"yyyyMMddHHmmss.SSSZ", null, LocaleUtil.getDefault());
 
-		FastDateFormatFactory fastDateFormatFactory = Mockito.mock(
+		FastDateFormatFactory fastDateFormatFactory = mock(
 			FastDateFormatFactory.class);
 
-		Mockito.when(
+		when(
 			fastDateFormatFactory.getSimpleDateFormat(Mockito.anyString())
 		).thenReturn(
 			fastDateFormat
@@ -755,28 +751,28 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpGroups() throws Exception {
-		Group group = Mockito.mock(Group.class);
+		Group group = mock(Group.class);
 
-		Mockito.when(
+		when(
 			group.getGroupId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			group.getName()
 		).thenReturn(
 			"testGroupName"
 		);
 
-		Mockito.when(
+		when(
 			groupLocalService.getGroup(
 				Mockito.eq(PRIMARY_KEY), Mockito.eq("testGroupName"))
 		).thenReturn(
 			group
 		);
 
-		Mockito.when(
+		when(
 			groupLocalService.search(
 				Mockito.anyLong(), Mockito.any(long[].class),
 				Mockito.anyString(), Mockito.anyString(),
@@ -786,7 +782,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 			Arrays.asList(group)
 		);
 
-		Mockito.when(
+		when(
 			searchBase.getCommunity()
 		).thenReturn(
 			group
@@ -794,34 +790,34 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpOrganizations() throws Exception {
-		Organization organization = Mockito.mock(Organization.class);
+		Organization organization = mock(Organization.class);
 
-		Mockito.when(
+		when(
 			organizationLocalService.getOrganization(
 				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
 			organization
 		);
 
-		Mockito.when(
+		when(
 			organization.getName()
 		).thenReturn(
 			"testOrganizationName"
 		);
 
-		Mockito.when(
+		when(
 			organization.getOrganizationId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_user.getOrganizations()
 		).thenReturn(
 			Arrays.asList(organization)
 		);
 
-		Mockito.when(
+		when(
 			searchBase.getOrganization()
 		).thenReturn(
 			organization
@@ -829,11 +825,11 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpPasswordPolicy() throws Exception {
-		PasswordPolicy passwordPolicy = Mockito.mock(PasswordPolicy.class);
+		PasswordPolicy passwordPolicy = mock(PasswordPolicy.class);
 
 		setUpPasswordPolicy(passwordPolicy);
 
-		Mockito.when(
+		when(
 			_user.getPasswordPolicy()
 		).thenReturn(
 			passwordPolicy
@@ -844,7 +840,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	protected void setUpPropsUtil() {
 		super.setUpPropsUtil();
 
-		Mockito.when(
+		when(
 			props.get(PortletPropsValues.POSIX_GROUP_ID)
 		).thenReturn(
 			"testGroupId"
@@ -852,33 +848,33 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpRoles() throws Exception {
-		Role role = Mockito.mock(Role.class);
+		Role role = mock(Role.class);
 
-		Mockito.when(
+		when(
 			roleLocalService.getRole(Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
 			role
 		);
 
-		Mockito.when(
+		when(
 			role.getName()
 		).thenReturn(
 			"testRoleName"
 		);
 
-		Mockito.when(
+		when(
 			role.getRoleId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_user.getRoles()
 		).thenReturn(
 			Arrays.asList(role)
 		);
 
-		Mockito.when(
+		when(
 			searchBase.getRole()
 		).thenReturn(
 			role
@@ -886,34 +882,34 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpUserGroups() throws Exception {
-		UserGroup userGroup = Mockito.mock(UserGroup.class);
+		UserGroup userGroup = mock(UserGroup.class);
 
-		Mockito.when(
+		when(
 			userGroupLocalService.getUserGroup(
 				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
 			userGroup
 		);
 
-		Mockito.when(
+		when(
 			userGroup.getName()
 		).thenReturn(
 			"testUserGroupName"
 		);
 
-		Mockito.when(
+		when(
 			userGroup.getUserGroupId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_user.getUserGroups()
 		).thenReturn(
 			Arrays.asList(userGroup)
 		);
 
-		Mockito.when(
+		when(
 			searchBase.getUserGroup()
 		).thenReturn(
 			userGroup
@@ -921,69 +917,69 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpUsers() {
-		_user = Mockito.mock(User.class);
+		_user = mock(User.class);
 
-		Mockito.when(
+		when(
 			_user.getCompanyId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_user.getCreateDate()
 		).thenReturn(
 			null
 		);
 
-		Mockito.when(
+		when(
 			_user.getEmailAddress()
 		).thenReturn(
 			"test@email"
 		);
 
-		Mockito.when(
+		when(
 			_user.getFirstName()
 		).thenReturn(
 			"testFirstName"
 		);
 
-		Mockito.when(
+		when(
 			_user.getFullName()
 		).thenReturn(
 			"testFullName"
 		);
 
-		Mockito.when(
+		when(
 			_user.getLastName()
 		).thenReturn(
 			"testLastName"
 		);
 
-		Mockito.when(
+		when(
 			_user.getModifiedDate()
 		).thenReturn(
 			null
 		);
 
-		Mockito.when(
+		when(
 			_user.getPortraitId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_user.getScreenName()
 		).thenReturn(
 			"testScreenName"
 		);
 
-		Mockito.when(
+		when(
 			_user.getUserId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_user.getUuid()
 		).thenReturn(
 			"testUuid"
@@ -991,7 +987,7 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 
 		_users.add(_user);
 
-		Mockito.when(
+		when(
 			userLocalService.getCompanyUsers(
 				Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())
 		).thenReturn(
@@ -1000,15 +996,15 @@ public class UserBuilderTest extends BaseVLDAPTestCase {
 	}
 
 	private void _setUpImage() throws Exception {
-		Image image = Mockito.mock(Image.class);
+		Image image = mock(Image.class);
 
-		Mockito.when(
+		when(
 			image.getTextObj()
 		).thenReturn(
 			_IMAGE_BYTES
 		);
 
-		Mockito.when(
+		when(
 			imageService.getImage(Mockito.anyLong())
 		).thenReturn(
 			image

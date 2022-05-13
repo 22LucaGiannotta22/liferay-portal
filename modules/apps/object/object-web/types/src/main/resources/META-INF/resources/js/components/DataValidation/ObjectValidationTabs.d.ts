@@ -12,15 +12,14 @@
  * details.
  */
 
-import 'codemirror/mode/groovy/groovy';
 import {ChangeEventHandler} from 'react';
 import {ObjectValidationErrors} from '../ObjectValidationFormBase';
-import './ObjectValidationTabs.scss';
 declare function BasicInfo({
 	componentLabel,
 	defaultLocale,
 	disabled,
 	errors,
+	handleChange,
 	locales,
 	setValues,
 	values,
@@ -30,11 +29,11 @@ declare function Conditions({
 	disabled,
 	errors,
 	locales,
-	objectValidationRuleElements,
 	setValues,
 	values,
 }: IConditions): JSX.Element;
-interface ITabs {
+interface IBasicInfo {
+	componentLabel: string;
 	defaultLocale: {
 		label: string;
 		symbol: string;
@@ -46,10 +45,16 @@ interface ITabs {
 	setValues: (values: Partial<ObjectValidation>) => void;
 	values: Partial<ObjectValidation>;
 }
-interface IBasicInfo extends ITabs {
-	componentLabel: string;
-}
-interface IConditions extends ITabs {
-	objectValidationRuleElements: ObjectValidationRuleElement[];
+interface IConditions {
+	defaultLocale: {
+		label: string;
+		symbol: string;
+	};
+	disabled: boolean;
+	errors: ObjectValidationErrors;
+	handleChange: ChangeEventHandler<HTMLInputElement>;
+	locales: Array<any>;
+	setValues: (values: Partial<ObjectValidation>) => void;
+	values: Partial<ObjectValidation>;
 }
 export {BasicInfo, Conditions};

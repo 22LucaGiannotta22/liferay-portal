@@ -22,7 +22,6 @@ import com.liferay.batch.planner.internal.notification.BatchPlannerNotificationS
 import com.liferay.batch.planner.model.BatchPlannerPlan;
 import com.liferay.batch.planner.service.BatchPlannerPlanLocalService;
 import com.liferay.portal.kernel.exception.ModelListenerException;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModelListener;
@@ -48,8 +47,10 @@ public class BatchEngineExportTaskModelListener
 		throws ModelListenerException {
 
 		try {
-			_batchPlannerPlanLocalService.deactivateBatchPlannerPlan(
-				batchEngineExportTask.getExternalReferenceCode());
+			_batchPlannerPlanLocalService.updateActive(
+				false,
+				String.valueOf(
+					batchEngineExportTask.getBatchEngineExportTaskId()));
 		}
 		catch (Exception exception) {
 			_log.error(exception);
@@ -119,18 +120,13 @@ public class BatchEngineExportTaskModelListener
 			return null;
 		}
 
-		try {
-			return _batchPlannerPlanLocalService.updateStatus(
-				batchPlannerPlan.getBatchPlannerPlanId(),
-				BatchPlannerPlanConstants.getStatus(
-					BatchEngineTaskExecuteStatus.valueOf(
-						batchEngineExportTask.getExecuteStatus())));
-		}
-		catch (PortalException portalException) {
-			_log.error(portalException);
-		}
+		batchPlannerPlan.setStatus(
+			BatchPlannerPlanConstants.getStatus(
+				BatchEngineTaskExecuteStatus.valueOf(
+					batchEngineExportTask.getExecuteStatus())));
 
-		return null;
+		return _batchPlannerPlanLocalService.updateBatchPlannerPlan(
+			batchPlannerPlan);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

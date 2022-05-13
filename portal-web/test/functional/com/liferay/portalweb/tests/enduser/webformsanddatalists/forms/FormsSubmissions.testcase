@@ -240,7 +240,7 @@ definition {
 
 		Form.closeSidebar();
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
@@ -361,7 +361,7 @@ definition {
 
 		Form.closeSidebar();
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
@@ -642,7 +642,7 @@ definition {
 			subject = "Form Subject",
 			toAddress = "formreviewer@liferay.com");
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
@@ -901,7 +901,7 @@ definition {
 			successPageDescription = "Edited: Your information was successfully received. Thank you for filling out the form.",
 			successPageTitle = "Edited: Thank You");
 
-		Form.publishForm();
+		Form.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",

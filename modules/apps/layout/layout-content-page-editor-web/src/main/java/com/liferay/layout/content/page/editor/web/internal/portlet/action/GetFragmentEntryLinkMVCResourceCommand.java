@@ -81,154 +81,153 @@ public class GetFragmentEntryLinkMVCResourceCommand
 			_fragmentEntryLinkLocalService.fetchFragmentEntryLink(
 				fragmentEntryLinkId);
 
-		if (fragmentEntryLink == null) {
-			JSONPortletResponseUtil.writeJSON(
-				resourceRequest, resourceResponse,
-				JSONFactoryUtil.createJSONObject());
-
-			return;
-		}
-
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-		DefaultFragmentRendererContext defaultFragmentRendererContext =
-			new DefaultFragmentRendererContext(fragmentEntryLink);
+		if (fragmentEntryLink != null) {
+			DefaultFragmentRendererContext defaultFragmentRendererContext =
+				new DefaultFragmentRendererContext(fragmentEntryLink);
 
-		int collectionItemIndex = ParamUtil.getInteger(
-			resourceRequest, "collectionItemIndex", -1);
+			int collectionItemIndex = ParamUtil.getInteger(
+				resourceRequest, "collectionItemIndex", -1);
 
-		defaultFragmentRendererContext.setCollectionElementIndex(
-			collectionItemIndex);
+			defaultFragmentRendererContext.setCollectionElementIndex(
+				collectionItemIndex);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)resourceRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
 
-		String languageId = ParamUtil.getString(
-			resourceRequest, "languageId", themeDisplay.getLanguageId());
+			String languageId = ParamUtil.getString(
+				resourceRequest, "languageId", themeDisplay.getLanguageId());
 
-		defaultFragmentRendererContext.setLocale(
-			LocaleUtil.fromLanguageId(languageId));
+			defaultFragmentRendererContext.setLocale(
+				LocaleUtil.fromLanguageId(languageId));
 
-		defaultFragmentRendererContext.setMode(FragmentEntryLinkConstants.EDIT);
+			defaultFragmentRendererContext.setMode(
+				FragmentEntryLinkConstants.EDIT);
 
-		long segmentsExperienceId = ParamUtil.getLong(
-			resourceRequest, "segmentsExperienceId");
+			long segmentsExperienceId = ParamUtil.getLong(
+				resourceRequest, "segmentsExperienceId");
 
-		defaultFragmentRendererContext.
-			setCollectionStyledLayoutStructureItemIds(
-				LayoutStructureUtil.getCollectionStyledLayoutStructureItemIds(
-					fragmentEntryLink.getFragmentEntryLinkId(),
-					LayoutStructureUtil.getLayoutStructure(
-						themeDisplay.getScopeGroupId(), themeDisplay.getPlid(),
-						segmentsExperienceId)));
+			defaultFragmentRendererContext.
+				setCollectionStyledLayoutStructureItemIds(
+					LayoutStructureUtil.
+						getCollectionStyledLayoutStructureItemIds(
+							fragmentEntryLink.getFragmentEntryLinkId(),
+							LayoutStructureUtil.getLayoutStructure(
+								themeDisplay.getScopeGroupId(),
+								themeDisplay.getPlid(), segmentsExperienceId)));
 
-		String itemClassName = ParamUtil.getString(
-			resourceRequest, "itemClassName");
-		long itemClassPK = ParamUtil.getLong(resourceRequest, "itemClassPK");
+			String itemClassName = ParamUtil.getString(
+				resourceRequest, "itemClassName");
+			long itemClassPK = ParamUtil.getLong(
+				resourceRequest, "itemClassPK");
 
-		HttpServletRequest httpServletRequest = _portal.getHttpServletRequest(
-			resourceRequest);
+			HttpServletRequest httpServletRequest =
+				_portal.getHttpServletRequest(resourceRequest);
 
-		LayoutDisplayPageProvider<?> currentLayoutDisplayPageProvider =
-			(LayoutDisplayPageProvider<?>)httpServletRequest.getAttribute(
-				LayoutDisplayPageWebKeys.LAYOUT_DISPLAY_PAGE_PROVIDER);
+			LayoutDisplayPageProvider<?> currentLayoutDisplayPageProvider =
+				(LayoutDisplayPageProvider<?>)httpServletRequest.getAttribute(
+					LayoutDisplayPageWebKeys.LAYOUT_DISPLAY_PAGE_PROVIDER);
 
-		if (Validator.isNotNull(itemClassName) && (itemClassPK > 0)) {
-			InfoItemIdentifier infoItemIdentifier =
-				new ClassPKInfoItemIdentifier(itemClassPK);
+			if (Validator.isNotNull(itemClassName) && (itemClassPK > 0)) {
+				InfoItemIdentifier infoItemIdentifier =
+					new ClassPKInfoItemIdentifier(itemClassPK);
 
-			InfoItemObjectProvider<Object> infoItemObjectProvider =
-				_infoItemServiceTracker.getFirstInfoItemService(
-					InfoItemObjectProvider.class, itemClassName,
-					infoItemIdentifier.getInfoItemServiceFilter());
-
-			if (infoItemObjectProvider != null) {
-				Object infoItemObject = infoItemObjectProvider.getInfoItem(
-					infoItemIdentifier);
-
-				defaultFragmentRendererContext.setDisplayObject(infoItemObject);
-
-				httpServletRequest.setAttribute(
-					InfoDisplayWebKeys.INFO_ITEM, infoItemObject);
-
-				InfoItemDetailsProvider infoItemDetailsProvider =
+				InfoItemObjectProvider<Object> infoItemObjectProvider =
 					_infoItemServiceTracker.getFirstInfoItemService(
-						InfoItemDetailsProvider.class, itemClassName);
+						InfoItemObjectProvider.class, itemClassName,
+						infoItemIdentifier.getInfoItemServiceFilter());
 
-				if (infoItemDetailsProvider != null) {
+				if (infoItemObjectProvider != null) {
+					Object infoItemObject = infoItemObjectProvider.getInfoItem(
+						infoItemIdentifier);
+
+					defaultFragmentRendererContext.setDisplayObject(
+						infoItemObject);
+
 					httpServletRequest.setAttribute(
-						InfoDisplayWebKeys.INFO_ITEM_DETAILS,
-						infoItemDetailsProvider.getInfoItemDetails(
-							infoItemObject));
+						InfoDisplayWebKeys.INFO_ITEM, infoItemObject);
+
+					InfoItemDetailsProvider infoItemDetailsProvider =
+						_infoItemServiceTracker.getFirstInfoItemService(
+							InfoItemDetailsProvider.class, itemClassName);
+
+					if (infoItemDetailsProvider != null) {
+						httpServletRequest.setAttribute(
+							InfoDisplayWebKeys.INFO_ITEM_DETAILS,
+							infoItemDetailsProvider.getInfoItemDetails(
+								infoItemObject));
+					}
+
+					httpServletRequest.setAttribute(
+						InfoDisplayWebKeys.INFO_LIST_DISPLAY_OBJECT,
+						infoItemObject);
 				}
 
-				httpServletRequest.setAttribute(
-					InfoDisplayWebKeys.INFO_LIST_DISPLAY_OBJECT,
-					infoItemObject);
+				LayoutDisplayPageProvider<?> layoutDisplayPageProvider =
+					_layoutDisplayPageProviderTracker.
+						getLayoutDisplayPageProviderByClassName(itemClassName);
+
+				if (layoutDisplayPageProvider != null) {
+					httpServletRequest.setAttribute(
+						LayoutDisplayPageWebKeys.LAYOUT_DISPLAY_PAGE_PROVIDER,
+						layoutDisplayPageProvider);
+				}
 			}
 
-			LayoutDisplayPageProvider<?> layoutDisplayPageProvider =
-				_layoutDisplayPageProviderTracker.
-					getLayoutDisplayPageProviderByClassName(itemClassName);
+			boolean isolated = themeDisplay.isIsolated();
 
-			if (layoutDisplayPageProvider != null) {
+			themeDisplay.setIsolated(true);
+
+			try {
+				String content = _fragmentRendererController.render(
+					defaultFragmentRendererContext, httpServletRequest,
+					_portal.getHttpServletResponse(resourceResponse));
+
+				jsonObject.put(
+					"content", content
+				).put(
+					"editableTypes",
+					EditableFragmentEntryProcessorUtil.getEditableTypes(content)
+				).put(
+					"editableValues",
+					JSONFactoryUtil.createJSONObject(
+						fragmentEntryLink.getEditableValues())
+				);
+
+				FragmentEntry fragmentEntry =
+					_fragmentEntryService.fetchFragmentEntry(
+						fragmentEntryLink.getFragmentEntryId());
+
+				if (fragmentEntry == null) {
+					fragmentEntry =
+						_fragmentCollectionContributorTracker.getFragmentEntry(
+							fragmentEntryLink.getRendererKey());
+				}
+
+				if (fragmentEntry != null) {
+					jsonObject.put("icon", fragmentEntry.getIcon());
+				}
+			}
+			finally {
+				httpServletRequest.removeAttribute(
+					InfoDisplayWebKeys.INFO_LIST_DISPLAY_OBJECT);
+
 				httpServletRequest.setAttribute(
 					LayoutDisplayPageWebKeys.LAYOUT_DISPLAY_PAGE_PROVIDER,
-					layoutDisplayPageProvider);
-			}
-		}
+					currentLayoutDisplayPageProvider);
 
-		boolean isolated = themeDisplay.isIsolated();
-
-		themeDisplay.setIsolated(true);
-
-		try {
-			String content = _fragmentRendererController.render(
-				defaultFragmentRendererContext, httpServletRequest,
-				_portal.getHttpServletResponse(resourceResponse));
-
-			jsonObject.put(
-				"content", content
-			).put(
-				"editableTypes",
-				EditableFragmentEntryProcessorUtil.getEditableTypes(content)
-			).put(
-				"editableValues",
-				JSONFactoryUtil.createJSONObject(
-					fragmentEntryLink.getEditableValues())
-			);
-
-			FragmentEntry fragmentEntry =
-				_fragmentEntryService.fetchFragmentEntry(
-					fragmentEntryLink.getFragmentEntryId());
-
-			if (fragmentEntry == null) {
-				fragmentEntry =
-					_fragmentCollectionContributorTracker.getFragmentEntry(
-						fragmentEntryLink.getRendererKey());
+				themeDisplay.setIsolated(isolated);
 			}
 
-			if (fragmentEntry != null) {
-				jsonObject.put("icon", fragmentEntry.getIcon());
+			if (SessionErrors.contains(
+					httpServletRequest, "fragmentEntryContentInvalid")) {
+
+				jsonObject.put("error", true);
+
+				SessionErrors.clear(httpServletRequest);
 			}
-		}
-		finally {
-			httpServletRequest.removeAttribute(
-				InfoDisplayWebKeys.INFO_LIST_DISPLAY_OBJECT);
-
-			httpServletRequest.setAttribute(
-				LayoutDisplayPageWebKeys.LAYOUT_DISPLAY_PAGE_PROVIDER,
-				currentLayoutDisplayPageProvider);
-
-			themeDisplay.setIsolated(isolated);
-		}
-
-		if (SessionErrors.contains(
-				httpServletRequest, "fragmentEntryContentInvalid")) {
-
-			jsonObject.put("error", true);
-
-			SessionErrors.clear(httpServletRequest);
 		}
 
 		JSONPortletResponseUtil.writeJSON(

@@ -1148,6 +1148,39 @@ public class CommerceOrderLocalServiceImpl
 			commerceOrder, shippingAmount, shippingWithTaxAmount, subtotal,
 			subtotalWithTaxAmount, taxAmount, total, totalWithTaxAmount);
 
+		if (commerceContext != null) {
+			CommerceOrderPriceCalculation commerceOrderPriceCalculation =
+				_commerceOrderPriceCalculationFactory.
+					getCommerceOrderPriceCalculation();
+
+			CommerceOrderPrice commerceOrderPrice =
+				commerceOrderPriceCalculation.getCommerceOrderPrice(
+					commerceOrder, false, commerceContext);
+
+			CommerceDiscountValue shippingDiscountValue =
+				commerceOrderPrice.getShippingDiscountValue();
+
+			if (shippingDiscountValue != null) {
+				CommerceMoney shippingDiscountAmountCommerceMoney =
+					shippingDiscountValue.getDiscountAmount();
+
+				commerceOrder.setShippingDiscountAmount(
+					shippingDiscountAmountCommerceMoney.getPrice());
+			}
+
+			CommerceDiscountValue shippingWithTaxAmountCommerceDiscountValue =
+				commerceOrderPrice.getShippingDiscountValueWithTaxAmount();
+
+			if (shippingWithTaxAmountCommerceDiscountValue != null) {
+				CommerceMoney shippingDiscountWithTaxAmountCommerceMoney =
+					shippingWithTaxAmountCommerceDiscountValue.
+						getDiscountAmount();
+
+				commerceOrder.setShippingDiscountWithTaxAmount(
+					shippingDiscountWithTaxAmountCommerceMoney.getPrice());
+			}
+		}
+
 		return commerceOrderPersistence.update(commerceOrder);
 	}
 
@@ -1429,7 +1462,10 @@ public class CommerceOrderLocalServiceImpl
 			}
 		}
 
-		return commerceOrderPersistence.update(commerceOrder);
+		commerceOrder = commerceOrderPersistence.update(commerceOrder);
+
+		return commerceOrderLocalService.recalculatePrice(
+			commerceOrder.getCommerceOrderId(), commerceContext);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)

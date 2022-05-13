@@ -17,7 +17,6 @@ import * as yup from 'yup';
 
 const yupSchema = {
 	case: yup.object({
-		caseTypeId: yup.string().required(),
 		componentId: yup.string().required(),
 		description: yup.string(),
 		descriptionType: yup.string(),
@@ -25,7 +24,7 @@ const yupSchema = {
 		name: yup.string().required(),
 		priority: yup.number(),
 		steps: yup.string(),
-		stepsType: yup.string(),
+		stepsType: yup.string().required(),
 	}),
 	caseType: yup.object({
 		name: yup.string().required(),
@@ -34,11 +33,11 @@ const yupSchema = {
 		name: yup.string().required(),
 	}),
 	factorOption: yup.object({
-		factorCategoryId: yup.string(),
+		factorCategoryId: yup.string().required(),
 		name: yup.string().required(),
 	}),
 	project: yup.object({
-		description: yup.string(),
+		description: yup.string().required(),
 		name: yup.string().required(),
 	}),
 	routine: yup.object({

@@ -150,11 +150,12 @@ public class ViewFlatUsersManagementToolbarDisplayContext
 					).buildString());
 
 				labelItem.setCloseable(true);
-				labelItem.setLabel(
-					String.format(
-						"%s: %s",
-						LanguageUtil.get(httpServletRequest, "status"),
-						LanguageUtil.get(httpServletRequest, _navigation)));
+
+				String label = String.format(
+					"%s: %s", LanguageUtil.get(httpServletRequest, "status"),
+					LanguageUtil.get(httpServletRequest, _navigation));
+
+				labelItem.setLabel(label);
 			}
 		).build();
 	}

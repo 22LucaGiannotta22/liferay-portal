@@ -29,7 +29,6 @@ type UseHeader = {
 	useAction?: Dropdown;
 	useDropdown?: Dropdown;
 	useHeading?: HeaderTitle[];
-	useIcon?: string;
 	useTabs?: HeaderTabs[];
 };
 
@@ -40,7 +39,6 @@ const useHeader = ({
 	timeout = DEFAULT_TIMEOUT,
 	useHeading = initialState.heading,
 	useAction,
-	useIcon = initialState.symbol,
 	useDropdown,
 	useTabs = initialState.tabs,
 }: UseHeader = {}) => {
@@ -50,7 +48,6 @@ const useHeader = ({
 	const useDropdownString = JSON.stringify(useDropdown);
 	const useHeadingString = JSON.stringify(useHeading);
 	const useTabsString = JSON.stringify(useTabs);
-	const useDropdownIcon = JSON.stringify(useIcon);
 
 	const setActions = useCallback(
 		(newActions: Dropdown) => {
@@ -62,16 +59,6 @@ const useHeader = ({
 	const setDropdown = useCallback(
 		(newDropdown: Dropdown) => {
 			dispatch({payload: newDropdown, type: HeaderTypes.SET_DROPDOWN});
-		},
-		[dispatch]
-	);
-
-	const setDropdownIcon = useCallback(
-		(newSymbol: string) => {
-			dispatch({
-				payload: newSymbol,
-				type: HeaderTypes.SET_SYMBOL,
-			});
 		},
 		[dispatch]
 	);
@@ -101,14 +88,6 @@ const useHeader = ({
 	}, [setHeading, shouldUpdate, timeout, useHeadingString]);
 
 	useEffect(() => {
-		if (shouldUpdate && useIcon) {
-			setTimeout(() => {
-				setDropdownIcon(JSON.parse(useDropdownIcon));
-			}, timeout);
-		}
-	}, [setDropdownIcon, shouldUpdate, timeout, useDropdownIcon, useIcon]);
-
-	useEffect(() => {
 		if (shouldUpdate && useTabsString) {
 			setTimeout(() => {
 				setTabs(JSON.parse(useTabsString));
@@ -132,12 +111,9 @@ const useHeader = ({
 		dispatch,
 		setActions,
 		setDropdown,
-		setDropdownIcon,
 		setHeading,
 		setTabs,
 	};
 };
-
-export {useHeader};
 
 export default useHeader;

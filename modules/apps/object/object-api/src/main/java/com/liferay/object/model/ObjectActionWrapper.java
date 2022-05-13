@@ -53,7 +53,6 @@ public class ObjectActionWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("objectDefinitionId", getObjectDefinitionId());
 		attributes.put("active", isActive());
-		attributes.put("description", getDescription());
 		attributes.put("name", getName());
 		attributes.put("objectActionExecutorKey", getObjectActionExecutorKey());
 		attributes.put("objectActionTriggerKey", getObjectActionTriggerKey());
@@ -124,12 +123,6 @@ public class ObjectActionWrapper
 			setActive(active);
 		}
 
-		String description = (String)attributes.get("description");
-
-		if (description != null) {
-			setDescription(description);
-		}
-
 		String name = (String)attributes.get("name");
 
 		if (name != null) {
@@ -190,16 +183,6 @@ public class ObjectActionWrapper
 	@Override
 	public Date getCreateDate() {
 		return model.getCreateDate();
-	}
-
-	/**
-	 * Returns the description of this object action.
-	 *
-	 * @return the description of this object action
-	 */
-	@Override
-	public String getDescription() {
-		return model.getDescription();
 	}
 
 	/**
@@ -382,16 +365,6 @@ public class ObjectActionWrapper
 	@Override
 	public void setCreateDate(Date createDate) {
 		model.setCreateDate(createDate);
-	}
-
-	/**
-	 * Sets the description of this object action.
-	 *
-	 * @param description the description of this object action
-	 */
-	@Override
-	public void setDescription(String description) {
-		model.setDescription(description);
 	}
 
 	/**

@@ -72,10 +72,6 @@ public class SegmentTestClassGroup extends BaseTestClassGroup {
 		return _batchTestClassGroup.getCohortName();
 	}
 
-	public String getDownstreamJobName() {
-		return _batchTestClassGroup.getDownstreamJobName();
-	}
-
 	@Override
 	public Job getJob() {
 		return _batchTestClassGroup.getJob();

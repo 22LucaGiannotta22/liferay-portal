@@ -63,9 +63,9 @@ public class FrontendComponentsTopHeadDynamicInclude
 				_ffFrontendJSComponentsConfiguration.enableClayTreeView()));
 		sb.append(
 			_buildFeatureFlagJSGlobalVariable(
-				"customDialogsEnabled",
+				"enableCustomDialogs",
 				GetterUtil.getBoolean(
-					PropsUtil.get("feature.flag.customDialogsEnabled"))));
+					PropsUtil.get("feature.flag.enableCustomDialogs"))));
 		sb.append("</script>");
 
 		printWriter.println(sb);

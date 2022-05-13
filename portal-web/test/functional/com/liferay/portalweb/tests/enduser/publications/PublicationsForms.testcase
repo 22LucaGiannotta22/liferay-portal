@@ -87,7 +87,7 @@ definition {
 
 		Form.closeSidebar();
 
-		PortletEntry.publish();
+		Form.save();
 
 		JSONLayout.addPublicLayout(
 			groupName = "Site Name",

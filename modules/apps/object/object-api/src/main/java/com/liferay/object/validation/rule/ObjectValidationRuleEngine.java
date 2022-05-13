@@ -22,6 +22,12 @@ import java.util.Map;
  */
 public interface ObjectValidationRuleEngine {
 
+	public default boolean evaluate(
+		Map<String, Object> inputObjects, String script) {
+
+		return false;
+	}
+
 	public default Map<String, Object> execute(
 		Map<String, Object> inputObjects, String script) {
 

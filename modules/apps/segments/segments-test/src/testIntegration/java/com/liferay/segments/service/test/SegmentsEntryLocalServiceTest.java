@@ -345,10 +345,11 @@ public class SegmentsEntryLocalServiceTest {
 
 		Assert.assertTrue(segmentsEntriesCount > 0);
 
-		Assert.assertEquals(
-			0,
+		segmentsEntriesCount =
 			_segmentsEntryLocalService.getSegmentsEntriesCount(
-				childGroup.getGroupId(), false));
+				childGroup.getGroupId(), false);
+
+		Assert.assertEquals(0, segmentsEntriesCount);
 	}
 
 	@Test

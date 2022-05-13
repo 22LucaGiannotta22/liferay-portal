@@ -41,10 +41,10 @@ public class CommerceOrderTypeClayTableDataSetDisplayView
 		ClayTableSchemaBuilder clayTableSchemaBuilder =
 			_clayTableSchemaBuilderFactory.create();
 
-		ClayTableSchemaField nameLangClayTableSchemaField =
+		ClayTableSchemaField nameClayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField("name.LANG", "name");
 
-		nameLangClayTableSchemaField.setContentRenderer("actionLink");
+		nameClayTableSchemaField.setContentRenderer("actionLink");
 
 		clayTableSchemaBuilder.addClayTableSchemaField("displayOrder", "order");
 
@@ -53,25 +53,25 @@ public class CommerceOrderTypeClayTableDataSetDisplayView
 
 		activeClayTableSchemaField.setContentRenderer("boolean");
 
-		ClayTableSchemaField displayDateClayTableSchemaField =
+		ClayTableSchemaField startDateClayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField(
 				"displayDate", "start-date");
 
-		displayDateClayTableSchemaField.setContentRenderer("dateTime");
-		displayDateClayTableSchemaField.setSortable(true);
+		startDateClayTableSchemaField.setContentRenderer("dateTime");
+		startDateClayTableSchemaField.setSortable(true);
 
-		ClayTableSchemaField expirationDateClayTableSchemaField =
+		ClayTableSchemaField endDateClayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField(
 				"expirationDate", "end-date");
 
-		expirationDateClayTableSchemaField.setContentRenderer("dateTime");
-		expirationDateClayTableSchemaField.setSortable(true);
+		endDateClayTableSchemaField.setContentRenderer("dateTime");
+		endDateClayTableSchemaField.setSortable(true);
 
-		ClayTableSchemaField workflowStatusInfoClayTableSchemaField =
+		ClayTableSchemaField statusClayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField(
 				"workflowStatusInfo", "status");
 
-		workflowStatusInfoClayTableSchemaField.setContentRenderer("status");
+		statusClayTableSchemaField.setContentRenderer("status");
 
 		return clayTableSchemaBuilder.build();
 	}

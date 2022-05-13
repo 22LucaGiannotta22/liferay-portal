@@ -639,7 +639,7 @@ public class EditCommerceOrderMVCActionCommand extends BaseMVCActionCommand {
 			(CommerceContext)actionRequest.getAttribute(
 				CommerceWebKeys.COMMERCE_CONTEXT);
 
-		_commerceOrderEngine.updateCommerceOrder(
+		_commerceOrderService.updateCommerceOrder(
 			commerceOrder.getExternalReferenceCode(),
 			commerceOrder.getCommerceOrderId(),
 			commerceOrder.getBillingAddressId(),
@@ -649,12 +649,8 @@ public class EditCommerceOrderMVCActionCommand extends BaseMVCActionCommand {
 			commerceOrder.getCommercePaymentMethodKey(),
 			commerceOrder.getPurchaseOrderNumber(),
 			new BigDecimal(shippingPrice),
-			commerceOrder.getShippingOptionName(),
-			commerceOrder.getShippingWithTaxAmount(), new BigDecimal(subtotal),
-			commerceOrder.getSubtotalWithTaxAmount(),
-			commerceOrder.getTaxAmount(), new BigDecimal(total),
-			commerceOrder.getTotalDiscountAmount(),
-			commerceOrder.getTotalWithTaxAmount(), commerceContext, false);
+			commerceOrder.getShippingOptionName(), new BigDecimal(subtotal),
+			new BigDecimal(total), commerceContext);
 	}
 
 	@Reference

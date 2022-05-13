@@ -30,6 +30,7 @@
 		displayTotalItemsQuantity: <%= displayTotalItemsQuantity %>,
 		itemsQuantity: <%= itemsQuantity %>,
 		orderId: <%= orderId %>,
+		spritemap: '<%= HtmlUtil.escapeJS(spritemap) %>',
 		toggleable: <%= toggleable %>,
 	};
 

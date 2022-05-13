@@ -29,19 +29,6 @@ export default function MappedProductRow({
 	setMappedProducts,
 	setNewQuantity,
 }) {
-	function updateSelected(selected) {
-		setMappedProducts((mappedProducts) =>
-			mappedProducts.map((mappedProduct) =>
-				mappedProduct.skuId === product.skuId
-					? {
-							...mappedProduct,
-							selected,
-					  }
-					: mappedProduct
-			)
-		);
-	}
-
 	return (
 		<ClayTable.Row
 			key={product.id}
@@ -51,10 +38,21 @@ export default function MappedProductRow({
 			{!isAdmin && (
 				<ClayTable.Cell>
 					<ClayCheckbox
-						checked={!!product.selected}
-						disabled={!product.selectable}
+						checked={product.selected || false}
+						disabled={!product.selectable || false}
 						onChange={(event) => {
-							updateSelected(event.target.checked);
+							const checked = event.target.checked;
+
+							setMappedProducts((mappedProducts) =>
+								mappedProducts.map((mappedProduct) =>
+									mappedProduct.skuId === product.skuId
+										? {
+												...mappedProduct,
+												selected: checked,
+										  }
+										: mappedProduct
+								)
+							);
 						}}
 					/>
 				</ClayTable.Cell>
@@ -99,21 +97,19 @@ export default function MappedProductRow({
 									.allowedOrderQuantities
 							}
 							disabled={!product.selectable}
-							max={product.productConfiguration.maxOrderQuantity}
-							min={product.productConfiguration.minOrderQuantity}
-							onUpdate={({errors, value}) => {
-								setNewQuantity(value);
-
-								if (errors.length) {
-									updateSelected(false);
-								}
-							}}
-							quantity={quantity}
-							size="sm"
-							step={
+							maxQuantity={
+								product.productConfiguration.maxOrderQuantity
+							}
+							minQuantity={
+								product.productConfiguration.minOrderQuantity
+							}
+							multipleQuantity={
 								product.productConfiguration
 									.multipleOrderQuantity
 							}
+							onUpdate={setNewQuantity}
+							quantity={quantity}
+							size="sm"
 						/>
 					)}
 

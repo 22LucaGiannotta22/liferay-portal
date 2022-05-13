@@ -65,9 +65,7 @@ const SelectSubscription = ({
 			}
 		};
 
-		if (sessionId) {
-			fetchGenerateFormData();
-		}
+		fetchGenerateFormData();
 	}, [accountKey, licenseKeyDownloadURL, productGroupName, sessionId]);
 
 	const productVersions = useMemo(() => {
@@ -177,7 +175,7 @@ const SelectSubscription = ({
 			</ClayAlert>
 		);
 
-	if (!generateFormValues || !accountKey || !sessionId) {
+	if (!generateFormValues) {
 		return <GenerateNewKeySkeleton />;
 	}
 
@@ -311,7 +309,7 @@ const SelectSubscription = ({
 					</div>
 
 					<div>
-						{subscriptionTerms?.map((subscriptionTerm, index) => {
+						{subscriptionTerms.map((subscriptionTerm, index) => {
 							const selected =
 								JSON.stringify(selectedSubscription) ===
 								JSON.stringify({
@@ -360,9 +358,7 @@ const SelectSubscription = ({
 										setInfoSelectedKey(infoSelectedKey);
 									}}
 									selected={selected}
-									subtitle={`Instance size: ${
-										subscriptionTerm?.instanceSize || 1
-									}`}
+									subtitle={`Instance size: ${subscriptionTerm.instanceSize}`}
 									value={subscriptionTerm}
 								/>
 							);

@@ -22,32 +22,29 @@ import com.liferay.dynamic.data.mapping.model.UnlocalizedValue;
 import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
-import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Marcellus Tavares
  */
-public class DDMFormValuesQueryTest {
-
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
+@PrepareForTest(LocaleUtil.class)
+@RunWith(PowerMockRunner.class)
+public class DDMFormValuesQueryTest extends PowerMockito {
 
 	@Before
 	public void setUp() {
@@ -621,16 +618,19 @@ public class DDMFormValuesQueryTest {
 	}
 
 	protected void setUpLocaleUtil() {
-		LocaleUtil localeUtil = ReflectionTestUtil.getFieldValue(
-			LocaleUtil.class, "_localeUtil");
+		mockStatic(LocaleUtil.class);
 
-		Map<String, Locale> locales = ReflectionTestUtil.getFieldValue(
-			localeUtil, "_locales");
+		when(
+			LocaleUtil.fromLanguageId("en_US")
+		).thenReturn(
+			LocaleUtil.US
+		);
 
-		locales.clear();
-
-		locales.put("en_US", LocaleUtil.US);
-		locales.put("pt_BR", LocaleUtil.BRAZIL);
+		when(
+			LocaleUtil.fromLanguageId("pt_BR")
+		).thenReturn(
+			LocaleUtil.BRAZIL
+		);
 	}
 
 	private DDMFormValues _ddmFormValues;

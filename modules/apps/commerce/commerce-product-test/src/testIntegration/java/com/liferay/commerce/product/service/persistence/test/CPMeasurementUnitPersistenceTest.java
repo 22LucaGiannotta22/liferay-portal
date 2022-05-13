@@ -132,9 +132,6 @@ public class CPMeasurementUnitPersistenceTest {
 
 		newCPMeasurementUnit.setUuid(RandomTestUtil.randomString());
 
-		newCPMeasurementUnit.setExternalReferenceCode(
-			RandomTestUtil.randomString());
-
 		newCPMeasurementUnit.setGroupId(RandomTestUtil.nextLong());
 
 		newCPMeasurementUnit.setCompanyId(RandomTestUtil.nextLong());
@@ -175,9 +172,6 @@ public class CPMeasurementUnitPersistenceTest {
 		Assert.assertEquals(
 			existingCPMeasurementUnit.getUuid(),
 			newCPMeasurementUnit.getUuid());
-		Assert.assertEquals(
-			existingCPMeasurementUnit.getExternalReferenceCode(),
-			newCPMeasurementUnit.getExternalReferenceCode());
 		Assert.assertEquals(
 			existingCPMeasurementUnit.getCPMeasurementUnitId(),
 			newCPMeasurementUnit.getCPMeasurementUnitId());
@@ -283,15 +277,6 @@ public class CPMeasurementUnitPersistenceTest {
 	}
 
 	@Test
-	public void testCountByC_ERC() throws Exception {
-		_persistence.countByC_ERC(RandomTestUtil.nextLong(), "");
-
-		_persistence.countByC_ERC(0L, "null");
-
-		_persistence.countByC_ERC(0L, (String)null);
-	}
-
-	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		CPMeasurementUnit newCPMeasurementUnit = addCPMeasurementUnit();
 
@@ -317,11 +302,11 @@ public class CPMeasurementUnitPersistenceTest {
 	protected OrderByComparator<CPMeasurementUnit> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create(
 			"CPMeasurementUnit", "mvccVersion", true, "ctCollectionId", true,
-			"uuid", true, "externalReferenceCode", true, "CPMeasurementUnitId",
-			true, "groupId", true, "companyId", true, "userId", true,
-			"userName", true, "createDate", true, "modifiedDate", true, "name",
-			true, "key", true, "rate", true, "primary", true, "priority", true,
-			"type", true, "lastPublishDate", true);
+			"uuid", true, "CPMeasurementUnitId", true, "groupId", true,
+			"companyId", true, "userId", true, "userName", true, "createDate",
+			true, "modifiedDate", true, "name", true, "key", true, "rate", true,
+			"primary", true, "priority", true, "type", true, "lastPublishDate",
+			true);
 	}
 
 	@Test
@@ -618,17 +603,6 @@ public class CPMeasurementUnitPersistenceTest {
 			ReflectionTestUtil.invoke(
 				cpMeasurementUnit, "getColumnOriginalValue",
 				new Class<?>[] {String.class}, "key_"));
-
-		Assert.assertEquals(
-			Long.valueOf(cpMeasurementUnit.getCompanyId()),
-			ReflectionTestUtil.<Long>invoke(
-				cpMeasurementUnit, "getColumnOriginalValue",
-				new Class<?>[] {String.class}, "companyId"));
-		Assert.assertEquals(
-			cpMeasurementUnit.getExternalReferenceCode(),
-			ReflectionTestUtil.invoke(
-				cpMeasurementUnit, "getColumnOriginalValue",
-				new Class<?>[] {String.class}, "externalReferenceCode"));
 	}
 
 	protected CPMeasurementUnit addCPMeasurementUnit() throws Exception {
@@ -641,9 +615,6 @@ public class CPMeasurementUnitPersistenceTest {
 		cpMeasurementUnit.setCtCollectionId(RandomTestUtil.nextLong());
 
 		cpMeasurementUnit.setUuid(RandomTestUtil.randomString());
-
-		cpMeasurementUnit.setExternalReferenceCode(
-			RandomTestUtil.randomString());
 
 		cpMeasurementUnit.setGroupId(RandomTestUtil.nextLong());
 

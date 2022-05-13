@@ -47,11 +47,6 @@ public class DeleteTrashPortletConfigurationIcon
 	extends BasePortletConfigurationIcon {
 
 	@Override
-	public String getIconCssClass() {
-		return "trash";
-	}
-
-	@Override
 	public String getMessage(PortletRequest portletRequest) {
 		return LanguageUtil.get(
 			getResourceBundle(getLocale(portletRequest)), "delete");

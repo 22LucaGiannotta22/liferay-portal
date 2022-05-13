@@ -15,7 +15,6 @@
 interface IThemeDisplay {
 	getBCP47LanguageId(): () => string;
 	getCompanyGroupId: () => number;
-	getDefaultLanguageId: () => string;
 	getLanguageId: () => string;
 	getPathThemeImages: () => string;
 	getScopeGroupId: () => number;
@@ -44,7 +43,6 @@ export const Liferay = window.Liferay || {
 	ThemeDisplay: {
 		getBCP47LanguageId: () => 'en-US',
 		getCompanyGroupId: () => 0,
-		getDefaultLanguageId: () => 'en_US',
 		getLanguageId: () => 'en_US',
 		getPathThemeImages: () => '',
 		getScopeGroupId: () => 0,

@@ -63,8 +63,6 @@ const AUTOCOMPLETE_EXCLUDED_KEYS = new Set([
 
 const CSS_CLASS_HINT_TYPE = 'hint-type';
 
-const LANGUAGE_ID = 'LanguageId';
-
 const MODES = {
 	json: {
 		name: 'JSON',
@@ -72,7 +70,7 @@ const MODES = {
 	},
 };
 
-function getCodeMirrorHints(cm, autocompleteSchema, availableLanguages) {
+function getCodeMirrorHints(cm, autocompleteSchema) {
 	const cursor = cm.getCursor();
 	const token = cm.getTokenAt(cursor);
 
@@ -173,11 +171,7 @@ function getCodeMirrorHints(cm, autocompleteSchema, availableLanguages) {
 
 	// Get property autocomplete items.
 
-	let list = getSchemaProperties(
-		autocompleteSchema,
-		propertyPathList,
-		availableLanguages
-	);
+	let list = getSchemaProperties(autocompleteSchema, propertyPathList);
 
 	// Filter matched strings.
 
@@ -298,18 +292,11 @@ function getDeepValue(object, path, delimiter = '/') {
  * first, like reading a breadcrumb.
  * @param {object} schema The current evaluated JSON schema object.
  * @param {Array} propertyPathList A list of parent properties to traverse.
- * @param {object} availableLanguages The available languages object to use
- * for i18n properties.
  * @param {object} [fullSchema] The original JSON schema object needed for
  * 	parsing $refs. Only used in recursion.
  * @returns {Array} List of objects with `name` and `type` properties.
  */
-function getSchemaProperties(
-	schema,
-	propertyPathList,
-	availableLanguages,
-	fullSchema
-) {
+function getSchemaProperties(schema, propertyPathList, fullSchema) {
 
 	// Fallback to empty array to avoid undefined errors.
 
@@ -322,15 +309,6 @@ function getSchemaProperties(
 
 	if (schema.$ref) {
 
-		// Check if the reference is for Language IDs, which is dynamically set
-
-		if (schema.$ref === LANGUAGE_ID) {
-			return Object.keys(availableLanguages).map((language) => ({
-				name: language,
-				type: 'string',
-			}));
-		}
-
 		// Check if reference is in the same schema. Only same schema references
 		// are supported (i.e. "#/definitions/test").
 
@@ -340,12 +318,7 @@ function getSchemaProperties(
 				schema.$ref.substring(2)
 			);
 
-			return getSchemaProperties(
-				refSchema,
-				propertyPathList,
-				availableLanguages,
-				fullSchema
-			);
+			return getSchemaProperties(refSchema, propertyPathList, fullSchema);
 		}
 
 		// Throw warning for unsupported reference and return empty array.
@@ -409,7 +382,6 @@ function getSchemaProperties(
 			return getSchemaProperties(
 				schema.properties[property.name].items,
 				propertyPathList.slice(1),
-				availableLanguages,
 				fullSchema
 			);
 		}
@@ -417,7 +389,6 @@ function getSchemaProperties(
 			return getSchemaProperties(
 				schema.properties[property.name],
 				propertyPathList.slice(1),
-				availableLanguages,
 				fullSchema
 			);
 		}
@@ -526,9 +497,7 @@ const CodeMirrorEditor = React.forwardRef(
 		const innerRef = useRef(ref);
 		const editorWrapperRef = useRef();
 		const editorRef = useCombinedRefs(ref, innerRef);
-		const {availableLanguages, jsonAutocompleteEnabled} = useContext(
-			ThemeContext
-		);
+		const {jsonAutocompleteEnabled} = useContext(ThemeContext);
 
 		useEffect(() => {
 			if (editorWrapperRef.current) {
@@ -566,11 +535,7 @@ const CodeMirrorEditor = React.forwardRef(
 
 				if (autocompleteSchema && jsonAutocompleteEnabled) {
 					CodeMirror.registerHelper('hint', 'json', (cm) =>
-						getCodeMirrorHints(
-							cm,
-							autocompleteSchema,
-							availableLanguages
-						)
+						getCodeMirrorHints(cm, autocompleteSchema)
 					);
 
 					codeMirror.on('keyup', (cm, event) => {

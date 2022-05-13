@@ -23,28 +23,23 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Rodrigo Paulino
  */
-public class CheckboxDDMFormFieldTypeReportProcessorTest {
+@RunWith(PowerMockRunner.class)
+public class CheckboxDDMFormFieldTypeReportProcessorTest extends PowerMockito {
 
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
-
-	@BeforeClass
-	public static void setUpClass() {
+	@Before
+	public void setUp() throws Exception {
 		_setUpJSONFactoryUtil();
 	}
 
@@ -116,23 +111,16 @@ public class CheckboxDDMFormFieldTypeReportProcessorTest {
 		Assert.assertEquals(1, valuesJSONObject.getLong("true"));
 	}
 
-	private static void _setUpJSONFactoryUtil() {
-		JSONFactoryUtil jsonFactoryUtil = new JSONFactoryUtil();
-
-		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
-	}
-
 	private DDMFormFieldValue _mockDDMFormFieldValue(String value) {
-		DDMFormFieldValue ddmFormFieldValue = Mockito.mock(
-			DDMFormFieldValue.class);
+		DDMFormFieldValue ddmFormFieldValue = mock(DDMFormFieldValue.class);
 
-		Mockito.when(
+		when(
 			ddmFormFieldValue.getName()
 		).thenReturn(
 			"boolean"
 		);
 
-		Mockito.when(
+		when(
 			ddmFormFieldValue.getType()
 		).thenReturn(
 			DDMFormFieldTypeConstants.CHECKBOX
@@ -143,13 +131,19 @@ public class CheckboxDDMFormFieldTypeReportProcessorTest {
 		localizedValue.addString(LocaleUtil.US, value);
 		localizedValue.setDefaultLocale(LocaleUtil.US);
 
-		Mockito.when(
+		when(
 			ddmFormFieldValue.getValue()
 		).thenReturn(
 			localizedValue
 		);
 
 		return ddmFormFieldValue;
+	}
+
+	private void _setUpJSONFactoryUtil() {
+		JSONFactoryUtil jsonFactoryUtil = new JSONFactoryUtil();
+
+		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
 	}
 
 	private final CheckboxDDMFormFieldTypeReportProcessor

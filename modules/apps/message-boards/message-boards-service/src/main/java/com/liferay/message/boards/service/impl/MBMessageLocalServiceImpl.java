@@ -408,16 +408,15 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			format = "html";
 		}
 
-		if (anonymous || user.isDefaultUser()) {
-			MBGroupServiceSettings mbGroupServiceSettings =
-				MBGroupServiceSettings.getInstance(groupId);
+		MBGroupServiceSettings mbGroupServiceSettings =
+			MBGroupServiceSettings.getInstance(groupId);
 
-			if ((mbGroupServiceSettings != null) &&
-				!mbGroupServiceSettings.isAllowAnonymousPosting()) {
+		if ((mbGroupServiceSettings != null) &&
+			!mbGroupServiceSettings.isAllowAnonymousPosting() &&
+			(anonymous || user.isDefaultUser())) {
 
-				throw new PrincipalException.MustHavePermission(
-					userId, ActionKeys.ADD_MESSAGE);
-			}
+			throw new PrincipalException.MustHavePermission(
+				userId, ActionKeys.ADD_MESSAGE);
 		}
 
 		if (user.isDefaultUser()) {

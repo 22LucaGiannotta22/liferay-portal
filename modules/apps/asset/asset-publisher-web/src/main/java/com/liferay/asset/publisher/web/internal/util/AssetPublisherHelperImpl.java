@@ -75,7 +75,7 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.segments.SegmentsEntryRetriever;
 import com.liferay.segments.constants.SegmentsWebKeys;
 import com.liferay.segments.context.RequestContextMapper;
-import com.liferay.sites.kernel.util.Sites;
+import com.liferay.sites.kernel.util.SitesUtil;
 
 import java.io.Serializable;
 
@@ -800,7 +800,7 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 
 			Group parentGroup = _groupLocalService.getGroup(parentGroupId);
 
-			if (!_sites.isContentSharingWithChildrenEnabled(parentGroup)) {
+			if (!SitesUtil.isContentSharingWithChildrenEnabled(parentGroup)) {
 				throw new PrincipalException();
 			}
 
@@ -893,7 +893,7 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 			Group scopeGroup = _groupLocalService.fetchGroup(scopeGroupId);
 
 			if (scopeGroup.hasAncestor(group.getGroupId()) &&
-				_sites.isContentSharingWithChildrenEnabled(group)) {
+				SitesUtil.isContentSharingWithChildrenEnabled(group)) {
 
 				key = SCOPE_ID_PARENT_GROUP_PREFIX + group.getGroupId();
 			}
@@ -1454,8 +1454,5 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 
 	@Reference
 	private SegmentsEntryRetriever _segmentsEntryRetriever;
-
-	@Reference
-	private Sites _sites;
 
 }

@@ -1291,13 +1291,10 @@ AUI.add(
 					var value = instance.getValue();
 
 					if (instance.get('localizable')) {
-						var defaultLocale = instance.getDefaultLocale();
-
 						if (
-							locale === defaultLocale ||
-							(localizationMap[defaultLocale] !== undefined &&
-								value !== localizationMap[defaultLocale]) ||
-							localizationMap[locale] !== undefined
+							!(locale in localizationMap) ||
+							(localizationMap[locale] !== undefined &&
+								value !== localizationMap[locale])
 						) {
 							localizationMap[locale] = value;
 						}
@@ -4085,7 +4082,7 @@ AUI.add(
 							var defaultLocale = field.getDefaultLocale();
 
 							availableLanguageIds.forEach((locale) => {
-								if (localizationMap[locale] === undefined) {
+								if (!localizationMap[locale]) {
 									localizationMap[locale] =
 										localizationMap[defaultLocale];
 								}

@@ -56,54 +56,36 @@ public class FDSTableSchemaField {
 		return _sortable;
 	}
 
-	public FDSTableSchemaField setActionId(String actionId) {
+	public void setActionId(String actionId) {
 		_actionId = actionId;
-
-		return this;
 	}
 
-	public FDSTableSchemaField setContentRenderer(String contentRenderer) {
+	public void setContentRenderer(String contentRenderer) {
 		_contentRenderer = contentRenderer;
-
-		return this;
 	}
 
-	public FDSTableSchemaField setContentRendererModuleURL(
-		String contentRendererModuleURL) {
-
+	public void setContentRendererModuleURL(String contentRendererModuleURL) {
 		_contentRendererModuleURL = contentRendererModuleURL;
-
-		return this;
 	}
 
-	public FDSTableSchemaField setExpand(boolean expand) {
+	public void setExpand(boolean expand) {
 		_expand = expand;
-
-		return this;
 	}
 
-	public FDSTableSchemaField setFieldName(String fieldName) {
+	public void setFieldName(String fieldName) {
 		_fieldName = fieldName;
-
-		return this;
 	}
 
-	public FDSTableSchemaField setLabel(String label) {
+	public void setLabel(String label) {
 		_label = label;
-
-		return this;
 	}
 
-	public FDSTableSchemaField setSortable(boolean sortable) {
+	public void setSortable(boolean sortable) {
 		_sortable = sortable;
-
-		return this;
 	}
 
-	public FDSTableSchemaField setSortingOrder(SortingOrder sortingOrder) {
+	public void setSortingOrder(SortingOrder sortingOrder) {
 		_sortingOrder = sortingOrder;
-
-		return this;
 	}
 
 	public JSONObject toJSONObject() {

@@ -14,8 +14,6 @@
 
 import {navigate} from 'frontend-js-web';
 
-import openDeleteLayoutModal from './openDeleteLayoutModal';
-
 export default function propsTransformer({portletNamespace, ...otherProps}) {
 	const convertSelectedPages = (itemData) => {
 		if (
@@ -34,19 +32,19 @@ export default function propsTransformer({portletNamespace, ...otherProps}) {
 	};
 
 	const deleteSelectedPages = (itemData) => {
-		openDeleteLayoutModal({
-			message: Liferay.Language.get(
-				'are-you-sure-you-want-to-delete-the-selected-pages-if-the-selected-pages-have-child-pages-they-will-also-be-removed'
-			),
-			multiple: true,
-			onDelete: () => {
-				const form = document.getElementById(`${portletNamespace}fm`);
+		if (
+			confirm(
+				Liferay.Language.get(
+					'are-you-sure-you-want-to-delete-the-selected-pages-if-the-selected-pages-have-child-pages-they-will-also-be-removed'
+				)
+			)
+		) {
+			const form = document.getElementById(`${portletNamespace}fm`);
 
-				if (form) {
-					submitForm(form, itemData?.deleteLayoutURL);
-				}
-			},
-		});
+			if (form) {
+				submitForm(form, itemData?.deleteLayoutURL);
+			}
+		}
 	};
 
 	const exportTranslation = ({exportTranslationURL}) => {

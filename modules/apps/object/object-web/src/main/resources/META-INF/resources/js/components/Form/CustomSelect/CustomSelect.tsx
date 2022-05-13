@@ -14,13 +14,13 @@
 
 import ClayAutocomplete from '@clayui/autocomplete';
 import ClayDropDown from '@clayui/drop-down';
-import React, {useRef, useState} from 'react';
+import React, {ReactNode, useRef, useState} from 'react';
 
 import FieldBase from '../FieldBase';
 
 import './CustomSelect.scss';
 
-export default function CustomSelect<T extends CustomItem = CustomItem>({
+export default function CustomSelect<T extends IItem = IItem>({
 	className,
 	disabled,
 	error,
@@ -47,9 +47,9 @@ export default function CustomSelect<T extends CustomItem = CustomItem>({
 		>
 			<ClayAutocomplete>
 				<ClayAutocomplete.Input
-					defaultValue={value}
+					className="object__custom-select-input"
 					disabled={disabled}
-					onClick={() => setActive((active) => !active)}
+					onClick={() => setActive(!active)}
 					placeholder={Liferay.Language.get('choose-an-option')}
 					ref={inputRef}
 					value={value}
@@ -72,11 +72,9 @@ export default function CustomSelect<T extends CustomItem = CustomItem>({
 							>
 								<div>{option.label}</div>
 
-								{option.description && (
-									<span className="text-small">
-										{option.description}
-									</span>
-								)}
+								<span className="text-small">
+									{option.description}
+								</span>
 							</ClayDropDown.Item>
 						))}
 					</ClayDropDown.ItemList>
@@ -86,12 +84,13 @@ export default function CustomSelect<T extends CustomItem = CustomItem>({
 	);
 }
 
-export interface CustomItem {
+interface IItem {
 	description?: string;
 	label: string;
 	value?: string;
 }
-interface IProps<T extends CustomItem = CustomItem> {
+interface IProps<T extends IItem = IItem> {
+	children?: ReactNode;
 	className?: string;
 	disabled?: boolean;
 	error?: string;

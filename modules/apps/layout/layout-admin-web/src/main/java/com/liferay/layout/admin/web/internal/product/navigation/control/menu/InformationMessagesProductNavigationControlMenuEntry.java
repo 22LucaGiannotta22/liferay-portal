@@ -27,7 +27,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.product.navigation.control.menu.BaseJSPProductNavigationControlMenuEntry;
 import com.liferay.product.navigation.control.menu.ProductNavigationControlMenuEntry;
 import com.liferay.product.navigation.control.menu.constants.ProductNavigationControlMenuCategoryKeys;
-import com.liferay.sites.kernel.util.Sites;
+import com.liferay.sites.kernel.util.SitesUtil;
 
 import java.io.IOException;
 
@@ -138,7 +138,7 @@ public class InformationMessagesProductNavigationControlMenuEntry
 
 		Group group = layout.getGroup();
 
-		if (!_sites.isLayoutUpdateable(layout) ||
+		if (!SitesUtil.isLayoutUpdateable(layout) ||
 			(layout.isLayoutPrototypeLinkActive() &&
 			 !group.hasStagingGroup())) {
 
@@ -163,7 +163,7 @@ public class InformationMessagesProductNavigationControlMenuEntry
 		LayoutSet layoutSet = layout.getLayoutSet();
 
 		if (!layoutSet.isLayoutSetPrototypeLinkActive() ||
-			!_sites.isLayoutModifiedSinceLastMerge(layout) ||
+			!SitesUtil.isLayoutModifiedSinceLastMerge(layout) ||
 			!hasUpdateLayoutPermission(themeDisplay)) {
 
 			return false;
@@ -174,8 +174,5 @@ public class InformationMessagesProductNavigationControlMenuEntry
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		InformationMessagesProductNavigationControlMenuEntry.class);
-
-	@Reference
-	private Sites _sites;
 
 }

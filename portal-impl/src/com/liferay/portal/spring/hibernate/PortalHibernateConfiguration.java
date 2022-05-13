@@ -14,7 +14,6 @@
 
 package com.liferay.portal.spring.hibernate;
 
-import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.internal.change.tracking.hibernate.CTSQLInterceptor;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
@@ -22,15 +21,12 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.lang.reflect.Field;
 
 import java.net.URL;
 
@@ -47,10 +43,6 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.dialect.Dialect;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.internal.SessionFactoryImpl;
-import org.hibernate.metamodel.spi.MetamodelImplementor;
-import org.hibernate.type.spi.TypeConfiguration;
 
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
@@ -182,36 +174,7 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 			_log.error(exception);
 		}
 
-		SessionFactory sessionFactory = super.buildSessionFactory(
-			localSessionFactoryBuilder);
-
-		SessionFactoryImplementor sessionFactoryImplementor =
-			(SessionFactoryImplementor)sessionFactory;
-
-		MetamodelImplementor metamodelImplementor =
-			sessionFactoryImplementor.getMetamodel();
-
-		TypeConfiguration typeConfiguration =
-			metamodelImplementor.getTypeConfiguration();
-
-		try {
-			_META_MODEL_FIELD.set(
-				sessionFactory,
-				ProxyUtil.newDelegateProxyInstance(
-					MetamodelImplementor.class.getClassLoader(),
-					MetamodelImplementor.class,
-					new SessionFactoryDelegate(
-						typeConfiguration.getImportMap()),
-					metamodelImplementor));
-		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Unable to inject optimized query plan cache", exception);
-			}
-		}
-
-		return sessionFactory;
+		return super.buildSessionFactory(localSessionFactoryBuilder);
 	}
 
 	protected ClassLoader getConfigurationClassLoader() {
@@ -266,8 +229,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		}
 	}
 
-	private static final Field _META_MODEL_FIELD;
-
 	private static final String[] _PRELOAD_CLASS_NAMES =
 		PropsValues.
 			SPRING_HIBERNATE_CONFIGURATION_PROXY_FACTORY_PRELOAD_CLASSLOADER_CLASSES;
@@ -275,31 +236,7 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortalHibernateConfiguration.class);
 
-	static {
-		try {
-			_META_MODEL_FIELD = ReflectionUtil.getDeclaredField(
-				SessionFactoryImpl.class, "metamodel");
-		}
-		catch (Exception exception) {
-			throw new ExceptionInInitializerError(exception);
-		}
-	}
-
 	private DataSource _dataSource;
 	private boolean _mvccEnabled = true;
-
-	private static class SessionFactoryDelegate {
-
-		public String getImportedClassName(String className) {
-			return _imports.get(className);
-		}
-
-		private SessionFactoryDelegate(Map<String, String> imports) {
-			_imports = new HashMap<>(imports);
-		}
-
-		private final Map<String, String> _imports;
-
-	}
 
 }

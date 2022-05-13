@@ -280,7 +280,7 @@ definition {
 	@description = "This is a test for COMMERCE-6230. Discount coupon code limitations"
 	@priority = "3"
 	test LimitCouponCodeUsability {
-		property portal.acceptance = "TEST";
+		property portal.acceptance = "false";
 
 		// TODO Review
 
@@ -337,17 +337,17 @@ definition {
 
 		Button.clickPublish();
 
-		Click(locator1 = "Icon#BACK");
-
-		AssertElementPresent(locator1 = "Luca#LUCA3");
-
 		ApplicationsMenu.gotoSite(site = "Minium");
 
 		FrontStore.addInitializerProductToCart(
 			productName = "U-Joint",
 			productQuantity = "1");
 
-		CommerceCheckout.gotoCheckout();
+		CommerceNavigator.gotoMiniCart();
+
+		Button.click(button = "View Details");
+
+		Button.click(button = "Checkout");
 
 		Click(locator1 = "Icon#PLUS");
 
@@ -367,8 +367,6 @@ definition {
 			value1 = "TEST");
 
 		Button.click(button = "Apply");
-
-		WaitForElementPresent(locator1 = "Luca#LUCA");
 
 		Type(
 			key_fieldName = "Name",
@@ -426,7 +424,11 @@ definition {
 			productName = "U-Joint",
 			productQuantity = "1");
 
-		CommerceCheckout.gotoCheckout();
+		CommerceNavigator.gotoMiniCart();
+
+		Button.click(button = "View Details");
+
+		Button.click(button = "Checkout");
 
 		Type(
 			locator1 = "TextInput#DISCOUNT",
@@ -490,7 +492,11 @@ definition {
 			productName = "U-Joint",
 			productQuantity = "1");
 
-		CommerceCheckout.gotoCheckout();
+		CommerceNavigator.gotoMiniCart();
+
+		Button.click(button = "View Details");
+
+		Button.click(button = "Checkout");
 
 		Type(
 			locator1 = "TextInput#DISCOUNT",

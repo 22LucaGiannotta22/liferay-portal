@@ -12,8 +12,6 @@
  * details.
  */
 
-import openDeleteStyleBookModal from './openDeleteSiteModal';
-
 const ACTIONS = {
 	activateSite(itemData) {
 		this.send(itemData.activateSiteURL);
@@ -30,11 +28,13 @@ const ACTIONS = {
 	},
 
 	deleteSite(itemData) {
-		openDeleteStyleBookModal({
-			onDelete: () => {
-				this.send(itemData.deleteSiteURL);
-			},
-		});
+		if (
+			confirm(
+				Liferay.Language.get('are-you-sure-you-want-to-delete-this')
+			)
+		) {
+			this.send(itemData.deleteSiteURL);
+		}
 	},
 
 	leaveSite(itemData) {
@@ -46,31 +46,22 @@ const ACTIONS = {
 	},
 };
 
-export default function propsTransformer({actions, items, ...props}) {
-	const updateItem = (item) => {
-		const newItem = {
-			...item,
-			onClick(event) {
-				const action = item.data?.action;
-
-				if (action) {
-					event.preventDefault();
-
-					ACTIONS[action]?.(item.data);
-				}
-			},
-		};
-
-		if (Array.isArray(item.items)) {
-			newItem.items = item.items.map(updateItem);
-		}
-
-		return newItem;
-	};
-
+export default function propsTransformer({items, ...props}) {
 	return {
 		...props,
-		actions: actions?.map(updateItem),
-		items: items?.map(updateItem),
+		items: items.map((item) => {
+			return {
+				...item,
+				onClick(event) {
+					const action = item.data?.action;
+
+					if (action) {
+						event.preventDefault();
+
+						ACTIONS[action](item.data);
+					}
+				},
+			};
+		}),
 	};
 }

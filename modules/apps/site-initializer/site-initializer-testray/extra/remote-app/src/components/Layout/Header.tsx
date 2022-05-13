@@ -30,10 +30,7 @@ type BreadCrumbTriggerProps = {
 };
 
 const Header = () => {
-	const [{actions, dropdown, heading, symbol, tabs}] = useContext(
-		HeaderContext
-	);
-
+	const [{actions, dropdown, heading, tabs}] = useContext(HeaderContext);
 	const navigate = useNavigate();
 
 	const BreadCrumbTrigger: React.FC<BreadCrumbTriggerProps> = ({
@@ -44,7 +41,7 @@ const Header = () => {
 				className="dropdown-poll-icon mr-2"
 				color="darkblue"
 				fontSize={22}
-				symbol={symbol || 'polls'}
+				symbol="polls"
 			/>
 
 			{displayCarret && (
@@ -107,7 +104,7 @@ const Header = () => {
 
 									<div className="d-flex flex-row">
 										<p
-											className="header-title text-paragraph-xl"
+											className="header-title text-paragraph-lg"
 											title={header.title}
 										>
 											{header.title}

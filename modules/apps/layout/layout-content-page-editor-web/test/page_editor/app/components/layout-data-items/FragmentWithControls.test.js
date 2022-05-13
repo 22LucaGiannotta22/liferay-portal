@@ -60,15 +60,14 @@ const FRAGMENT_ID = 'FRAGMENT_ID';
 const FRAGMENT_CLASS_NAME = 'FRAGMENT_CLASS_NAME';
 
 const renderFragment = ({
-	activeItemId = FRAGMENT_ID,
-	editableValues = {},
+	activeItemId = 'fragment',
 	fragmentConfig = {styles: {}},
 	hasUpdatePermissions = true,
 	lockedExperience = false,
 } = {}) => {
 	const fragmentEntryLink = {
 		cssClass: FRAGMENT_CLASS_NAME,
-		editableValues,
+		editableValues: {},
 		fragmentEntryLinkId: 'fragmentEntryLink',
 	};
 
@@ -181,29 +180,6 @@ describe('FragmentWithControls', () => {
 			const item = baseElement.querySelector(`.${className}`);
 
 			expect(item).toBeVisible();
-		});
-	});
-
-	it('does not set unique classNames when it has inner common styles', () => {
-		config.featureFlagLps132571 = true;
-
-		const {baseElement} = renderFragment({
-			editableValues: {
-				['com.liferay.fragment.entry.processor.styles.StylesFragmentEntryProcessor']: {
-					hasCommonStyles: true,
-				},
-			},
-		});
-
-		const classes = [
-			getLayoutDataItemTopperUniqueClassName(FRAGMENT_ID),
-			getLayoutDataItemUniqueClassName(FRAGMENT_ID),
-		];
-
-		classes.forEach((className) => {
-			const item = baseElement.querySelector(`.${className}`);
-
-			expect(item).toBeNull();
 		});
 	});
 });

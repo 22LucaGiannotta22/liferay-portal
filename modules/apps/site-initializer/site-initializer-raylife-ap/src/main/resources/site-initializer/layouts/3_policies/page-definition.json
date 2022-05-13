@@ -10,6 +10,7 @@
 					"indexed": true,
 					"layout": {
 						"borderWidth": 0,
+						"htmlTag": "Div",
 						"marginBottom": 0,
 						"marginLeft": 0,
 						"marginRight": 0,
@@ -84,6 +85,7 @@
 											"indexed": true,
 											"layout": {
 												"borderWidth": 0,
+												"htmlTag": "Div",
 												"marginBottom": 0,
 												"marginLeft": 0,
 												"marginRight": 0,
@@ -168,10 +170,11 @@
 																			{
 																				"definition": {
 																					"fragment": {
-																						"key": "policies-total-active"
+																						"key": "fake-content"
 																					},
 																					"fragmentConfig": {
-																						"textColor": ""
+																						"fakeContentId": "fake content",
+																						"height": "257px"
 																					},
 																					"fragmentFields": [
 																					],
@@ -330,12 +333,12 @@
 											{
 												"definition": {
 													"fragmentStyle": {
-														"borderWidth": "0",
-														"textAlign": ""
+														"borderWidth": "0"
 													},
 													"indexed": true,
 													"layout": {
 														"borderWidth": 0,
+														"htmlTag": "Div",
 														"marginBottom": 0,
 														"marginLeft": 0,
 														"marginRight": 0,

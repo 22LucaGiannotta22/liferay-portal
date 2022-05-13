@@ -41,8 +41,8 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ContactLocalService;
-import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.GroupService;
+import com.liferay.portal.kernel.service.RoleService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -124,7 +124,7 @@ public class UserAccountResourceDTOConverter
 					organization -> _toOrganizationBrief(organization),
 					OrganizationBrief.class);
 				siteBriefs = TransformUtil.transformToArray(
-					_groupLocalService.getGroups(
+					_groupService.getGroups(
 						contextUser.getCompanyId(),
 						GroupConstants.DEFAULT_PARENT_GROUP_ID, true),
 					group -> _toSiteBrief(dtoConverterContext, group),
@@ -231,7 +231,7 @@ public class UserAccountResourceDTOConverter
 						}
 
 						return TransformUtil.transformToArray(
-							_roleLocalService.getUserRoles(user.getUserId()),
+							_roleService.getUserRoles(user.getUserId()),
 							role -> _toRoleBrief(dtoConverterContext, role),
 							RoleBrief.class);
 					});
@@ -307,13 +307,13 @@ public class UserAccountResourceDTOConverter
 	private ContactLocalService _contactLocalService;
 
 	@Reference
-	private GroupLocalService _groupLocalService;
+	private GroupService _groupService;
 
 	@Reference
 	private Portal _portal;
 
 	@Reference
-	private RoleLocalService _roleLocalService;
+	private RoleService _roleService;
 
 	@Reference
 	private UserLocalService _userLocalService;

@@ -12,18 +12,14 @@
  * details.
  */
 
+import ClayButton from '@clayui/button';
 import ClayTabs from '@clayui/tabs';
 import {fetch} from 'frontend-js-web';
 import React, {useState} from 'react';
 
-import {
-	availableLocales,
-	defaultLanguageId,
-	defaultLocale,
-} from '../utils/locale';
 import {BasicInfo, Conditions} from './DataValidation/ObjectValidationTabs';
 import {useObjectValidationForm} from './ObjectValidationFormBase';
-import {SidePanelForm, closeSidePanel, openToast} from './SidePanelContent';
+import SidePanelContent from './SidePanelContent';
 
 const TABS = [
 	{
@@ -36,9 +32,30 @@ const TABS = [
 	},
 ];
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId() as Locale;
+const defaultSymbol = defaultLanguageId.replace('_', '-').toLocaleLowerCase();
+const locales: {label: string; symbol: string}[] = [];
+const languageLabels: string[] = [];
+const languages = Liferay.Language.available as LocalizedValue<string>;
+
+Object.entries(languages).forEach(([languageId, label]) => {
+	locales.push({
+		label: languageId,
+		symbol: languageId.replace('_', '-').toLocaleLowerCase(),
+	});
+
+	languageLabels.push(label);
+});
+
+const defaultLocale = locales.find(({symbol}) => symbol === defaultSymbol);
+
+function closeSidePanel() {
+	const parentWindow = Liferay.Util.getOpener();
+	parentWindow.Liferay.fire('close-side-panel');
+}
+
 export default function EditObjectValidation({
 	objectValidationRule: initialValues,
-	objectValidationRuleElements,
 	readOnly,
 }: IProps) {
 	const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -56,18 +73,21 @@ export default function EditObjectValidation({
 			}
 		);
 
+		const parentWindow = Liferay.Util.getOpener();
+
 		if (response.ok) {
 			closeSidePanel();
-			openToast({
+			parentWindow.Liferay.Util.openToast({
 				message: Liferay.Language.get(
 					'the-object-validation-was-updated-successfully'
 				),
+				type: 'success',
 			});
 		}
 		else {
 			const message = Liferay.Language.get('an-error-occurred');
 
-			openToast({message, type: 'danger'});
+			parentWindow.Liferay.Util.openToast({message, type: 'danger'});
 		}
 	};
 
@@ -80,10 +100,7 @@ export default function EditObjectValidation({
 	} = useObjectValidationForm({initialValues, onSubmit});
 
 	return (
-		<SidePanelForm
-			onSubmit={handleSubmit}
-			title={initialValues.name?.[defaultLanguageId] as string}
-		>
+		<>
 			<ClayTabs className="side-panel-iframe__tabs">
 				{TABS.map(({label}, index) => (
 					<ClayTabs.Item
@@ -96,35 +113,46 @@ export default function EditObjectValidation({
 				))}
 			</ClayTabs>
 
-			<ClayTabs.Content activeIndex={activeIndex} fade>
-				{TABS.map(({Component, label}, index) =>
-					activeIndex === index ? (
-						<ClayTabs.TabPane key={index}>
-							<Component
-								componentLabel={label}
-								defaultLocale={defaultLocale!}
-								disabled={readOnly}
-								errors={errors}
-								handleChange={handleChange}
-								locales={availableLocales}
-								objectValidationRuleElements={
-									objectValidationRuleElements
-								}
-								setValues={setValues}
-								values={values}
-							/>
-						</ClayTabs.TabPane>
-					) : (
-						<React.Fragment key={index} />
-					)
-				)}
-			</ClayTabs.Content>
-		</SidePanelForm>
+			<SidePanelContent className="side-panel-content--layout">
+				<SidePanelContent.Body>
+					<ClayTabs.Content activeIndex={activeIndex} fade>
+						{TABS.map(({Component, label}, index) => (
+							<ClayTabs.TabPane key={index}>
+								<Component
+									componentLabel={label}
+									defaultLocale={defaultLocale!}
+									disabled={readOnly}
+									errors={errors}
+									handleChange={handleChange}
+									locales={locales}
+									setValues={setValues}
+									values={values}
+								/>
+							</ClayTabs.TabPane>
+						))}
+					</ClayTabs.Content>
+				</SidePanelContent.Body>
+
+				<SidePanelContent.Footer>
+					<ClayButton.Group spaced>
+						<ClayButton
+							displayType="secondary"
+							onClick={closeSidePanel}
+						>
+							{Liferay.Language.get('cancel')}
+						</ClayButton>
+
+						<ClayButton disabled={readOnly} onClick={handleSubmit}>
+							{Liferay.Language.get('save')}
+						</ClayButton>
+					</ClayButton.Group>
+				</SidePanelContent.Footer>
+			</SidePanelContent>
+		</>
 	);
 }
 
 interface IProps {
 	objectValidationRule: ObjectValidation;
-	objectValidationRuleElements: ObjectValidationRuleElement[];
 	readOnly: boolean;
 }

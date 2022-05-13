@@ -15,12 +15,10 @@
 package com.liferay.layout.internal.crawler;
 
 import com.liferay.layout.crawler.LayoutCrawler;
-import com.liferay.layout.internal.configuration.LayoutCrawlerClientConfiguration;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -73,22 +71,12 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 		Cookie cookie = new Cookie(
 			CookieKeys.GUEST_LANGUAGE_ID, LocaleUtil.toLanguageId(locale));
 
-		LayoutCrawlerClientConfiguration layoutCrawlerClientConfiguration =
-			_configurationProvider.getGroupConfiguration(
-				LayoutCrawlerClientConfiguration.class, layout.getGroupId());
-
-		if (layoutCrawlerClientConfiguration.enabled()) {
-			cookie.setDomain(layoutCrawlerClientConfiguration.hostName());
-		}
-		else {
-			cookie.setDomain(inetAddress.getHostName());
-		}
+		cookie.setDomain(inetAddress.getHostName());
 
 		options.setCookies(new Cookie[] {cookie});
 
 		ThemeDisplay themeDisplay = _getThemeDisplay(
-			company, layout, layoutCrawlerClientConfiguration, locale,
-			inetAddress);
+			layout, locale, inetAddress, company);
 
 		options.setLocation(
 			HttpComponentsUtil.addParameter(
@@ -117,9 +105,8 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 	}
 
 	private ThemeDisplay _getThemeDisplay(
-			Company company, Layout layout,
-			LayoutCrawlerClientConfiguration layoutCrawlerClientConfiguration,
-			Locale locale, InetAddress inetAddress)
+			Layout layout, Locale locale, InetAddress inetAddress,
+			Company company)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = new ThemeDisplay();
@@ -132,19 +119,9 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 		themeDisplay.setLayoutSet(layout.getLayoutSet());
 		themeDisplay.setLocale(locale);
 		themeDisplay.setScopeGroupId(layout.getGroupId());
-
-		if (layoutCrawlerClientConfiguration.enabled()) {
-			themeDisplay.setSecure(layoutCrawlerClientConfiguration.secure());
-			themeDisplay.setServerName(
-				layoutCrawlerClientConfiguration.hostName());
-			themeDisplay.setServerPort(layoutCrawlerClientConfiguration.port());
-		}
-		else {
-			themeDisplay.setServerName(inetAddress.getHostName());
-			themeDisplay.setServerPort(
-				_portal.getPortalServerPort(_isHttpsEnabled()));
-		}
-
+		themeDisplay.setServerName(inetAddress.getHostName());
+		themeDisplay.setServerPort(
+			_portal.getPortalServerPort(_isHttpsEnabled()));
 		themeDisplay.setSiteGroupId(layout.getGroupId());
 
 		return themeDisplay;
@@ -167,9 +144,6 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
-
-	@Reference
-	private ConfigurationProvider _configurationProvider;
 
 	@Reference
 	private Http _http;

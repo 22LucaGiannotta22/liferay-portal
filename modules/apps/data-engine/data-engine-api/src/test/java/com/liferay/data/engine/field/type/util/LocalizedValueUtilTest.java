@@ -114,7 +114,7 @@ public class LocalizedValueUtilTest {
 		JSONAssert.assertEquals(
 			JSONUtil.put(
 				"eng"
-			).toString(),
+			).toJSONString(),
 			String.valueOf(map.get("en_US")), false);
 	}
 
@@ -133,7 +133,7 @@ public class LocalizedValueUtilTest {
 		JSONAssert.assertEquals(
 			JSONUtil.put(
 				"language", "eng"
-			).toString(),
+			).toJSONString(),
 			String.valueOf(map.get("en_US")), false);
 	}
 

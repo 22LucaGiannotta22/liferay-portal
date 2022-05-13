@@ -83,10 +83,11 @@ public class WikiPageStagedModelDataHandler
 			return;
 		}
 
-		deleteStagedModel(
-			_wikiPageLocalService.getLatestPage(
-				pageResource.getResourcePrimKey(), WorkflowConstants.STATUS_ANY,
-				true));
+		WikiPage latestPage = _wikiPageLocalService.getLatestPage(
+			pageResource.getResourcePrimKey(), WorkflowConstants.STATUS_ANY,
+			true);
+
+		deleteStagedModel(latestPage);
 	}
 
 	@Override

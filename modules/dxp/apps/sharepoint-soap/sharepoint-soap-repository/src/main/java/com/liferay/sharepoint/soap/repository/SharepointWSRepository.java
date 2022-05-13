@@ -761,9 +761,11 @@ public class SharepointWSRepository
 
 			sharepointConnection.moveSharepointObject(path, newPath);
 
+			sharepointObject = sharepointConnection.getSharepointObject(
+				newPath);
+
 			return _toExtRepositoryObject(
-				extRepositoryObjectType,
-				sharepointConnection.getSharepointObject(newPath));
+				extRepositoryObjectType, sharepointObject);
 		}
 		catch (SharepointException | SharepointRuntimeException exception) {
 			throw new SystemException(exception);

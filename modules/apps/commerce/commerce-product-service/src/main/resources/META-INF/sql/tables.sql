@@ -273,7 +273,6 @@ create table CPMeasurementUnit (
 	mvccVersion LONG default 0 not null,
 	ctCollectionId LONG default 0 not null,
 	uuid_ VARCHAR(75) null,
-	externalReferenceCode VARCHAR(75) null,
 	CPMeasurementUnitId LONG not null,
 	groupId LONG,
 	companyId LONG,

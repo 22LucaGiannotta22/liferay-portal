@@ -16,6 +16,7 @@ package com.liferay.product.navigation.control.menu.web.internal;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIcon;
 import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIconTracker;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -26,6 +27,8 @@ import com.liferay.portal.kernel.util.comparator.PortletConfigurationIconCompara
 import com.liferay.product.navigation.control.menu.BaseJSPProductNavigationControlMenuEntry;
 import com.liferay.product.navigation.control.menu.ProductNavigationControlMenuEntry;
 import com.liferay.product.navigation.control.menu.constants.ProductNavigationControlMenuCategoryKeys;
+
+import java.util.List;
 
 import javax.portlet.PortletRequest;
 
@@ -73,11 +76,12 @@ public class PortletOptionsProductNavigationControlMenuEntry
 			(PortletRequest)httpServletRequest.getAttribute(
 				JavaConstants.JAVAX_PORTLET_REQUEST);
 
-		if (ListUtil.isEmpty(
-				PortletConfigurationIconTracker.getPortletConfigurationIcons(
-					_getPortletId(httpServletRequest), portletRequest,
-					PortletConfigurationIconComparator.INSTANCE))) {
+		List<PortletConfigurationIcon> portletConfigurationIcons =
+			PortletConfigurationIconTracker.getPortletConfigurationIcons(
+				_getPortletId(httpServletRequest), portletRequest,
+				PortletConfigurationIconComparator.INSTANCE);
 
+		if (ListUtil.isEmpty(portletConfigurationIcons)) {
 			return false;
 		}
 

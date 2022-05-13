@@ -127,10 +127,10 @@ public class ChainingCheck extends BaseCheck {
 
 		String variableName = variableNameDetailAST.getText();
 
-		if (!classOrVariableName.equals(
-				getVariableTypeName(
-					methodCallDetailAST, variableName, false))) {
+		String variableTypeName = getVariableTypeName(
+			methodCallDetailAST, variableName, false);
 
+		if (!classOrVariableName.equals(variableTypeName)) {
 			return;
 		}
 

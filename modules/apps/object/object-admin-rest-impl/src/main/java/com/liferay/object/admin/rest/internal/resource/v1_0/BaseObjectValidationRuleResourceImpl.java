@@ -54,7 +54,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -517,25 +516,12 @@ public abstract class BaseObjectValidationRuleResourceImpl
 		throws Exception {
 
 		UnsafeConsumer<ObjectValidationRule, Exception>
-			objectValidationRuleUnsafeConsumer = null;
-
-		String createStrategy = (String)parameters.getOrDefault(
-			"createStrategy", "INSERT");
-
-		if ("INSERT".equalsIgnoreCase(createStrategy)) {
 			objectValidationRuleUnsafeConsumer =
 				objectValidationRule ->
 					postObjectDefinitionObjectValidationRule(
 						Long.parseLong(
 							(String)parameters.get("objectDefinitionId")),
 						objectValidationRule);
-		}
-
-		if (objectValidationRuleUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Create strategy \"" + createStrategy +
-					"\" is not supported for ObjectValidationRule");
-		}
 
 		if (contextBatchUnsafeConsumer != null) {
 			contextBatchUnsafeConsumer.accept(
@@ -621,50 +607,15 @@ public abstract class BaseObjectValidationRuleResourceImpl
 			Map<String, Serializable> parameters)
 		throws Exception {
 
-		UnsafeConsumer<ObjectValidationRule, Exception>
-			objectValidationRuleUnsafeConsumer = null;
+		for (ObjectValidationRule objectValidationRule :
+				objectValidationRules) {
 
-		String updateStrategy = (String)parameters.getOrDefault(
-			"updateStrategy", "UPDATE");
-
-		if ("PARTIAL_UPDATE".equalsIgnoreCase(updateStrategy)) {
-			objectValidationRuleUnsafeConsumer =
-				objectValidationRule -> patchObjectValidationRule(
-					objectValidationRule.getId() != null ?
-						objectValidationRule.getId() :
-							Long.parseLong(
-								(String)parameters.get(
-									"objectValidationRuleId")),
-					objectValidationRule);
-		}
-
-		if ("UPDATE".equalsIgnoreCase(updateStrategy)) {
-			objectValidationRuleUnsafeConsumer =
-				objectValidationRule -> putObjectValidationRule(
-					objectValidationRule.getId() != null ?
-						objectValidationRule.getId() :
-							Long.parseLong(
-								(String)parameters.get(
-									"objectValidationRuleId")),
-					objectValidationRule);
-		}
-
-		if (objectValidationRuleUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Update strategy \"" + updateStrategy +
-					"\" is not supported for ObjectValidationRule");
-		}
-
-		if (contextBatchUnsafeConsumer != null) {
-			contextBatchUnsafeConsumer.accept(
-				objectValidationRules, objectValidationRuleUnsafeConsumer);
-		}
-		else {
-			for (ObjectValidationRule objectValidationRule :
-					objectValidationRules) {
-
-				objectValidationRuleUnsafeConsumer.accept(objectValidationRule);
-			}
+			putObjectValidationRule(
+				objectValidationRule.getId() != null ?
+					objectValidationRule.getId() :
+						Long.parseLong(
+							(String)parameters.get("objectValidationRuleId")),
+				objectValidationRule);
 		}
 	}
 

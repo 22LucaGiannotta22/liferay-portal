@@ -68,9 +68,8 @@ public interface ObjectActionLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public ObjectAction addObjectAction(
-			long userId, long objectDefinitionId, boolean active,
-			String description, String name, String objectActionExecutorKey,
-			String objectActionTriggerKey,
+			long userId, long objectDefinitionId, boolean active, String name,
+			String objectActionExecutorKey, String objectActionTriggerKey,
 			UnicodeProperties parametersUnicodeProperties)
 		throws PortalException;
 
@@ -304,8 +303,8 @@ public interface ObjectActionLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public ObjectAction updateObjectAction(
-			long objectActionId, boolean active, String description,
-			String name, UnicodeProperties parametersUnicodeProperties)
+			long objectActionId, boolean active, String name,
+			UnicodeProperties parametersUnicodeProperties)
 		throws PortalException;
 
 	/**

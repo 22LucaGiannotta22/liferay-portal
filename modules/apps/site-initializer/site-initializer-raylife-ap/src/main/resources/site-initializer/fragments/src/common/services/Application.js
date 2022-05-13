@@ -19,7 +19,3 @@ const DeliveryAPI = 'o/c/raylifeapplications';
 export function getApplicationsStatus(status) {
 	return axios.get(`${DeliveryAPI}/?filter=applicationStatus eq '${status}'`);
 }
-
-export function getApplications() {
-	return axios.get(`${DeliveryAPI}/`);
-}

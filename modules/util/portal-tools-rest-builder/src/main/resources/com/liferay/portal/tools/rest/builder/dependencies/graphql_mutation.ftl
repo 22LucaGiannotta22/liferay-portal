@@ -47,6 +47,7 @@ public class Mutation {
 
 	<#assign
 		javaMethodSignatures = freeMarkerTool.getGraphQLJavaMethodSignatures(configYAML, "mutation", openAPIYAML)
+
 		schemaNames = freeMarkerTool.getGraphQLSchemaNames(javaMethodSignatures)
 	/>
 
@@ -115,11 +116,6 @@ public class Mutation {
 	}
 
 	<#list schemaNames as schemaName>
-		<#assign
-			javaDataType = freeMarkerTool.getJavaDataType(configYAML, openAPIYAML, schemaName)!""
-			generateBatch = freeMarkerTool.generateBatch(configYAML, javaDataType, freeMarkerTool.getResourceJavaMethodSignatures(configYAML, openAPIYAML, schemaName))
-		/>
-
 		private void _populateResourceContext(${schemaName}Resource ${freeMarkerTool.getSchemaVarName(schemaName)}Resource) throws Exception {
 			${freeMarkerTool.getSchemaVarName(schemaName)}Resource.setContextAcceptLanguage(_acceptLanguage);
 			${freeMarkerTool.getSchemaVarName(schemaName)}Resource.setContextCompany(_company);
@@ -130,9 +126,7 @@ public class Mutation {
 			${freeMarkerTool.getSchemaVarName(schemaName)}Resource.setGroupLocalService(_groupLocalService);
 			${freeMarkerTool.getSchemaVarName(schemaName)}Resource.setRoleLocalService(_roleLocalService);
 
-			<#if generateBatch>
-				<#assign useVulcanBatchEngineImportTaskResource = true />
-
+			<#if configYAML.generateBatch>
 				${freeMarkerTool.getSchemaVarName(schemaName)}Resource.setVulcanBatchEngineImportTaskResource(_vulcanBatchEngineImportTaskResource);
 			</#if>
 		}
@@ -152,7 +146,7 @@ public class Mutation {
 	private UriInfo _uriInfo;
 	private com.liferay.portal.kernel.model.User _user;
 
-	<#if useVulcanBatchEngineImportTaskResource??>
+	<#if configYAML.generateBatch>
 		private VulcanBatchEngineImportTaskResource _vulcanBatchEngineImportTaskResource;
 	</#if>
 

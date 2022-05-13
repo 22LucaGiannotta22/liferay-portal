@@ -116,6 +116,7 @@ export default function InviteUserModal({closeModal, observer, parentData}) {
 						<ClayInput.GroupItem>
 							<ClayMultiSelect
 								id="inviteUsersEmailInput"
+								inputValue={emailsQuery}
 								items={selectedEmails}
 								locator={{
 									label: 'emailAddress',
@@ -126,7 +127,6 @@ export default function InviteUserModal({closeModal, observer, parentData}) {
 								placeholder={Liferay.Language.get(
 									'users-emails'
 								)}
-								value={emailsQuery}
 							/>
 						</ClayInput.GroupItem>
 					</ClayInput.Group>

@@ -55,16 +55,6 @@
 	<td>//a[contains(@href, 'objectEntryId')]</td>
 	<td></td>
 </tr>
-<tr>
-	<td>INVITE_MEMBERS_CANCEL_BUTTON</td>
-	<td>//button[contains(@class,'btn-outline-borderless') and contains(text(),'Cancel')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>SEND_INVITATIONS_BUTTON</td>
-	<td>//button[contains(@class,'btn-primary') and contains(text(),'Send Invitations')]</td>
-	<td></td>
-</tr>
 </tbody>
 </table>
 </body>

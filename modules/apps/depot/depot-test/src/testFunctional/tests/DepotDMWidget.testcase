@@ -198,6 +198,7 @@ definition {
 		JSONDocument.addFileWithUploadedFile(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentTitle = "DM Document Title",
+			folderName = "Depot Folder Name",
 			groupName = "Test Depot Name",
 			mimeType = "application/msword",
 			sourceFileName = "Document_1.doc");
@@ -208,7 +209,7 @@ definition {
 
 		DMDocument.setRootFolder(
 			depotName = "Test Depot Name",
-			selectRootFolder = "Home");
+			dmRootFolderName = "Depot Folder Name");
 
 		Navigator.openSitePage(
 			pageName = "Documents and Media Page",
@@ -216,17 +217,15 @@ definition {
 
 		DMDocument.deletePG(dmDocumentTitle = "DM Document Title");
 
-		LexiconEntry.changeDisplayStyle(displayStyle = "list");
-
-		DMFolder.deletePG(dmFolderName = "Depot Folder Name");
-
 		Navigator.openSitePage(
 			pageName = "Documents and Media Page",
 			siteName = "Site Name");
 
 		DMPortlet.viewDefaultPG();
 
-		DepotNavigator.openDepotDocumentsAndMediaAdmin(depotName = "Test Depot Name");
+		DepotNavigator.openToDMFolder(
+			depotName = "Test Depot Name",
+			folderName = "Depot Folder Name");
 
 		DMDocument.viewDefault();
 	}

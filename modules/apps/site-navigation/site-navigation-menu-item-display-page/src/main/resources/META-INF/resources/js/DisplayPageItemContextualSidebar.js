@@ -16,12 +16,11 @@ import ClayAlert from '@clayui/alert';
 import {ClayButtonWithIcon} from '@clayui/button';
 import ClayForm, {ClayCheckbox, ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import ClayLabel from '@clayui/label';
 import classNames from 'classnames';
 import {TranslationAdminSelector} from 'frontend-js-components-web';
 import {fetch, objectToFormData, openSelectionModal} from 'frontend-js-web';
 import PropTypes from 'prop-types';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import '../css/main.scss';
 
@@ -48,10 +47,6 @@ function DisplayPageItemContextualSidebar({
 	const [type, setType] = useState(itemType);
 	const [subtype, setSubtype] = useState(itemSubtype);
 	const [itemData, setItemData] = useState(item.data);
-	const [customName, setCustomName] = useState(
-		translations[selectedLocaleId] || item.title
-	);
-	const [customNameInvalid, setCustomNameInvalid] = useState(false);
 
 	const {
 		eventName,
@@ -59,24 +54,6 @@ function DisplayPageItemContextualSidebar({
 		itemSelectorURL,
 		modalTitle,
 	} = chooseItemProps;
-
-	useEffect(() => {
-		const onFormSubmit = (event) => {
-			if (!customName) {
-				event.preventDefault();
-
-				setCustomNameInvalid(true);
-			}
-		};
-
-		const submitButton = document.querySelector('button[type=submit]');
-
-		submitButton?.addEventListener('click', onFormSubmit);
-
-		return () => {
-			submitButton?.removeEventListener('click', onFormSubmit);
-		};
-	}, [customName]);
 
 	const openChooseItemModal = () =>
 		openSelectionModal({
@@ -146,17 +123,12 @@ function DisplayPageItemContextualSidebar({
 					data-tooltip-align="top"
 					title={Liferay.Language.get('use-custom-name-help')}
 				>
-					<ClayIcon symbol="question-circle" />
+					<ClayIcon symbol="question-circle-full" />
 				</span>
 			</ClayForm.Group>
 
-			<ClayForm.Group
-				className={classNames({'has-error': customNameInvalid})}
-			>
-				<label
-					className={classNames({disabled: !customNameEnabled})}
-					htmlFor={`${namespace}_nameInput`}
-				>
+			<ClayForm.Group>
+				<label htmlFor={`${namespace}_nameInput`}>
 					{Liferay.Language.get('name')}
 				</label>
 
@@ -165,16 +137,14 @@ function DisplayPageItemContextualSidebar({
 						<ClayInput
 							disabled={!customNameEnabled}
 							id={`${namespace}_nameInput`}
-							onChange={(event) => {
+							onChange={(event) =>
 								setTranslations({
 									...translations,
 									[selectedLocaleId]: event.target.value,
-								});
-
-								setCustomName(event.target.value);
-							}}
+								})
+							}
 							type="text"
-							value={customName}
+							value={translations[selectedLocaleId] || ''}
 						/>
 					</ClayInput.GroupItem>
 
@@ -194,12 +164,6 @@ function DisplayPageItemContextualSidebar({
 						/>
 					</ClayInput.GroupItem>
 				</ClayInput.Group>
-
-				{customNameInvalid && (
-					<ClayForm.FeedbackItem>
-						{Liferay.Language.get('this-field-is-required')}
-					</ClayForm.FeedbackItem>
-				)}
 			</ClayForm.Group>
 
 			<ClayForm.Group
@@ -214,8 +178,8 @@ function DisplayPageItemContextualSidebar({
 						<ClayInput
 							className="text-secondary"
 							id={`${namespace}_itemInput`}
-							onChange={() => {}}
 							onClick={openChooseItemModal}
+							readOnly
 							type="text"
 							value={selectedItem.title}
 						/>
@@ -256,9 +220,7 @@ function DisplayPageItemContextualSidebar({
 						{Liferay.Language.get('type')}
 					</p>
 
-					<div>
-						<ClayLabel displayType="secondary">{type}</ClayLabel>
-					</div>
+					<p className="list-group-text">{type}</p>
 				</div>
 			</ClayForm.Group>
 

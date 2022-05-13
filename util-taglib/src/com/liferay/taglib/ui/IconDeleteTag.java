@@ -83,7 +83,12 @@ public class IconDeleteTag extends IconTag {
 			icon = getIcon();
 
 			if (Validator.isNull(icon)) {
-				icon = "trash";
+				if (_trash) {
+					icon = "trash";
+				}
+				else {
+					icon = "times-circle";
+				}
 			}
 
 			if (!isLabel()) {
@@ -96,7 +101,14 @@ public class IconDeleteTag extends IconTag {
 		setMarkupView("lexicon");
 
 		if (Validator.isNull(getMessage())) {
-			setMessage(LanguageUtil.get(_getResourceBundle(), "delete"));
+			if (_trash) {
+				setMessage(
+					LanguageUtil.get(
+						_getResourceBundle(), "move-to-recycle-bin"));
+			}
+			else {
+				setMessage(LanguageUtil.get(_getResourceBundle(), "delete"));
+			}
 		}
 
 		String url = getUrl();

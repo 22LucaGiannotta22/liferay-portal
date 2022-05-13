@@ -15,7 +15,6 @@
 import {ADD_FRAGMENT_COMPOSITION, INIT} from '../actions/types';
 import {LAYOUT_DATA_ITEM_TYPE_LABELS} from '../config/constants/layoutDataItemTypeLabels';
 import {LAYOUT_DATA_ITEM_TYPES} from '../config/constants/layoutDataItemTypes';
-import {config} from '../config/index';
 
 const CONTENT_DISPLAY_COLLECTION_ID = 'content-display';
 
@@ -82,10 +81,7 @@ export default function fragmentsReducer(fragments = [], action) {
 						},
 						icon: 'container',
 						itemId: 'container',
-						label:
-							LAYOUT_DATA_ITEM_TYPE_LABELS[
-								LAYOUT_DATA_ITEM_TYPES.container
-							],
+						label: LAYOUT_DATA_ITEM_TYPE_LABELS.container,
 						type: 'container',
 					},
 					{
@@ -94,52 +90,14 @@ export default function fragmentsReducer(fragments = [], action) {
 						},
 						icon: 'table',
 						itemId: 'row',
-						label:
-							LAYOUT_DATA_ITEM_TYPE_LABELS[
-								LAYOUT_DATA_ITEM_TYPES.row
-							],
+						label: LAYOUT_DATA_ITEM_TYPE_LABELS.row,
 						type: 'row',
 					},
 				],
 				name: Liferay.Language.get('layout-elements'),
 			});
 
-			let formComponentsCollection = {fragmentEntries: []};
-
-			const formComponentsCollectionIndex = newFragments.findIndex(
-				(collection) => collection.fragmentCollectionId === 'INPUTS'
-			);
-
-			if (formComponentsCollectionIndex !== -1) {
-				[formComponentsCollection] = newFragments.splice(
-					formComponentsCollectionIndex,
-					1
-				);
-			}
-
-			if (config.featureFlagLps150277) {
-				newFragments.splice(2, 0, {
-					fragmentCollectionId: 'form-components',
-					fragmentEntries: [
-						{
-							data: {
-								itemType: LAYOUT_DATA_ITEM_TYPES.form,
-							},
-							icon: 'container',
-							itemId: 'form',
-							label:
-								LAYOUT_DATA_ITEM_TYPE_LABELS[
-									LAYOUT_DATA_ITEM_TYPES.form
-								],
-							type: 'form',
-						},
-						...formComponentsCollection.fragmentEntries,
-					],
-					name: Liferay.Language.get('form-components'),
-				});
-			}
-
-			newFragments.splice(3, 0, {
+			newFragments.splice(2, 0, {
 				...(contentDisplayCollection ||
 					DEFAULT_CONTENT_DISPLAY_COLLECTION),
 

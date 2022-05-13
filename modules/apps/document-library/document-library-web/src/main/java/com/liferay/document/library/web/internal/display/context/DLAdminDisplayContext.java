@@ -415,10 +415,6 @@ public class DLAdminDisplayContext {
 		return mvcRenderCommandName.equals("/document_library/search");
 	}
 
-	public boolean isUpdateAutoTags() {
-		return _assetAutoTaggerConfiguration.isUpdateAutoTags();
-	}
-
 	public boolean isVersioningStrategyOverridable() {
 		return _versioningStrategy.isOverridable();
 	}

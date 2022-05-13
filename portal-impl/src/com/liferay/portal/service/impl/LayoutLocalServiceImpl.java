@@ -25,7 +25,6 @@ import com.liferay.petra.sql.dsl.query.FromStep;
 import com.liferay.petra.sql.dsl.query.GroupByStep;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.change.tracking.CTTransactionException;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -3939,9 +3938,7 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 	private boolean _mergeLayout(Layout layout, Object... arguments)
 		throws PortalException {
 
-		if (MergeLayoutPrototypesThreadLocal.isInProgress() ||
-			StartupHelperUtil.isUpgrading()) {
-
+		if (MergeLayoutPrototypesThreadLocal.isInProgress()) {
 			return false;
 		}
 
@@ -3991,10 +3988,9 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 	private boolean _mergeLayouts(
 		Group group, LayoutSet layoutSet, Object... arguments) {
 
-		if ((MergeLayoutPrototypesThreadLocal.isMergeComplete(
+		if (MergeLayoutPrototypesThreadLocal.isMergeComplete(
 				"getLayouts", arguments) &&
-			 !group.isUser()) ||
-			StartupHelperUtil.isUpgrading()) {
+			!group.isUser()) {
 
 			return false;
 		}

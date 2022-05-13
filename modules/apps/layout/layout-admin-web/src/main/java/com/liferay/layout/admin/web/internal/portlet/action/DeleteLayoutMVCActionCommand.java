@@ -42,7 +42,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.segments.exception.RequiredSegmentsExperienceException;
-import com.liferay.sites.kernel.util.Sites;
+import com.liferay.sites.kernel.util.SitesUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -97,7 +97,7 @@ public class DeleteLayoutMVCActionCommand extends BaseMVCActionCommand {
 
 		Group group = layout.getGroup();
 
-		if (!_sites.isLayoutDeleteable(layout)) {
+		if (!SitesUtil.isLayoutDeleteable(layout)) {
 			PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
 
 			SessionMessages.add(
@@ -184,8 +184,5 @@ public class DeleteLayoutMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
-
-	@Reference
-	private Sites _sites;
 
 }

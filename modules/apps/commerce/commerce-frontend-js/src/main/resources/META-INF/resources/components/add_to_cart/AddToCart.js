@@ -14,12 +14,12 @@
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import ServiceProvider from '../../ServiceProvider/index';
 import {
-	CART_PRODUCT_QUANTITY_CHANGED,
 	CP_INSTANCE_CHANGED,
+	PRODUCT_REMOVED_FROM_CART,
 } from '../../utilities/eventsDefinitions';
 import {useCommerceAccount, useCommerceCart} from '../../utilities/hooks';
 import {getMinQuantity} from '../../utilities/quantities';
@@ -30,15 +30,13 @@ import {ALL} from './constants';
 const CartResource = ServiceProvider.DeliveryCartAPI('v1');
 
 function getQuantity(settings) {
-	if (settings?.productConfiguration?.allowedOrderQuantities?.length) {
-		return Math.min(
-			...settings.productConfiguration.allowedOrderQuantities
-		);
+	if (settings?.quantityDetails?.allowedQuantities?.length) {
+		return Math.min(...settings.quantityDetails.allowedQuantities);
 	}
 
 	return getMinQuantity(
-		settings?.productConfiguration?.minOrderQuantity,
-		settings?.productConfiguration?.multipleOrderQuantity
+		settings?.quantityDetails?.minQuantity,
+		settings?.quantityDetails?.multipleQuantity
 	);
 }
 
@@ -59,12 +57,11 @@ function AddToCart({
 		},
 		channel.groupId
 	);
+
 	const [cpInstance, setCpInstance] = useState({
 		...initialCpInstance,
 		quantity: getQuantity(settings),
-		quantityValid: true,
 	});
-	const inputRef = useRef(null);
 
 	const buttonDisabled = useMemo(() => {
 		if (
@@ -84,77 +81,62 @@ function AddToCart({
 		setCpInstance({
 			...initialCpInstance,
 			quantity: getQuantity(settings),
-			quantityValid: true,
 		});
 	}, [initialCpInstance, settings]);
 
-	const handleCPInstanceReplaced = useCallback(
+	const reset = useCallback(
 		({cpInstance: incomingCpInstance}) => {
-			function updateInCartState(inCart) {
-				setCpInstance((cpInstance) => ({
-					...cpInstance,
-					backOrderAllowed: incomingCpInstance.backOrderAllowed,
-					disabled: incomingCpInstance.disabled,
-					inCart,
-					purchasable: incomingCpInstance.purchasable,
-					skuId: incomingCpInstance.skuId,
-					skuOptions: Array.isArray(incomingCpInstance.skuOptions)
-						? incomingCpInstance.skuOptions
-						: JSON.parse(incomingCpInstance.skuOptions),
-					stockQuantity: incomingCpInstance.stockQuantity,
-				}));
-			}
-
-			if (cart.id) {
-				CartResource.getItemsByCartId(cart.id).then(({items}) => {
-					const inCart = items.some(
-						({skuId}) => incomingCpInstance.skuId === skuId
-					);
-
-					updateInCartState(inCart);
+			CartResource.getItemsByCartId(cart.id)
+				.then(({items}) =>
+					items.some(({skuId}) => incomingCpInstance.skuId === skuId)
+				)
+				.catch(() => false)
+				.then((inCart) => {
+					setCpInstance((cpInstance) => ({
+						...cpInstance,
+						backOrderAllowed: incomingCpInstance.backOrderAllowed,
+						disabled: incomingCpInstance.disabled,
+						inCart,
+						purchasable: incomingCpInstance.purchasable,
+						skuId: incomingCpInstance.skuId,
+						skuOptions: Array.isArray(incomingCpInstance.skuOptions)
+							? incomingCpInstance.skuOptions
+							: JSON.parse(incomingCpInstance.skuOptions),
+						stockQuantity: incomingCpInstance.stockQuantity,
+					}));
 				});
-			}
-			else {
-				updateInCartState(false);
-			}
 		},
 		[cart.id]
 	);
 
 	useEffect(() => {
-		function handleQuantityChanged({quantity, skuId}) {
+		function remove({skuId: removedSkuId}) {
 			setCpInstance((cpInstance) => ({
 				...cpInstance,
 				inCart:
-					skuId === cpInstance.skuId || skuId === ALL
-						? Boolean(quantity)
+					removedSkuId === cpInstance.skuId || removedSkuId === ALL
+						? false
 						: cpInstance.inCart,
 			}));
 		}
 
-		Liferay.on(CART_PRODUCT_QUANTITY_CHANGED, handleQuantityChanged);
+		Liferay.on(PRODUCT_REMOVED_FROM_CART, remove);
 
 		if (settings.namespace) {
-			Liferay.on(
-				`${settings.namespace}${CP_INSTANCE_CHANGED}`,
-				handleCPInstanceReplaced
-			);
+			Liferay.on(`${settings.namespace}${CP_INSTANCE_CHANGED}`, reset);
 		}
 
 		return () => {
-			Liferay.detach(
-				CART_PRODUCT_QUANTITY_CHANGED,
-				handleQuantityChanged
-			);
+			Liferay.detach(PRODUCT_REMOVED_FROM_CART, remove);
 
 			if (settings.namespace) {
 				Liferay.detach(
 					`${settings.namespace}${CP_INSTANCE_CHANGED}`,
-					handleCPInstanceReplaced
+					reset
 				);
 			}
 		};
-	}, [handleCPInstanceReplaced, settings.namespace]);
+	}, [reset, settings.namespace]);
 
 	const spaceDirection = settings.inline ? 'ml' : 'mt';
 	const spacer = settings.size === 'sm' ? 1 : 3;
@@ -171,23 +153,13 @@ function AddToCart({
 			})}
 		>
 			<QuantitySelector
-				allowedQuantities={
-					settings.productConfiguration?.allowedOrderQuantities
-				}
+				{...settings.quantityDetails}
 				disabled={initialDisabled || !account?.id}
-				max={settings.productConfiguration?.maxOrderQuantity}
-				min={settings.productConfiguration?.minOrderQuantity}
-				onUpdate={({errors, value: quantity}) =>
-					setCpInstance({
-						...cpInstance,
-						quantity,
-						quantityValid: !errors.length,
-					})
+				onUpdate={(quantity) =>
+					setCpInstance({...cpInstance, quantity})
 				}
 				quantity={cpInstance.quantity}
-				ref={inputRef}
 				size={settings.size}
-				step={settings.productConfiguration?.multipleOrderQuantity}
 			/>
 
 			<AddToCartButton
@@ -197,19 +169,9 @@ function AddToCart({
 				className={`${spaceDirection}-${spacer}`}
 				cpInstances={[cpInstance]}
 				disabled={buttonDisabled}
-				invalid={!cpInstance.quantityValid}
 				onAdd={() => {
 					setCpInstance({...cpInstance, inCart: true});
 				}}
-				onClick={
-					cpInstance.quantityValid
-						? null
-						: (event) => {
-								event.preventDefault();
-
-								inputRef.current.focus();
-						  }
-				}
 				settings={settings}
 			/>
 		</div>
@@ -217,7 +179,7 @@ function AddToCart({
 }
 
 AddToCart.propTypes = {
-	accountId: PropTypes.number.isRequired,
+	accountId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	cartId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	cpInstance: PropTypes.shape({
 		skuId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
@@ -229,11 +191,11 @@ AddToCart.propTypes = {
 		alignment: PropTypes.oneOf(['center', 'left', 'right', 'full-width']),
 		inline: PropTypes.bool,
 		namespace: PropTypes.string,
-		productConfiguration: PropTypes.shape({
-			allowedOrderQuantities: PropTypes.arrayOf(PropTypes.number),
-			maxOrderQuantity: PropTypes.number,
-			minOrderQuantity: PropTypes.number,
-			multipleOrderQuantity: PropTypes.number,
+		quantityDetails: PropTypes.shape({
+			allowedQuantities: PropTypes.arrayOf(PropTypes.number),
+			maxQuantity: PropTypes.number,
+			minQuantity: PropTypes.number,
+			multipleQuantity: PropTypes.number,
 		}),
 		size: PropTypes.oneOf(['lg', 'md', 'sm']),
 	}),

@@ -30,17 +30,6 @@ public class PullRequestSubrepositoryTopLevelBuild
 	}
 
 	@Override
-	public String getBranchName() {
-		String branchName = getParameterValue("GITHUB_UPSTREAM_BRANCH_NAME");
-
-		if (!JenkinsResultsParserUtil.isNullOrEmpty(branchName)) {
-			return branchName;
-		}
-
-		return getBranchName();
-	}
-
-	@Override
 	public BranchInformation getOSBAsahBranchInformation() {
 		Workspace workspace = getWorkspace();
 
@@ -93,17 +82,6 @@ public class PullRequestSubrepositoryTopLevelBuild
 			subrepositoryWorkspace.getPortalWorkspaceGitRepository());
 	}
 
-	public String getPortalUpstreamBranchName() {
-		String portalUpstreamBranchName = getParameterValue(
-			"PORTAL_UPSTREAM_BRANCH_NAME");
-
-		if (!JenkinsResultsParserUtil.isNullOrEmpty(portalUpstreamBranchName)) {
-			return portalUpstreamBranchName;
-		}
-
-		return getBranchName();
-	}
-
 	@Override
 	public PullRequest getPullRequest() {
 		if (_pullRequest != null) {
@@ -138,7 +116,7 @@ public class PullRequestSubrepositoryTopLevelBuild
 
 			subrepositoryWorkspace.setBuildProfile(getBuildProfile());
 			subrepositoryWorkspace.setPortalUpstreamBranchName(
-				getPortalUpstreamBranchName());
+				_getPortalUpstreamBranchName());
 		}
 
 		WorkspaceGitRepository workspaceGitRepository =
@@ -159,6 +137,17 @@ public class PullRequestSubrepositoryTopLevelBuild
 		}
 
 		return workspace;
+	}
+
+	private String _getPortalUpstreamBranchName() {
+		String portalUpstreamBranchName = getParameterValue(
+			"PORTAL_UPSTREAM_BRANCH_NAME");
+
+		if (!JenkinsResultsParserUtil.isNullOrEmpty(portalUpstreamBranchName)) {
+			return portalUpstreamBranchName;
+		}
+
+		return getBranchName();
 	}
 
 	private String _getSenderBranchSHA() {

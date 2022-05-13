@@ -92,7 +92,7 @@ public class RankingGetSearchResultsBuilderTest
 				))
 		).put(
 			"total", 1
-		).toString();
+		).toJSONString();
 	}
 
 	private RankingGetSearchResultsBuilder _rankingGetSearchResultsBuilder;

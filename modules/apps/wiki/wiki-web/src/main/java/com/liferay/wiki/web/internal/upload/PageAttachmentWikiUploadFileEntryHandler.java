@@ -72,9 +72,11 @@ public class PageAttachmentWikiUploadFileEntryHandler
 		if (Validator.isNotNull(
 				uploadPortletRequest.getFileName("imageSelectorFileName"))) {
 
+			String fileName = uploadPortletRequest.getFileName(
+				"imageSelectorFileName");
+
 			return _addPageAttachment(
-				uploadPortletRequest, themeDisplay,
-				uploadPortletRequest.getFileName("imageSelectorFileName"),
+				uploadPortletRequest, themeDisplay, fileName,
 				"imageSelectorFileName");
 		}
 

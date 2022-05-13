@@ -75,7 +75,7 @@ export default function PublishButton() {
 			{openStyleErrorsModal && hasStyleErrors && (
 				<StyleErrorsModal
 					onCloseModal={() => setOpenStyleErrorsModal(false)}
-					onPublish={() => {
+					onSubmit={() => {
 						setOpenStyleErrorsModal(false);
 						setOpenPublishModal(true);
 					}}

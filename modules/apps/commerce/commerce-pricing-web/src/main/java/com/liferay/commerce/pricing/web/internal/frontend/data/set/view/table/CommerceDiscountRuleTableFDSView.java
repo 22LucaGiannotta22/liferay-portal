@@ -20,6 +20,7 @@ import com.liferay.frontend.data.set.view.table.BaseTableFDSView;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
+import com.liferay.frontend.data.set.view.table.FDSTableSchemaField;
 
 import java.util.Locale;
 
@@ -41,13 +42,14 @@ public class CommerceDiscountRuleTableFDSView extends BaseTableFDSView {
 		FDSTableSchemaBuilder fdsTableSchemaBuilder =
 			_fdsTableSchemaBuilderFactory.create();
 
-		return fdsTableSchemaBuilder.add(
-			"name", "name",
-			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
-				"actionLink")
-		).add(
-			"type", "type"
-		).build();
+		FDSTableSchemaField nameFDSTableSchemaField =
+			fdsTableSchemaBuilder.addFDSTableSchemaField("name", "name");
+
+		nameFDSTableSchemaField.setContentRenderer("actionLink");
+
+		fdsTableSchemaBuilder.addFDSTableSchemaField("type", "type");
+
+		return fdsTableSchemaBuilder.build();
 	}
 
 	@Reference

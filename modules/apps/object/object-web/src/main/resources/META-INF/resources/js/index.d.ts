@@ -12,26 +12,8 @@
  * details.
  */
 
-interface ObjectAction {
-	active: boolean;
-	description?: string;
-	id?: number;
-	name: string;
-	objectActionExecutorKey: string;
-	objectActionTriggerKey: string;
-	parameters?: {
-		script?: string;
-		secret?: string;
-		url?: string;
-	};
-}
-
-interface ObjectActionParameters {
-	secret: string;
-	url: string;
-}
-
 type ObjectFieldBusinessType = 'Attachment' | 'LongText' | 'Picklist' | 'Text';
+
 interface ObjectFieldType {
 	businessType: ObjectFieldBusinessType;
 	dbType: string;
@@ -70,38 +52,13 @@ type ObjectFieldSettingName =
 interface ObjectValidation {
 	active: boolean;
 	description?: string;
-	engine: string;
-	engineLabel: string;
+	engine: ObjectValidationType;
 	errorLabel: LocalizedValue<string>;
 	id: number;
-	name: LocalizedValue<string>;
+	name: any;
 	script: string;
 }
 
-interface ObjectValidationRuleElement {
-	items: ObjectValidationRuleElementItem[];
+interface ObjectValidationType {
 	label: string;
 }
-
-interface ObjectValidationRuleElementItem {
-	content: string;
-	label: string;
-	tooltip: string;
-}
-interface ObjectRelationship {
-	deletionType: string;
-	id: string;
-	label: LocalizedValue<string>;
-	name: string;
-	objectDefinitionId1: number;
-	objectDefinitionId2: number;
-	objectDefinitionName2: string;
-	objectRelationshipId: number;
-	reverse?: boolean;
-	type: string;
-}
-
-type ObjectValidationType = {
-	label: string;
-	name: string;
-};

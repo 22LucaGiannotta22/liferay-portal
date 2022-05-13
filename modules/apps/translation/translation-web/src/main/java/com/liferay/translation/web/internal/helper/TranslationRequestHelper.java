@@ -82,10 +82,6 @@ public class TranslationRequestHelper {
 			return getModelClassName();
 		}
 
-		if (_isExportAllSegmentsExperiences(segmentsExperienceIds)) {
-			return SegmentsExperience.class.getName();
-		}
-
 		if (segmentsExperienceIds.length == 1) {
 			SegmentsExperience segmentsExperience =
 				_segmentsExperienceLocalService.fetchSegmentsExperience(
@@ -136,10 +132,6 @@ public class TranslationRequestHelper {
 			return getModelClassPKs();
 		}
 
-		if (_isExportAllSegmentsExperiences(segmentsExperienceIds)) {
-			return _getSegmentsExperienceIds(getModelClassPKs());
-		}
-
 		if (segmentsExperienceIds.length == 1) {
 			SegmentsExperience segmentsExperience =
 				_segmentsExperienceLocalService.fetchSegmentsExperience(
@@ -152,6 +144,10 @@ public class TranslationRequestHelper {
 
 				return getModelClassPKs();
 			}
+		}
+
+		if (_isExportAllSegmentsExperiences(segmentsExperienceIds)) {
+			return _getSegmentsExperienceIds(getModelClassPKs());
 		}
 
 		return segmentsExperienceIds;

@@ -54,9 +54,8 @@ public class ObjectActionLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public ObjectAction addObjectAction(
-			long userId, long objectDefinitionId, boolean active,
-			String description, String name, String objectActionExecutorKey,
-			String objectActionTriggerKey,
+			long userId, long objectDefinitionId, boolean active, String name,
+			String objectActionExecutorKey, String objectActionTriggerKey,
 			UnicodeProperties parametersUnicodeProperties)
 		throws PortalException {
 
@@ -97,7 +96,6 @@ public class ObjectActionLocalServiceImpl
 		objectAction.setObjectDefinitionId(
 			objectDefinition.getObjectDefinitionId());
 		objectAction.setActive(active);
-		objectAction.setDescription(description);
 		objectAction.setName(name);
 		objectAction.setObjectActionExecutorKey(objectActionExecutorKey);
 		objectAction.setObjectActionTriggerKey(objectActionTriggerKey);
@@ -141,8 +139,8 @@ public class ObjectActionLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public ObjectAction updateObjectAction(
-			long objectActionId, boolean active, String description,
-			String name, UnicodeProperties parametersUnicodeProperties)
+			long objectActionId, boolean active, String name,
+			UnicodeProperties parametersUnicodeProperties)
 		throws PortalException {
 
 		_validate(name);
@@ -151,7 +149,6 @@ public class ObjectActionLocalServiceImpl
 			objectActionId);
 
 		objectAction.setActive(active);
-		objectAction.setDescription(description);
 		objectAction.setName(name);
 		objectAction.setParameters(parametersUnicodeProperties.toString());
 

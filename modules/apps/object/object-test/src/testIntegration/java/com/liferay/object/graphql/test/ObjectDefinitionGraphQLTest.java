@@ -79,7 +79,6 @@ public class ObjectDefinitionGraphQLTest {
 				"A" + RandomTestUtil.randomString(), null, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				ObjectDefinitionConstants.SCOPE_COMPANY,
-				ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT,
 				Collections.singletonList(
 					ObjectFieldUtil.createObjectField(
 						"Text", "String", true, true, null,
@@ -396,7 +395,7 @@ public class ObjectDefinitionGraphQLTest {
 		options.setBody(
 			JSONUtil.put(
 				"query", queryGraphQLField.toString()
-			).toString(),
+			).toJSONString(),
 			ContentTypes.APPLICATION_JSON, StringPool.UTF8);
 		options.setLocation("http://localhost:8080/o/graphql");
 		options.setPost(true);

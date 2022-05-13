@@ -15,7 +15,6 @@
 package com.liferay.layout.taglib.servlet.taglib;
 
 import com.liferay.fragment.constants.FragmentEntryLinkConstants;
-import com.liferay.fragment.constants.FragmentWebKeys;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.renderer.DefaultFragmentRendererContext;
 import com.liferay.fragment.renderer.FragmentRendererController;
@@ -36,12 +35,12 @@ import com.liferay.layout.responsive.ResponsiveLayoutStructureUtil;
 import com.liferay.layout.taglib.internal.display.context.RenderCollectionLayoutStructureItemDisplayContext;
 import com.liferay.layout.taglib.internal.display.context.RenderLayoutStructureDisplayContext;
 import com.liferay.layout.taglib.internal.servlet.ServletContextUtil;
+import com.liferay.layout.taglib.internal.util.FFLayoutTaglibConfigurationUtil;
 import com.liferay.layout.util.constants.LayoutStructureConstants;
 import com.liferay.layout.util.structure.CollectionStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.ColumnLayoutStructureItem;
 import com.liferay.layout.util.structure.ContainerStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.DropZoneLayoutStructureItem;
-import com.liferay.layout.util.structure.FormStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.FragmentStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.layout.util.structure.LayoutStructureItem;
@@ -51,8 +50,6 @@ import com.liferay.layout.util.structure.RowStyledLayoutStructureItem;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.layoutconfiguration.util.RuntimePageUtil;
 import com.liferay.portal.kernel.model.Layout;
@@ -66,7 +63,6 @@ import com.liferay.portal.kernel.servlet.PipingServletResponse;
 import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -158,9 +154,6 @@ public class RenderLayoutStructureTag extends IncludeTag {
 		return SKIP_BODY;
 	}
 
-	protected static final String COLLECTION_ELEMENT_INDEX =
-		RenderLayoutStructureTag.class.getName() + "#COLLECTION_ELEMENT_INDEX";
-
 	protected static final String LAYOUT_STRUCTURE =
 		RenderLayoutStructureTag.class.getName() + "#LAYOUT_STRUCTURE";
 
@@ -169,28 +162,6 @@ public class RenderLayoutStructureTag extends IncludeTag {
 
 		return ParamUtil.getString(
 			httpServletRequest, "p_l_mode", Constants.VIEW);
-	}
-
-	private boolean _includeCommonStyles(FragmentEntryLink fragmentEntryLink)
-		throws Exception {
-
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			fragmentEntryLink.getEditableValues());
-
-		JSONObject stylesFragmentEntryEntryProcessorJSONObject =
-			jsonObject.getJSONObject(_KEY_STYLES_FRAGMENT_ENTRY_PROCESSOR);
-
-		if (stylesFragmentEntryEntryProcessorJSONObject == null) {
-			return false;
-		}
-
-		if (stylesFragmentEntryEntryProcessorJSONObject.getBoolean(
-				"hasCommonStyles")) {
-
-			return true;
-		}
-
-		return false;
 	}
 
 	private void _renderCollectionStyledLayoutStructureItem(
@@ -363,15 +334,9 @@ public class RenderLayoutStructureTag extends IncludeTag {
 
 						colTag.doStartTag();
 
-						httpServletRequest.setAttribute(
-							COLLECTION_ELEMENT_INDEX, index);
-
 						_renderLayoutStructure(
 							layoutStructureItem.getChildrenItemIds(), index,
 							renderLayoutStructureDisplayContext);
-
-						httpServletRequest.removeAttribute(
-							COLLECTION_ELEMENT_INDEX);
 
 						colTag.doEndTag();
 					}
@@ -491,7 +456,7 @@ public class RenderLayoutStructureTag extends IncludeTag {
 	}
 
 	private void _renderColumnLayoutStructureItem(
-			LayoutStructureItem layoutStructureItem, int collectionElementIndex,
+			LayoutStructureItem layoutStructureItem,
 			RenderLayoutStructureDisplayContext
 				renderLayoutStructureDisplayContext)
 		throws Exception {
@@ -514,14 +479,14 @@ public class RenderLayoutStructureTag extends IncludeTag {
 		colTag.doStartTag();
 
 		_renderLayoutStructure(
-			layoutStructureItem.getChildrenItemIds(), collectionElementIndex,
+			layoutStructureItem.getChildrenItemIds(),
 			renderLayoutStructureDisplayContext);
 
 		colTag.doEndTag();
 	}
 
 	private void _renderContainerStyledLayoutStructureItem(
-			LayoutStructureItem layoutStructureItem, int collectionElementIndex,
+			LayoutStructureItem layoutStructureItem,
 			RenderLayoutStructureDisplayContext
 				renderLayoutStructureDisplayContext)
 		throws Exception {
@@ -558,7 +523,9 @@ public class RenderLayoutStructureTag extends IncludeTag {
 
 		String htmlTag = containerStyledLayoutStructureItem.getHtmlTag();
 
-		if (Validator.isNull(htmlTag)) {
+		if (!FFLayoutTaglibConfigurationUtil.fragmentAdvancedOptionsEnabled() ||
+			Validator.isNull(htmlTag)) {
+
 			htmlTag = "div";
 		}
 
@@ -613,7 +580,7 @@ public class RenderLayoutStructureTag extends IncludeTag {
 		jspWriter.write("\">");
 
 		_renderLayoutStructure(
-			layoutStructureItem.getChildrenItemIds(), collectionElementIndex,
+			layoutStructureItem.getChildrenItemIds(),
 			renderLayoutStructureDisplayContext);
 
 		jspWriter.write("</");
@@ -626,7 +593,7 @@ public class RenderLayoutStructureTag extends IncludeTag {
 	}
 
 	private void _renderDropZoneLayoutStructureItem(
-			LayoutStructureItem layoutStructureItem, int collectionElementIndex,
+			LayoutStructureItem layoutStructureItem,
 			RenderLayoutStructureDisplayContext
 				renderLayoutStructureDisplayContext)
 		throws Exception {
@@ -685,7 +652,7 @@ public class RenderLayoutStructureTag extends IncludeTag {
 		else {
 			_renderLayoutStructure(
 				layoutStructureItem.getChildrenItemIds(),
-				collectionElementIndex, renderLayoutStructureDisplayContext);
+				renderLayoutStructureDisplayContext);
 		}
 	}
 
@@ -700,44 +667,6 @@ public class RenderLayoutStructureTag extends IncludeTag {
 		jspWriter.write(
 			LanguageUtil.get(getRequest(), "sorry,-no-results-were-found"));
 		jspWriter.write("</div></div></div>");
-	}
-
-	private void _renderFormStyledLayoutStructureItem(
-			LayoutStructureItem layoutStructureItem, int collectionElementIndex,
-			RenderLayoutStructureDisplayContext
-				renderLayoutStructureDisplayContext)
-		throws Exception {
-
-		JspWriter jspWriter = pageContext.getOut();
-
-		jspWriter.write("<form class=\"");
-
-		if (renderLayoutStructureDisplayContext.isCommonStylesFFEnabled()) {
-			jspWriter.write(
-				LayoutStructureItemCSSUtil.getLayoutStructureItemUniqueCssClass(
-					layoutStructureItem));
-			jspWriter.write(StringPool.SPACE);
-			jspWriter.write(
-				LayoutStructureItemCSSUtil.getLayoutStructureItemCssClass(
-					layoutStructureItem));
-		}
-		else {
-			jspWriter.write(
-				renderLayoutStructureDisplayContext.getCssClass(
-					(FormStyledLayoutStructureItem)layoutStructureItem));
-		}
-
-		jspWriter.write("\" style=\"");
-		jspWriter.write(
-			renderLayoutStructureDisplayContext.getStyle(
-				(FormStyledLayoutStructureItem)layoutStructureItem));
-		jspWriter.write("\">");
-
-		_renderLayoutStructure(
-			layoutStructureItem.getChildrenItemIds(), collectionElementIndex,
-			renderLayoutStructureDisplayContext);
-
-		jspWriter.write("</form>");
 	}
 
 	private void _renderFragmentStyledLayoutStructureItem(
@@ -769,40 +698,52 @@ public class RenderLayoutStructureTag extends IncludeTag {
 					fragmentStyledLayoutStructureItem.getFragmentEntryLinkId());
 
 			if (fragmentEntryLink != null) {
+				FragmentRendererController fragmentRendererController =
+					ServletContextUtil.getFragmentRendererController();
+
 				DefaultFragmentRendererContext defaultFragmentRendererContext =
 					renderLayoutStructureDisplayContext.
 						getDefaultFragmentRendererContext(
 							fragmentEntryLink,
 							fragmentStyledLayoutStructureItem.getItemId(),
+							renderLayoutStructureDisplayContext.
+								getCollectionStyledLayoutStructureItemIds(),
 							collectionElementIndex);
 
-				FragmentRendererController fragmentRendererController =
-					ServletContextUtil.getFragmentRendererController();
+				jspWriter.write("<div class=\"");
+
+				if (renderLayoutStructureDisplayContext.
+						isCommonStylesFFEnabled()) {
+
+					jspWriter.write(
+						LayoutStructureItemCSSUtil.
+							getLayoutStructureItemUniqueCssClass(
+								fragmentStyledLayoutStructureItem));
+					jspWriter.write(StringPool.SPACE);
+					jspWriter.write(
+						LayoutStructureItemCSSUtil.getFragmentEntryLinkCssClass(
+							fragmentEntryLink));
+				}
+				else {
+					jspWriter.write(
+						renderLayoutStructureDisplayContext.getCssClass(
+							fragmentStyledLayoutStructureItem));
+				}
+
+				jspWriter.write("\" style=\"");
+				jspWriter.write(
+					renderLayoutStructureDisplayContext.getStyle(
+						fragmentStyledLayoutStructureItem));
+				jspWriter.write("\">");
 
 				HttpServletResponse httpServletResponse =
 					(HttpServletResponse)pageContext.getResponse();
 
-				String html = fragmentRendererController.render(
-					defaultFragmentRendererContext, httpServletRequest,
-					httpServletResponse);
+				jspWriter.write(
+					fragmentRendererController.render(
+						defaultFragmentRendererContext, httpServletRequest,
+						httpServletResponse));
 
-				if (GetterUtil.getBoolean(
-						httpServletRequest.getAttribute(
-							FragmentWebKeys.
-								ACCESS_ALLOWED_TO_FRAGMENT_ENTRY_LINK_ID +
-									fragmentEntryLink.getFragmentEntryLinkId()),
-						true)) {
-
-					_write(
-						jspWriter, fragmentEntryLink,
-						fragmentStyledLayoutStructureItem,
-						renderLayoutStructureDisplayContext);
-				}
-				else {
-					jspWriter.write("<div>");
-				}
-
-				jspWriter.write(html);
 				jspWriter.write("</div>");
 			}
 		}
@@ -830,8 +771,7 @@ public class RenderLayoutStructureTag extends IncludeTag {
 			}
 			else if (layoutStructureItem instanceof ColumnLayoutStructureItem) {
 				_renderColumnLayoutStructureItem(
-					layoutStructureItem, collectionElementIndex,
-					renderLayoutStructureDisplayContext);
+					layoutStructureItem, renderLayoutStructureDisplayContext);
 			}
 			else if (layoutStructureItem instanceof
 						ContainerStyledLayoutStructureItem) {
@@ -847,31 +787,13 @@ public class RenderLayoutStructureTag extends IncludeTag {
 				}
 
 				_renderContainerStyledLayoutStructureItem(
-					layoutStructureItem, collectionElementIndex,
-					renderLayoutStructureDisplayContext);
+					layoutStructureItem, renderLayoutStructureDisplayContext);
 			}
 			else if (layoutStructureItem instanceof
 						DropZoneLayoutStructureItem) {
 
 				_renderDropZoneLayoutStructureItem(
-					layoutStructureItem, collectionElementIndex,
-					renderLayoutStructureDisplayContext);
-			}
-			else if (layoutStructureItem instanceof
-						FormStyledLayoutStructureItem) {
-
-				FormStyledLayoutStructureItem formStyledLayoutStructureItem =
-					(FormStyledLayoutStructureItem)layoutStructureItem;
-
-				if (Objects.equals(_getLayoutMode(), Constants.SEARCH) &&
-					!formStyledLayoutStructureItem.isIndexed()) {
-
-					continue;
-				}
-
-				_renderFormStyledLayoutStructureItem(
-					layoutStructureItem, collectionElementIndex,
-					renderLayoutStructureDisplayContext);
+					layoutStructureItem, renderLayoutStructureDisplayContext);
 			}
 			else if (layoutStructureItem instanceof
 						FragmentStyledLayoutStructureItem) {
@@ -903,8 +825,7 @@ public class RenderLayoutStructureTag extends IncludeTag {
 				}
 
 				_renderRowStyledLayoutStructureItem(
-					layoutStructureItem, collectionElementIndex,
-					renderLayoutStructureDisplayContext);
+					layoutStructureItem, renderLayoutStructureDisplayContext);
 			}
 			else {
 				_renderLayoutStructure(
@@ -926,14 +847,11 @@ public class RenderLayoutStructureTag extends IncludeTag {
 		httpServletRequest.setAttribute(LAYOUT_STRUCTURE, _layoutStructure);
 
 		_renderLayoutStructure(
-			childrenItemIds,
-			GetterUtil.getInteger(
-				httpServletRequest.getAttribute(COLLECTION_ELEMENT_INDEX), -1),
-			renderLayoutStructureDisplayContext);
+			childrenItemIds, -1, renderLayoutStructureDisplayContext);
 	}
 
 	private void _renderRowStyledLayoutStructureItem(
-			LayoutStructureItem layoutStructureItem, int collectionElementIndex,
+			LayoutStructureItem layoutStructureItem,
 			RenderLayoutStructureDisplayContext
 				renderLayoutStructureDisplayContext)
 		throws Exception {
@@ -1030,7 +948,7 @@ public class RenderLayoutStructureTag extends IncludeTag {
 
 			_renderLayoutStructure(
 				layoutStructureItem.getChildrenItemIds(),
-				collectionElementIndex, renderLayoutStructureDisplayContext);
+				renderLayoutStructureDisplayContext);
 
 			rowTag.doEndTag();
 
@@ -1048,7 +966,7 @@ public class RenderLayoutStructureTag extends IncludeTag {
 
 			_renderLayoutStructure(
 				layoutStructureItem.getChildrenItemIds(),
-				collectionElementIndex, renderLayoutStructureDisplayContext);
+				renderLayoutStructureDisplayContext);
 
 			rowTag.doEndTag();
 		}
@@ -1083,45 +1001,6 @@ public class RenderLayoutStructureTag extends IncludeTag {
 
 		return (LayoutTypePortlet)layout.getLayoutType();
 	}
-
-	private void _write(
-			JspWriter jspWriter, FragmentEntryLink fragmentEntryLink,
-			FragmentStyledLayoutStructureItem fragmentStyledLayoutStructureItem,
-			RenderLayoutStructureDisplayContext
-				renderLayoutStructureDisplayContext)
-		throws Exception {
-
-		jspWriter.write("<div class=\"");
-
-		if (renderLayoutStructureDisplayContext.isCommonStylesFFEnabled()) {
-			if (!_includeCommonStyles(fragmentEntryLink)) {
-				jspWriter.write(
-					LayoutStructureItemCSSUtil.
-						getLayoutStructureItemUniqueCssClass(
-							fragmentStyledLayoutStructureItem));
-			}
-
-			jspWriter.write(StringPool.SPACE);
-			jspWriter.write(
-				LayoutStructureItemCSSUtil.getFragmentEntryLinkCssClass(
-					fragmentEntryLink));
-		}
-		else {
-			jspWriter.write(
-				renderLayoutStructureDisplayContext.getCssClass(
-					fragmentStyledLayoutStructureItem));
-		}
-
-		jspWriter.write("\" style=\"");
-		jspWriter.write(
-			renderLayoutStructureDisplayContext.getStyle(
-				fragmentStyledLayoutStructureItem));
-		jspWriter.write("\">");
-	}
-
-	private static final String _KEY_STYLES_FRAGMENT_ENTRY_PROCESSOR =
-		"com.liferay.fragment.entry.processor.styles." +
-			"StylesFragmentEntryProcessor";
 
 	private static final String _PAGE = "/render_layout_structure/page.jsp";
 

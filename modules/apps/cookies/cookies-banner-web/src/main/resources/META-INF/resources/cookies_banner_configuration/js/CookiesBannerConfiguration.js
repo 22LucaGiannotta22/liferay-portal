@@ -21,8 +21,8 @@ import {
 
 export default function ({
 	namespace,
-	optionalCookieNames,
-	requiredCookieNames,
+	optionalCookies,
+	requiredCookies,
 	showButtons,
 }) {
 	const toggleSwitches = Array.from(
@@ -58,7 +58,7 @@ export default function ({
 		);
 
 		acceptAllButton.addEventListener('click', () => {
-			acceptAllCookies(optionalCookieNames, requiredCookieNames);
+			acceptAllCookies(optionalCookies, requiredCookies);
 
 			window.location.reload();
 		});
@@ -71,7 +71,7 @@ export default function ({
 				);
 			});
 
-			requiredCookieNames.forEach((requiredCookie) => {
+			requiredCookies.forEach((requiredCookie) => {
 				setCookie(requiredCookie, 'true');
 			});
 
@@ -79,7 +79,7 @@ export default function ({
 		});
 
 		declineAllButton.addEventListener('click', () => {
-			declineAllCookies(optionalCookieNames, requiredCookieNames);
+			declineAllCookies(optionalCookies, requiredCookies);
 
 			window.location.reload();
 		});

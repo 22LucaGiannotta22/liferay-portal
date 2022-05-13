@@ -19,8 +19,10 @@ import {fetch} from 'frontend-js-web';
 import React, {ChangeEventHandler, ReactNode, useMemo, useState} from 'react';
 
 import useForm, {FormError, invalidateRequired} from '../hooks/useForm';
-import {normalizeFieldSettings} from '../utils/fieldSettings';
-import {defaultLanguageId} from '../utils/locale';
+import {
+	normalizeFieldSettings,
+	updateFieldSettings,
+} from '../utils/fieldSettings';
 import {toCamelCase} from '../utils/string';
 import CustomSelect from './Form/CustomSelect/CustomSelect';
 import Input from './Form/Input';
@@ -49,6 +51,8 @@ const attachmentSources = [
 	},
 ];
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId() as Liferay.Language.Locale;
+
 const headers = new Headers({
 	'Accept': 'application/json',
 	'Content-Type': 'application/json',
@@ -71,6 +75,8 @@ async function fetchPickList() {
 }
 
 export default function ObjectFieldFormBase({
+	allowMaxLength,
+	allowUploadDocAndMedia,
 	children,
 	disabled,
 	errors,
@@ -91,6 +97,14 @@ export default function ObjectFieldFormBase({
 	}, [objectFieldTypes]);
 
 	const [pickList, setPickList] = useState<IPickList[]>([]);
+
+	const handleSettingsChange = ({name, value}: ObjectFieldSetting) =>
+		setValues({
+			objectFieldSettings: updateFieldSettings(
+				values.objectFieldSettings,
+				{name, value}
+			),
+		});
 
 	const handleTypeChange = async (option: ObjectFieldType) => {
 		if (option.businessType === 'Picklist') {
@@ -115,12 +129,14 @@ export default function ObjectFieldFormBase({
 
 			case 'LongText':
 			case 'Text':
-				objectFieldSettings = [
-					{
-						name: 'showCounter',
-						value: false,
-					},
-				];
+				if (allowMaxLength) {
+					objectFieldSettings = [
+						{
+							name: 'showCounter',
+							value: false,
+						},
+					];
+				}
 				break;
 
 			default:
@@ -173,12 +189,14 @@ export default function ObjectFieldFormBase({
 
 			{values.businessType === 'Attachment' && (
 				<AttachmentSourceProperty
+					allowUploadDocAndMedia={allowUploadDocAndMedia}
 					disabled={disabled}
 					error={errors.fileSource}
 					objectFieldSettings={
 						values.objectFieldSettings as ObjectFieldSetting[]
 					}
 					objectName={objectName}
+					onSettingsChange={handleSettingsChange}
 					setValues={setValues}
 				/>
 			)}
@@ -280,11 +298,6 @@ export function useObjectFieldForm({
 			errors.businessType = REQUIRED_MSG;
 		}
 		else if (field.businessType === 'Attachment') {
-			const uploadRequestSizeLimit = Math.floor(
-				Liferay.PropsValues.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE /
-					1048576
-			);
-
 			if (
 				invalidateRequired(
 					settings.acceptedFileExtensions as string | undefined
@@ -297,14 +310,6 @@ export function useObjectFieldForm({
 			}
 			if (!settings.maximumFileSize && settings.maximumFileSize !== 0) {
 				errors.maximumFileSize = REQUIRED_MSG;
-			}
-			else if (settings.maximumFileSize > uploadRequestSizeLimit) {
-				errors.maximumFileSize = Liferay.Util.sub(
-					Liferay.Language.get(
-						'file-size-is-larger-than-the-allowed-overall-maximum-upload-request-size-x-mb'
-					),
-					uploadRequestSizeLimit
-				);
 			}
 			else if (settings.maximumFileSize < 0) {
 				errors.maximumFileSize = Liferay.Util.sub(
@@ -364,10 +369,12 @@ export function useObjectFieldForm({
 }
 
 function AttachmentSourceProperty({
+	allowUploadDocAndMedia,
 	disabled,
 	error,
 	objectFieldSettings,
 	objectName,
+	onSettingsChange,
 	setValues,
 }: IAttachmentSourcePropertyProps) {
 	const settings = normalizeFieldSettings(objectFieldSettings);
@@ -378,6 +385,11 @@ function AttachmentSourceProperty({
 
 	const handleAttachmentSourceChange = ({value}: {value: string}) => {
 		const fileSource: ObjectFieldSetting = {name: 'fileSource', value};
+		if (!allowUploadDocAndMedia) {
+			onSettingsChange(fileSource);
+
+			return;
+		}
 
 		const updatedSettings = objectFieldSettings.filter(
 			(setting) =>
@@ -432,7 +444,7 @@ function AttachmentSourceProperty({
 				value={attachmentSource?.label}
 			/>
 
-			{settings.fileSource === 'userComputer' && (
+			{allowUploadDocAndMedia && settings.fileSource === 'userComputer' && (
 				<ClayForm.Group className="lfr-objects__object-field-form-base-container">
 					<ClayToggle
 						disabled={disabled}
@@ -452,7 +464,7 @@ function AttachmentSourceProperty({
 							)}
 						>
 							<ClayIcon
-								className="lfr-objects__object-field-form-base-tooltip-icon"
+								className="lfr-objects__edit-object-field-tooltip-icon"
 								symbol="question-circle-full"
 							/>
 						</div>
@@ -464,10 +476,12 @@ function AttachmentSourceProperty({
 }
 
 interface IAttachmentSourcePropertyProps {
+	allowUploadDocAndMedia?: boolean;
 	disabled?: boolean;
 	error?: string;
 	objectFieldSettings: ObjectFieldSetting[];
 	objectName: string;
+	onSettingsChange: (setting: ObjectFieldSetting) => void;
 	setValues: (values: Partial<ObjectField>) => void;
 }
 interface IUseObjectFieldForm {
@@ -483,6 +497,8 @@ interface IPickList {
 }
 
 interface IProps {
+	allowMaxLength?: boolean;
+	allowUploadDocAndMedia?: boolean;
 	children?: ReactNode;
 	disabled?: boolean;
 	errors: ObjectFieldErrors;

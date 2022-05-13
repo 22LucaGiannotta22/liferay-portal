@@ -215,6 +215,15 @@ public class TestTrashHandler implements TrashHandler {
 		return false;
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link #isDeletable(long)}
+	 */
+	@Deprecated
+	@Override
+	public boolean isDeletable() {
+		return false;
+	}
+
 	@Override
 	public boolean isDeletable(long classPK) {
 		return false;
@@ -227,6 +236,15 @@ public class TestTrashHandler implements TrashHandler {
 
 	@Override
 	public boolean isInTrashContainer(long classPK) {
+		return false;
+	}
+
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link #isMovable(long)}
+	 */
+	@Deprecated
+	@Override
+	public boolean isMovable() {
 		return false;
 	}
 

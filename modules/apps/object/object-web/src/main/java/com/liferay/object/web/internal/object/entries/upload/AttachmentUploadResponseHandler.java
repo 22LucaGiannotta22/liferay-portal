@@ -17,7 +17,6 @@ package com.liferay.object.web.internal.object.entries.upload;
 import com.liferay.document.library.kernel.exception.FileExtensionException;
 import com.liferay.document.library.kernel.exception.FileSizeException;
 import com.liferay.document.library.kernel.exception.InvalidFileException;
-import com.liferay.document.library.util.DLURLHelper;
 import com.liferay.object.web.internal.object.entries.upload.util.AttachmentValidator;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -29,7 +28,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.upload.UploadResponseHandler;
 
@@ -70,8 +68,7 @@ public class AttachmentUploadResponseHandler implements UploadResponseHandler {
 				"please-enter-a-file-with-a-valid-file-size-no-larger-than-x",
 				LanguageUtil.formatStorageSize(
 					_attachmentValidator.getMaximumFileSize(
-						ParamUtil.getLong(portletRequest, "objectFieldId"),
-						themeDisplay.isSignedIn()),
+						ParamUtil.getLong(portletRequest, "objectFieldId")),
 					themeDisplay.getLocale()));
 		}
 		else if (portalException instanceof InvalidFileException) {
@@ -90,22 +87,8 @@ public class AttachmentUploadResponseHandler implements UploadResponseHandler {
 			UploadPortletRequest uploadPortletRequest, FileEntry fileEntry)
 		throws PortalException {
 
-		return JSONUtil.put(
-			"file",
-			JSONUtil.put(
-				"contentURL",
-				_dlURLHelper.getPreviewURL(
-					fileEntry, fileEntry.getFileVersion(), null, "")
-			).put(
-				"fileEntryId", fileEntry.getFileEntryId()
-			).put(
-				"title",
-				TempFileEntryUtil.getOriginalTempFileName(
-					fileEntry.getFileName())
-			)
-		).put(
-			"success", Boolean.TRUE
-		);
+		return _defaultUploadResponseHandler.onSuccess(
+			uploadPortletRequest, fileEntry);
 	}
 
 	@Reference
@@ -113,8 +96,5 @@ public class AttachmentUploadResponseHandler implements UploadResponseHandler {
 
 	@Reference(target = "(upload.response.handler.system.default=true)")
 	private UploadResponseHandler _defaultUploadResponseHandler;
-
-	@Reference
-	private DLURLHelper _dlURLHelper;
 
 }

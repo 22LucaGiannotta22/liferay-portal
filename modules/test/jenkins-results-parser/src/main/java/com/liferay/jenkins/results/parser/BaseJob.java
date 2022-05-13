@@ -479,12 +479,6 @@ public abstract class BaseJob implements Job {
 					String.valueOf(batchTestClassGroup.getAxisCount()));
 			}
 
-			if (isDownstreamEnabled()) {
-				batchProperties.setProperty(
-					"test.downstream.job.name",
-					batchTestClassGroup.getDownstreamJobName());
-			}
-
 			propertiesMap.put(
 				batchTestClassGroup.getBatchName(), batchProperties);
 
@@ -528,12 +522,6 @@ public abstract class BaseJob implements Job {
 						"test.case.properties", testCasePropertiesContent);
 				}
 
-				if (isDownstreamEnabled()) {
-					segmentProperties.setProperty(
-						"test.downstream.job.name",
-						segmentTestClassGroup.getDownstreamJobName());
-				}
-
 				if (segmentTestClassGroup instanceof
 						FunctionalSegmentTestClassGroup) {
 
@@ -564,20 +552,6 @@ public abstract class BaseJob implements Job {
 		}
 
 		return sb.toString();
-	}
-
-	@Override
-	public boolean isDownstreamEnabled() {
-		JobProperty jobProperty = getJobProperty(
-			"test.batch.downstream.enabled");
-
-		String downstreamEnabled = jobProperty.getValue();
-
-		if ((downstreamEnabled != null) && downstreamEnabled.equals("true")) {
-			return true;
-		}
-
-		return false;
 	}
 
 	@Override

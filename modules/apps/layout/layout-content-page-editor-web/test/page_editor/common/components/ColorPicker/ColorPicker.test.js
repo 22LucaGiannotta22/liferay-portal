@@ -97,13 +97,11 @@ describe('ColorPicker', () => {
 	});
 
 	it('clears the value and sets "default"', async () => {
-		const onValueSelect = jest.fn();
-
-		const {getByTitle} = renderColorPicker({onValueSelect});
+		const {getByLabelText, getByTitle} = renderColorPicker({});
 
 		fireEvent.click(getByTitle('clear-selection'));
 
-		expect(onValueSelect).toBeCalledWith('Color Picker', null);
+		expect(getByLabelText('default')).toBeInTheDocument();
 	});
 
 	it('clears the value and sets the default value of the field if it exists', async () => {

@@ -54,17 +54,23 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
+
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author William Newbury
  */
-public abstract class BaseVLDAPTestCase {
+@RunWith(PowerMockRunner.class)
+public abstract class BaseVLDAPTestCase extends PowerMockito {
 
 	@Before
 	public void setUp() throws Exception {
 		_setUpPortal();
+
 		_setUpConfiguration();
 		_setUpCompany();
 		_setUpORM();
@@ -85,7 +91,7 @@ public abstract class BaseVLDAPTestCase {
 
 		serviceUtilClasses.add(serviceUtilClass);
 
-		T serviceMock = Mockito.mock(serviceClass);
+		T serviceMock = mock(serviceClass);
 
 		ReflectionTestUtil.setFieldValue(
 			serviceUtilClass, "_service", serviceMock);
@@ -94,55 +100,55 @@ public abstract class BaseVLDAPTestCase {
 	}
 
 	protected void setUpPasswordPolicy(PasswordPolicy passwordPolicy) {
-		Mockito.when(
+		when(
 			passwordPolicy.getGraceLimit()
 		).thenReturn(
 			GRACE_LIMIT
 		);
 
-		Mockito.when(
+		when(
 			passwordPolicy.getHistoryCount()
 		).thenReturn(
 			HISTORY_COUNT
 		);
 
-		Mockito.when(
+		when(
 			passwordPolicy.getLockoutDuration()
 		).thenReturn(
 			LOCKOUT_DURATION
 		);
 
-		Mockito.when(
+		when(
 			passwordPolicy.getMaxAge()
 		).thenReturn(
 			MAX_AGE
 		);
 
-		Mockito.when(
+		when(
 			passwordPolicy.getMinAge()
 		).thenReturn(
 			MIN_AGE
 		);
 
-		Mockito.when(
+		when(
 			passwordPolicy.getResetFailureCount()
 		).thenReturn(
 			RESET_FAILURE_COUNT
 		);
 
-		Mockito.when(
+		when(
 			passwordPolicy.isExpireable()
 		).thenReturn(
 			false
 		);
 
-		Mockito.when(
+		when(
 			passwordPolicy.isLockout()
 		).thenReturn(
 			true
 		);
 
-		Mockito.when(
+		when(
 			passwordPolicy.isRequireUnlock()
 		).thenReturn(
 			true
@@ -150,9 +156,9 @@ public abstract class BaseVLDAPTestCase {
 	}
 
 	protected void setUpPortalUtil() {
-		Portal portal = Mockito.mock(Portal.class);
+		Portal portal = mock(Portal.class);
 
-		Mockito.when(
+		when(
 			portal.getClassNameId(Mockito.any(Class.class))
 		).thenReturn(
 			PRIMARY_KEY
@@ -164,11 +170,11 @@ public abstract class BaseVLDAPTestCase {
 	}
 
 	protected void setUpPropsUtil() {
-		props = Mockito.mock(Props.class);
+		props = mock(Props.class);
 
 		PropsUtil.setProps(props);
 
-		Mockito.when(
+		when(
 			props.get(PortletPropsKeys.SEARCH_MAX_SIZE)
 		).thenReturn(
 			"42"
@@ -202,15 +208,15 @@ public abstract class BaseVLDAPTestCase {
 	protected UserLocalService userLocalService;
 
 	private void _setUpCompany() throws Exception {
-		company = Mockito.mock(Company.class);
+		company = mock(Company.class);
 
-		Mockito.when(
+		when(
 			company.getCompanyId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			company.getWebId()
 		).thenReturn(
 			"liferay.com"
@@ -221,19 +227,19 @@ public abstract class BaseVLDAPTestCase {
 		CompanyLocalService companyLocalService = getMockPortalService(
 			CompanyLocalServiceUtil.class, CompanyLocalService.class);
 
-		Mockito.when(
+		when(
 			companyLocalService.getCompanies()
 		).thenReturn(
 			companies
 		);
 
-		Mockito.when(
+		when(
 			companyLocalService.getCompanies(Mockito.anyBoolean())
 		).thenReturn(
 			companies
 		);
 
-		Mockito.when(
+		when(
 			companyLocalService.getCompanyByWebId(Mockito.eq("liferay.com"))
 		).thenReturn(
 			company
@@ -248,31 +254,31 @@ public abstract class BaseVLDAPTestCase {
 		ClassLoaderPool.register(
 			"vldap-server", currentThread.getContextClassLoader());
 
-		Configuration configuration = Mockito.mock(Configuration.class);
+		Configuration configuration = mock(Configuration.class);
 
-		Mockito.when(
+		when(
 			configuration.getArray(PortletPropsKeys.SAMBA_DOMAIN_NAMES)
 		).thenReturn(
 			new String[] {"testDomainName"}
 		);
 
-		Mockito.when(
+		when(
 			configuration.getArray(PortletPropsKeys.SAMBA_HOSTS_ALLOWED)
 		).thenReturn(
 			new String[0]
 		);
 
-		ConfigurationFactory configurationFactory = Mockito.mock(
+		ConfigurationFactory configurationFactory = mock(
 			ConfigurationFactory.class);
 
-		Mockito.when(
+		when(
 			configurationFactory.getConfiguration(
 				Mockito.any(ClassLoader.class), Mockito.eq("portlet"))
 		).thenReturn(
 			configuration
 		);
 
-		Mockito.when(
+		when(
 			configurationFactory.getConfiguration(
 				Mockito.any(ClassLoader.class), Mockito.eq("service"))
 		).thenReturn(
@@ -283,14 +289,14 @@ public abstract class BaseVLDAPTestCase {
 	}
 
 	private void _setUpORM() {
-		Criterion criterion = Mockito.mock(Criterion.class);
+		Criterion criterion = mock(Criterion.class);
 
-		DynamicQuery dynamicQuery = Mockito.mock(DynamicQuery.class);
+		DynamicQuery dynamicQuery = mock(DynamicQuery.class);
 
-		DynamicQueryFactory dynamicQueryFactory = Mockito.mock(
+		DynamicQueryFactory dynamicQueryFactory = mock(
 			DynamicQueryFactory.class);
 
-		Mockito.when(
+		when(
 			dynamicQueryFactory.forClass(
 				Mockito.any(Class.class), Mockito.any(ClassLoader.class))
 		).thenReturn(
@@ -302,17 +308,17 @@ public abstract class BaseVLDAPTestCase {
 
 		dynamicQueryFactoryUtil.setDynamicQueryFactory(dynamicQueryFactory);
 
-		RestrictionsFactory restrictionsFactory = Mockito.mock(
+		RestrictionsFactory restrictionsFactory = mock(
 			RestrictionsFactory.class);
 
-		Mockito.when(
+		when(
 			restrictionsFactory.eq(
 				Mockito.anyString(), Mockito.any(Object.class))
 		).thenReturn(
 			criterion
 		);
 
-		Mockito.when(
+		when(
 			restrictionsFactory.ilike(
 				Mockito.anyString(), Mockito.any(Object.class))
 		).thenReturn(
@@ -341,21 +347,21 @@ public abstract class BaseVLDAPTestCase {
 	}
 
 	private void _setUpSearchBase() {
-		searchBase = Mockito.mock(SearchBase.class);
+		searchBase = mock(SearchBase.class);
 
-		Mockito.when(
+		when(
 			searchBase.getCompanies()
 		).thenReturn(
 			companies
 		);
 
-		Mockito.when(
+		when(
 			searchBase.getSizeLimit()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			searchBase.getTop()
 		).thenReturn(
 			"Liferay"

@@ -284,11 +284,6 @@ public class ObjectViewWrapper
 		return model.getObjectViewColumns();
 	}
 
-	@Override
-	public java.util.List<ObjectViewFilterColumn> getObjectViewFilterColumns() {
-		return model.getObjectViewFilterColumns();
-	}
-
 	/**
 	 * Returns the object view ID of this object view.
 	 *
@@ -512,13 +507,6 @@ public class ObjectViewWrapper
 		java.util.List<ObjectViewColumn> objectViewColumns) {
 
 		model.setObjectViewColumns(objectViewColumns);
-	}
-
-	@Override
-	public void setObjectViewFilterColumns(
-		java.util.List<ObjectViewFilterColumn> objectViewFilterColumns) {
-
-		model.setObjectViewFilterColumns(objectViewFilterColumns);
 	}
 
 	/**

@@ -90,9 +90,25 @@ public class MBEntriesManagementToolbarDisplayContext {
 		return DropdownItemListBuilder.add(
 			dropdownItem -> {
 				dropdownItem.putData("action", "deleteEntries");
-				dropdownItem.setIcon("trash");
+
+				ThemeDisplay themeDisplay =
+					(ThemeDisplay)_httpServletRequest.getAttribute(
+						WebKeys.THEME_DISPLAY);
+
+				boolean trashEnabled = _trashHelper.isTrashEnabled(
+					themeDisplay.getScopeGroupId());
+
+				dropdownItem.setIcon(trashEnabled ? "trash" : "times-circle");
+
+				String label = "delete";
+
+				if (trashEnabled) {
+					label = "move-to-recycle-bin";
+				}
+
 				dropdownItem.setLabel(
-					LanguageUtil.get(_httpServletRequest, "delete"));
+					LanguageUtil.get(_httpServletRequest, label));
+
 				dropdownItem.setQuickAction(true);
 			}
 		).add(
@@ -101,6 +117,7 @@ public class MBEntriesManagementToolbarDisplayContext {
 				dropdownItem.setIcon("lock");
 				dropdownItem.setLabel(
 					LanguageUtil.get(_httpServletRequest, "lock"));
+
 				dropdownItem.setQuickAction(true);
 			}
 		).add(

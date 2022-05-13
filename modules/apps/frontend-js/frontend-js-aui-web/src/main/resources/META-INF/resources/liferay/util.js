@@ -20,6 +20,19 @@
 
 	var EVENT_CLICK = 'click';
 
+	var MAP_TOGGLE_STATE = {
+		false: {
+			cssClass: 'controls-hidden',
+			iconCssClass: 'hidden',
+			state: 'hidden',
+		},
+		true: {
+			cssClass: 'controls-visible',
+			iconCssClass: 'view',
+			state: 'visible',
+		},
+	};
+
 	var SRC_HIDE_LINK = {
 		src: 'hideLink',
 	};
@@ -121,9 +134,6 @@
 			return editable;
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-		 */
 		addInputCancel() {
 			A.use('aui-button-search-cancel', (A) => {
 				new A.ButtonSearchCancel({
@@ -247,9 +257,6 @@
 			}
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-		 */
 		disableElements(element) {
 			const currentElement = Util.getElement(element);
 
@@ -279,9 +286,6 @@
 			}
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-		 */
 		disableFormButtons(inputs, form) {
 			inputs.attr('disabled', true);
 			inputs.setStyle('opacity', 0.5);
@@ -300,9 +304,6 @@
 			}
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), replaced by `toggleDisabled`
-		 */
 		disableToggleBoxes(checkBoxId, toggleBoxId, checkDisabled) {
 			const checkBox = document.getElementById(checkBoxId);
 			const toggleBox = document.getElementById(toggleBoxId);
@@ -316,9 +317,6 @@
 			}
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-		 */
 		enableFormButtons(inputs) {
 			Util._submitLocked = null;
 
@@ -343,9 +341,6 @@
 			});
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-		 */
 		forcePost(link) {
 			const currentElement = Util.getElement(link);
 
@@ -429,6 +424,17 @@
 			var columnId = str.replace(/layout-column_/, '');
 
 			return columnId;
+		},
+
+		/**
+		 * @deprecated As of Cavanaugh (7.4.x), replaced by `openModal`
+		 */
+		getWindow(id) {
+			if (!id) {
+				id = Util.getWindowName();
+			}
+
+			return Util.getTop().Liferay.Util.Window.getById(id);
 		},
 
 		/**
@@ -560,9 +566,6 @@
 			return Math.ceil(Math.random() * new Date().getTime());
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-		 */
 		reorder(box, down) {
 			box = Util.getElement(box);
 
@@ -613,9 +616,6 @@
 			}
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-		 */
 		rowCheckerCheckAllBox(
 			ancestorTable,
 			ancestorRow,
@@ -630,9 +630,6 @@
 			}
 		},
 
-		/**
-		 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-		 */
 		savePortletTitle(params) {
 			params = {
 				doAsUserId: 0,
@@ -1404,6 +1401,68 @@
 		},
 		['aui-base', 'liferay-util-window']
 	);
+
+	Liferay.provide(Util, 'toggleControls', (node) => {
+		const docBody = document.body;
+
+		node = node._node || docBody;
+
+		const trigger = node.querySelector('.toggle-controls');
+
+		if (!trigger) {
+			return;
+		}
+
+		let controlsVisible = Liferay._editControlsState === 'visible';
+
+		let currentState = MAP_TOGGLE_STATE[controlsVisible];
+
+		let icon = trigger.querySelector('.lexicon-icon');
+
+		if (icon) {
+			currentState.icon = icon;
+		}
+
+		docBody.classList.add(currentState.cssClass);
+
+		Liferay.fire('toggleControls', {
+			enabled: controlsVisible,
+		});
+
+		trigger.addEventListener('click', () => {
+			controlsVisible = !controlsVisible;
+
+			const previousState = currentState;
+
+			currentState = MAP_TOGGLE_STATE[controlsVisible];
+
+			docBody.classList.toggle(previousState.cssClass);
+			docBody.classList.toggle(currentState.cssClass);
+
+			const editControlsIconClass = currentState.iconCssClass;
+			const editControlsState = currentState.state;
+
+			const newIcon = Util.getLexiconIcon(editControlsIconClass);
+
+			currentState.icon = newIcon;
+
+			icon.replaceWith(newIcon);
+
+			icon = newIcon;
+
+			Liferay._editControlsState = editControlsState;
+
+			Liferay.Util.Session.set(
+				'com.liferay.frontend.js.web_toggleControls',
+				editControlsState
+			);
+
+			Liferay.fire('toggleControls', {
+				enabled: controlsVisible,
+				src: 'ui',
+			});
+		});
+	});
 
 	Liferay.provide(
 		Util,

@@ -67,8 +67,7 @@ public class EditImportBatchPlannerPlanTemplateMVCActionCommand
 		try {
 			BatchPlannerPlan batchPlannerPlan =
 				_batchPlannerPlanHelper.addImportBatchPlannerPlan(
-					actionRequest,
-					ParamUtil.getString(actionRequest, "templateName"),
+					actionRequest, ParamUtil.getString(actionRequest, "name"),
 					StringPool.BLANK);
 
 			JSONPortletResponseUtil.writeJSON(

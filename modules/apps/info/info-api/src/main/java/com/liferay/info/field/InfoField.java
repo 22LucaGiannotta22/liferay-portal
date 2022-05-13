@@ -113,10 +113,6 @@ public class InfoField<T extends InfoFieldType> implements InfoFieldSetEntry {
 		return _builder._multivalued;
 	}
 
-	public boolean isRequired() {
-		return _builder._required;
-	}
-
 	@Override
 	public String toString() {
 		return StringBundler.concat(
@@ -147,7 +143,6 @@ public class InfoField<T extends InfoFieldType> implements InfoFieldSetEntry {
 		private boolean _multivalued;
 		private String _name;
 		private String _namespace;
-		private boolean _required;
 		private String _uniqueId;
 
 	}
@@ -187,12 +182,6 @@ public class InfoField<T extends InfoFieldType> implements InfoFieldSetEntry {
 
 		public FinalStep<T> multivalued(boolean multivalued) {
 			_builder._multivalued = multivalued;
-
-			return this;
-		}
-
-		public FinalStep<T> required(boolean required) {
-			_builder._required = required;
 
 			return this;
 		}

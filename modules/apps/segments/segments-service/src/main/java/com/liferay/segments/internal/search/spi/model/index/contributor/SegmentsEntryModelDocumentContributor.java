@@ -54,9 +54,11 @@ public class SegmentsEntryModelDocumentContributor
 			Field.DESCRIPTION, segmentsEntry.getDescriptionMap(), true);
 		document.addDate(Field.MODIFIED_DATE, segmentsEntry.getModifiedDate());
 
+		Locale siteDefaultLocale = _getSiteDefaultLocale(
+			segmentsEntry.getGroupId());
+
 		_searchLocalizationHelper.addLocalizedField(
-			document, Field.NAME,
-			_getSiteDefaultLocale(segmentsEntry.getGroupId()),
+			document, Field.NAME, siteDefaultLocale,
 			segmentsEntry.getNameMap());
 
 		document.addLocalizedKeyword(

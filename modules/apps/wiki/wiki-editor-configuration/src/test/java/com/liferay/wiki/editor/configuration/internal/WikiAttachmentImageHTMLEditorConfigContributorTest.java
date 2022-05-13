@@ -99,7 +99,7 @@ public class WikiAttachmentImageHTMLEditorConfigContributorTest {
 			getJSONObjectWithDefaultItemSelectorURL();
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		WikiAttachmentImageHTMLEditorConfigContributor
 			wikiAttachmentImageHTMLEditorConfigContributor =
@@ -111,17 +111,18 @@ public class WikiAttachmentImageHTMLEditorConfigContributorTest {
 		wikiAttachmentImageHTMLEditorConfigContributor.populateConfigJSONObject(
 			jsonObject, _inputEditorTaglibAttributes, null, null);
 
+		JSONObject expectedJSONObject = JSONUtil.put(
+			"filebrowserImageBrowseLinkUrl",
+			"itemSelectorPortletURLWithImageUrlSelectionViews"
+		).put(
+			"filebrowserImageBrowseUrl",
+			"itemSelectorPortletURLWithImageUrlSelectionViews"
+		).put(
+			"removePlugins", "plugin1,ae_addimages"
+		);
+
 		JSONAssert.assertEquals(
-			JSONUtil.put(
-				"filebrowserImageBrowseLinkUrl",
-				"itemSelectorPortletURLWithImageUrlSelectionViews"
-			).put(
-				"filebrowserImageBrowseUrl",
-				"itemSelectorPortletURLWithImageUrlSelectionViews"
-			).put(
-				"removePlugins", "plugin1,ae_addimages"
-			).toString(),
-			jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -187,17 +188,18 @@ public class WikiAttachmentImageHTMLEditorConfigContributorTest {
 			jsonObject, _inputEditorTaglibAttributes, new ThemeDisplay(),
 			requestBackedPortletURLFactory);
 
+		JSONObject expectedJSONObject = JSONUtil.put(
+			"filebrowserImageBrowseLinkUrl",
+			"itemSelectorPortletURLWithWikiImageUrlAndUploadSelectionViews"
+		).put(
+			"filebrowserImageBrowseUrl",
+			"itemSelectorPortletURLWithWikiImageUrlAndUploadSelectionViews"
+		).put(
+			"removePlugins", "plugin1"
+		);
+
 		JSONAssert.assertEquals(
-			JSONUtil.put(
-				"filebrowserImageBrowseLinkUrl",
-				"itemSelectorPortletURLWithWikiImageUrlAndUploadSelectionViews"
-			).put(
-				"filebrowserImageBrowseUrl",
-				"itemSelectorPortletURLWithWikiImageUrlAndUploadSelectionViews"
-			).put(
-				"removePlugins", "plugin1"
-			).toString(),
-			jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -211,7 +213,7 @@ public class WikiAttachmentImageHTMLEditorConfigContributorTest {
 			getJSONObjectWithDefaultItemSelectorURL();
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		WikiAttachmentImageHTMLEditorConfigContributor
 			wikiAttachmentImageHTMLEditorConfigContributor =
@@ -224,12 +226,12 @@ public class WikiAttachmentImageHTMLEditorConfigContributorTest {
 			jsonObject, _inputEditorTaglibAttributes, null, null);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		expectedJSONObject.put("removePlugins", "plugin1");
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -243,7 +245,7 @@ public class WikiAttachmentImageHTMLEditorConfigContributorTest {
 			getJSONObjectWithDefaultItemSelectorURL();
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		WikiAttachmentImageHTMLEditorConfigContributor
 			wikiAttachmentImageHTMLEditorConfigContributor =
@@ -256,12 +258,12 @@ public class WikiAttachmentImageHTMLEditorConfigContributorTest {
 			jsonObject, _inputEditorTaglibAttributes, null, null);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		expectedJSONObject.put("removePlugins", "plugin1");
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	protected JSONObject getJSONObjectWithDefaultItemSelectorURL() {

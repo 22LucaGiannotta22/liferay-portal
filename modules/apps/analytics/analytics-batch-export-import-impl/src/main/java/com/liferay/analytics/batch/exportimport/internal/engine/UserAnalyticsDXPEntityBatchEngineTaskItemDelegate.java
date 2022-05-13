@@ -64,27 +64,25 @@ public class UserAnalyticsDXPEntityBatchEngineTaskItemDelegate
 			com.liferay.portal.vulcan.pagination.Pagination.of(
 				pagination.getPage(), pagination.getPageSize());
 
-		com.liferay.portal.vulcan.pagination.Page<DXPEntity> page =
+		com.liferay.portal.vulcan.pagination.Page<DXPEntity> dxpEntitiesPage =
 			SearchUtil.search(
 				null, booleanQuery -> booleanQuery.getPreBooleanFilter(),
 				_createBooleanFilter(contextCompany.getCompanyId(), filter),
 				User.class.getName(), null, vulcanPagination,
 				queryConfig -> queryConfig.setSelectedFieldNames(
 					Field.ENTRY_CLASS_PK),
-				searchContext -> {
-					searchContext.setCompanyId(contextCompany.getCompanyId());
-					searchContext.setUserId(0);
-				},
-				sorts,
+				searchContext -> searchContext.setCompanyId(
+					contextCompany.getCompanyId()),
+				null,
 				document -> _dxpEntityDTOConverter.toDTO(
 					_userLocalService.getUser(
 						GetterUtil.getLong(
 							document.get(Field.ENTRY_CLASS_PK)))));
 
 		return Page.of(
-			page.getItems(),
+			dxpEntitiesPage.getItems(),
 			Pagination.of(pagination.getPage(), pagination.getPageSize()),
-			page.getTotalCount());
+			dxpEntitiesPage.getTotalCount());
 	}
 
 	private BooleanFilter _createBooleanFilter(long companyId, Filter filter) {

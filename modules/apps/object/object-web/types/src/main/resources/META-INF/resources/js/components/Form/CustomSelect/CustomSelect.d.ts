@@ -12,10 +12,9 @@
  * details.
  */
 
-/// <reference types="react" />
-
+import {ReactNode} from 'react';
 import './CustomSelect.scss';
-export default function CustomSelect<T extends CustomItem = CustomItem>({
+export default function CustomSelect<T extends IItem = IItem>({
 	className,
 	disabled,
 	error,
@@ -27,12 +26,13 @@ export default function CustomSelect<T extends CustomItem = CustomItem>({
 	required,
 	value,
 }: IProps<T>): JSX.Element;
-export interface CustomItem {
+interface IItem {
 	description?: string;
 	label: string;
 	value?: string;
 }
-interface IProps<T extends CustomItem = CustomItem> {
+interface IProps<T extends IItem = IItem> {
+	children?: ReactNode;
 	className?: string;
 	disabled?: boolean;
 	error?: string;

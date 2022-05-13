@@ -75,9 +75,11 @@ public class IndexerFixture<T> {
 
 	public Document[] search(long userId, String keywords, Locale locale) {
 		try {
-			Hits hits = _indexer.search(
+			SearchContext searchContext =
 				SearchContextTestUtil.getSearchContext(
-					userId, keywords, locale));
+					userId, keywords, locale);
+
+			Hits hits = _indexer.search(searchContext);
 
 			return hits.getDocs();
 		}
@@ -104,9 +106,11 @@ public class IndexerFixture<T> {
 		Map<String, Serializable> attributes) {
 
 		try {
-			Hits hits = _indexer.search(
+			SearchContext searchContext =
 				SearchContextTestUtil.getSearchContext(
-					userId, null, keywords, locale, attributes));
+					userId, null, keywords, locale, attributes);
+
+			Hits hits = _indexer.search(searchContext);
 
 			HitsAssert.assertNoHits(hits);
 		}

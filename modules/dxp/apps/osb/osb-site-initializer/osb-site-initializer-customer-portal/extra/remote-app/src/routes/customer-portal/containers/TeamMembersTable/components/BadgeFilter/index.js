@@ -9,8 +9,6 @@
  * distribution rights of the Software.
  */
 
-import i18n from '../../../../../../common/I18n';
-
 const BadgeFilter = ({
 	activationKeysLength,
 	loading,
@@ -21,15 +19,11 @@ const BadgeFilter = ({
 			<div className="d-flex">
 				{!!filters.searchTerm && !loading && (
 					<p className="font-weight-semi-bold m-0 mt-3 text-paragraph-sm">
-						{activationKeysLength > 1
-							? i18n.sub('x-results-for-x', [
-									activationKeysLength,
-									filters.searchTerm,
-							  ])
-							: i18n.sub('x-result-for-x', [
-									activationKeysLength,
-									filters.searchTerm,
-							  ])}
+						{activationKeysLength} {}
+						result
+						{activationKeysLength > 1 ? 's ' : ' '}
+						for &quot;
+						{filters.searchTerm}&quot;
 					</p>
 				)}
 			</div>

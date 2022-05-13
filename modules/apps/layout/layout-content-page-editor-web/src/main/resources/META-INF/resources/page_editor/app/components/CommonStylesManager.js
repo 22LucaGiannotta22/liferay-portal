@@ -19,16 +19,14 @@ import {LAYOUT_DATA_ITEM_TYPES} from '../config/constants/layoutDataItemTypes';
 import {VIEWPORT_SIZES} from '../config/constants/viewportSizes';
 import {config} from '../config/index';
 import {useGlobalContext} from '../contexts/GlobalContext';
-import {useSelector, useSelectorRef} from '../contexts/StoreContext';
+import {useSelector} from '../contexts/StoreContext';
 import {deepEqual} from '../utils/checkDeepEqual';
 import generateStyleSheet from '../utils/generateStyleSheet';
 import {getResponsiveConfig} from '../utils/getResponsiveConfig';
-import hasInnerCommonStyles from '../utils/hasInnerCustomStyles';
 
 const LAYOUT_DATA_ITEMS_WITH_COMMON_STYLES = [
 	LAYOUT_DATA_ITEM_TYPES.collection,
 	LAYOUT_DATA_ITEM_TYPES.container,
-	LAYOUT_DATA_ITEM_TYPES.form,
 	LAYOUT_DATA_ITEM_TYPES.row,
 	LAYOUT_DATA_ITEM_TYPES.fragment,
 ];
@@ -45,10 +43,6 @@ export default function CommonStylesManager() {
 		(state) => state.selectedViewportSize
 	);
 
-	const fragmentEntryLinksRef = useSelectorRef(
-		(state) => state.fragmentEntryLinks
-	);
-
 	const globalContext = useGlobalContext();
 
 	useEffect(() => {
@@ -56,8 +50,7 @@ export default function CommonStylesManager() {
 			stylesPerViewportRef.current[selectedViewportSize] || {};
 
 		const {styleSheet, styles} = calculateStyles({
-			fragmentEntryLinks: fragmentEntryLinksRef.current,
-			isMaster: true,
+			hasTopper: true,
 			items: Object.values(layoutData.items),
 			previousStyleSheet,
 			previousStyles,
@@ -74,12 +67,7 @@ export default function CommonStylesManager() {
 			id: 'layout-common-styles',
 			styleSheet,
 		});
-	}, [
-		layoutData.items,
-		selectedViewportSize,
-		globalContext,
-		fragmentEntryLinksRef,
-	]);
+	}, [layoutData.items, selectedViewportSize, globalContext]);
 
 	useEffect(() => {
 		if (!masterLayoutData) {
@@ -90,8 +78,7 @@ export default function CommonStylesManager() {
 			masterStylesPerViewportRef.current[selectedViewportSize] || {};
 
 		const {styleSheet, styles} = calculateStyles({
-			fragmentEntryLinks: fragmentEntryLinksRef.current,
-			isMaster: false,
+			hasTopper: false,
 			items: Object.values(masterLayoutData.items),
 			previousStyleSheet,
 			previousStyles,
@@ -108,12 +95,7 @@ export default function CommonStylesManager() {
 			id: 'layout-master-common-styles',
 			styleSheet,
 		});
-	}, [
-		masterLayoutData,
-		selectedViewportSize,
-		globalContext,
-		fragmentEntryLinksRef,
-	]);
+	}, [masterLayoutData, selectedViewportSize, globalContext]);
 
 	return null;
 }
@@ -171,14 +153,12 @@ function filterStyles({item, selectedViewportSize, styles}) {
 }
 
 function calculateStyles({
-	fragmentEntryLinks,
-	isMaster,
+	hasTopper,
 	items,
 	previousStyleSheet,
 	previousStyles,
 	selectedViewportSize,
 }) {
-	const itemsWithTopper = new Set();
 	const nextStyles = {};
 
 	items.forEach((item) => {
@@ -193,20 +173,6 @@ function calculateStyles({
 				selectedViewportSize,
 				styles,
 			});
-
-			if (!isMaster) {
-				return;
-			}
-
-			const fragmentEntryLink =
-				fragmentEntryLinks[item.config.fragmentEntryLinkId];
-
-			if (
-				item.type !== LAYOUT_DATA_ITEM_TYPES.fragment ||
-				!hasInnerCommonStyles(fragmentEntryLink)
-			) {
-				itemsWithTopper.add(item.itemId);
-			}
 		}
 	});
 
@@ -216,7 +182,7 @@ function calculateStyles({
 		!deepEqual(previousStyles, nextStyles)
 	) {
 		const styleSheet = generateStyleSheet(nextStyles, {
-			itemsWithTopper,
+			hasTopper,
 		});
 
 		return {styleSheet, styles: nextStyles};

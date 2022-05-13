@@ -9,27 +9,25 @@
  * distribution rights of the Software.
  */
 
-import i18n from '../../../../../../common/I18n';
-
 export const ACTIVATION_STATUS = {
 	activated: {
 		color: 'success',
 		id: 'activated',
-		title: i18n.translate('activated'),
+		title: 'Activated',
 	},
 	all: {
 		color: 'none',
 		id: 'all',
-		title: i18n.translate('all'),
+		title: 'All',
 	},
 	expired: {
 		color: 'danger',
 		id: 'expired',
-		title: i18n.translate('expired'),
+		title: 'Expired',
 	},
 	notActivated: {
 		color: 'info',
 		id: 'notActivated',
-		title: i18n.translate('not-activated'),
+		title: 'Not Activated',
 	},
 };

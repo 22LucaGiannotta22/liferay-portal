@@ -30,22 +30,18 @@ import com.liferay.headless.delivery.dto.v1_0.ContentField;
 import com.liferay.journal.service.JournalArticleService;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -80,8 +76,8 @@ public class DDMFormValuesUtil {
 	}
 
 	public static DDMFormValues toDDMFormValues(
-		Set<Locale> availableLocales, ContentField[] contentFields,
-		DDMForm ddmForm, DLAppService dlAppService, long groupId,
+		ContentField[] contentFields, DDMForm ddmForm,
+		DLAppService dlAppService, long groupId,
 		JournalArticleService journalArticleService,
 		LayoutLocalService layoutLocalService, Locale locale,
 		List<DDMFormField> rootDDMFormFields) {
@@ -96,8 +92,7 @@ public class DDMFormValuesUtil {
 
 		return new DDMFormValues(ddmForm) {
 			{
-				setAvailableLocales(
-					_getAvailableLocales(availableLocales, ddmForm, groupId));
+				setAvailableLocales(ddmForm.getAvailableLocales());
 				setDDMFormFieldValues(
 					_flattenDDMFormFieldValues(
 						rootDDMFormFields,
@@ -107,7 +102,7 @@ public class DDMFormValuesUtil {
 							ddmFormField, dlAppService, groupId,
 							journalArticleService, layoutLocalService,
 							locale)));
-				setDefaultLocale(_getDefaultLocale(ddmForm, locale));
+				setDefaultLocale(ddmForm.getDefaultLocale());
 			}
 		};
 	}
@@ -140,37 +135,6 @@ public class DDMFormValuesUtil {
 		).collect(
 			Collectors.toList()
 		);
-	}
-
-	private static Set<Locale> _getAvailableLocales(
-		Set<Locale> availableLocales, DDMForm ddmForm, long groupId) {
-
-		if (SetUtil.isEmpty(availableLocales)) {
-			return ddmForm.getAvailableLocales();
-		}
-
-		Set<Locale> locales = new HashSet<>();
-
-		Set<Locale> siteAvailableLocales = LanguageUtil.getAvailableLocales(
-			groupId);
-
-		for (Locale availableLocale : availableLocales) {
-			if (siteAvailableLocales.contains(availableLocale)) {
-				locales.add(availableLocale);
-			}
-		}
-
-		return locales;
-	}
-
-	private static Locale _getDefaultLocale(
-		DDMForm ddmForm, Locale defaultLocale) {
-
-		if (defaultLocale == null) {
-			return ddmForm.getDefaultLocale();
-		}
-
-		return defaultLocale;
 	}
 
 	private static Map<String, List<ContentField>> _toContentFieldsMap(

@@ -11,14 +11,12 @@
 import {useQuery} from '@apollo/client';
 import DOMPurify from 'dompurify';
 import {useEffect, useState} from 'react';
-import i18n from '../../../../../../common/I18n';
 import {Table} from '../../../../../../common/components';
 import {fetchHeadless} from '../../../../../../common/services/liferay/api';
 import {getKoroneikiAccounts} from '../../../../../../common/services/liferay/graphql/queries';
-import {useCustomerPortal} from '../../../../context';
 import ActivationKeysLayout from '../../../../layouts/ActivationKeysLayout';
 
-const Commerce = () => {
+const Commerce = ({accountKey, sessionId}) => {
 	const [
 		ActivationInstructionsData,
 		setActivationInstructionsData,
@@ -27,9 +25,6 @@ const Commerce = () => {
 		isLoadingActivationInstructions,
 		setIsLoadingActivationInstructions,
 	] = useState(false);
-
-	const [{accountKey, sessionId}] = useCustomerPortal();
-
 	const {data, loading} = useQuery(getKoroneikiAccounts, {
 		variables: {
 			filter: `accountKey eq '${accountKey}'`,
@@ -102,7 +97,7 @@ const Commerce = () => {
 			accessor: 'version',
 			bodyClass: 'border border-0 py-4 pl-4',
 			header: {
-				name: i18n.translate('version'),
+				name: 'Version',
 				styles:
 					'bg-neutral-1 font-weight-bold text-neutral-8 table-cell-minw-200 py-3 pl-4',
 			},
@@ -112,7 +107,7 @@ const Commerce = () => {
 			accessor: 'instructions',
 			bodyClass: 'border border-0',
 			header: {
-				name: i18n.translate('instructions'),
+				name: 'Instructions',
 				styles:
 					'bg-neutral-1 font-weight-bold text-neutral-8 table-cell-expand-smaller py-3',
 			},

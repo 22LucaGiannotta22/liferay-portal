@@ -16,19 +16,17 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
-import {useFeatureFlag} from 'data-engine-js-components-web';
 import {fetch} from 'frontend-js-web';
 import React, {FormEvent, useEffect, useState} from 'react';
 
-import {defaultLanguageId} from '../utils/locale';
 import CustomSelect from './Form/CustomSelect/CustomSelect';
 import Input from './Form/Input';
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId() as Liferay.Language.Locale;
 const headers = new Headers({
 	'Accept': 'application/json',
 	'Content-Type': 'application/json',
 });
-
 const requiredLabel = Liferay.Language.get('required');
 
 function ModalAddObjectValidation({
@@ -37,13 +35,9 @@ function ModalAddObjectValidation({
 	observer,
 	onClose,
 }: IModal) {
-	const flags = useFeatureFlag();
-
-	if (!flags['LPS-147651']) {
-		objectValidationRuleEngines = objectValidationRuleEngines.filter(
-			(type) => type.name === 'groovy'
-		);
-	}
+	objectValidationRuleEngines = objectValidationRuleEngines.filter(
+		(type) => type.name === 'groovy'
+	);
 
 	const [typeSelection, setTypeSelection] = useState<ObjectValidationType>({
 		label: '',
@@ -86,9 +80,7 @@ function ModalAddObjectValidation({
 						[defaultLanguageId]: labelInput[defaultLanguageId],
 					},
 					script:
-						typeSelection.name === 'groovy'
-							? '<#-- Insert a Groovy Script to define your validation. -->'
-							: '<#-- Add elements from the sidebar to define your validation. -->',
+						'<#-- Insert a Groovy Script to define your validation. -->',
 				}),
 				headers,
 				method: 'POST',
@@ -215,6 +207,11 @@ export default function ModalWithProvider({
 		</ClayModalProvider>
 	);
 }
+
+type ObjectValidationType = {
+	label: string;
+	name: string;
+};
 
 interface IModal extends IProps {
 	observer: any;

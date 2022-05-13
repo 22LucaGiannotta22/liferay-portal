@@ -1,8 +1,6 @@
 @component-name = "portal-analytics-cloud"
 definition {
 
-	property analytics.cloud.release = "true";
-	property analytics.cloud.upstream = "true";
 	property custom.properties = "jsonws.web.service.paths.excludes=";
 	property portal.release = "false";
 	property portal.upstream = "true";
@@ -882,9 +880,9 @@ definition {
 		}
 
 		task ("Check that the empty page message and check the hyperlink taking user to event analysis document") {
-			ACUtils.viewGenericText(textValueList = "There are no analysis found.,Create a analysis to get started.,Access our documentation to learn more.");
+			ACUtils.viewNoResultsMessage(noResultMessage = "No analysis found");
 
-			ACUtils.clickGenericHyperlink(hyperlinkText = "Access our documentation to learn more.");
+			ACUtils.clickGenericHyperlink(hyperlinkText = "documentation");
 
 			task ("Switch to the documentation tab") {
 				SelectWindow(locator1 = "title=Events Analysis — Liferay Learn");

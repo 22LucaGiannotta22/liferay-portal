@@ -102,7 +102,7 @@ public class GetTotalViewsMVCResourceCommandTest {
 								))
 						).put(
 							"value", 5
-						).toString();
+						).toJSONString();
 					}
 				).build()));
 

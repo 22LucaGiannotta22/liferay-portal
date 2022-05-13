@@ -207,8 +207,8 @@ export default function AddOrganizationModal({
 			<ClayModal.Body>
 				<ClayRadioGroup
 					className="mb-4"
-					onChange={setNewAccountMode}
-					value={newAccountMode}
+					onSelectedValueChange={setNewAccountMode}
+					selectedValue={newAccountMode}
 				>
 					<ClayRadio
 						label={Liferay.Language.get('select-accounts')}
@@ -249,12 +249,12 @@ export default function AddOrganizationModal({
 
 						<ClayMultiSelect
 							id="searchAccountInput"
+							inputValue={accountsQuery}
 							items={selectedAccounts}
 							locator={{label: 'name', value: 'id'}}
 							onChange={setAccountsQuery}
 							onItemsChange={handleItemsChange}
 							sourceItems={accountOptions}
-							value={accountsQuery}
 						/>
 
 						{errorsContainer}

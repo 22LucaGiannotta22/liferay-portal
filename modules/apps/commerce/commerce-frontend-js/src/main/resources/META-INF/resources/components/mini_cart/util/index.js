@@ -115,5 +115,5 @@ export function summaryDataMapper({
 }
 
 export function hasErrors(cartItems) {
-	return cartItems.some(({errorMessages}) => Boolean(errorMessages?.length));
+	return !!cartItems.find(({errorMessages}) => !!errorMessages);
 }

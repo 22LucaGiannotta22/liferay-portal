@@ -12,11 +12,9 @@
 import {Button as ClayButton} from '@clayui/core';
 import {useModal} from '@clayui/modal';
 import {useState} from 'react';
-import i18n from '../../../../../../common/I18n';
 import {useApplicationProvider} from '../../../../../../common/context/AppPropertiesProvider';
 import {putDeactivateKeys} from '../../../../../../common/services/liferay/rest/raysource/LicenseKeys';
 import {ALERT_DOWNLOAD_TYPE, STATUS_CODE} from '../../../../utils/constants';
-import ConfirmationMessageModal from './ConfirmationMessageModal';
 import DeactivateKeysModal from './Modal';
 
 const DeactivateButton = ({
@@ -29,7 +27,6 @@ const DeactivateButton = ({
 	const {licenseKeyDownloadURL} = useApplicationProvider();
 	const [isDeactivating, setIsDeactivating] = useState(false);
 	const [isVisibleModal, setIsVisibleModal] = useState(false);
-	const [alreadyDeactivated, setAlreadyDeactivated] = useState(false);
 	const {observer, onClose} = useModal({
 		onClose: () => {
 			setIsVisibleModal(false);
@@ -48,46 +45,33 @@ const DeactivateButton = ({
 
 		if (response.status === STATUS_CODE.successNoContent) {
 			setIsDeactivating(false);
-			setAlreadyDeactivated(true);
+			setIsVisibleModal(false);
+			handleDeactivate();
 
-			return;
+			return setDeactivateKeysStatus(ALERT_DOWNLOAD_TYPE.success);
 		}
 
 		setIsDeactivating(false);
 		setDeactivateKeysStatus(ALERT_DOWNLOAD_TYPE.danger);
 	};
 
-	const confirmKeyNoLongerVisible = () => {
-		setIsVisibleModal(false);
-		setAlreadyDeactivated(false);
-		handleDeactivate();
-
-		return setDeactivateKeysStatus(ALERT_DOWNLOAD_TYPE.success);
-	};
-
 	return (
 		<>
-			{isVisibleModal &&
-				(alreadyDeactivated ? (
-					<ConfirmationMessageModal
-						confirmKeyNoLongerVisible={confirmKeyNoLongerVisible}
-						observer={observer}
-					/>
-				) : (
-					<DeactivateKeysModal
-						deactivateKeysConfirm={deactivateKeysConfirm}
-						deactivateKeysStatus={deactivateKeysStatus}
-						isDeactivating={isDeactivating}
-						observer={observer}
-						onClose={onClose}
-					/>
-				))}
+			{isVisibleModal && (
+				<DeactivateKeysModal
+					deactivateKeysConfirm={deactivateKeysConfirm}
+					deactivateKeysStatus={deactivateKeysStatus}
+					isDeactivating={isDeactivating}
+					observer={observer}
+					onClose={onClose}
+				/>
+			)}
 
 			<ClayButton
 				className="btn-outline-danger cp-deactivate-button mx-2 px-3 py-2"
 				onClick={() => setIsVisibleModal(true)}
 			>
-				{i18n.translate('deactivate')}
+				Deactivate
 			</ClayButton>
 		</>
 	);

@@ -55,16 +55,14 @@ public class OrganizationAnalyticsDXPEntityBatchEngineTaskItemDelegate
 			com.liferay.portal.vulcan.pagination.Pagination.of(
 				pagination.getPage(), pagination.getPageSize());
 
-		com.liferay.portal.vulcan.pagination.Page<DXPEntity> page =
+		com.liferay.portal.vulcan.pagination.Page<DXPEntity> dxpEntitiesPage =
 			SearchUtil.search(
 				null, booleanQuery -> booleanQuery.getPreBooleanFilter(),
 				filter, Organization.class.getName(), null, vulcanPagination,
 				queryConfig -> queryConfig.setSelectedFieldNames(
 					Field.ENTRY_CLASS_PK),
-				searchContext -> {
-					searchContext.setCompanyId(contextCompany.getCompanyId());
-					searchContext.setUserId(0);
-				},
+				searchContext -> searchContext.setCompanyId(
+					contextCompany.getCompanyId()),
 				null,
 				document -> _dxpEntityDTOConverter.toDTO(
 					_organizationLocalService.getOrganization(
@@ -72,9 +70,9 @@ public class OrganizationAnalyticsDXPEntityBatchEngineTaskItemDelegate
 							document.get(Field.ENTRY_CLASS_PK)))));
 
 		return Page.of(
-			page.getItems(),
+			dxpEntitiesPage.getItems(),
 			Pagination.of(pagination.getPage(), pagination.getPageSize()),
-			page.getTotalCount());
+			dxpEntitiesPage.getTotalCount());
 	}
 
 	@Reference

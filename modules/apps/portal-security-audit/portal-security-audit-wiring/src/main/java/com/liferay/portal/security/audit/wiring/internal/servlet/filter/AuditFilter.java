@@ -80,7 +80,7 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 		auditRequestThreadLocal.setClientHost(
 			httpServletRequest.getRemoteHost());
 
-		String remoteAddr = httpServletRequest.getRemoteAddr();
+		String remoteAddr = _getRemoteAddr(httpServletRequest);
 
 		auditRequestThreadLocal.setClientIP(remoteAddr);
 
@@ -152,6 +152,17 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 	@Override
 	protected Log getLog() {
 		return _log;
+	}
+
+	private String _getRemoteAddr(HttpServletRequest httpServletRequest) {
+		String remoteAddr = httpServletRequest.getHeader(
+			HttpHeaders.X_FORWARDED_FOR);
+
+		if (remoteAddr != null) {
+			return remoteAddr;
+		}
+
+		return httpServletRequest.getRemoteAddr();
 	}
 
 	private boolean _isValidXRequestId(String xRequestId) {

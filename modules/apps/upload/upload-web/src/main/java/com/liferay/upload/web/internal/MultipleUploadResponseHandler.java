@@ -115,7 +115,6 @@ public class MultipleUploadResponseHandler implements UploadResponseHandler {
 			else if (portalException instanceof FileNameException) {
 				errorMessage = themeDisplay.translate(
 					"please-enter-a-file-with-a-valid-file-name");
-				errorType = ServletResponseConstants.SC_FILE_NAME_EXCEPTION;
 			}
 			else if (portalException instanceof FileSizeException) {
 				FileSizeException fileSizeException =
@@ -127,8 +126,6 @@ public class MultipleUploadResponseHandler implements UploadResponseHandler {
 					_language.formatStorageSize(
 						fileSizeException.getMaxSize(),
 						themeDisplay.getLocale()));
-
-				errorType = ServletResponseConstants.SC_FILE_SIZE_EXCEPTION;
 			}
 			else if (portalException instanceof UploadRequestSizeException) {
 				errorType =

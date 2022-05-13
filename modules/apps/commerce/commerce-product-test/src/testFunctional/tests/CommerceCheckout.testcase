@@ -141,7 +141,11 @@ definition {
 			locator1 = "CommerceEntry#ACTIVE_ORDER_ID",
 			value1 = "${activeOrderId}");
 
-		CommerceCheckout.gotoCheckout();
+		CommerceNavigator.gotoMiniCart();
+
+		Button.click(button = "View Details");
+
+		Button.click(button = "Checkout");
 
 		CommerceCheckout.initializersCheckout(
 			newAddressAddress = "Test Address",
@@ -218,7 +222,11 @@ definition {
 			productName = "U-Joint",
 			productQuantity = "1");
 
-		CommerceCheckout.gotoCheckout();
+		CommerceNavigator.gotoMiniCart();
+
+		Button.click(button = "View Details");
+
+		Button.click(button = "Checkout");
 
 		CommerceCheckout.initializersCheckout(
 			newAddressAddress = "Test Address",

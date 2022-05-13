@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.model;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.trash.kernel.model.TrashEntry;
 
 /**
@@ -27,6 +28,8 @@ public interface TrashedModel {
 	public TrashEntry getTrashEntry() throws PortalException;
 
 	public long getTrashEntryClassPK();
+
+	public TrashHandler getTrashHandler();
 
 	public boolean isInTrash();
 

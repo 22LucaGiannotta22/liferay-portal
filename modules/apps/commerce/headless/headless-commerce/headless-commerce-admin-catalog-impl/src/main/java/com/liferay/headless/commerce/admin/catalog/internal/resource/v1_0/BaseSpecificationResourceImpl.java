@@ -54,7 +54,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -347,21 +346,7 @@ public abstract class BaseSpecificationResourceImpl
 		throws Exception {
 
 		UnsafeConsumer<Specification, Exception> specificationUnsafeConsumer =
-			null;
-
-		String createStrategy = (String)parameters.getOrDefault(
-			"createStrategy", "INSERT");
-
-		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			specificationUnsafeConsumer = specification -> postSpecification(
-				specification);
-		}
-
-		if (specificationUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Create strategy \"" + createStrategy +
-					"\" is not supported for Specification");
-		}
+			specification -> postSpecification(specification);
 
 		if (contextBatchUnsafeConsumer != null) {
 			contextBatchUnsafeConsumer.accept(
@@ -440,35 +425,6 @@ public abstract class BaseSpecificationResourceImpl
 			java.util.Collection<Specification> specifications,
 			Map<String, Serializable> parameters)
 		throws Exception {
-
-		UnsafeConsumer<Specification, Exception> specificationUnsafeConsumer =
-			null;
-
-		String updateStrategy = (String)parameters.getOrDefault(
-			"updateStrategy", "UPDATE");
-
-		if ("PARTIAL_UPDATE".equalsIgnoreCase(updateStrategy)) {
-			specificationUnsafeConsumer = specification -> patchSpecification(
-				specification.getId() != null ? specification.getId() :
-					Long.parseLong((String)parameters.get("specificationId")),
-				specification);
-		}
-
-		if (specificationUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Update strategy \"" + updateStrategy +
-					"\" is not supported for Specification");
-		}
-
-		if (contextBatchUnsafeConsumer != null) {
-			contextBatchUnsafeConsumer.accept(
-				specifications, specificationUnsafeConsumer);
-		}
-		else {
-			for (Specification specification : specifications) {
-				specificationUnsafeConsumer.accept(specification);
-			}
-		}
 	}
 
 	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {

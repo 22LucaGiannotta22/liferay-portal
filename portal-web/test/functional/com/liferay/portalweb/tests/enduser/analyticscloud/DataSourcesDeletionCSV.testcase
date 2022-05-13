@@ -1,8 +1,6 @@
 @component-name = "portal-analytics-cloud"
 definition {
 
-	property analytics.cloud.release = "true";
-	property analytics.cloud.upstream = "true";
 	property portal.release = "false";
 	property portal.upstream = "true";
 	property property.group = "analytics.cloud.profile";
@@ -48,7 +46,7 @@ definition {
 		task ("View the CSV Data Source is deleted") {
 			ACUtils.searchBar(searchItem = "CSV Data Source");
 
-			ACUtils.viewGenericText(textValueList = "There are no results found.,Please try a different search term.");
+			ACUtils.viewNoResultsMessage(noResultMessage = "There are no Data Sources found.");
 		}
 	}
 

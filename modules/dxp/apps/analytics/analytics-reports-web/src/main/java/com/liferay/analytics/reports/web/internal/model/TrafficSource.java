@@ -158,7 +158,7 @@ public class TrafficSource {
 		JSONObject jsonObject = toJSONObject(
 			null, LocaleUtil.getDefault(), _name);
 
-		return jsonObject.toString();
+		return jsonObject.toJSONString();
 	}
 
 	private JSONArray _getCountryKeywordsJSONArray(Locale locale) {

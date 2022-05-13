@@ -227,7 +227,7 @@ describe('ReactFieldBase', () => {
 
 	describe('Hide Field', () => {
 		it('renders the FieldBase with hideField markup', () => {
-			const {getAllByText, getByText} = render(
+			const {getByText} = render(
 				<FieldBaseWithProvider
 					hideField
 					label="Text"
@@ -236,18 +236,16 @@ describe('ReactFieldBase', () => {
 			);
 
 			expect(getByText('hidden')).toBeInTheDocument();
-
-			const allByText = getAllByText('Text');
-			expect(allByText).toHaveLength(2);
-			expect(allByText[0]).toBeInTheDocument();
-			expect(allByText[1]).toBeInTheDocument();
+			expect(getByText('Text')).toBeInTheDocument();
 
 			expect(getByText('hidden').parentNode).toHaveAttribute(
 				'class',
 				'label ml-1 label-secondary'
 			);
-			expect(allByText[0]).toHaveAttribute('class', 'text-secondary');
-			expect(allByText[1]).toHaveAttribute('class', 'sr-only');
+			expect(getByText('Text')).toHaveAttribute(
+				'class',
+				'text-secondary'
+			);
 		});
 
 		it('renders the FieldBase with hideField markup when the label is empty', () => {

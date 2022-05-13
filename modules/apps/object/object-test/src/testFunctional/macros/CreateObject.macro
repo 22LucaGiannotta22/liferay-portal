@@ -238,10 +238,12 @@ definition {
 	macro assertSelectedValueInDeletionType {
 		WaitForSPARefresh();
 
+		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
+
 		AssertElementPresent(
 			key_fieldLabel = "Deletion Type",
 			key_value = "${deletionType}",
-			locator1 = "CreateObject#ASSERT_DELETION_TYPE_VALUE");
+			locator1 = "CreateObject#ASSERT_SELECTED_VALUE");
 	}
 
 	macro assertTitleFieldIsSelected {
@@ -275,7 +277,7 @@ definition {
 	}
 
 	macro checkToggleActive {
-		Check.checkToggleSwitch(locator1 = "CreateObject#ACTIVE_TOGGLE");
+		Check.checkToggleSwitch(locator1 = "CreateObject#TOGGLE_ACTIVE");
 
 		WaitForSPARefresh();
 
@@ -291,7 +293,7 @@ definition {
 	}
 
 	macro checkToggleInactive {
-		Uncheck.uncheckToggleSwitch(locator1 = "CreateObject#ACTIVE_TOGGLE");
+		Uncheck.uncheckToggleSwitch(locator1 = "CreateObject#TOGGLE_INACTIVE");
 
 		WaitForSPARefresh();
 

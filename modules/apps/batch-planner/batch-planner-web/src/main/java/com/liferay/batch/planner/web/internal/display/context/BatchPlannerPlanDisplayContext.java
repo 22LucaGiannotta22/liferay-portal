@@ -15,7 +15,6 @@
 package com.liferay.batch.planner.web.internal.display.context;
 
 import com.liferay.batch.engine.BatchEngineTaskExecuteStatus;
-import com.liferay.batch.engine.constants.BatchEngineImportTaskConstants;
 import com.liferay.batch.engine.model.BatchEngineExportTask;
 import com.liferay.batch.engine.model.BatchEngineImportTask;
 import com.liferay.batch.engine.service.BatchEngineExportTaskLocalServiceUtil;
@@ -30,7 +29,6 @@ import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.SearchOrderByUtil;
-import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -66,67 +64,7 @@ public class BatchPlannerPlanDisplayContext extends BaseDisplayContext {
 		).buildPortletURL();
 	}
 
-	public SearchContainer<BatchPlannerPlanDisplay> getSearchContainer() {
-		try {
-			return _getSearchContainer();
-		}
-		catch (Exception exception) {
-			Class<? extends Exception> clazz = exception.getClass();
-
-			SessionErrors.add(renderRequest, clazz.getName());
-		}
-
-		return new SearchContainer<>(
-			renderRequest, getPortletURL(), null, "no-items-were-found");
-	}
-
-	private String _getAction(boolean export) {
-		if (export) {
-			return "export";
-		}
-
-		return "import";
-	}
-
-	private String _getOrderByCol() {
-		if (Validator.isNotNull(_orderByCol)) {
-			return _orderByCol;
-		}
-
-		_orderByCol = SearchOrderByUtil.getOrderByCol(
-			httpServletRequest, BatchPlannerPortletKeys.BATCH_PLANNER,
-			"plan-order-by-col", "modifiedDate");
-
-		return _orderByCol;
-	}
-
-	private String _getOrderByType() {
-		if (Validator.isNotNull(_orderByType)) {
-			return _orderByType;
-		}
-
-		_orderByType = SearchOrderByUtil.getOrderByType(
-			httpServletRequest, BatchPlannerPortletKeys.BATCH_PLANNER,
-			"plan-order-by-type", "desc");
-
-		return _orderByType;
-	}
-
-	private int _getProcessedItemsCount(
-		BatchEngineImportTask batchEngineImportTask,
-		int batchEngineImportTaskErrorsCount) {
-
-		if (batchEngineImportTask.getImportStrategy() ==
-				BatchEngineImportTaskConstants.IMPORT_STRATEGY_ON_ERROR_FAIL) {
-
-			return batchEngineImportTask.getProcessedItemsCount();
-		}
-
-		return batchEngineImportTask.getTotalItemsCount() -
-			batchEngineImportTaskErrorsCount;
-	}
-
-	private SearchContainer<BatchPlannerPlanDisplay> _getSearchContainer()
+	public SearchContainer<BatchPlannerPlanDisplay> getSearchContainer()
 		throws PortalException {
 
 		if (_searchContainer != null) {
@@ -178,6 +116,38 @@ public class BatchPlannerPlanDisplayContext extends BaseDisplayContext {
 		}
 
 		return _searchContainer;
+	}
+
+	private String _getAction(boolean export) {
+		if (export) {
+			return "export";
+		}
+
+		return "import";
+	}
+
+	private String _getOrderByCol() {
+		if (Validator.isNotNull(_orderByCol)) {
+			return _orderByCol;
+		}
+
+		_orderByCol = SearchOrderByUtil.getOrderByCol(
+			httpServletRequest, BatchPlannerPortletKeys.BATCH_PLANNER,
+			"plan-order-by-col", "modifiedDate");
+
+		return _orderByCol;
+	}
+
+	private String _getOrderByType() {
+		if (Validator.isNotNull(_orderByType)) {
+			return _orderByType;
+		}
+
+		_orderByType = SearchOrderByUtil.getOrderByType(
+			httpServletRequest, BatchPlannerPortletKeys.BATCH_PLANNER,
+			"plan-order-by-type", "desc");
+
+		return _orderByType;
 	}
 
 	private BatchPlannerPlanDisplay _toBatchPlannerPlanDisplay(
@@ -233,16 +203,12 @@ public class BatchPlannerPlanDisplayContext extends BaseDisplayContext {
 						String.valueOf(
 							batchPlannerPlan.getBatchPlannerPlanId()));
 
-			int batchEngineImportTaskErrorsCount =
+			builder.failedItemsCount(
 				BatchEngineImportTaskErrorLocalServiceUtil.
 					getBatchEngineImportTaskErrorsCount(
-						batchEngineImportTask.getBatchEngineImportTaskId());
-
-			builder.failedItemsCount(
-				batchEngineImportTaskErrorsCount
+						batchEngineImportTask.getBatchEngineImportTaskId())
 			).processedItemsCount(
-				_getProcessedItemsCount(
-					batchEngineImportTask, batchEngineImportTaskErrorsCount)
+				batchEngineImportTask.getProcessedItemsCount()
 			).status(
 				BatchPlannerPlanConstants.getStatus(
 					BatchEngineTaskExecuteStatus.valueOf(

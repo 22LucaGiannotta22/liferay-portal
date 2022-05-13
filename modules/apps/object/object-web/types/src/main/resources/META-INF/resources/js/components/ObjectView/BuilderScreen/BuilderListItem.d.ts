@@ -16,20 +16,15 @@ import React from 'react';
 import './BuilderListItem.scss';
 interface IProps {
 	aliasColumnText?: string;
-	defaultFilter?: boolean;
-	defaultSort?: boolean;
 	hasDragAndDrop?: boolean;
 	index: number;
+	isDefaultSort?: boolean;
 	label?: string;
 	objectFieldName: string;
 	onEditing?: (boolean: boolean) => void;
 	onEditingObjectFieldName?: (objectFieldName: string) => void;
 	onVisibleEditModal?: (boolean: boolean) => void;
-	thirdColumnValues?: TThirdColumnValues[];
+	thirdColumnValues?: string[];
 }
-declare type TThirdColumnValues = {
-	label: string;
-	value: string;
-};
 declare const BuilderListItem: React.FC<IProps>;
 export default BuilderListItem;

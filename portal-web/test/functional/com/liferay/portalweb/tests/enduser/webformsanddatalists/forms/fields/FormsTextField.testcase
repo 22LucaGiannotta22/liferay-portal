@@ -1362,7 +1362,9 @@ definition {
 
 		FormPortlet.changeLocale(locale = "português-Brasil");
 
-		FormPortlet.submit();
+		AssertClick(
+			locator1 = "Button#MAIN_CONTENT_SUBMIT",
+			value1 = "Submeter");
 
 		FormPortlet.viewValidationErrorMessage(validationErrorMessage = "Essa é uma mensagem customizada para o português brasileiro");
 
@@ -1372,9 +1374,7 @@ definition {
 
 		FormPortlet.waitForValidationErrorNotPresent(validationErrorMessage = "Essa é uma mensagem customizada para o português brasileiro");
 
-		FormPortlet.submit();
-
-		Alert.viewSuccessMessage();
+		FormPortlet.submitLocalizedSuccessfully(buttonName = "Submeter");
 
 		FormsAdmin.openFormsAdmin(siteURLKey = "guest");
 

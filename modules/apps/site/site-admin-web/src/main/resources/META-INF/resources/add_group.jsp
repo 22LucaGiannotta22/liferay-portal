@@ -20,20 +20,18 @@
 AddGroupDisplayContext addGroupDisplayContext = (AddGroupDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 %>
 
-<div class="add-group-alert-container"></div>
-
 <clay:container-fluid>
 	<liferay-frontend:edit-form
 		action="<%= addGroupDisplayContext.getAddGroupURL() %>"
-		cssClass="add-group-form pt-0"
+		cssClass="add-group-form"
 		method="post"
 		name="fm"
 		onSubmit="event.preventDefault();"
 		validateOnBlur="<%= false %>"
 	>
 		<div class="add-group-content">
-			<div class="lfr-form-content">
-				<aui:input label="name" name="name" required="<%= true %>" />
+			<liferay-frontend:edit-form-body>
+				<aui:input autoFocus="<%= true %>" label="name" name="name" required="<%= true %>" />
 
 				<c:if test="<%= addGroupDisplayContext.isShowLayoutSetVisibilityPrivateCheckbox() %>">
 					<aui:input label="create-default-pages-as-private-available-only-to-members-if-unchecked-they-will-be-public-available-to-anyone" name="layoutSetVisibilityPrivate" type="checkbox" />
@@ -61,7 +59,7 @@ AddGroupDisplayContext addGroupDisplayContext = (AddGroupDisplayContext)request.
 						</c:choose>
 					</aui:fieldset>
 				</c:if>
-			</div>
+			</liferay-frontend:edit-form-body>
 		</div>
 
 		<div class="add-group-loading align-items-center d-none flex-column justify-content-center">

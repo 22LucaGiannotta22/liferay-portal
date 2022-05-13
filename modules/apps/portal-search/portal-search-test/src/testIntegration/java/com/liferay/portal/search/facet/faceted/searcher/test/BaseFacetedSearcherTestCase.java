@@ -121,10 +121,11 @@ public abstract class BaseFacetedSearcherTestCase {
 
 		Stream<Group> stream = _groups.stream();
 
-		searchContext.setGroupIds(
-			stream.mapToLong(
-				Group::getGroupId
-			).toArray());
+		long[] groupIds = stream.mapToLong(
+			Group::getGroupId
+		).toArray();
+
+		searchContext.setGroupIds(groupIds);
 
 		return searchContext;
 	}

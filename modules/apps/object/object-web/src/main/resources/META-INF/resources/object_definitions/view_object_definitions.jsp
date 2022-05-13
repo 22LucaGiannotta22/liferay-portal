@@ -26,6 +26,10 @@ ViewObjectDefinitionsDisplayContext viewObjectDefinitionsDisplayContext = (ViewO
 	fdsActionDropdownItems="<%= viewObjectDefinitionsDisplayContext.getFDSActionDropdownItems() %>"
 	formName="fm"
 	id="<%= ObjectDefinitionsFDSNames.OBJECT_DEFINITIONS %>"
+	itemsPerPage="<%= 20 %>"
+	namespace="<%= liferayPortletResponse.getNamespace() %>"
+	pageNumber="<%= 1 %>"
+	portletURL="<%= liferayPortletResponse.createRenderURL() %>"
 	style="fluid"
 />
 

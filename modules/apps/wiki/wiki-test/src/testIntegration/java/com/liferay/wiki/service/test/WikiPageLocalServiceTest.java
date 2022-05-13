@@ -120,10 +120,11 @@ public class WikiPageLocalServiceTest {
 			TestPropsValues.getUserId(), _node.getNodeId(), "FrontPage",
 			RandomTestUtil.randomString(), true, serviceContext);
 
-		Assert.assertTrue(
-			ListUtil.isNull(
-				AssetCategoryLocalServiceUtil.getCategories(
-					WikiPage.class.getName(), frontPage.getResourcePrimKey())));
+		List<AssetCategory> categories =
+			AssetCategoryLocalServiceUtil.getCategories(
+				WikiPage.class.getName(), frontPage.getResourcePrimKey());
+
+		Assert.assertTrue(ListUtil.isNull(categories));
 	}
 
 	@Test(expected = DuplicatePageExternalReferenceCodeException.class)
@@ -169,12 +170,14 @@ public class WikiPageLocalServiceTest {
 
 		for (char invalidCharacter : invalidCharacters) {
 			try {
+				ServiceContext serviceContext =
+					ServiceContextTestUtil.getServiceContext(
+						_group.getGroupId());
+
 				WikiTestUtil.addPage(
 					TestPropsValues.getUserId(), _node.getNodeId(),
 					"ChildPage" + invalidCharacter,
-					RandomTestUtil.randomString(), true,
-					ServiceContextTestUtil.getServiceContext(
-						_group.getGroupId()));
+					RandomTestUtil.randomString(), true, serviceContext);
 
 				Assert.fail(
 					"Created a page with invalid character " +
@@ -758,10 +761,12 @@ public class WikiPageLocalServiceTest {
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(), true,
 			serviceContext);
 
+		serviceContext = ServiceContextTestUtil.getServiceContext(
+			_group.getGroupId());
+
 		WikiPageLocalServiceUtil.renamePage(
 			TestPropsValues.getUserId(), _node.getNodeId(), page.getTitle(),
-			"New Title", true,
-			ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
+			"New Title", true, serviceContext);
 
 		WikiPage renamedPage = WikiPageLocalServiceUtil.getPage(
 			_node.getNodeId(), "New Title");
@@ -793,10 +798,12 @@ public class WikiPageLocalServiceTest {
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(), true,
 			serviceContext);
 
+		serviceContext = ServiceContextTestUtil.getServiceContext(
+			_group.getGroupId());
+
 		WikiPageLocalServiceUtil.renamePage(
 			TestPropsValues.getUserId(), _node.getNodeId(), page.getTitle(),
-			"New Title", true,
-			ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
+			"New Title", true, serviceContext);
 
 		WikiPage renamedPage = WikiPageLocalServiceUtil.getPage(
 			_node.getNodeId(), "New Title");

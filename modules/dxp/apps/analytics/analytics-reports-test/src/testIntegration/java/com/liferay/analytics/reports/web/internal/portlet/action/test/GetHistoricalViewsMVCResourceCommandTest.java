@@ -98,7 +98,7 @@ public class GetHistoricalViewsMVCResourceCommandTest {
 							))
 					).put(
 						"value", 5
-					).toString())));
+					).toJSONString())));
 
 		try {
 			MockContextUtil.testWithMockContext(

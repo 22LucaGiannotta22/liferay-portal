@@ -461,7 +461,7 @@ public class JournalTransformer {
 							optionValue, optionValue));
 				}
 
-				return nextJSONArray.toString();
+				return nextJSONArray.toJSONString();
 			}
 			catch (Exception exception) {
 				if (_log.isDebugEnabled()) {

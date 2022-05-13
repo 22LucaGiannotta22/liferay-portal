@@ -42,9 +42,10 @@ public class ContactBatchReindexerImpl implements ContactBatchReindexer {
 				Property classNameIdProperty = PropertyFactoryUtil.forName(
 					"classNameId");
 
-				dynamicQuery.add(
-					classNameIdProperty.eq(
-						_classNameLocalService.getClassNameId(User.class)));
+				long classNameId = _classNameLocalService.getClassNameId(
+					User.class);
+
+				dynamicQuery.add(classNameIdProperty.eq(classNameId));
 
 				Property classPKProperty = PropertyFactoryUtil.forName(
 					"classPK");

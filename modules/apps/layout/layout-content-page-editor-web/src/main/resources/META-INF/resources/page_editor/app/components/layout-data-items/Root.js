@@ -12,25 +12,29 @@
  * details.
  */
 
+import classNames from 'classnames';
 import React from 'react';
 
 import {getLayoutDataItemPropTypes} from '../../../prop-types/index';
-import {useSelectorCallback} from '../../contexts/StoreContext';
+import {useSelector} from '../../contexts/StoreContext';
 import isItemEmpty from '../../utils/isItemEmpty';
 import TopperEmpty from '../topper/TopperEmpty';
 
 const Root = React.forwardRef(({children, item}, ref) => {
-	const isEmpty = useSelectorCallback(
-		(state) =>
-			isItemEmpty(item, state.layoutData, state.selectedViewportSize),
-		[item]
+	const layoutData = useSelector((state) => state.layoutData);
+	const selectedViewportSize = useSelector(
+		(state) => state.selectedViewportSize
 	);
 
 	return (
 		<TopperEmpty item={item}>
-			<div className="page-editor__root" ref={ref}>
-				{isEmpty ? (
-					<div className="page-editor__no-fragments-message">
+			<div className={classNames('page-editor__root')} ref={ref}>
+				{isItemEmpty(item, layoutData, selectedViewportSize) ? (
+					<div
+						className={classNames(
+							'page-editor__no-fragments-message'
+						)}
+					>
 						<div className="page-editor__no-fragments-message__title">
 							{Liferay.Language.get('place-fragments-here')}
 						</div>

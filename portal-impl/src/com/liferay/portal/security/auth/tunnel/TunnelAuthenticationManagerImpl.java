@@ -14,8 +14,8 @@
 
 package com.liferay.portal.security.auth.tunnel;
 
-import com.liferay.portal.kernel.encryptor.EncryptorException;
-import com.liferay.portal.kernel.encryptor.EncryptorUtil;
+import com.liferay.petra.encryptor.Encryptor;
+import com.liferay.petra.encryptor.EncryptorException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
@@ -82,8 +82,7 @@ public class TunnelAuthenticationManagerImpl
 			HttpAuthorizationHeader.AUTH_PARAMETER_NAME_USERNAME);
 
 		try {
-			expectedPassword = EncryptorUtil.encrypt(
-				getSharedSecretKey(), login);
+			expectedPassword = Encryptor.encrypt(getSharedSecretKey(), login);
 		}
 		catch (EncryptorException encryptorException) {
 			AuthException authException = new RemoteAuthException(
@@ -151,7 +150,7 @@ public class TunnelAuthenticationManagerImpl
 		HttpAuthorizationHeader httpAuthorizationHeader =
 			new HttpAuthorizationHeader(HttpAuthorizationHeader.SCHEME_BASIC);
 
-		String password = EncryptorUtil.encrypt(getSharedSecretKey(), login);
+		String password = Encryptor.encrypt(getSharedSecretKey(), login);
 
 		httpAuthorizationHeader.setAuthParameter(
 			HttpAuthorizationHeader.AUTH_PARAMETER_NAME_PASSWORD, password);

@@ -275,7 +275,16 @@ public class ObjectEntryDTOConverter
 					int underlineLastIndex = objectFieldName.lastIndexOf(
 						StringPool.UNDERLINE);
 
-					if ((objectEntryId != 0) &&
+					ObjectRelationship objectRelationship =
+						_objectRelationshipLocalService.
+							fetchObjectRelationshipByObjectFieldId2(
+								objectField.getObjectFieldId());
+
+					ObjectDefinition objectDefinition1 =
+						_objectDefinitionLocalService.getObjectDefinition(
+							objectRelationship.getObjectDefinitionId1());
+
+					if (!objectDefinition1.isSystem() && (objectEntryId != 0) &&
 						uriInfoOptional.map(
 							UriInfo::getQueryParameters
 						).map(
@@ -291,35 +300,14 @@ public class ObjectEntryDTOConverter
 							false
 						)) {
 
-						ObjectRelationship objectRelationship =
-							_objectRelationshipLocalService.
-								fetchObjectRelationshipByObjectFieldId2(
-									objectField.getObjectFieldId());
-
-						ObjectDefinition relatedObjectDefinition =
-							_objectDefinitionLocalService.getObjectDefinition(
-								objectRelationship.getObjectDefinitionId1());
-
-						if (relatedObjectDefinition.isSystem()) {
-							map.put(
-								StringUtil.replaceLast(
-									objectFieldName, "Id", ""),
-								_objectEntryLocalService.
-									getSystemModelAttributes(
-										relatedObjectDefinition,
-										objectEntryId));
-						}
-						else {
-							map.put(
-								StringUtil.replaceLast(
-									objectFieldName, "Id", ""),
-								_toDTO(
-									_getDTOConverterContext(
-										dtoConverterContext, objectEntryId),
-									nestedFieldsDepth - 1,
-									_objectEntryLocalService.getObjectEntry(
-										objectEntryId)));
-						}
+						map.put(
+							StringUtil.replaceLast(objectFieldName, "Id", ""),
+							_toDTO(
+								_getDTOConverterContext(
+									dtoConverterContext, objectEntryId),
+								nestedFieldsDepth - 1,
+								_objectEntryLocalService.getObjectEntry(
+									objectEntryId)));
 					}
 				}
 

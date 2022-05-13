@@ -14,7 +14,6 @@
 
 package com.liferay.analytics.settings.internal.configuration;
 
-import com.liferay.analytics.batch.exportimport.AnalyticsDXPEntityBatchExporter;
 import com.liferay.analytics.message.sender.constants.AnalyticsMessagesDestinationNames;
 import com.liferay.analytics.message.sender.constants.AnalyticsMessagesProcessorCommand;
 import com.liferay.analytics.message.sender.model.AnalyticsMessage;
@@ -52,7 +51,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.service.access.policy.model.SAPEntry;
 import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalService;
@@ -373,16 +371,8 @@ public class AnalyticsConfigurationTrackerImpl
 	private void _disable(long companyId) {
 		try {
 			if (companyId != CompanyConstants.SYSTEM) {
-				if (GetterUtil.getBoolean(
-						PropsUtil.get("feature.flag.LRAC-10632"))) {
-
-					_analyticsDXPEntityBatchExporter.unscheduleExportTriggers(
-						companyId);
-				}
-				else {
-					_analyticsMessageLocalService.deleteAnalyticsMessages(
-						companyId);
-				}
+				_analyticsMessageLocalService.deleteAnalyticsMessages(
+					companyId);
 
 				_deleteAnalyticsAdmin(companyId);
 				_deleteSAPEntry(companyId);
@@ -440,119 +430,87 @@ public class AnalyticsConfigurationTrackerImpl
 	}
 
 	private void _sync(Dictionary<String, ?> dictionary) {
-		try {
-			if (Validator.isNotNull(dictionary.get("token")) &&
-				Validator.isNull(dictionary.get("previousToken"))) {
+		if (Validator.isNotNull(dictionary.get("token")) &&
+			Validator.isNull(dictionary.get("previousToken"))) {
 
-				if (GetterUtil.getBoolean(
-						PropsUtil.get("feature.flag.LRAC-10632"))) {
+			Collection<EntityModelListener<?>> entityModelListeners =
+				_entityModelListenerTracker.getEntityModelListeners();
 
-					_analyticsDXPEntityBatchExporter.scheduleExportTriggers(
+			for (EntityModelListener<?> entityModelListener :
+					entityModelListeners) {
+
+				try {
+					entityModelListener.syncAll(
 						(Long)dictionary.get("companyId"));
 				}
-				else {
-					Collection<EntityModelListener<?>> entityModelListeners =
-						_entityModelListenerTracker.getEntityModelListeners();
-
-					for (EntityModelListener<?> entityModelListener :
-							entityModelListeners) {
-
-						entityModelListener.syncAll(
-							(Long)dictionary.get("companyId"));
-					}
+				catch (Exception exception) {
+					_log.error(exception);
 				}
 			}
-
-			String[] previousSyncedContactFieldNames =
-				GetterUtil.getStringValues(
-					dictionary.get("previousSyncedContactFieldNames"));
-			String[] previousSyncedUserFieldNames = GetterUtil.getStringValues(
-				dictionary.get("previousSyncedUserFieldNames"));
-			String[] syncedContactFieldNames = GetterUtil.getStringValues(
-				dictionary.get("syncedContactFieldNames"));
-			String[] syncedUserFieldNames = GetterUtil.getStringValues(
-				dictionary.get("syncedUserFieldNames"));
-
-			Arrays.sort(previousSyncedContactFieldNames);
-			Arrays.sort(previousSyncedUserFieldNames);
-			Arrays.sort(syncedContactFieldNames);
-			Arrays.sort(syncedUserFieldNames);
-
-			if (GetterUtil.getBoolean(
-					PropsUtil.get("feature.flag.LRAC-10632"))) {
-
-				if (!Arrays.equals(
-						previousSyncedUserFieldNames, syncedUserFieldNames) ||
-					!Arrays.equals(
-						previousSyncedContactFieldNames,
-						syncedContactFieldNames) ||
-					!Arrays.equals(
-						previousSyncedUserFieldNames, syncedUserFieldNames)) {
-
-					_analyticsDXPEntityBatchExporter.refreshExportTrigger(
-						(Long)dictionary.get("companyId"),
-						"export-user-analytics-dxp-entities");
-				}
-
-				_analyticsDXPEntityBatchExporter.export(
-					(Long)dictionary.get("companyId"));
-
-				return;
-			}
-
-			if (!Arrays.equals(
-					previousSyncedUserFieldNames, syncedUserFieldNames)) {
-
-				_syncUserCustomFields(
-					(Long)dictionary.get("companyId"), syncedUserFieldNames);
-			}
-
-			if (!Arrays.equals(
-					previousSyncedContactFieldNames, syncedContactFieldNames) ||
-				!Arrays.equals(
-					previousSyncedUserFieldNames, syncedUserFieldNames)) {
-
-				_syncDefaultFields(
-					(Long)dictionary.get("companyId"), syncedContactFieldNames,
-					syncedUserFieldNames);
-			}
-
-			if (GetterUtil.getBoolean(dictionary.get("syncAllContacts"))) {
-				if (!GetterUtil.getBoolean(
-						dictionary.get("previousSyncAllContacts"))) {
-
-					_syncContacts((Long)dictionary.get("companyId"));
-				}
-			}
-			else {
-				_syncOrganizationUsers(
-					(String[])dictionary.get("syncedOrganizationIds"));
-				_syncUserGroupUsers(
-					(String[])dictionary.get("syncedUserGroupIds"));
-			}
-
-			Message message = new Message();
-
-			message.put("command", AnalyticsMessagesProcessorCommand.SEND);
-			message.put("companyId", dictionary.get("companyId"));
-
-			if (_log.isInfoEnabled()) {
-				_log.info("Queueing send analytics messages message");
-			}
-
-			TransactionCommitCallbackUtil.registerCallback(
-				() -> {
-					_messageBus.sendMessage(
-						AnalyticsMessagesDestinationNames.
-							ANALYTICS_MESSAGES_PROCESSOR,
-						message);
-
-					return null;
-				});
 		}
-		catch (Exception exception) {
-			_log.error(exception);
+
+		String[] previousSyncedContactFieldNames = GetterUtil.getStringValues(
+			dictionary.get("previousSyncedContactFieldNames"));
+		String[] previousSyncedUserFieldNames = GetterUtil.getStringValues(
+			dictionary.get("previousSyncedUserFieldNames"));
+		String[] syncedContactFieldNames = GetterUtil.getStringValues(
+			dictionary.get("syncedContactFieldNames"));
+		String[] syncedUserFieldNames = GetterUtil.getStringValues(
+			dictionary.get("syncedUserFieldNames"));
+
+		Arrays.sort(previousSyncedContactFieldNames);
+		Arrays.sort(previousSyncedUserFieldNames);
+		Arrays.sort(syncedContactFieldNames);
+		Arrays.sort(syncedUserFieldNames);
+
+		if (!Arrays.equals(
+				previousSyncedUserFieldNames, syncedUserFieldNames)) {
+
+			_syncUserCustomFields(
+				(Long)dictionary.get("companyId"), syncedUserFieldNames);
 		}
+
+		if (!Arrays.equals(
+				previousSyncedContactFieldNames, syncedContactFieldNames) ||
+			!Arrays.equals(
+				previousSyncedUserFieldNames, syncedUserFieldNames)) {
+
+			_syncDefaultFields(
+				(Long)dictionary.get("companyId"), syncedContactFieldNames,
+				syncedUserFieldNames);
+		}
+
+		if (GetterUtil.getBoolean(dictionary.get("syncAllContacts"))) {
+			if (!GetterUtil.getBoolean(
+					dictionary.get("previousSyncAllContacts"))) {
+
+				_syncContacts((Long)dictionary.get("companyId"));
+			}
+		}
+		else {
+			_syncOrganizationUsers(
+				(String[])dictionary.get("syncedOrganizationIds"));
+			_syncUserGroupUsers((String[])dictionary.get("syncedUserGroupIds"));
+		}
+
+		Message message = new Message();
+
+		message.put("command", AnalyticsMessagesProcessorCommand.SEND);
+		message.put("companyId", dictionary.get("companyId"));
+
+		if (_log.isInfoEnabled()) {
+			_log.info("Queueing send analytics messages message");
+		}
+
+		TransactionCommitCallbackUtil.registerCallback(
+			() -> {
+				_messageBus.sendMessage(
+					AnalyticsMessagesDestinationNames.
+						ANALYTICS_MESSAGES_PROCESSOR,
+					message);
+
+				return null;
+			});
 	}
 
 	private void _syncContacts(long companyId) {
@@ -822,9 +780,6 @@ public class AnalyticsConfigurationTrackerImpl
 	private boolean _active;
 	private final Map<Long, AnalyticsConfiguration> _analyticsConfigurations =
 		new ConcurrentHashMap<>();
-
-	@Reference
-	private AnalyticsDXPEntityBatchExporter _analyticsDXPEntityBatchExporter;
 
 	@Reference
 	private AnalyticsMessageLocalService _analyticsMessageLocalService;

@@ -745,9 +745,10 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
+		WikiPage page = wikiPageLocalService.fetchPage(nodeId, title);
+
 		_wikiPageModelResourcePermission.check(
-			getPermissionChecker(),
-			wikiPageLocalService.fetchPage(nodeId, title), ActionKeys.UPDATE);
+			getPermissionChecker(), page, ActionKeys.UPDATE);
 
 		_wikiNodeModelResourcePermission.check(
 			getPermissionChecker(), nodeId, ActionKeys.ADD_PAGE);

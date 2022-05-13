@@ -250,12 +250,14 @@ public class JournalFolderActionDropdownItems {
 		}
 
 		String actionName = "/journal/delete_folder";
+		String key = "delete";
 
 		if (_trashHelper.isTrashEnabled(_themeDisplay.getScopeGroupId())) {
 			actionName = "/journal/move_folder_to_trash";
+			key = "move-to-recycle-bin";
 		}
 
-		String label = LanguageUtil.get(_httpServletRequest, "delete");
+		String label = LanguageUtil.get(_httpServletRequest, key);
 
 		String deleteURL = PortletURLBuilder.createActionURL(
 			_liferayPortletResponse

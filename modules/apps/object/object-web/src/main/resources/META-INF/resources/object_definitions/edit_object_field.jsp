@@ -22,25 +22,33 @@ ObjectDefinitionsFieldsDisplayContext objectDefinitionsFieldsDisplayContext = (O
 ObjectField objectField = (ObjectField)request.getAttribute(ObjectWebKeys.OBJECT_FIELD);
 %>
 
-<react:component
-	module="js/components/EditObjectField"
-	props='<%=
-		HashMapBuilder.<String, Object>put(
-			"forbiddenChars", PropsUtil.getArray(PropsKeys.DL_CHAR_BLACKLIST)
-		).put(
-			"forbiddenLastChars", objectDefinitionsFieldsDisplayContext.getForbiddenLastCharacters()
-		).put(
-			"forbiddenNames", PropsUtil.getArray(PropsKeys.DL_NAME_BLACKLIST)
-		).put(
-			"isApproved", objectDefinition.isApproved()
-		).put(
-			"objectField", objectDefinitionsFieldsDisplayContext.getObjectFieldJSONObject(objectField)
-		).put(
-			"objectFieldTypes", objectDefinitionsFieldsDisplayContext.getObjectFieldBusinessTypeMaps(Validator.isNotNull(objectField.getRelationshipType()), locale)
-		).put(
-			"objectName", objectDefinition.getShortName()
-		).put(
-			"readOnly", !objectDefinitionsFieldsDisplayContext.hasUpdateObjectDefinitionPermission()
-		).build()
-	%>'
-/>
+<liferay-frontend:side-panel-content
+	title='<%= LanguageUtil.get(request, "field") %>'
+>
+	<react:component
+		module="js/components/EditObjectField"
+		props='<%=
+			HashMapBuilder.<String, Object>put(
+				"allowMaxLength", GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-146889"))
+			).put(
+				"allowUploadDocAndMedia", GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-148112"))
+			).put(
+				"forbiddenChars", PropsUtil.getArray(PropsKeys.DL_CHAR_BLACKLIST)
+			).put(
+				"forbiddenLastChars", objectDefinitionsFieldsDisplayContext.getForbiddenLastCharacters()
+			).put(
+				"forbiddenNames", PropsUtil.getArray(PropsKeys.DL_NAME_BLACKLIST)
+			).put(
+				"isApproved", objectDefinition.isApproved()
+			).put(
+				"objectField", objectDefinitionsFieldsDisplayContext.getObjectFieldJSONObject(objectField)
+			).put(
+				"objectFieldTypes", objectDefinitionsFieldsDisplayContext.getObjectFieldBusinessTypeMaps(Validator.isNotNull(objectField.getRelationshipType()), locale)
+			).put(
+				"objectName", objectDefinition.getShortName()
+			).put(
+				"readOnly", !objectDefinitionsFieldsDisplayContext.hasUpdateObjectDefinitionPermission()
+			).build()
+		%>'
+	/>
+</liferay-frontend:side-panel-content>

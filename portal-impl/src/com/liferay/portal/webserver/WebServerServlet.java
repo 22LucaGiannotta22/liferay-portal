@@ -92,7 +92,6 @@ import com.liferay.portal.kernel.template.URLTemplateResource;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.transaction.TransactionConfig;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
-import com.liferay.portal.kernel.trash.helper.TrashHelper;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -117,6 +116,7 @@ import com.liferay.portal.model.impl.ImageImpl;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.trash.kernel.model.TrashEntry;
+import com.liferay.trash.kernel.util.TrashUtil;
 import com.liferay.users.admin.kernel.file.uploads.UserFileUploadsSettings;
 
 import java.awt.image.RenderedImage;
@@ -1274,7 +1274,7 @@ public class WebServerServlet extends HttpServlet {
 		}
 
 		if (fileEntry.isInTrash()) {
-			fileName = _trashTitleResolver.getOriginalTitle(fileName);
+			fileName = TrashUtil.getOriginalTitle(fileName);
 		}
 
 		httpServletResponse.addHeader(
@@ -1544,8 +1544,7 @@ public class WebServerServlet extends HttpServlet {
 				throw new PrincipalException();
 			}
 		}
-		else if (Objects.equals(pathArray[0], _PATH_SEPARATOR_FILE_ENTRY) ||
-				 Validator.isNumber(pathArray[0])) {
+		else if (Validator.isNumber(pathArray[0])) {
 
 			// Check for sendFile
 
@@ -1818,10 +1817,6 @@ public class WebServerServlet extends HttpServlet {
 		ServiceProxyFactory.newServiceTrackedInstance(
 			InactiveRequestHandler.class, WebServerServlet.class,
 			"_inactiveRequestHandler", false);
-	private static volatile TrashHelper _trashTitleResolver =
-		ServiceProxyFactory.newServiceTrackedInstance(
-			TrashHelper.class, WebServerServlet.class, "_trashTitleResolver",
-			false);
 	private static volatile UserFileUploadsSettings _userFileUploadsSettings =
 		ServiceProxyFactory.newServiceTrackedInstance(
 			UserFileUploadsSettings.class, WebServerServlet.class,

@@ -101,14 +101,18 @@ public class DefaultSegmentsEntryProviderTest {
 			_group.getGroupId(), CriteriaSerializer.serialize(criteria),
 			User.class.getName());
 
-		Assert.assertEquals(
-			1,
+		int segmentsEntryClassPKsCount =
 			_segmentsEntryProvider.getSegmentsEntryClassPKsCount(
-				segmentsEntry.getSegmentsEntryId()));
-		Assert.assertArrayEquals(
-			new long[] {_user1.getUserId()},
+				segmentsEntry.getSegmentsEntryId());
+
+		Assert.assertEquals(1, segmentsEntryClassPKsCount);
+
+		long[] segmentsEntryClassPKs =
 			_segmentsEntryProvider.getSegmentsEntryClassPKs(
-				segmentsEntry.getSegmentsEntryId(), 0, 1));
+				segmentsEntry.getSegmentsEntryId(), 0, 1);
+
+		Assert.assertArrayEquals(
+			new long[] {_user1.getUserId()}, segmentsEntryClassPKs);
 	}
 
 	@Test
@@ -137,10 +141,11 @@ public class DefaultSegmentsEntryProviderTest {
 			_group.getGroupId(), CriteriaSerializer.serialize(criteria),
 			User.class.getName());
 
-		Assert.assertEquals(
-			0,
+		int segmentsEntryClassPKsCount =
 			_segmentsEntryProvider.getSegmentsEntryClassPKsCount(
-				segmentsEntry.getSegmentsEntryId()));
+				segmentsEntry.getSegmentsEntryId());
+
+		Assert.assertEquals(0, segmentsEntryClassPKsCount);
 	}
 
 	@Test
@@ -157,14 +162,18 @@ public class DefaultSegmentsEntryProviderTest {
 			_portal.getClassNameId(User.class.getName()), _user1.getUserId(),
 			ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
 
-		Assert.assertEquals(
-			1,
+		int segmentsEntryClassPKsCount =
 			_segmentsEntryProvider.getSegmentsEntryClassPKsCount(
-				segmentsEntry.getSegmentsEntryId()));
-		Assert.assertArrayEquals(
-			new long[] {_user1.getUserId()},
+				segmentsEntry.getSegmentsEntryId());
+
+		Assert.assertEquals(1, segmentsEntryClassPKsCount);
+
+		long[] segmentsEntryClassPKs =
 			_segmentsEntryProvider.getSegmentsEntryClassPKs(
-				segmentsEntry.getSegmentsEntryId(), 0, 1));
+				segmentsEntry.getSegmentsEntryId(), 0, 1);
+
+		Assert.assertArrayEquals(
+			new long[] {_user1.getUserId()}, segmentsEntryClassPKs);
 	}
 
 	@Test
@@ -185,14 +194,18 @@ public class DefaultSegmentsEntryProviderTest {
 			_group.getGroupId(), CriteriaSerializer.serialize(criteria),
 			User.class.getName());
 
-		Assert.assertEquals(
-			1,
+		int segmentsEntryClassPKsCount =
 			_segmentsEntryProvider.getSegmentsEntryClassPKsCount(
-				segmentsEntry.getSegmentsEntryId()));
-		Assert.assertArrayEquals(
-			new long[] {_user1.getUserId()},
+				segmentsEntry.getSegmentsEntryId());
+
+		Assert.assertEquals(1, segmentsEntryClassPKsCount);
+
+		long[] segmentsEntryClassPKs =
 			_segmentsEntryProvider.getSegmentsEntryClassPKs(
-				segmentsEntry.getSegmentsEntryId(), 0, 1));
+				segmentsEntry.getSegmentsEntryId(), 0, 1);
+
+		Assert.assertArrayEquals(
+			new long[] {_user1.getUserId()}, segmentsEntryClassPKs);
 	}
 
 	@Test
@@ -218,11 +231,12 @@ public class DefaultSegmentsEntryProviderTest {
 		context.put(Context.LANGUAGE_ID, "en");
 		context.put(Context.SIGNED_IN, false);
 
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
 		Assert.assertArrayEquals(
-			new long[] {segmentsEntry.getSegmentsEntryId()},
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+			new long[] {segmentsEntry.getSegmentsEntryId()}, segmentsEntryIds);
 	}
 
 	@Test
@@ -247,11 +261,12 @@ public class DefaultSegmentsEntryProviderTest {
 
 		context.put(Context.LANGUAGE_ID, "en");
 
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
 		Assert.assertArrayEquals(
-			new long[] {segmentsEntry.getSegmentsEntryId()},
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+			new long[] {segmentsEntry.getSegmentsEntryId()}, segmentsEntryIds);
 	}
 
 	@Test
@@ -341,11 +356,11 @@ public class DefaultSegmentsEntryProviderTest {
 		context.put(Context.LANGUAGE_ID, "en");
 		context.put(Context.SIGNED_IN, false);
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -375,11 +390,11 @@ public class DefaultSegmentsEntryProviderTest {
 
 		context.put(Context.LANGUAGE_ID, "en");
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -410,11 +425,12 @@ public class DefaultSegmentsEntryProviderTest {
 		context.put(Context.LANGUAGE_ID, "en");
 		context.put(Context.SIGNED_IN, false);
 
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
 		Assert.assertArrayEquals(
-			new long[] {segmentsEntry.getSegmentsEntryId()},
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+			new long[] {segmentsEntry.getSegmentsEntryId()}, segmentsEntryIds);
 	}
 
 	@Test
@@ -444,11 +460,12 @@ public class DefaultSegmentsEntryProviderTest {
 
 		context.put(Context.LANGUAGE_ID, "en");
 
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
 		Assert.assertArrayEquals(
-			new long[] {segmentsEntry.getSegmentsEntryId()},
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+			new long[] {segmentsEntry.getSegmentsEntryId()}, segmentsEntryIds);
 	}
 
 	@Test
@@ -475,11 +492,11 @@ public class DefaultSegmentsEntryProviderTest {
 
 		context.put(Context.SIGNED_IN, false);
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -563,11 +580,11 @@ public class DefaultSegmentsEntryProviderTest {
 		context.put(Context.LANGUAGE_ID, "es");
 		context.put(Context.SIGNED_IN, false);
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -592,11 +609,11 @@ public class DefaultSegmentsEntryProviderTest {
 
 		context.put(Context.LANGUAGE_ID, "es");
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -623,11 +640,11 @@ public class DefaultSegmentsEntryProviderTest {
 
 		context.put("languageId", "es");
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(), _user1.getUserId(),
-				context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), _user1.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -658,11 +675,11 @@ public class DefaultSegmentsEntryProviderTest {
 		context.put(Context.LANGUAGE_ID, "es");
 		context.put(Context.SIGNED_IN, false);
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -692,11 +709,11 @@ public class DefaultSegmentsEntryProviderTest {
 
 		context.put(Context.LANGUAGE_ID, "es");
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -727,11 +744,11 @@ public class DefaultSegmentsEntryProviderTest {
 		context.put(Context.LANGUAGE_ID, "es");
 		context.put(Context.SIGNED_IN, false);
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test
@@ -761,11 +778,11 @@ public class DefaultSegmentsEntryProviderTest {
 
 		context.put(Context.LANGUAGE_ID, "es");
 
-		Assert.assertArrayEquals(
-			new long[0],
-			_segmentsEntryProvider.getSegmentsEntryIds(
-				_group.getGroupId(), User.class.getName(),
-				defaultUser.getUserId(), context));
+		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
+			_group.getGroupId(), User.class.getName(), defaultUser.getUserId(),
+			context);
+
+		Assert.assertArrayEquals(new long[0], segmentsEntryIds);
 	}
 
 	@Test

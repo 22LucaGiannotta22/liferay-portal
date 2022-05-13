@@ -210,7 +210,6 @@ AUI.add(
 						columnNames: config.columnNames,
 						dimensions: config.folders.dimensions,
 						displayStyle: config.displayStyle,
-						documentLibraryNamespace: instance.NS,
 						entriesContainer: instance._entriesContainer,
 						folderId: instance._folderId,
 						maxFileSize: config.maxFileSize,

@@ -9,32 +9,30 @@
  * distribution rights of the Software.
  */
 
-import i18n from '../../I18n';
-
 export const ROLE_TYPES = {
 	admin: {
 		key: 'Account Administrator',
-		name: i18n.translate('administrator'),
+		name: 'Administrator',
 		raysourceName: 'Support Administrator',
 	},
 	member: {
 		key: 'Account Member',
-		name: i18n.translate('user'),
+		name: 'User',
 		raysourceName: 'Support User',
 	},
 	partnerManager: {
 		key: 'Partner Manager',
-		name: i18n.translate('partner-manager'),
+		name: 'Partner Manager',
 		raysourceName: 'Partner Manager',
 	},
 	partnerMember: {
 		key: 'Partner Member',
-		name: i18n.translate('partner-member'),
+		name: 'Partner Member',
 		raysourceName: 'Partner Member',
 	},
 	requester: {
 		key: 'Requester',
-		name: i18n.translate('requester'),
+		name: 'Requester',
 		raysourceName: 'Support Requester',
 	},
 };

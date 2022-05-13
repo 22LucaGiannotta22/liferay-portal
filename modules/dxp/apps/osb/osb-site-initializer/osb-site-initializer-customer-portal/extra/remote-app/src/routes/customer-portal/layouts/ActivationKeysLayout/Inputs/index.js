@@ -13,7 +13,6 @@ import {ClaySelect} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {useEffect, useMemo, useState} from 'react';
 import client from '../../../../../apolloClient';
-import i18n from '../../../../../common/I18n';
 import {Button} from '../../../../../common/components';
 import {useApplicationProvider} from '../../../../../common/context/AppPropertiesProvider';
 import {
@@ -26,7 +25,6 @@ import downloadFromBlob from '../../../../../common/utils/downloadFromBlob';
 import getCurrentEndDate from '../../../../../common/utils/getCurrentEndDate';
 import {useCustomerPortal} from '../../../context';
 import {EXTENSION_FILE_TYPES, STATUS_CODE} from '../../../utils/constants';
-import getKebabCase from '../../../utils/getKebabCase';
 import {getYearlyTerms} from '../../../utils/getYearlyTerms';
 
 const ActivationKeysInputs = ({
@@ -147,10 +145,9 @@ const ActivationKeysInputs = ({
 		() => ({
 			messageRequestersAdministrators: (
 				<p className="mt-3 text-neutral-7 text-paragraph">
-					{i18n.sub(
-						'the-requested-activation-key-is-not-yet-available-for-more-information-about-the-availability-of-your-x-activation-keys-please',
-						[getKebabCase(productTitle)]
-					)}
+					{`The requested activation key is not yet available. For more
+                     information about the availability of your ${productTitle} 
+                     activation keys, please `}
 
 					<a
 						href={createSupportRequest}
@@ -158,17 +155,18 @@ const ActivationKeysInputs = ({
 						target="_blank"
 					>
 						<u className="font-weight-bold text-neutral-9">
-							{i18n.translate('contact-the-support-team')}
+							contact the Support team.
 						</u>
 					</a>
 				</p>
 			),
 			messageUsers: (
 				<p className="mt-3 text-neutral-7 text-paragraph">
-					{i18n.sub(
-						'the-requested-activation-key-is-not-yet-available-if-you-need-more-information-about-the-availability-of-your-x-activation-keys-please-ask-one-of-your-administrator-team-members-to-update-your-permissions-so-you-can-contact-liferay-support-alternatively-team-members-with-administrator-or-requester-role-can-submit-a-support-ticket-on-your-behalf',
-						[getKebabCase(productTitle)]
-					)}
+					{`The requested activation key is not yet available. If you need
+                 more information about the availability of your ${productTitle} activation keys, please ask one of your Administrator
+                 team members to update your permissions, so you can contact
+                 Liferay Support. Alternatively, team members with Administrator
+                 or Requester role can submit a support ticket on your behalf.`}
 				</p>
 			),
 		}),
@@ -189,17 +187,13 @@ const ActivationKeysInputs = ({
 	return (
 		<div className="mt-3">
 			<p className="text-paragraph">
-				{i18n.sub(
-					'select-an-active-liferay-x-subscription-to-download-the-activation-key',
-					[getKebabCase(productTitle)]
-				)}
-				.
+				Select an active Liferay {productTitle} subscription to download
+				the activation key.
 			</p>
 
 			<div className="d-flex mb-3">
 				<label className="cp-subscription-select mr-3">
-					{i18n.sub('subscription')}
-
+					Subscription
 					<div className="position-relative">
 						<ClayIcon
 							className="select-icon"
@@ -219,9 +213,7 @@ const ActivationKeysInputs = ({
 									key={
 										accountSubscription.accountSubscriptionId
 									}
-									label={i18n.translate(
-										getKebabCase(accountSubscription.name)
-									)}
+									label={accountSubscription.name}
 									value={accountSubscription.name}
 								/>
 							))}
@@ -230,8 +222,7 @@ const ActivationKeysInputs = ({
 				</label>
 
 				<label className="cp-subscription-term-select">
-					{i18n.translate('subscription-term')}
-
+					Subscription Term
 					<div className="position-relative">
 						<ClayIcon
 							className="select-icon"
@@ -280,7 +271,7 @@ const ActivationKeysInputs = ({
 				prependIcon="download"
 				type="button"
 			>
-				{i18n.translate('download-key')}
+				Download Key
 			</Button>
 
 			{hasLicenseDownloadError && currentEnterpriseMessage}

@@ -20,7 +20,8 @@ import ImportMappingItem from '../../../src/main/resources/META-INF/resources/js
 
 const BASE_PROPS = {
 	dbField: {
-		name: 'nameTest',
+		label: 'nameLabel',
+		name: 'name',
 	},
 	fileFields: ['first name', 'last name', 'address'],
 	formEvaluated: false,
@@ -48,7 +49,7 @@ describe('ImportMappingItem', () => {
 		);
 
 		act(() => {
-			fireEvent.change(getByLabelText(/nameTest/), {
+			fireEvent.change(getByLabelText(/nameLabel/), {
 				target: {value: 'address'},
 			});
 		});
@@ -75,6 +76,7 @@ describe('ImportMappingItem', () => {
 			<ImportMappingItem
 				{...BASE_PROPS}
 				dbField={{
+					label: 'nameLabel',
 					name: 'name',
 				}}
 				formEvaluated={true}

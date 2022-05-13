@@ -12,7 +12,7 @@
  * details.
  */
 
-import selectLayoutDataItemLabel from '../../selectors/selectLayoutDataItemLabel';
+import getLayoutDataItemLabel from '../../utils/getLayoutDataItemLabel';
 
 /**
  * Obtain the name associated to the undo action,
@@ -53,5 +53,5 @@ export function getItemNameFromAction({action, state}) {
 		return null;
 	}
 
-	return selectLayoutDataItemLabel({fragmentEntryLinks}, item);
+	return getLayoutDataItemLabel(item, fragmentEntryLinks);
 }

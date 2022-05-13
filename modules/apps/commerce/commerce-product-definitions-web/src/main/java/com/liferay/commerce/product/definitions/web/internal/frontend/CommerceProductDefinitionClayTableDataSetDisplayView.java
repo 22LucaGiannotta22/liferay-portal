@@ -57,11 +57,11 @@ public class CommerceProductDefinitionClayTableDataSetDisplayView
 		clayTableSchemaBuilder.addClayTableSchemaField(
 			"productTypeI18n", "type");
 
-		ClayTableSchemaField workflowStatusInfoClayTableSchemaField =
+		ClayTableSchemaField clayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField(
 				"workflowStatusInfo", "status");
 
-		workflowStatusInfoClayTableSchemaField.setContentRenderer("status");
+		clayTableSchemaField.setContentRenderer("status");
 
 		ClayTableSchemaField modifiedDateClayTableSchemaField =
 			clayTableSchemaBuilder.addClayTableSchemaField(

@@ -853,10 +853,11 @@ public class JavaParserUtil {
 			_parseParameterValueJavaExpressions(
 				literalNewDetailAST.findFirstToken(TokenTypes.ELIST)));
 
-		javaClassCall.setStatementCondition(
-			DetailASTUtil.hasParentWithTokenType(
-				literalNewDetailAST, TokenTypes.LITERAL_FOR,
-				TokenTypes.LITERAL_IF, TokenTypes.LITERAL_WHILE));
+		boolean statementCondition = DetailASTUtil.hasParentWithTokenType(
+			literalNewDetailAST, TokenTypes.LITERAL_FOR, TokenTypes.LITERAL_IF,
+			TokenTypes.LITERAL_WHILE);
+
+		javaClassCall.setStatementCondition(statementCondition);
 
 		DetailAST objBlockDetailAST = literalNewDetailAST.findFirstToken(
 			TokenTypes.OBJBLOCK);
@@ -1426,10 +1427,12 @@ public class JavaParserUtil {
 		javaMethodCall.setParameterValueJavaExpressions(
 			_parseParameterValueJavaExpressions(
 				methodCallDetailAST.findFirstToken(TokenTypes.ELIST)));
-		javaMethodCall.setInsideConstructorCall(
-			DetailASTUtil.hasParentWithTokenType(
-				methodCallDetailAST, TokenTypes.CTOR_CALL,
-				TokenTypes.SUPER_CTOR_CALL));
+
+		boolean insideConstructorCall = DetailASTUtil.hasParentWithTokenType(
+			methodCallDetailAST, TokenTypes.CTOR_CALL,
+			TokenTypes.SUPER_CTOR_CALL);
+
+		javaMethodCall.setInsideConstructorCall(insideConstructorCall);
 
 		if (javaExpression == null) {
 			javaMethodCall.setMethodCallWithinClass(true);

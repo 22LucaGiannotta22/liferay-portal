@@ -16,29 +16,20 @@ package com.liferay.object.web.internal.object.entries.upload.util;
 
 import com.liferay.document.library.kernel.exception.FileExtensionException;
 import com.liferay.document.library.kernel.exception.FileSizeException;
-import com.liferay.object.configuration.ObjectConfiguration;
 import com.liferay.object.model.ObjectFieldSetting;
 import com.liferay.object.service.ObjectFieldSettingLocalService;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 
-import java.util.Map;
-
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Carolina Barbosa
  */
-@Component(
-	configurationPid = "com.liferay.object.configuration.ObjectConfiguration",
-	service = AttachmentValidator.class
-)
+@Component(service = AttachmentValidator.class)
 public class AttachmentValidator {
 
 	public String[] getAcceptedFileExtensions(long objectFieldId) {
@@ -51,22 +42,12 @@ public class AttachmentValidator {
 		return value.split("\\s*,\\s*");
 	}
 
-	public long getMaximumFileSize(long objectFieldId, boolean signedIn) {
+	public long getMaximumFileSize(long objectFieldId) {
 		ObjectFieldSetting objectFieldSetting =
 			_objectFieldSettingLocalService.fetchObjectFieldSetting(
 				objectFieldId, "maximumFileSize");
 
-		long maximumFileSize = GetterUtil.getLong(
-			objectFieldSetting.getValue());
-
-		if (signedIn ||
-			(maximumFileSize <
-				_objectConfiguration.maximumFileSizeForGuestUsers())) {
-
-			return maximumFileSize * _FILE_LENGTH_MB;
-		}
-
-		return _objectConfiguration.maximumFileSizeForGuestUsers() *
+		return GetterUtil.getLong(objectFieldSetting.getValue()) *
 			_FILE_LENGTH_MB;
 	}
 
@@ -83,11 +64,10 @@ public class AttachmentValidator {
 	}
 
 	public void validateFileSize(
-			String fileName, long fileSize, long objectFieldId,
-			boolean signedIn)
+			String fileName, long fileSize, long objectFieldId)
 		throws FileSizeException {
 
-		long maximumFileSize = getMaximumFileSize(objectFieldId, signedIn);
+		long maximumFileSize = getMaximumFileSize(objectFieldId);
 
 		if ((maximumFileSize > 0) && (fileSize > maximumFileSize)) {
 			throw new FileSizeException(
@@ -98,16 +78,7 @@ public class AttachmentValidator {
 		}
 	}
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_objectConfiguration = ConfigurableUtil.createConfigurable(
-			ObjectConfiguration.class, properties);
-	}
-
 	private static final long _FILE_LENGTH_MB = 1024 * 1024;
-
-	private volatile ObjectConfiguration _objectConfiguration;
 
 	@Reference
 	private ObjectFieldSettingLocalService _objectFieldSettingLocalService;

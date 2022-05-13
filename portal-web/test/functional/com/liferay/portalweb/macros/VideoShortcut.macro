@@ -2,26 +2,13 @@ definition {
 
 	macro addCP {
 		if (!(isSet(skipNavigation))) {
-			if (isSet(localizedDocumentTypeName)) {
-				DMNavigator.gotoAddDocumentTypeCP(dmDocumentTypeName = "${localizedDocumentTypeName}");
-			}
-			else {
-				DMNavigator.gotoAddDocumentTypeCP(dmDocumentTypeName = "External Video Shortcut");
-			}
+			DMNavigator.gotoAddDocumentTypeCP(dmDocumentTypeName = "External Video Shortcut");
 		}
 
-		if (isSet(localizedVideoURL)) {
-			Type(
-				key_text = "${localizedVideoURL}",
-				locator1 = "TextInput#ANY",
-				value1 = "${videoURL}");
-		}
-		else {
-			Type(
-				key_text = "Video URL",
-				locator1 = "TextInput#ANY",
-				value1 = "${videoURL}");
-		}
+		Type(
+			key_text = "Video URL",
+			locator1 = "TextInput#ANY",
+			value1 = "${videoURL}");
 
 		Pause(locator1 = "5000");
 
@@ -68,14 +55,7 @@ definition {
 			}
 		}
 
-		if (isSet(localizedPublish)) {
-			Button.click(button = "${localizedPublish}");
-
-			Alert.viewSuccessMessage();
-		}
-		else {
-			PortletEntry.publish();
-		}
+		PortletEntry.publish();
 	}
 
 	macro addPG {

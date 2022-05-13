@@ -656,9 +656,10 @@ public class GraphQLServletExtender {
 							return null;
 						}
 
-						Servlet servlet = _createServlet(
-							_portal.getCompanyId(
-								(HttpServletRequest)arguments[0]));
+						long companyId = _portal.getCompanyId(
+							(HttpServletRequest)arguments[0]);
+
+						Servlet servlet = _createServlet(companyId);
 
 						servlet.init(_servletConfig);
 

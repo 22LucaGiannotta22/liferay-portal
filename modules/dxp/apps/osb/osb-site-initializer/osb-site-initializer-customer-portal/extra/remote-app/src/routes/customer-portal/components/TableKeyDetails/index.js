@@ -12,7 +12,6 @@
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {useEffect, useState} from 'react';
-import i18n from '../../../../common/I18n';
 import getCurrentEndDate from '../../../../common/utils/getCurrentEndDate';
 import {
 	getFormatedProductName,
@@ -22,9 +21,9 @@ import {
 	hasVirtualCluster,
 } from '../../containers/ActivationKeysTable/utils';
 
-const HOST_NAME = i18n.translate('host-name');
-const IP_ADDRESSES = i18n.translate('ip-addresses');
-const MAC_ADDRESSES = i18n.translate('mac-addresses');
+const HOST_NAME = 'Host Name';
+const IP_ADDRESSES = 'IP Addresses';
+const MAC_ADDRESSES = 'Mac Addresses';
 const SUBSCRIPTION_IMAGE_FILE = 'dxp_icon.svg';
 
 const NO_EXPIRATION_DATE = 100;

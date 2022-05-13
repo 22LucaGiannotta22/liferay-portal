@@ -62,7 +62,6 @@ import com.liferay.source.formatter.processor.SHSourceProcessor;
 import com.liferay.source.formatter.processor.SQLSourceProcessor;
 import com.liferay.source.formatter.processor.SourceProcessor;
 import com.liferay.source.formatter.processor.SoySourceProcessor;
-import com.liferay.source.formatter.processor.TFSourceProcessor;
 import com.liferay.source.formatter.processor.TLDSourceProcessor;
 import com.liferay.source.formatter.processor.TSSourceProcessor;
 import com.liferay.source.formatter.processor.TXTSourceProcessor;
@@ -343,7 +342,6 @@ public class SourceFormatter {
 		_sourceProcessors.add(new SHSourceProcessor());
 		_sourceProcessors.add(new SoySourceProcessor());
 		_sourceProcessors.add(new SQLSourceProcessor());
-		_sourceProcessors.add(new TFSourceProcessor());
 		_sourceProcessors.add(new TLDSourceProcessor());
 		_sourceProcessors.add(new TSSourceProcessor());
 		_sourceProcessors.add(new TXTSourceProcessor());
@@ -997,10 +995,11 @@ public class SourceFormatter {
 		_portalSource = _containsDir("portal-impl");
 
 		if (_portalSource) {
-			_excludeWorkingDirCheckoutPrivateApps(
-				SourceFormatterUtil.getPortalDir(
-					_sourceFormatterArgs.getBaseDirName(),
-					_sourceFormatterArgs.getMaxLineLength()));
+			File portalDir = SourceFormatterUtil.getPortalDir(
+				_sourceFormatterArgs.getBaseDirName(),
+				_sourceFormatterArgs.getMaxLineLength());
+
+			_excludeWorkingDirCheckoutPrivateApps(portalDir);
 		}
 
 		_propertiesMap = new HashMap<>();
@@ -1074,12 +1073,12 @@ public class SourceFormatter {
 
 		_projectPathPrefix = _getProjectPathPrefix();
 
+		List<File> suppressionsFiles = SourceFormatterUtil.getSuppressionsFiles(
+			_sourceFormatterArgs.getBaseDirName(), _allFileNames,
+			_sourceFormatterExcludes, _sourceFormatterArgs.getMaxDirLevel());
+
 		_sourceFormatterSuppressions = SuppressionsLoader.loadSuppressions(
-			_sourceFormatterArgs.getBaseDirName(),
-			SourceFormatterUtil.getSuppressionsFiles(
-				_sourceFormatterArgs.getBaseDirName(), _allFileNames,
-				_sourceFormatterExcludes,
-				_sourceFormatterArgs.getMaxDirLevel()),
+			_sourceFormatterArgs.getBaseDirName(), suppressionsFiles,
 			_propertiesMap);
 
 		_sourceFormatterConfiguration = ConfigurationLoader.loadConfiguration(

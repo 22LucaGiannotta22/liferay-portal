@@ -27,7 +27,6 @@ import com.liferay.message.boards.service.MBMessageLocalService;
 import com.liferay.message.boards.service.MBMessageService;
 import com.liferay.message.boards.service.MBThreadService;
 import com.liferay.message.boards.settings.MBGroupServiceSettings;
-import com.liferay.message.boards.web.internal.util.MBRequestUtil;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.portlet.LiferayActionResponse;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -116,8 +115,7 @@ public class SplitThreadMVCActionCommand extends BaseMVCActionCommand {
 			String body = ParamUtil.getString(actionRequest, "body");
 
 			MBGroupServiceSettings mbGroupServiceSettings =
-				MBRequestUtil.getMBGroupServiceSettings(
-					_portal.getHttpServletRequest(actionRequest),
+				MBGroupServiceSettings.getInstance(
 					themeDisplay.getScopeGroupId());
 
 			String layoutFullURL = _portal.getLayoutFullURL(themeDisplay);

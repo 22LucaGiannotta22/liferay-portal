@@ -258,8 +258,10 @@ public class ThemeBuilderCompareTest {
 		}
 
 		for (String pattern : excludePatterns) {
-			excludePathMatchers.add(
-				fileSystem.getPathMatcher("glob:" + dirName + "/" + pattern));
+			PathMatcher pathMatcher = fileSystem.getPathMatcher(
+				"glob:" + dirName + "/" + pattern);
+
+			excludePathMatchers.add(pathMatcher);
 		}
 
 		Files.walkFileTree(

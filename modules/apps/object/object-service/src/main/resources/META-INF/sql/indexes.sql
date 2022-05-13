@@ -11,7 +11,6 @@ create index IX_B929D94C on ObjectDefinition (uuid_[$COLUMN_LENGTH:75$], company
 create index IX_FDFF4146 on ObjectEntry (groupId, companyId, externalReferenceCode[$COLUMN_LENGTH:75$]);
 create index IX_7403EBB8 on ObjectEntry (groupId, objectDefinitionId, status);
 create index IX_A388E5A0 on ObjectEntry (objectDefinitionId, status);
-create index IX_897D0EF4 on ObjectEntry (userId, objectDefinitionId);
 create index IX_49B9450D on ObjectEntry (uuid_[$COLUMN_LENGTH:75$], companyId);
 create unique index IX_5AF9AACF on ObjectEntry (uuid_[$COLUMN_LENGTH:75$], groupId);
 
@@ -55,9 +54,6 @@ create index IX_C771CDE on ObjectView (uuid_[$COLUMN_LENGTH:75$], companyId);
 
 create index IX_B7B14E3 on ObjectViewColumn (objectViewId, objectFieldName[$COLUMN_LENGTH:75$]);
 create index IX_F3077A54 on ObjectViewColumn (uuid_[$COLUMN_LENGTH:75$], companyId);
-
-create index IX_B8CD6D4B on ObjectViewFilterColumn (objectViewId, objectFieldName[$COLUMN_LENGTH:75$]);
-create index IX_3C598EC on ObjectViewFilterColumn (uuid_[$COLUMN_LENGTH:75$], companyId);
 
 create index IX_55C88365 on ObjectViewSortColumn (objectViewId, objectFieldName[$COLUMN_LENGTH:75$]);
 create index IX_29BEA092 on ObjectViewSortColumn (uuid_[$COLUMN_LENGTH:75$], companyId);

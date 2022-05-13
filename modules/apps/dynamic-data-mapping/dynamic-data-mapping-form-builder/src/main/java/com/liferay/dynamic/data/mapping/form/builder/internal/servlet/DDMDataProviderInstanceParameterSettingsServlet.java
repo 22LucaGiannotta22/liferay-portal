@@ -127,7 +127,7 @@ public class DDMDataProviderInstanceParameterSettingsServlet
 		httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 
 		ServletResponseUtil.write(
-			httpServletResponse, parametersJSONObject.toString());
+			httpServletResponse, parametersJSONObject.toJSONString());
 	}
 
 	protected DDMFormValues getDataProviderFormValues(

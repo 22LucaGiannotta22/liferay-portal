@@ -1805,10 +1805,6 @@ public class JenkinsResultsParserUtil {
 				_getGitDirectoriesJSONArray());
 		}
 
-		if (targetGitDirectoryName == null) {
-			return repositoryName;
-		}
-
 		return targetGitDirectoryName;
 	}
 

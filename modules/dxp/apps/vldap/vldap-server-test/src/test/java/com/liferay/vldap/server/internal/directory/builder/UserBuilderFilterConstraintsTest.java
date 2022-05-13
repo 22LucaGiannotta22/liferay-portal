@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.comparator.UserScreenNameComparator;
-import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.vldap.server.internal.BaseVLDAPTestCase;
 import com.liferay.vldap.server.internal.directory.FilterConstraint;
 
@@ -36,21 +35,18 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
+
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Peter Shin
  */
+@RunWith(PowerMockRunner.class)
 public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
-
-	@ClassRule
-	@Rule
-	public static final LiferayUnitTestRule liferayUnitTestRule =
-		LiferayUnitTestRule.INSTANCE;
 
 	@Before
 	@Override
@@ -99,29 +95,29 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpExpando() {
-		ExpandoBridge expandoBridge = Mockito.mock(ExpandoBridge.class);
+		ExpandoBridge expandoBridge = mock(ExpandoBridge.class);
 
-		Mockito.when(
+		when(
 			expandoBridge.getAttribute(
 				Mockito.eq("sambaLMPassword"), Mockito.eq(false))
 		).thenReturn(
 			"testLMPassword"
 		);
 
-		Mockito.when(
+		when(
 			expandoBridge.getAttribute(
 				Mockito.eq("sambaNTPassword"), Mockito.eq(false))
 		).thenReturn(
 			"testNTPassword"
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getExpandoBridge()
 		).thenReturn(
 			expandoBridge
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getExpandoBridge()
 		).thenReturn(
 			expandoBridge
@@ -132,10 +128,10 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 		FastDateFormat fastDateFormat = FastDateFormat.getInstance(
 			"yyyyMMddHHmmss.SSSZ", null, LocaleUtil.getDefault());
 
-		FastDateFormatFactory fastDateFormatFactory = Mockito.mock(
+		FastDateFormatFactory fastDateFormatFactory = mock(
 			FastDateFormatFactory.class);
 
-		Mockito.when(
+		when(
 			fastDateFormatFactory.getSimpleDateFormat(Mockito.anyString())
 		).thenReturn(
 			fastDateFormat
@@ -149,15 +145,15 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpOrganizations() throws Exception {
-		Organization organization = Mockito.mock(Organization.class);
+		Organization organization = mock(Organization.class);
 
-		Mockito.when(
+		when(
 			organization.getName()
 		).thenReturn(
 			"testOrganizationName"
 		);
 
-		Mockito.when(
+		when(
 			organization.getOrganizationId()
 		).thenReturn(
 			PRIMARY_KEY
@@ -167,14 +163,14 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 
 		organizations.add(organization);
 
-		Mockito.when(
+		when(
 			organizationLocalService.getOrganization(
 				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
 			organization
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getOrganizations()
 		).thenReturn(
 			organizations
@@ -182,17 +178,17 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpPasswordPolicy() throws Exception {
-		PasswordPolicy passwordPolicy = Mockito.mock(PasswordPolicy.class);
+		PasswordPolicy passwordPolicy = mock(PasswordPolicy.class);
 
 		setUpPasswordPolicy(passwordPolicy);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getPasswordPolicy()
 		).thenReturn(
 			passwordPolicy
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getPasswordPolicy()
 		).thenReturn(
 			passwordPolicy
@@ -200,15 +196,15 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpRoles() throws Exception {
-		Role role = Mockito.mock(Role.class);
+		Role role = mock(Role.class);
 
-		Mockito.when(
+		when(
 			role.getName()
 		).thenReturn(
 			"testRoleName"
 		);
 
-		Mockito.when(
+		when(
 			role.getRoleId()
 		).thenReturn(
 			PRIMARY_KEY
@@ -218,13 +214,13 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 
 		roles.add(role);
 
-		Mockito.when(
+		when(
 			roleLocalService.getRole(Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
 			role
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getRoles()
 		).thenReturn(
 			roles
@@ -232,63 +228,63 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 	}
 
 	protected void setUpUsers() {
-		_hasOrganizationUser = Mockito.mock(User.class);
+		_hasOrganizationUser = mock(User.class);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getCompanyId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getCreateDate()
 		).thenReturn(
 			null
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getEmailAddress()
 		).thenReturn(
 			"testHasOrganizationUser@email"
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getFirstName()
 		).thenReturn(
 			"testHasOrganizationUserFirstName"
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getFullName()
 		).thenReturn(
 			"testHasOrganizationUserFullName"
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getLastName()
 		).thenReturn(
 			"testHasOrganizationUserLastName"
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getModifiedDate()
 		).thenReturn(
 			null
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getScreenName()
 		).thenReturn(
 			"testHasOrganizationUserScreenName"
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getUserId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_hasOrganizationUser.getUuid()
 		).thenReturn(
 			"testHasOrganizationUserUuid"
@@ -296,63 +292,63 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 
 		_users.add(_hasOrganizationUser);
 
-		_hasRoleUser = Mockito.mock(User.class);
+		_hasRoleUser = mock(User.class);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getCompanyId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getCreateDate()
 		).thenReturn(
 			null
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getEmailAddress()
 		).thenReturn(
 			"testUserWtihRole@email"
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getFirstName()
 		).thenReturn(
 			"testHasRoleUserFirstName"
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getFullName()
 		).thenReturn(
 			"testHasRoleUserFullName"
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getLastName()
 		).thenReturn(
 			"testHasRoleUserLastName"
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getModifiedDate()
 		).thenReturn(
 			null
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getScreenName()
 		).thenReturn(
 			"testHasRoleUserScreenName"
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getUserId()
 		).thenReturn(
 			PRIMARY_KEY
 		);
 
-		Mockito.when(
+		when(
 			_hasRoleUser.getUuid()
 		).thenReturn(
 			"testHasRoleUserUuid"
@@ -360,14 +356,14 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 
 		_users.add(_hasRoleUser);
 
-		Mockito.when(
+		when(
 			userLocalService.getCompanyUsers(
 				Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())
 		).thenReturn(
 			_users
 		);
 
-		Mockito.when(
+		when(
 			userLocalService.search(
 				Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
 				Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
@@ -382,7 +378,7 @@ public class UserBuilderFilterConstraintsTest extends BaseVLDAPTestCase {
 			Arrays.asList(_hasRoleUser)
 		);
 
-		Mockito.when(
+		when(
 			userLocalService.search(
 				Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
 				Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),

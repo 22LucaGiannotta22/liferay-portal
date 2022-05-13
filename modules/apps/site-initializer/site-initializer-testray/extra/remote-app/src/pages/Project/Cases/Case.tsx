@@ -21,7 +21,6 @@ import QATable from '../../../components/Table/QATable';
 import {TestrayCase, getCaseResults} from '../../../graphql/queries';
 import i18n from '../../../i18n';
 import {getStatusLabel} from '../../../util/constants';
-import dayjs from '../../../util/date';
 import useCaseActions from './useCaseActions';
 
 const Case = () => {
@@ -31,7 +30,7 @@ const Case = () => {
 
 	return (
 		<>
-			<Container collapsable title={i18n.translate('details')}>
+			<Container title={i18n.translate('details')}>
 				<QATable
 					items={[
 						{
@@ -60,13 +59,11 @@ const Case = () => {
 						},
 						{
 							title: i18n.translate('date-created'),
-							value: dayjs(testrayCase.dateCreated).format('lll'),
+							value: testrayCase.dateCreated,
 						},
 						{
 							title: i18n.translate('date-modified'),
-							value: dayjs(testrayCase.dateModified).format(
-								'lll'
-							),
+							value: testrayCase.dateModified,
 						},
 						{
 							title: i18n.translate('all-issues-found'),
@@ -98,14 +95,10 @@ const Case = () => {
 						actions,
 						columns: [
 							{
-								clickable: true,
 								key: 'dateCreated',
-								render: (date) => dayjs(date).format('lll'),
-								size: 'sm',
 								value: i18n.translate('create-date'),
 							},
 							{
-								clickable: true,
 								key: 'build',
 								render: (build) => {
 									return build?.gitHash;

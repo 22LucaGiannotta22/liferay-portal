@@ -27,12 +27,10 @@ definition {
 		}
 	}
 
-	@description = "LPS-144591 - Verify that I was redirected to the 'Congrats' page after PayPal payment"
+	@description = "LPS-144591 - Verify that the Policy Declaration Page is reached by the get a quote form"
 	@priority = "5"
 	test CanReachPolicyDeclarationPageByTheForm {
-		RaylifePaymentMethod.configurationPaypal();
-
-		RaylifePaymentMethod.enablePricingPaypal();
+		RaylifePaymentMethod.enablePayPalPayment();
 
 		ApplicationsMenu.gotoSite(key_site = "Raylife");
 
@@ -53,8 +51,6 @@ definition {
 		Click(locator1 = "RaylifeUploadDocuments#BUTTON_CONFIRM_UPLOADS");
 
 		RaylifePaymentMethod.payPalFlow();
-
-		RaylifePaymentMethod.paypalPaymentFlow();
 
 		AssertElementPresent(locator1 = "RaylifePolicyDeclaration#CONGRATS_PAGE_POLICY_DECLARATION");
 	}

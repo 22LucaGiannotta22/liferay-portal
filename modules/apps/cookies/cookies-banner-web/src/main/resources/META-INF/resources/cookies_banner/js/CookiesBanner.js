@@ -22,8 +22,8 @@ import {
 export default function ({
 	configurationUrl,
 	namespace,
-	optionalCookieNames,
-	requiredCookieNames,
+	optionalCookies,
+	requiredCookies,
 }) {
 	const acceptAllButton = document.getElementById(
 		`${namespace}acceptAllButton`
@@ -38,15 +38,11 @@ export default function ({
 	const editMode = document.body.classList.contains('has-edit-mode-menu');
 
 	if (!editMode) {
-		checkCookiesConsent(
-			cookieBanner,
-			optionalCookieNames,
-			requiredCookieNames
-		);
+		checkCookiesConsent(cookieBanner, optionalCookies, requiredCookies);
 
 		const cookiePreferences = {};
 
-		optionalCookieNames.forEach((optionalCookie) => {
+		optionalCookies.forEach((optionalCookie) => {
 			cookiePreferences[optionalCookie] = Boolean(
 				getCookie(optionalCookie)
 			).toString();
@@ -59,7 +55,7 @@ export default function ({
 		acceptAllButton.addEventListener('click', () => {
 			cookieBanner.style.display = 'none';
 
-			acceptAllCookies(optionalCookieNames, requiredCookieNames);
+			acceptAllCookies(optionalCookies, requiredCookies);
 		});
 
 		configurationButton.addEventListener('click', () => {
@@ -75,14 +71,14 @@ export default function ({
 								}
 							);
 
-							requiredCookieNames.forEach((requiredCookie) => {
+							requiredCookies.forEach((requiredCookie) => {
 								setCookie(requiredCookie, 'true');
 							});
 
 							checkCookiesConsent(
 								cookieBanner,
-								optionalCookieNames,
-								requiredCookieNames
+								optionalCookies,
+								requiredCookies
 							);
 
 							Liferay.Util.getOpener().Liferay.fire('closeModal');
@@ -92,33 +88,26 @@ export default function ({
 						displayType: 'secondary',
 						label: Liferay.Language.get('accept-all'),
 						onClick() {
-							acceptAllCookies(
-								optionalCookieNames,
-								requiredCookieNames
-							);
+							acceptAllCookies(optionalCookies, requiredCookies);
 
 							checkCookiesConsent(
 								cookieBanner,
-								optionalCookieNames,
-								requiredCookieNames
+								optionalCookies,
+								requiredCookies
 							);
 
 							Liferay.Util.getOpener().Liferay.fire('closeModal');
 						},
 					},
 					{
-						displayType: 'secondary',
 						label: Liferay.Language.get('decline-all'),
 						onClick() {
-							declineAllCookies(
-								optionalCookieNames,
-								requiredCookieNames
-							);
+							declineAllCookies(optionalCookies, requiredCookies);
 
 							checkCookiesConsent(
 								cookieBanner,
-								optionalCookieNames,
-								requiredCookieNames
+								optionalCookies,
+								requiredCookies
 							);
 
 							Liferay.Util.getOpener().Liferay.fire('closeModal');
@@ -137,21 +126,15 @@ export default function ({
 		declineAllButton.addEventListener('click', () => {
 			cookieBanner.style.display = 'none';
 
-			declineAllCookies(optionalCookieNames, requiredCookieNames);
+			declineAllCookies(optionalCookies, requiredCookies);
 		});
 	}
 }
 
-function checkCookiesConsent(
-	cookieBanner,
-	optionalCookieNames,
-	requiredCookieNames
-) {
+function checkCookiesConsent(cookieBanner, optionalCookies, requiredCookies) {
 	if (
-		optionalCookieNames.every((optionalCookie) =>
-			getCookie(optionalCookie)
-		) &&
-		requiredCookieNames.every((requiredCookie) => getCookie(requiredCookie))
+		optionalCookies.every((optionalCookie) => getCookie(optionalCookie)) &&
+		requiredCookies.every((requiredCookie) => getCookie(requiredCookie))
 	) {
 		cookieBanner.style.display = 'none';
 	}

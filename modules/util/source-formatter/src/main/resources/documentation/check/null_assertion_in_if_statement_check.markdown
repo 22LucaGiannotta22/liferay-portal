@@ -1,6 +1,6 @@
 ## NullAssertionInIfStatementCheck
 
-`null` check for variable should always be first before using it in if-statement.
+Null check for variable should always be first before using it in if-statement.
 
 ### Examples
 

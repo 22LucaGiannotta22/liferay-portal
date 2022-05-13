@@ -656,7 +656,7 @@ public class FragmentEntryLinkLocalServiceImpl
 					defaultEditableFragmentEntryProcessorJSONObject);
 			}
 
-			return editableValuesJSONObject.toString();
+			return editableValuesJSONObject.toJSONString();
 		}
 		catch (JSONException jsonException) {
 			if (_log.isDebugEnabled()) {

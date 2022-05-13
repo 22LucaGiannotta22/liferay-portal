@@ -152,7 +152,7 @@ public class RankingGetHiddenResultsBuilderTest
 				))
 		).put(
 			"total", 2
-		).toString();
+		).toJSONString();
 	}
 
 	private RankingGetHiddenResultsBuilder _rankingGetHiddenResultsBuilder;

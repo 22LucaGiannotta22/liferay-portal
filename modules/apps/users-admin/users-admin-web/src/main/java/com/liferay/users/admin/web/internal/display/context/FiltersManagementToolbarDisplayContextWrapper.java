@@ -123,14 +123,15 @@ public class FiltersManagementToolbarDisplayContextWrapper
 							).buildString());
 
 						labelItem.setCloseable(true);
-						labelItem.setLabel(
-							String.format(
-								"%s: %s",
-								filterContributor.getShortLabel(
-									httpServletRequest.getLocale()),
-								filterContributor.getValueLabel(
-									httpServletRequest.getLocale(),
-									currentValue)));
+
+						String label = String.format(
+							"%s: %s",
+							filterContributor.getShortLabel(
+								httpServletRequest.getLocale()),
+							filterContributor.getValueLabel(
+								httpServletRequest.getLocale(), currentValue));
+
+						labelItem.setLabel(label);
 					});
 			}
 		}

@@ -636,7 +636,11 @@ definition {
 
 		Refresh();
 
-		CommerceCheckout.gotoCheckout();
+		CommerceNavigator.gotoMiniCart();
+
+		Button.click(button = "View Details");
+
+		Button.click(button = "Checkout");
 
 		Type(
 			key_fieldName = "Name",

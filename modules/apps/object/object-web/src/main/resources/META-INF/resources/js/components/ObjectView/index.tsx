@@ -12,20 +12,18 @@
  * details.
  */
 
+import ClayButton from '@clayui/button';
 import ClayTabs from '@clayui/tabs';
-import {useFeatureFlag} from 'data-engine-js-components-web';
 import {fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useState} from 'react';
 
 import {invalidateRequired} from '../../hooks/useForm';
-import {defaultLanguageId} from '../../utils/locale';
-import SidePanelContent, {closeSidePanel, openToast} from '../SidePanelContent';
+import SidePanelContent from '../SidePanelContent';
 import BasicInfoScreen from './BasicInfoScreen/BasicInfoScreen';
-import {DefaultFilterScreen} from './DefaultFilterScreen/DefaultFilterScreen';
 import {DefaultSortScreen} from './DefaultSortScreen/DefaultSortScreen';
 import ViewBuilderScreen from './ViewBuilderScreen/ViewBuilderScreen';
 import ViewContext, {TYPES, ViewContextProvider} from './context';
-import {TObjectField, TObjectView, TWorkflowStatus} from './types';
+import {TObjectField, TObjectView} from './types';
 
 const TABS = [
 	{
@@ -47,6 +45,8 @@ const HEADERS = new Headers({
 	'Content-Type': 'application/json',
 });
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+
 const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 	const [{isViewOnly, objectView, objectViewId}, dispatch] = useContext(
 		ViewContext
@@ -55,14 +55,10 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 	const [activeIndex, setActiveIndex] = useState<number>(0);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	const flags = useFeatureFlag();
-
-	if (TABS.length < 4 && flags['LPS-144957']) {
-		TABS.push({
-			Component: DefaultFilterScreen,
-			label: Liferay.Language.get('default-filters'),
-		});
-	}
+	const onCloseSidePanel = () => {
+		const parentWindow = Liferay.Util.getOpener();
+		parentWindow.Liferay.fire('close-side-panel');
+	};
 
 	useEffect(() => {
 		const makeFetch = async () => {
@@ -164,8 +160,10 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 
 		const {objectViewColumns} = newObjectView;
 
+		const parentWindow = Liferay.Util.getOpener();
+
 		if (invalidateRequired(objectView.name[defaultLanguageId])) {
-			openToast({
+			parentWindow.Liferay.Util.openToast({
 				message: Liferay.Language.get('a-name-is-required'),
 				type: 'danger',
 			});
@@ -187,12 +185,13 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				window.location.reload();
 			}
 			else if (response.ok) {
-				closeSidePanel();
+				onCloseSidePanel();
 
-				openToast({
+				parentWindow.Liferay.Util.openToast({
 					message: Liferay.Language.get(
 						'modifications-saved-successfully'
 					),
+					type: 'success',
 				});
 			}
 			else {
@@ -200,14 +199,14 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 					title = Liferay.Language.get('an-error-occurred'),
 				} = (await response.json()) as any;
 
-				openToast({
+				parentWindow.Liferay.Util.openToast({
 					message: title,
 					type: 'danger',
 				});
 			}
 		}
 		else {
-			openToast({
+			parentWindow.Liferay.Util.openToast({
 				message: Liferay.Language.get(
 					'default-view-must-have-at-least-one-column'
 				),
@@ -217,11 +216,7 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 	};
 
 	return (
-		<SidePanelContent
-			onSave={handleSaveObjectView}
-			readOnly={isViewOnly || loading}
-			title={Liferay.Language.get('custom-view')}
-		>
+		<>
 			<ClayTabs className="side-panel-iframe__tabs">
 				{TABS.map(({label}, index) => (
 					<ClayTabs.Item
@@ -234,33 +229,54 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				))}
 			</ClayTabs>
 
-			<ClayTabs.Content activeIndex={activeIndex} fade>
-				{TABS.map(({Component}, index) => (
-					<ClayTabs.TabPane key={index}>
-						{!loading && <Component />}
-					</ClayTabs.TabPane>
-				))}
-			</ClayTabs.Content>
-		</SidePanelContent>
+			<SidePanelContent className="side-panel-content--custom-view">
+				<SidePanelContent.Body>
+					<ClayTabs.Content activeIndex={activeIndex} fade>
+						{TABS.map(({Component}, index) => (
+							<ClayTabs.TabPane key={index}>
+								{!loading && <Component />}
+							</ClayTabs.TabPane>
+						))}
+					</ClayTabs.Content>
+				</SidePanelContent.Body>
+
+				{!loading && (
+					<SidePanelContent.Footer>
+						<ClayButton.Group spaced>
+							<ClayButton
+								displayType="secondary"
+								onClick={onCloseSidePanel}
+							>
+								{Liferay.Language.get('cancel')}
+							</ClayButton>
+
+							<ClayButton
+								disabled={isViewOnly}
+								onClick={() => handleSaveObjectView()}
+							>
+								{Liferay.Language.get('save')}
+							</ClayButton>
+						</ClayButton.Group>
+					</SidePanelContent.Footer>
+				)}
+			</SidePanelContent>
+		</>
 	);
 };
 interface ICustomViewWrapperProps extends React.HTMLAttributes<HTMLElement> {
 	isViewOnly: boolean;
 	objectViewId: string;
-	workflowStatusJSONArray: TWorkflowStatus[];
 }
 
 const CustomViewWrapper: React.FC<ICustomViewWrapperProps> = ({
 	isViewOnly,
 	objectViewId,
-	workflowStatusJSONArray,
 }) => {
 	return (
 		<ViewContextProvider
 			value={{
 				isViewOnly,
 				objectViewId,
-				workflowStatusJSONArray,
 			}}
 		>
 			<CustomView />

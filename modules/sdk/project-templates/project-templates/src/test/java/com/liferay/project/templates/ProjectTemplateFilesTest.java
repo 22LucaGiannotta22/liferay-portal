@@ -363,7 +363,9 @@ public class ProjectTemplateFilesTest {
 				"Undeclared \"" + expression + "\" property. Please add to " +
 					archetypeMetadataXmlPath,
 				_expressionContainedInList(declaredVariables, expression) ||
-				_expressionContainedInList(requiredPropertyNames, expression));
+				_expressionContainedInList(requiredPropertyNames, expression) ||
+				_expressionContainedInList(
+					_archetypeMetadataXmlDefaultPropertyNames, expression));
 		}
 	}
 
@@ -1007,8 +1009,7 @@ public class ProjectTemplateFilesTest {
 
 	private static final List<String>
 		_archetypeMetadataXmlDefaultPropertyNames = Arrays.asList(
-			"artifactId", "groupId", "package", "project", "replacestring",
-			"version");
+			"artifactId", "groupId", "package", "project", "version");
 	private static final Pattern _archetypeMetadataXmlIncludePattern =
 		Pattern.compile("<include>([^\\*]+?)<\\/include>");
 	private static final Pattern _archetypeMetadataXmlRequiredPropertyPattern =

@@ -61,10 +61,11 @@ public class TempAttachmentWikiUploadFileEntryHandler
 		try (InputStream inputStream = uploadPortletRequest.getFileAsStream(
 				_PARAMETER_NAME)) {
 
+			String tempFileName = TempFileEntryUtil.getTempFileName(
+				uploadPortletRequest.getFileName(_PARAMETER_NAME));
+
 			return _wikiPageService.addTempFileEntry(
-				nodeId, WikiConstants.TEMP_FOLDER_NAME,
-				TempFileEntryUtil.getTempFileName(
-					uploadPortletRequest.getFileName(_PARAMETER_NAME)),
+				nodeId, WikiConstants.TEMP_FOLDER_NAME, tempFileName,
 				inputStream,
 				uploadPortletRequest.getContentType(_PARAMETER_NAME));
 		}

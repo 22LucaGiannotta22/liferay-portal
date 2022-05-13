@@ -201,9 +201,10 @@ public class ExperimentUtil {
 		boolean secure = StringUtil.equalsIgnoreCase(
 			Http.HTTPS, PropsValues.WEB_SERVER_PROTOCOL);
 
-		sb.append(
-			portal.getPortalURL(
-				virtualHostname, portal.getPortalServerPort(secure), secure));
+		String portalURL = portal.getPortalURL(
+			virtualHostname, portal.getPortalServerPort(secure), secure);
+
+		sb.append(portalURL);
 
 		if (layout.isPrivateLayout()) {
 			sb.append(portal.getPathFriendlyURLPrivateGroup());

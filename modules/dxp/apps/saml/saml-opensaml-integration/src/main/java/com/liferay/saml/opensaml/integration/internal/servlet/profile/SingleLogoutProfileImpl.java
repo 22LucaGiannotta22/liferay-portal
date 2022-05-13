@@ -588,8 +588,10 @@ public class SingleLogoutProfileImpl
 		String binding = singleLogoutService.getBinding();
 
 		if (binding.equals(SAMLConstants.SAML2_SOAP11_BINDING_URI)) {
-			samlSloRequestInfo.setStatusCode(
-				_sendSyncLogoutRequest(messageContext, samlSloContext));
+			String statusCode = _sendSyncLogoutRequest(
+				messageContext, samlSloContext);
+
+			samlSloRequestInfo.setStatusCode(statusCode);
 
 			httpServletRequest.setAttribute(
 				SamlWebKeys.SAML_SLO_REQUEST_INFO,
@@ -681,12 +683,15 @@ public class SingleLogoutProfileImpl
 			idpSSODescriptor);
 
 		logoutRequest.setIssuer(issuer);
-		logoutRequest.setNameID(
-			OpenSamlUtil.buildNameId(
-				samlPeerBinding.getSamlNameIdFormat(),
-				samlPeerBinding.getSamlNameIdNameQualifier(),
-				samlPeerBinding.getSamlNameIdSpNameQualifier(),
-				samlPeerBinding.getSamlNameIdValue()));
+
+		NameID nameID = OpenSamlUtil.buildNameId(
+			samlPeerBinding.getSamlNameIdFormat(),
+			samlPeerBinding.getSamlNameIdNameQualifier(),
+			samlPeerBinding.getSamlNameIdSpNameQualifier(),
+			samlPeerBinding.getSamlNameIdValue());
+
+		logoutRequest.setNameID(nameID);
+
 		logoutRequest.setVersion(SAMLVersion.VERSION_20);
 
 		_addSessionIndex(logoutRequest, samlSpSession.getSessionIndex());

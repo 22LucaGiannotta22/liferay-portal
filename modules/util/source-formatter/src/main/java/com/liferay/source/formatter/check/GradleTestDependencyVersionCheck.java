@@ -72,10 +72,10 @@ public class GradleTestDependencyVersionCheck extends BaseFileCheck {
 		StringBundler sb = new StringBundler();
 
 		for (String line : StringUtil.splitLines(dependencies)) {
-			if (!StringUtil.startsWith(
-					GradleSourceUtil.getConfiguration(StringUtil.trim(line)),
-					"test")) {
+			String configuration = GradleSourceUtil.getConfiguration(
+				StringUtil.trim(line));
 
+			if (!StringUtil.startsWith(configuration, "test")) {
 				sb.append(line);
 				sb.append("\n");
 

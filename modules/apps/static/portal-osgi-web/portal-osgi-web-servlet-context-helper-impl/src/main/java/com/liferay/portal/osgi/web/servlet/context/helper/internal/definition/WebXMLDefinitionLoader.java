@@ -559,9 +559,10 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			_servletMapping = new ServletMapping();
 		}
 		else if (qName.equals("web-app")) {
-			_webXMLDefinition.setMetadataComplete(
-				GetterUtil.getBoolean(
-					attributes.getValue("metadata-complete")));
+			boolean metadataComplete = GetterUtil.getBoolean(
+				attributes.getValue("metadata-complete"));
+
+			_webXMLDefinition.setMetadataComplete(metadataComplete);
 		}
 		else if (qName.equals("web-resource-collection")) {
 			_webResourceCollection = new WebResourceCollection();

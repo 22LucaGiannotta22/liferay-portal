@@ -55,7 +55,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -414,21 +413,7 @@ public abstract class BaseSXPBlueprintResourceImpl
 		throws Exception {
 
 		UnsafeConsumer<SXPBlueprint, Exception> sxpBlueprintUnsafeConsumer =
-			null;
-
-		String createStrategy = (String)parameters.getOrDefault(
-			"createStrategy", "INSERT");
-
-		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			sxpBlueprintUnsafeConsumer = sxpBlueprint -> postSXPBlueprint(
-				sxpBlueprint);
-		}
-
-		if (sxpBlueprintUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Create strategy \"" + createStrategy +
-					"\" is not supported for SxpBlueprint");
-		}
+			sxpBlueprint -> postSXPBlueprint(sxpBlueprint);
 
 		if (contextBatchUnsafeConsumer != null) {
 			contextBatchUnsafeConsumer.accept(
@@ -507,35 +492,6 @@ public abstract class BaseSXPBlueprintResourceImpl
 			java.util.Collection<SXPBlueprint> sxpBlueprints,
 			Map<String, Serializable> parameters)
 		throws Exception {
-
-		UnsafeConsumer<SXPBlueprint, Exception> sxpBlueprintUnsafeConsumer =
-			null;
-
-		String updateStrategy = (String)parameters.getOrDefault(
-			"updateStrategy", "UPDATE");
-
-		if ("PARTIAL_UPDATE".equalsIgnoreCase(updateStrategy)) {
-			sxpBlueprintUnsafeConsumer = sxpBlueprint -> patchSXPBlueprint(
-				sxpBlueprint.getId() != null ? sxpBlueprint.getId() :
-					Long.parseLong((String)parameters.get("sxpBlueprintId")),
-				sxpBlueprint);
-		}
-
-		if (sxpBlueprintUnsafeConsumer == null) {
-			throw new NotSupportedException(
-				"Update strategy \"" + updateStrategy +
-					"\" is not supported for SxpBlueprint");
-		}
-
-		if (contextBatchUnsafeConsumer != null) {
-			contextBatchUnsafeConsumer.accept(
-				sxpBlueprints, sxpBlueprintUnsafeConsumer);
-		}
-		else {
-			for (SXPBlueprint sxpBlueprint : sxpBlueprints) {
-				sxpBlueprintUnsafeConsumer.accept(sxpBlueprint);
-			}
-		}
 	}
 
 	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {

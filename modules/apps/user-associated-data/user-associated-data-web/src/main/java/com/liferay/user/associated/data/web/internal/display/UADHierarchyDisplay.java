@@ -125,9 +125,11 @@ public class UADHierarchyDisplay {
 		UADDisplay<Object> uadDisplay =
 			(UADDisplay<Object>)_getUADDisplayByTypeClassName(className);
 
+		String applicationName = UADLanguageUtil.getApplicationName(
+			uadDisplay, locale);
+
 		PortalUtil.addPortletBreadcrumbEntry(
-			httpServletRequest,
-			UADLanguageUtil.getApplicationName(uadDisplay, locale),
+			httpServletRequest, applicationName,
 			PortletURLBuilder.create(
 				PortletURLUtil.clone(baseURL, renderResponse)
 			).setMVCRenderCommandName(
@@ -215,11 +217,12 @@ public class UADHierarchyDisplay {
 				Class<?> containerItemTypeClass =
 					containerItemUADDisplay.getTypeClass();
 
+				List<Serializable> containerItemPKs = _getContainerItemPKs(
+					parentContainerClass, parentContainerId,
+					containerItemTypeClass, userId);
+
 				_addEntities(
-					containerItemPKsMap,
-					_getContainerItemPKs(
-						parentContainerClass, parentContainerId,
-						containerItemTypeClass, userId),
+					containerItemPKsMap, containerItemPKs,
 					containerItemTypeClass);
 			}
 		}

@@ -118,7 +118,7 @@ public class JournalContentCompatibilityConverterImpl
 
 	private String _convertDDMFieldType(String ddmFieldType) {
 		if (Objects.equals(ddmFieldType, "boolean")) {
-			return DDMFormFieldTypeConstants.CHECKBOX;
+			return DDMFormFieldTypeConstants.CHECKBOX_MULTIPLE;
 		}
 
 		if (Objects.equals(ddmFieldType, "ddm-color")) {
@@ -191,10 +191,6 @@ public class JournalContentCompatibilityConverterImpl
 			"dynamic-content");
 
 		for (Element dynamicContentElement : dynamicContentElements) {
-			if (Objects.equals(ddmFieldType, "list")) {
-				continue;
-			}
-
 			String text = dynamicContentElement.getText();
 
 			dynamicContentElement.clearContent();
@@ -260,7 +256,7 @@ public class JournalContentCompatibilityConverterImpl
 			"privateLayout", privateLayout
 		);
 
-		return jsonObject.toString();
+		return jsonObject.toJSONString();
 	}
 
 	private void _convertNestedFields(Element newElement, Element oldElement) {

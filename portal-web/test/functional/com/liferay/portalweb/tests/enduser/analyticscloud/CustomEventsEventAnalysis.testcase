@@ -1,8 +1,6 @@
 @component-name = "portal-analytics-cloud"
 definition {
 
-	property analytics.cloud.release = "true";
-	property analytics.cloud.upstream = "true";
 	property custom.properties = "jsonws.web.service.paths.excludes=";
 	property portal.release = "false";
 	property portal.upstream = "true";
@@ -460,6 +458,7 @@ definition {
 		property test.name.skip.portal.instance = "CustomEventsEventAnalysis#RemoveAttribute";
 
 		var attributeName = "pageTitle";
+		var dataSource = StringUtil.extractFirst("${assignedPropertyName}", " ");
 
 		task ("Fill fields and create custom event") {
 			var customEventName = ACCustomEvents.generateCustomEventName();
@@ -494,7 +493,7 @@ definition {
 
 			ACTimeFilter.setLast24Hours();
 
-			ACEventAnalysis.viewAnalysisInformation(informationValueList = "ac page - site name - liferay dxp");
+			ACEventAnalysis.viewAnalysisInformation(informationValueList = "ac page - site name - ${dataSource}");
 		}
 
 		task ("Remove the breakdown from the analysis") {
@@ -502,7 +501,7 @@ definition {
 		}
 
 		task ("Check that the breakdown information does not appear in the result") {
-			ACEventAnalysis.viewAnalysisInformationNotPresent(informationValueList = "ac page - site name - liferay dxp");
+			ACEventAnalysis.viewAnalysisInformationNotPresent(informationValueList = "ac page - site name - ${dataSource}");
 		}
 
 		task ("Check that the breakdown does not appear on the dashboard") {
@@ -567,7 +566,7 @@ definition {
 		task ("Search for an attribute that doesn't exist and check that it doesn't appear") {
 			ACEventAnalysis.searchEventAnalysis(searchItem = "acqa");
 
-			ACUtils.viewGenericText(textValueList = "There are no items found.");
+			ACUtils.viewNoResultsMessage(noResultMessage = "There are no items found.");
 		}
 	}
 

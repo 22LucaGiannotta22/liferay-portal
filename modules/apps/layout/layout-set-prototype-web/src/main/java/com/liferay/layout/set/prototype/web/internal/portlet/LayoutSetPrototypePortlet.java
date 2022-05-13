@@ -39,7 +39,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.sites.kernel.util.Sites;
+import com.liferay.sites.kernel.util.SitesUtil;
 
 import java.io.IOException;
 
@@ -81,8 +81,7 @@ import org.osgi.service.component.annotations.Reference;
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + LayoutSetPrototypePortletKeys.LAYOUT_SET_PROTOTYPE,
 		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.security-role-ref=administrator",
-		"javax.portlet.version=3.0"
+		"javax.portlet.security-role-ref=administrator"
 	},
 	service = Portlet.class
 )
@@ -134,7 +133,7 @@ public class LayoutSetPrototypePortlet extends MVCPortlet {
 		long layoutSetPrototypeId = ParamUtil.getLong(
 			actionRequest, "layoutSetPrototypeId");
 
-		sites.setMergeFailCount(
+		SitesUtil.setMergeFailCount(
 			layoutSetPrototypeService.getLayoutSetPrototype(
 				layoutSetPrototypeId),
 			0);
@@ -326,9 +325,6 @@ public class LayoutSetPrototypePortlet extends MVCPortlet {
 	protected LayoutSetPrototypeService layoutSetPrototypeService;
 	protected PanelAppRegistry panelAppRegistry;
 	protected PanelCategoryRegistry panelCategoryRegistry;
-
-	@Reference
-	protected Sites sites;
 
 	private void _addSessionMessages(
 		ActionRequest actionRequest, boolean oldReadyForPropagation,

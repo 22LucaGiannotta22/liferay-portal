@@ -54,7 +54,7 @@ definition {
 	}
 
 	macro clickMoveToRecycleBin {
-		MenuItem.click(menuItem = "Delete");
+		MenuItem.click(menuItem = "Move to Recycle Bin");
 	}
 
 	macro create {

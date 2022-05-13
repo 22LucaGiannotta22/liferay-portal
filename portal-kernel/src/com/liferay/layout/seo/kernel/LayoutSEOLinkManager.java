@@ -21,12 +21,25 @@ import com.liferay.portal.kernel.util.ListMergeable;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * @author Cristina González
  */
 public interface LayoutSEOLinkManager {
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #getCanonicalLayoutSEOLink(Layout, Locale, String, ThemeDisplay)}
+	 */
+	@Deprecated
+	public default LayoutSEOLink getCanonicalLayoutSEOLink(
+			Layout layout, Locale locale, String canonicalURL,
+			Map<Locale, String> alternateURLs)
+		throws PortalException {
+
+		throw new UnsupportedOperationException();
+	}
 
 	public LayoutSEOLink getCanonicalLayoutSEOLink(
 			Layout layout, Locale locale, String canonicalURL,
@@ -42,6 +55,15 @@ public interface LayoutSEOLinkManager {
 
 		throw new UnsupportedOperationException();
 	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #getLocalizedLayoutSEOLinks(Layout, Locale, String, Set)}
+	 */
+	@Deprecated
+	public List<LayoutSEOLink> getLocalizedLayoutSEOLinks(
+			Layout layout, Locale locale, String canonicalURL,
+			Map<Locale, String> alternateURLs)
+		throws PortalException;
 
 	public List<LayoutSEOLink> getLocalizedLayoutSEOLinks(
 			Layout layout, Locale locale, String canonicalURL,
@@ -61,6 +83,17 @@ public interface LayoutSEOLinkManager {
 		throws PortalException {
 
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             OpenGraphConfiguration#isOpenGraphEnabled(Group)}
+	 */
+	@Deprecated
+	public default boolean isOpenGraphEnabled(Layout layout)
+		throws PortalException {
+
+		return false;
 	}
 
 }

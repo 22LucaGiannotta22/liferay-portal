@@ -14,62 +14,57 @@
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React, {forwardRef, useRef} from 'react';
+import React from 'react';
 
 import InputQuantitySelector from './InputQuantitySelector';
 import ListQuantitySelector from './ListQuantitySelector';
 
-const QuantitySelector = forwardRef(
-	(
-		{
-			alignment,
-			allowedQuantities,
-			disabled,
-			max,
-			min,
-			name,
-			onUpdate,
-			quantity,
-			size,
-			step,
-		},
-		providedRef
-	) => {
-		const inputRef = useRef();
+function QuantitySelector({
+	allowedQuantities,
+	disabled,
+	maxQuantity,
+	minQuantity,
+	multipleQuantity,
+	name,
+	onUpdate,
+	quantity,
+	size,
+}) {
+	const Selector =
+		allowedQuantities?.length > 0
+			? ListQuantitySelector
+			: InputQuantitySelector;
 
-		const Selector =
-			allowedQuantities?.length > 0
-				? ListQuantitySelector
-				: InputQuantitySelector;
-
-		return (
-			<Selector
-				alignment={alignment}
-				allowedQuantities={allowedQuantities}
-				className={classnames({
-					[`form-control-${size}`]: size,
-					'quantity-selector': true,
-				})}
-				disabled={disabled}
-				max={max}
-				min={min}
-				name={name}
-				onUpdate={onUpdate}
-				quantity={quantity}
-				ref={providedRef || inputRef}
-				step={step}
-			/>
-		);
-	}
-);
+	return (
+		<Selector
+			allowedQuantities={allowedQuantities}
+			className={classnames({
+				[`form-control-${size}`]: size,
+				'quantity-selector': true,
+			})}
+			disabled={disabled}
+			maxQuantity={maxQuantity}
+			minQuantity={minQuantity}
+			multipleQuantity={multipleQuantity}
+			name={name}
+			onUpdate={onUpdate}
+			quantity={quantity}
+		/>
+	);
+}
 
 QuantitySelector.defaultProps = {
 	disabled: false,
+	minQuantity: 1,
+	multipleQuantity: 1,
+	quantity: 1,
 };
 
 QuantitySelector.propTypes = {
-	alignment: PropTypes.oneOf(['top', 'bottom']),
 	disabled: PropTypes.bool,
+	maxQuantity: PropTypes.number,
+	minQuantity: PropTypes.number,
+	multipleQuantity: PropTypes.number,
 	name: PropTypes.string,
 	onUpdate: PropTypes.func.isRequired,
 	quantity: PropTypes.number,

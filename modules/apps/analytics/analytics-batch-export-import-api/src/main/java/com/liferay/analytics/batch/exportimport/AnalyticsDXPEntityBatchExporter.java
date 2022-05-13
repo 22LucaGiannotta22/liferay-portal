@@ -21,9 +21,6 @@ public interface AnalyticsDXPEntityBatchExporter {
 
 	public void export(long companyId) throws Exception;
 
-	public void refreshExportTrigger(long companyId, String dispatchTriggerName)
-		throws Exception;
-
 	public void scheduleExportTriggers(long companyId) throws Exception;
 
 	public void unscheduleExportTriggers(long companyId) throws Exception;

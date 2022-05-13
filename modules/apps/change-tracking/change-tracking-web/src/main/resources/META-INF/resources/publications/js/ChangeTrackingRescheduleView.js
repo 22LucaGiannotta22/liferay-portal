@@ -96,10 +96,10 @@ class ChangeTrackingRescheduleView extends ChangeTrackingBaseScheduleView {
 						<div className={this.getTimeClassName()}>
 							<div>
 								<ClayTimePicker
-									onChange={this.handleTimeChange}
+									onInputChange={this.handleTimeChange}
 									spritemap={this.spritemap}
 									timezone={this.timeZone}
-									value={this.state.time}
+									values={this.state.time}
 								/>
 
 								{this.getTimeHelpText()}

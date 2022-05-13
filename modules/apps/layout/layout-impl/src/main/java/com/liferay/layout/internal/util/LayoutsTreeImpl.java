@@ -45,17 +45,15 @@ import com.liferay.portal.kernel.service.permission.LayoutPermission;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.kernel.servlet.BrowserSniffer;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.SessionClicks;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.layoutsadmin.util.LayoutsTree;
-import com.liferay.sites.kernel.util.Sites;
+import com.liferay.sites.kernel.util.SitesUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -250,51 +248,6 @@ public class LayoutsTreeImpl implements LayoutsTree {
 			httpServletRequest, groupId, layoutTreeNodes, layoutSetBranch);
 	}
 
-	private Layout _fetchCurrentLayout(HttpServletRequest httpServletRequest) {
-		long selPlid = ParamUtil.getLong(httpServletRequest, "selPlid");
-
-		if (selPlid > 0) {
-			return _layoutLocalService.fetchLayout(selPlid);
-		}
-
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-		Layout layout = themeDisplay.getLayout();
-
-		if (!layout.isTypeControlPanel()) {
-			return layout;
-		}
-
-		return null;
-	}
-
-	private List<Layout> _getAncestorLayouts(
-			HttpServletRequest httpServletRequest)
-		throws Exception {
-
-		Layout layout = _fetchCurrentLayout(httpServletRequest);
-
-		if (layout == null) {
-			return Collections.emptyList();
-		}
-
-		List<Layout> ancestorLayouts = _layoutService.getAncestorLayouts(
-			layout.getPlid());
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(
-				StringBundler.concat(
-					"Get ancestor layouts ", ancestorLayouts, " for layout ",
-					layout));
-		}
-
-		ancestorLayouts.add(layout);
-
-		return ancestorLayouts;
-	}
-
 	private Layout _getDraftLayout(Layout layout) {
 		if (!layout.isTypeContent()) {
 			return null;
@@ -331,8 +284,6 @@ public class LayoutsTreeImpl implements LayoutsTree {
 
 		List<LayoutTreeNode> layoutTreeNodes = new ArrayList<>();
 
-		List<Layout> ancestorLayouts = _getAncestorLayouts(httpServletRequest);
-
 		int count = _layoutService.getLayoutsCount(
 			groupId, privateLayout, parentLayoutId);
 
@@ -348,32 +299,20 @@ public class LayoutsTreeImpl implements LayoutsTree {
 
 			LayoutTreeNodes childLayoutTreeNodes = null;
 
-			if (_isExpandableLayout(
-					httpServletRequest, ancestorLayouts, expandedLayoutIds,
-					layout)) {
+			if (layout instanceof VirtualLayout) {
+				VirtualLayout virtualLayout = (VirtualLayout)layout;
 
-				if (layout instanceof VirtualLayout) {
-					VirtualLayout virtualLayout = (VirtualLayout)layout;
-
-					childLayoutTreeNodes = _getLayoutTreeNodes(
-						httpServletRequest, virtualLayout.getSourceGroupId(),
-						virtualLayout.isPrivateLayout(),
-						virtualLayout.getLayoutId(), incomplete,
-						expandedLayoutIds, treeId, true);
-				}
-				else {
-					childLayoutTreeNodes = _getLayoutTreeNodes(
-						httpServletRequest, groupId, layout.isPrivateLayout(),
-						layout.getLayoutId(), incomplete, expandedLayoutIds,
-						treeId, true);
-				}
+				childLayoutTreeNodes = _getLayoutTreeNodes(
+					httpServletRequest, virtualLayout.getSourceGroupId(),
+					virtualLayout.isPrivateLayout(),
+					virtualLayout.getLayoutId(), incomplete, expandedLayoutIds,
+					treeId, true);
 			}
 			else {
-				int childLayoutsCount = _layoutService.getLayoutsCount(
-					groupId, privateLayout, layout.getLayoutId());
-
-				childLayoutTreeNodes = new LayoutTreeNodes(
-					new ArrayList<LayoutTreeNode>(), childLayoutsCount);
+				childLayoutTreeNodes = _getLayoutTreeNodes(
+					httpServletRequest, groupId, layout.isPrivateLayout(),
+					layout.getLayoutId(), incomplete, expandedLayoutIds, treeId,
+					true);
 			}
 
 			layoutTreeNode.setChildLayoutTreeNodes(childLayoutTreeNodes);
@@ -508,22 +447,6 @@ public class LayoutsTreeImpl implements LayoutsTree {
 		}
 
 		return true;
-	}
-
-	private boolean _isExpandableLayout(
-		HttpServletRequest httpServletRequest, List<Layout> ancestorLayouts,
-		long[] expandedLayoutIds, Layout layout) {
-
-		boolean expandParentLayouts = ParamUtil.getBoolean(
-			httpServletRequest, "expandParentLayouts");
-
-		if (expandParentLayouts || ancestorLayouts.contains(layout) ||
-			ArrayUtil.contains(expandedLayoutIds, layout.getLayoutId())) {
-
-			return true;
-		}
-
-		return false;
 	}
 
 	private boolean _isPaginationEnabled(
@@ -664,7 +587,7 @@ public class LayoutsTreeImpl implements LayoutsTree {
 			).put(
 				"sortable",
 				hasManageLayoutsPermission && !mobile &&
-				_sites.isLayoutSortable(layout)
+				SitesUtil.isLayoutSortable(layout)
 			).put(
 				"type", layout.getType()
 			).put(
@@ -788,9 +711,6 @@ public class LayoutsTreeImpl implements LayoutsTree {
 
 	@Reference
 	private Portal _portal;
-
-	@Reference
-	private Sites _sites;
 
 	@Reference
 	private Staging _staging;

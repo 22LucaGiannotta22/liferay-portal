@@ -195,22 +195,33 @@ export default function useFilters(setFilterTerm, productName) {
 				)
 			) {
 				if (
-					filters.keyType.value.hasOnPremise &&
-					!filters.keyType.value.maxNodes &&
-					!filters.keyType.value.minNodes
+					!isNaN(filters.keyType.value.hasOnPremise) &&
+					filters.keyType.value.hasOnPremise
 				) {
 					hasFilterPill = true;
-					filtersKeyType.push('maxClusterNodes eq 0');
+					filtersKeyType.push(
+						"not contains(licenseEntryType, 'cluster')"
+					);
 				}
 
 				if (
-					(filters.keyType.value.hasVirtualCluster ||
-						filters.keyType.value.hasCluster) &&
-					!filters.keyType.value.maxNodes &&
-					!filters.keyType.value.minNodes
+					!isNaN(filters.keyType.value.hasVirtualCluster) &&
+					filters.keyType.value.hasVirtualCluster
 				) {
 					hasFilterPill = true;
-					filtersKeyType.push('maxClusterNodes gt 0');
+					filtersKeyType.push(
+						"contains(licenseEntryType, 'virtual')"
+					);
+				}
+
+				if (
+					!isNaN(filters.keyType.value.hasCluster) &&
+					filters.keyType.value.hasCluster
+				) {
+					hasFilterPill = true;
+					filtersKeyType.push(
+						"contains(licenseEntryType, 'cluster')"
+					);
 				}
 			}
 			else {
@@ -218,25 +229,23 @@ export default function useFilters(setFilterTerm, productName) {
 			}
 
 			if (filters.keyType.value.maxNodes) {
-				hasFilterPill = true;
-
 				filtersKeyType.push(
 					`maxClusterNodes le ${filters.keyType.value.maxNodes}`
 				);
-				showOnPrem = filters.keyType.value.hasOnPremise;
+				showOnPrem = true;
 			}
 
 			if (filters.keyType.value.minNodes) {
-				hasFilterPill = true;
-
 				filtersKeyType.push(
 					`maxClusterNodes ge ${filters.keyType.value.minNodes}`
 				);
-				showOnPrem = filters.keyType.value.hasOnPremise;
+				showOnPrem = true;
 			}
 
 			if (showOnPrem) {
-				filtersKeyType.push(' or maxClusterNodes eq 0');
+				filtersKeyType.push(
+					" or not contains(licenseEntryType, 'cluster')"
+				);
 			}
 
 			if (filtersKeyType.length) {

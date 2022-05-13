@@ -23,14 +23,10 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TimeZoneUtil;
 import com.liferay.portal.kernel.util.Validator;
-
-import java.text.DateFormat;
-import java.text.ParseException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,19 +47,8 @@ public class DateParameterUtil {
 			return null;
 		}
 
-		try {
-			DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat(
-				_PATTERN);
-
-			return LocalDate.parse(
-				dateFormat.format(dateFormat.parse(dateString)),
-				DateTimeFormatter.ofPattern(_PATTERN));
-		}
-		catch (ParseException parseException) {
-			_log.error(parseException);
-		}
-
-		return null;
+		return LocalDate.parse(
+			dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 
 	public static LocalDateTime getLocalDateTime(String dateTimeString) {
@@ -198,8 +183,6 @@ public class DateParameterUtil {
 
 		return null;
 	}
-
-	private static final String _PATTERN = "yyyy-MM-dd";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DateParameterUtil.class);

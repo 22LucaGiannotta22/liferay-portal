@@ -80,7 +80,6 @@ import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.CookieKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
-import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -430,7 +429,8 @@ public class DDMFormDisplayContext {
 			return submitLabel;
 		}
 
-		ResourceBundle resourceBundle = _getResourceBundle();
+		ResourceBundle resourceBundle = _getResourceBundle(
+			getLocale(_getHttpServletRequest(), getDDMForm()));
 
 		if (_hasWorkflowEnabled(getFormInstance(), getThemeDisplay())) {
 			DDMFormInstanceRecord ddmFormInstanceRecord =
@@ -563,43 +563,56 @@ public class DDMFormDisplayContext {
 	}
 
 	public boolean isFormAvailable() throws PortalException {
-		DDMFormInstance ddmFormInstance = getFormInstance();
-
-		if ((ddmFormInstance == null) || !isFormPublished()) {
-			return false;
+		if (isPreview()) {
+			return true;
 		}
 
-		if (!isFormShared() && isSharedURL()) {
-			return false;
-		}
+		DDMFormInstance formInstance = getFormInstance();
 
-		Group group = _groupLocalService.getGroup(ddmFormInstance.getGroupId());
+		if (formInstance != null) {
+			Group group = _groupLocalService.getGroup(
+				formInstance.getGroupId());
 
-		Group scopeGroup = _groupLocalService.getGroup(
-			_portal.getScopeGroupId(_renderRequest));
+			Group scopeGroup = _groupLocalService.getGroup(
+				_portal.getScopeGroupId(_renderRequest));
 
-		if ((group != null) && (scopeGroup != null) && group.isStagingGroup() &&
-			!scopeGroup.isStagingGroup()) {
-
-			return false;
-		}
-
-		if ((group != null) && group.isStagedRemotely()) {
-			ThemeDisplay themeDisplay = getThemeDisplay();
-
-			Role role = _roleLocalService.getRole(
-				themeDisplay.getCompanyId(), RoleConstants.ADMINISTRATOR);
-
-			List<User> users = _userLocalService.getRoleUsers(role.getRoleId());
-
-			if (!DDMFormInstanceStagingUtil.isFormInstancePublishedToRemoteLive(
-					group, users.get(0), ddmFormInstance.getUuid())) {
+			if ((group != null) && (scopeGroup != null) &&
+				group.isStagingGroup() && !scopeGroup.isStagingGroup()) {
 
 				return false;
 			}
+
+			if ((group != null) && group.isStagedRemotely()) {
+				ThemeDisplay themeDisplay = getThemeDisplay();
+
+				Role role = _roleLocalService.getRole(
+					themeDisplay.getCompanyId(), RoleConstants.ADMINISTRATOR);
+
+				List<User> users = _userLocalService.getRoleUsers(
+					role.getRoleId());
+
+				if (!DDMFormInstanceStagingUtil.
+						isFormInstancePublishedToRemoteLive(
+							group, users.get(0), formInstance.getUuid())) {
+
+					return false;
+				}
+			}
 		}
 
-		return true;
+		if (isSharedURL()) {
+			if (isFormPublished() && isFormShared()) {
+				return true;
+			}
+
+			return false;
+		}
+
+		if (formInstance != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean isFormShared() {
@@ -1051,13 +1064,11 @@ public class DDMFormDisplayContext {
 		}
 	}
 
-	private ResourceBundle _getResourceBundle() {
-		ResourceBundle portalResourceBundle = _portal.getResourceBundle(
-			LocaleThreadLocal.getThemeDisplayLocale());
+	private ResourceBundle _getResourceBundle(Locale locale) {
+		ResourceBundle portalResourceBundle = _portal.getResourceBundle(locale);
 
 		ResourceBundle moduleResourceBundle = ResourceBundleUtil.getBundle(
-			"content.Language", LocaleThreadLocal.getThemeDisplayLocale(),
-			getClass());
+			"content.Language", locale, getClass());
 
 		return new AggregateResourceBundle(
 			moduleResourceBundle, portalResourceBundle);

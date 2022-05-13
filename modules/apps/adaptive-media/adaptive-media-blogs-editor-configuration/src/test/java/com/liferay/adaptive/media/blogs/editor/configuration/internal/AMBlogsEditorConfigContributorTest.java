@@ -111,7 +111,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"blogsItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -164,7 +164,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"blogsItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -211,13 +211,15 @@ public class AMBlogsEditorConfigContributorTest {
 			_getBlogsItemSelectorCriterionFileEntryItemSelectorReturnType()
 		);
 
+		JSONObject originalJSONObject = JSONUtil.put(
+			"extraPlugins", "ae_placeholder,ae_selectionregion,ae_uicore"
+		).put(
+			"filebrowserImageBrowseLinkUrl",
+			"blogsItemSelectorCriterionFileEntryItemSelectorReturnType"
+		);
+
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			JSONUtil.put(
-				"extraPlugins", "ae_placeholder,ae_selectionregion,ae_uicore"
-			).put(
-				"filebrowserImageBrowseLinkUrl",
-				"blogsItemSelectorCriterionFileEntryItemSelectorReturnType"
-			).toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -337,7 +339,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"allowedContent", "a[*](*); div(*);");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -350,7 +352,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"allowedContent", "a[*](*); div(*); img[*](*){*};");
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -358,7 +360,7 @@ public class AMBlogsEditorConfigContributorTest {
 		JSONObject originalJSONObject = JSONFactoryUtil.createJSONObject();
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -370,7 +372,7 @@ public class AMBlogsEditorConfigContributorTest {
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject();
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -381,7 +383,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"allowedContent", "a[*](*); div(*); img[*](*){*};");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -394,7 +396,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"allowedContent", "a[*](*); div(*); img[*](*){*};");
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -405,7 +407,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"allowedContent", Boolean.TRUE.toString());
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -418,7 +420,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"allowedContent", Boolean.TRUE.toString());
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -429,7 +431,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"filebrowserImageBrowseLinkUrl", StringPool.BLANK);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -449,10 +451,10 @@ public class AMBlogsEditorConfigContributorTest {
 		);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -471,7 +473,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"audioItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -491,10 +493,10 @@ public class AMBlogsEditorConfigContributorTest {
 		);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		JSONAssert.assertEquals(
-			expectedJSONObject.toString(), jsonObject.toString(), true);
+			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
 	}
 
 	@Test
@@ -535,7 +537,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"blogsItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();
@@ -593,7 +595,7 @@ public class AMBlogsEditorConfigContributorTest {
 			"fileItemSelectorCriterionFileEntryItemSelectorReturnType");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toString());
+			originalJSONObject.toJSONString());
 
 		AMBlogsEditorConfigContributor amBlogsEditorConfigContributor =
 			new AMBlogsEditorConfigContributor();

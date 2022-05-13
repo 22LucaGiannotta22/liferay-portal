@@ -73,11 +73,12 @@ public class ODataSearchAdapterImpl implements ODataSearchAdapter {
 		try {
 			SearchContext searchContext = _createSearchContext(companyId);
 
+			BooleanQuery booleanQuery = _getBooleanQuery(
+				filterString, entityModel, filterParser, locale);
+
 			return search(
 				_indexerRegistry.getIndexer(className), searchContext,
-				_getBooleanQuery(
-					filterString, entityModel, filterParser, locale),
-				start, end);
+				booleanQuery, start, end);
 		}
 		catch (Exception exception) {
 			throw new PortalException(

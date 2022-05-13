@@ -41,30 +41,22 @@ import org.osgi.service.component.annotations.Reference;
 public class FDSFilterSerializerImpl implements FDSFilterSerializer {
 
 	@Override
-	public JSONArray serialize(
-		String fdsDisplayName, List<FDSFilter> fdsFilters, Locale locale) {
-
+	public JSONArray serialize(String fdsName, Locale locale) {
 		JSONArray jsonArray = _jsonFactory.createJSONArray();
-
-		_serialize(fdsFilters, jsonArray, locale);
-		_serialize(
-			_fdsFilterRegistry.getFDSFilters(fdsDisplayName), jsonArray,
-			locale);
-
-		return jsonArray;
-	}
-
-	private void _serialize(
-		List<FDSFilter> fdsFilters, JSONArray jsonArray, Locale locale) {
 
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
+		List<FDSFilter> fdsFilters = _fdsFilterRegistry.getFDSFilters(fdsName);
+
 		for (FDSFilter fdsFilter : fdsFilters) {
+			String label = LanguageUtil.get(
+				resourceBundle, fdsFilter.getLabel());
+
 			JSONObject jsonObject = JSONUtil.put(
 				"id", fdsFilter.getId()
 			).put(
-				"label", LanguageUtil.get(resourceBundle, fdsFilter.getLabel())
+				"label", label
 			).put(
 				"preloadedData", fdsFilter.getPreloadedData()
 			).put(
@@ -95,6 +87,8 @@ public class FDSFilterSerializerImpl implements FDSFilterSerializer {
 
 			jsonArray.put(jsonObject);
 		}
+
+		return jsonArray;
 	}
 
 	@Reference

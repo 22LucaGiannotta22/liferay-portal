@@ -185,7 +185,8 @@ public class SetupWizardSampleDataUtil {
 				adminUser.getUserId(), StringPool.BLANK, StringPool.BLANK,
 				StringPool.BLANK, false, adminUser.getReminderQueryQuestion(),
 				adminUser.getReminderQueryAnswer(), screenName, emailAddress,
-				false, null, languageId, adminUser.getTimeZoneId(), greeting,
+				adminUser.getFacebookId(), adminUser.getOpenId(), false, null,
+				languageId, adminUser.getTimeZoneId(), greeting,
 				adminUser.getComments(), firstName, adminUser.getMiddleName(),
 				lastName, contact.getPrefixId(), contact.getSuffixId(),
 				contact.isMale(), birthdayMonth, birthdayDay, birthdayYear,
@@ -313,9 +314,9 @@ public class SetupWizardSampleDataUtil {
 
 				User user = UserLocalServiceUtil.addUser(
 					0, defaultUser.getCompanyId(), false, "test", "test", false,
-					screenName, emailAddress, LocaleUtil.getDefault(), "Test",
-					null, lastName, 0, 0, true, Calendar.JANUARY, 1, 1970, null,
-					groupIds, organizationIds, null, null, false,
+					screenName, emailAddress, 0, null, LocaleUtil.getDefault(),
+					"Test", null, lastName, 0, 0, true, Calendar.JANUARY, 1,
+					1970, null, groupIds, organizationIds, null, null, false,
 					new ServiceContext());
 
 				user.setPasswordReset(false);

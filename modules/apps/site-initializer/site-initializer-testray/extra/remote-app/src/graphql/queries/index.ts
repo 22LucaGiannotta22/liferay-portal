@@ -18,20 +18,6 @@ export type CType<ObjectKey extends string, Query = any> = {
 	};
 };
 
-export type FacetAggregation = {
-	facets: {
-		facetCriteria: string;
-		facetValues: {
-			numberOfOccurrences: number;
-			term: string;
-		}[];
-	};
-};
-
-export type FacetAggregationQuery<ObjectKey extends string> = {
-	[key in ObjectKey]: FacetAggregation;
-};
-
 export type APIResponse<Query = any> = {
 	items: Query[];
 	lastPage: number;
@@ -50,7 +36,6 @@ export type CTypePagination<ObjectKey extends string, Query = any> = {
 
 export * from './liferayRole';
 export * from './liferayUserAccount';
-export * from './testrayAttachment';
 export * from './testrayBuild';
 export * from './testrayCase';
 export * from './testrayCaseResult';
@@ -64,4 +49,3 @@ export * from './testrayRoutine';
 export * from './testrayShared';
 export * from './testraySuite';
 export * from './testrayTask';
-export * from './testrayWarning';

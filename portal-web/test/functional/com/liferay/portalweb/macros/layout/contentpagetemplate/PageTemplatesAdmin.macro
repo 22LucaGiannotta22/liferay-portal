@@ -98,31 +98,7 @@ definition {
 	}
 
 	macro deletePageTemplate {
-		PageTemplatesAdmin.gotoPageTemplateEllipsisItem(
-			item = "Delete",
-			pageTemplateName = "${pageTemplateName}");
-
-		AssertTextEquals(
-			locator1 = "Modal#BODY",
-			value1 = "Are you sure you want to delete this? It will be deleted immediately.");
-
-		Click(
-			key_text = "Delete",
-			locator1 = "Modal#MODAL_FOOTER_BUTTON");
-	}
-
-	macro deletePageTemplateSet {
-		Navigator.gotoNavNested(navNested = "${setName}");
-
-		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Delete");
-
-		AssertTextEquals(
-			locator1 = "Modal#BODY",
-			value1 = "Are you sure you want to delete this? It will be deleted immediately.");
-
-		Click(
-			key_text = "Delete",
-			locator1 = "Modal#MODAL_FOOTER_BUTTON");
+		LexiconCard.delete(card = "${pageTemplateName}");
 	}
 
 	macro gotoPageTemplate {
@@ -130,11 +106,9 @@ definition {
 	}
 
 	macro gotoPageTemplateEllipsisItem {
-		Click.waitForMenuToggleJSClick(
-			key_card = "${pageTemplateName}",
-			locator1 = "Card#CARD_ELLIPSIS");
-
-		MenuItem.click(menuItem = "${item}");
+		LexiconCard.clickEllipsisItem(
+			card = "${pageTemplateName}",
+			item = "${item}");
 	}
 
 	macro importPageTemplatesFromTempFolder {
@@ -195,18 +169,6 @@ definition {
 
 	macro viewPageTemplatePresent {
 		LexiconCard.viewCardPresent(card = "${pageTemplateName}");
-	}
-
-	macro viewPageTemplateSetNotPresent {
-		AssertElementNotPresent(
-			key_navNested = "${setName}",
-			locator1 = "NavNested#NAV_NESTED_LINK");
-	}
-
-	macro viewPageTemplateSetPresent {
-		AssertElementPresent(
-			key_navNested = "${setName}",
-			locator1 = "NavNested#NAV_NESTED_LINK");
 	}
 
 }

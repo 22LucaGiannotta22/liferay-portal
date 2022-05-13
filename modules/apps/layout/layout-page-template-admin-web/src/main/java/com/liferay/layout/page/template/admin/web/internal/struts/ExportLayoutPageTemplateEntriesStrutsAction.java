@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.zip.ZipWriter;
-import com.liferay.portal.kernel.zip.ZipWriterFactory;
+import com.liferay.portal.kernel.zip.ZipWriterFactoryUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,7 +61,7 @@ public class ExportLayoutPageTemplateEntriesStrutsAction
 		File file = _layoutPageTemplatesExporter.exportGroupLayoutPageTemplates(
 			groupId);
 
-		ZipWriter zipWriter = _zipWriterFactory.getZipWriter(file);
+		ZipWriter zipWriter = ZipWriterFactoryUtil.getZipWriter(file);
 
 		List<FragmentCollection> fragmentCollections =
 			_fragmentCollectionService.getFragmentCollections(groupId);
@@ -99,8 +99,5 @@ public class ExportLayoutPageTemplateEntriesStrutsAction
 
 	@Reference
 	private Portal _portal;
-
-	@Reference
-	private ZipWriterFactory _zipWriterFactory;
 
 }

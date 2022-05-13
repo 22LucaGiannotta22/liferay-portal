@@ -98,9 +98,11 @@ public class UADApplicationSummaryHelper {
 		UADApplicationSummaryDisplay uadApplicationSummaryDisplay =
 			new UADApplicationSummaryDisplay();
 
-		uadApplicationSummaryDisplay.setCount(
-			_getReviewableUADEntitiesCount(
-				uadDisplayStream.stream(), userId, groupIds));
+		int count = _getReviewableUADEntitiesCount(
+			uadDisplayStream.stream(), userId, groupIds);
+
+		uadApplicationSummaryDisplay.setCount(count);
+
 		uadApplicationSummaryDisplay.setApplicationKey(applicationKey);
 
 		return uadApplicationSummaryDisplay;

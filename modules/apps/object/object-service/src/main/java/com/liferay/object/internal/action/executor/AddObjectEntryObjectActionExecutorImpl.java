@@ -16,6 +16,7 @@ package com.liferay.object.internal.action.executor;
 
 import com.liferay.object.action.executor.ObjectActionExecutor;
 import com.liferay.object.constants.ObjectActionExecutorConstants;
+import com.liferay.object.internal.action.settings.AddObjectEntryObjectActionSettings;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -62,6 +63,11 @@ public class AddObjectEntryObjectActionExecutorImpl
 	@Override
 	public String getKey() {
 		return ObjectActionExecutorConstants.KEY_ADD_OBJECT_ENTRY;
+	}
+
+	@Override
+	public Class<?> getSettings() {
+		return AddObjectEntryObjectActionSettings.class;
 	}
 
 	@Reference

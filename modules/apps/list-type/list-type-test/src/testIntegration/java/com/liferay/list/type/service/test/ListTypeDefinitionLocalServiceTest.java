@@ -113,7 +113,6 @@ public class ListTypeDefinitionLocalServiceTest {
 				LocalizedMapUtil.getLocalizedMap("Test"), "Test", null, null,
 				LocalizedMapUtil.getLocalizedMap("Tests"),
 				ObjectDefinitionConstants.SCOPE_COMPANY,
-				ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT,
 				Collections.singletonList(objectField));
 
 		try {

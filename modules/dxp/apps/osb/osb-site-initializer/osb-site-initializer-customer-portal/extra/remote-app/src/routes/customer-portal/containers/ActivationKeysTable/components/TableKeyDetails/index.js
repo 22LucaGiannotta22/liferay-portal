@@ -12,7 +12,6 @@
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {useEffect, useState} from 'react';
-import i18n from '../../../../../../common/I18n';
 import getCurrentEndDate from '../../../../../../common/utils/getCurrentEndDate';
 import {PRODUCT_TYPES} from '../../../../utils/constants';
 import {
@@ -24,9 +23,9 @@ import {
 	hasVirtualCluster,
 } from '../../utils/index';
 
-const HOST_NAME = i18n.translate('host-name');
-const IP_ADDRESSES = i18n.translate('ip-addresses');
-const MAC_ADDRESSES = i18n.translate('mac-addresses');
+const HOST_NAME = 'Host Name';
+const IP_ADDRESSES = 'IP Addresses';
+const MAC_ADDRESSES = 'Mac Addresses';
 
 const NO_EXPIRATION_DATE = 100;
 
@@ -56,7 +55,7 @@ const TableKeyDetails = ({
 	const handleExpiredDate =
 		new Date(currentActivationKey.expirationDate) >=
 		new Date(unlimitedLicenseDate)
-			? i18n.translate('does-not-expire')
+			? 'Does Not Expire'
 			: getCurrentEndDate(currentActivationKey.expirationDate);
 
 	useEffect(() => {
@@ -82,40 +81,40 @@ const TableKeyDetails = ({
 			<div className="container">
 				<div className="row">
 					<div className="col-5">
-						<h5>{i18n.translate('environment')}</h5>
+						<h5>Environment</h5>
 					</div>
 
 					<div className="col-4">
-						<h5>{i18n.translate('server')}</h5>
+						<h5>Server</h5>
 					</div>
 
 					<div className="col-3">
-						<h5>{i18n.translate('activation-status')}</h5>
+						<h5>Activation Status</h5>
 					</div>
 				</div>
 
 				<div className="row">
 					<div className="col-2">
 						<p className="text-neutral-8 text-paragraph-sm">
-							{i18n.translate('product')}
+							Product
 						</p>
 					</div>
 
 					<div className="col-3">
 						<p className="text-neutral-8 text-paragraph-sm">
-							{i18n.translate('version')}
+							Version
 						</p>
 					</div>
 
 					<div className="col-4">
 						<p className="text-neutral-8 text-paragraph-sm">
-							{i18n.translate('key-type')}
+							Key Type
 						</p>
 					</div>
 
 					<div className="col-3">
 						<p className="text-neutral-8 text-paragraph-sm">
-							{i18n.translate('status')}
+							Status
 						</p>
 					</div>
 				</div>
@@ -141,8 +140,8 @@ const TableKeyDetails = ({
 					<div className="col-4">
 						<p className="bg-neutral-1 cp-key-details-paragraph px-3 py-2 rounded">
 							{hasVirtualClusterForActivationKeys
-								? i18n.translate('virtual-cluster')
-								: i18n.translate('on-premise')}
+								? 'Virtual Cluster'
+								: 'On-Premise'}
 						</p>
 					</div>
 
@@ -158,21 +157,21 @@ const TableKeyDetails = ({
 				<div className="row">
 					<div className="col-5">
 						<p className="text-neutral-8 text-paragraph-sm">
-							{i18n.translate('environment-type')}
+							Environment Type
 						</p>
 					</div>
 
 					<div className="col-4">
 						<p className="text-neutral-8 text-paragraph-sm">
 							{hasVirtualClusterForActivationKeys
-								? i18n.translate('cluster-nodes')
+								? 'Cluster Nodes'
 								: HOST_NAME}
 						</p>
 					</div>
 
 					<div className="col-3">
 						<p className="text-neutral-8 text-paragraph-sm">
-							{i18n.translate('start-date')}
+							Start Date
 						</p>
 					</div>
 				</div>
@@ -232,7 +231,7 @@ const TableKeyDetails = ({
 					<div className="col-5">
 						{!!currentActivationKey.sizing && (
 							<p className="text-neutral-8 text-paragraph-sm">
-								{i18n.translate('instance-size')}
+								Instance Size
 							</p>
 						)}
 					</div>
@@ -247,7 +246,7 @@ const TableKeyDetails = ({
 
 					<div className="col-3">
 						<p className="text-neutral-8 text-paragraph-sm">
-							{i18n.translate('expiration-date')}
+							Expiration Date
 						</p>
 					</div>
 				</div>

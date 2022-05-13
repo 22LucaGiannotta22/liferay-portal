@@ -15,8 +15,11 @@
 package com.liferay.fragment.entry.processor.internal.util;
 
 import com.liferay.asset.info.display.contributor.util.ContentAccessor;
+import com.liferay.asset.info.display.contributor.util.ContentAccessorUtil;
 import com.liferay.fragment.constants.FragmentEntryLinkConstants;
 import com.liferay.fragment.entry.processor.helper.FragmentEntryProcessorHelper;
+import com.liferay.fragment.processor.DefaultFragmentEntryProcessorContext;
+import com.liferay.fragment.processor.FragmentEntryProcessorContext;
 import com.liferay.info.field.InfoFieldValue;
 import com.liferay.info.formatter.InfoCollectionTextFormatter;
 import com.liferay.info.formatter.InfoTextFormatter;
@@ -31,18 +34,29 @@ import com.liferay.info.type.Labeled;
 import com.liferay.info.type.WebImage;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.ClassedModel;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.LayoutLocalService;
+import com.liferay.portal.kernel.template.StringTemplateResource;
+import com.liferay.portal.kernel.template.Template;
+import com.liferay.portal.kernel.template.TemplateConstants;
+import com.liferay.portal.kernel.template.TemplateManagerUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -50,6 +64,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -211,12 +227,15 @@ public class FragmentEntryProcessorHelperImpl
 
 	@Override
 	public Object getMappedCollectionValue(
-		Optional<Object> displayObjectOptional, JSONObject jsonObject,
-		Locale locale) {
+		JSONObject jsonObject,
+		FragmentEntryProcessorContext fragmentEntryProcessorContext) {
 
 		if (!isMappedCollection(jsonObject)) {
 			return JSONFactoryUtil.createJSONObject();
 		}
+
+		Optional<Object> displayObjectOptional =
+			fragmentEntryProcessorContext.getDisplayObjectOptional();
 
 		if (!displayObjectOptional.isPresent()) {
 			return null;
@@ -254,18 +273,21 @@ public class FragmentEntryProcessorHelperImpl
 
 		return getMappedInfoItemFieldValue(
 			jsonObject.getString("collectionFieldId"),
-			infoItemFieldValuesProvider, locale, displayObjectOptional.get());
+			infoItemFieldValuesProvider,
+			fragmentEntryProcessorContext.getLocale(),
+			displayObjectOptional.get());
 	}
 
 	@Override
 	public Object getMappedInfoItemFieldValue(
 			JSONObject jsonObject,
 			Map<Long, InfoItemFieldValues> infoItemFieldValuesMap,
-			Locale locale, String mode, long previewClassPK,
-			String previewVersion)
+			FragmentEntryProcessorContext fragmentEntryProcessorContext)
 		throws PortalException {
 
-		if (!isMapped(jsonObject) && !isAssetDisplayPage(mode)) {
+		if (!isMapped(jsonObject) &&
+			!isAssetDisplayPage(fragmentEntryProcessorContext.getMode())) {
+
 			return JSONFactoryUtil.createJSONObject();
 		}
 
@@ -294,11 +316,15 @@ public class FragmentEntryProcessorHelperImpl
 			return null;
 		}
 
-		if (previewClassPK > 0) {
-			infoItemIdentifier = new ClassPKInfoItemIdentifier(previewClassPK);
+		if (fragmentEntryProcessorContext.getPreviewClassPK() > 0) {
+			infoItemIdentifier = new ClassPKInfoItemIdentifier(
+				fragmentEntryProcessorContext.getPreviewClassPK());
 
-			if (Validator.isNotNull(previewVersion)) {
-				infoItemIdentifier.setVersion(previewVersion);
+			if (Validator.isNotNull(
+					fragmentEntryProcessorContext.getPreviewVersion())) {
+
+				infoItemIdentifier.setVersion(
+					fragmentEntryProcessorContext.getPreviewVersion());
 			}
 		}
 
@@ -335,7 +361,7 @@ public class FragmentEntryProcessorHelperImpl
 
 		return getMappedInfoItemFieldValue(
 			jsonObject.getString("fieldId"), infoItemFieldValuesProvider,
-			locale, object);
+			fragmentEntryProcessorContext.getLocale(), object);
 	}
 
 	@Override
@@ -346,9 +372,19 @@ public class FragmentEntryProcessorHelperImpl
 			int previewType)
 		throws PortalException {
 
+		DefaultFragmentEntryProcessorContext
+			defaultFragmentEntryProcessorContext =
+				new DefaultFragmentEntryProcessorContext(
+					null, null, mode, locale);
+
+		defaultFragmentEntryProcessorContext.setPreviewClassNameId(
+			previewClassNameId);
+		defaultFragmentEntryProcessorContext.setPreviewClassPK(previewClassPK);
+		defaultFragmentEntryProcessorContext.setPreviewType(previewType);
+
 		return getMappedInfoItemFieldValue(
-			jsonObject, infoDisplaysFieldValues, locale, mode, previewClassPK,
-			StringPool.BLANK);
+			jsonObject, infoDisplaysFieldValues,
+			defaultFragmentEntryProcessorContext);
 	}
 
 	@Override
@@ -382,6 +418,52 @@ public class FragmentEntryProcessorHelperImpl
 		}
 
 		return formatMappedValue(value, locale);
+	}
+
+	@Override
+	public Object getMappedLayoutValue(
+			JSONObject jsonObject,
+			FragmentEntryProcessorContext fragmentEntryProcessorContext)
+		throws PortalException {
+
+		if (!isMappedLayout(jsonObject)) {
+			return StringPool.BLANK;
+		}
+
+		HttpServletRequest httpServletRequest =
+			fragmentEntryProcessorContext.getHttpServletRequest();
+
+		if (httpServletRequest == null) {
+			return StringPool.BLANK;
+		}
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		if (themeDisplay == null) {
+			return StringPool.BLANK;
+		}
+
+		JSONObject layoutJSONObject = jsonObject.getJSONObject("layout");
+
+		long groupId = layoutJSONObject.getLong("groupId");
+
+		Group group = _groupLocalService.fetchGroup(groupId);
+
+		if (group == null) {
+			return StringPool.POUND;
+		}
+
+		Layout layout = _layoutLocalService.fetchLayout(
+			groupId, layoutJSONObject.getBoolean("privateLayout"),
+			layoutJSONObject.getLong("layoutId"));
+
+		if (layout == null) {
+			return StringPool.POUND;
+		}
+
+		return _portal.getLayoutRelativeURL(layout, themeDisplay);
 	}
 
 	@Override
@@ -426,6 +508,32 @@ public class FragmentEntryProcessorHelperImpl
 		}
 
 		return false;
+	}
+
+	@Override
+	public String processTemplate(
+			String html,
+			FragmentEntryProcessorContext fragmentEntryProcessorContext)
+		throws PortalException {
+
+		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter();
+
+		Template template = TemplateManagerUtil.getTemplate(
+			TemplateConstants.LANG_TYPE_FTL,
+			new StringTemplateResource("template_id", "[#ftl] " + html), true);
+
+		template.prepareTaglib(
+			fragmentEntryProcessorContext.getHttpServletRequest(),
+			fragmentEntryProcessorContext.getHttpServletResponse());
+
+		template.put(TemplateConstants.WRITER, unsyncStringWriter);
+		template.put("contentAccessorUtil", ContentAccessorUtil.getInstance());
+
+		template.prepare(fragmentEntryProcessorContext.getHttpServletRequest());
+
+		template.processTemplate(unsyncStringWriter);
+
+		return unsyncStringWriter.toString();
 	}
 
 	private String _getEditableValueByLocale(
@@ -506,7 +614,13 @@ public class FragmentEntryProcessorHelperImpl
 		FragmentEntryProcessorHelperImpl.class);
 
 	@Reference
+	private GroupLocalService _groupLocalService;
+
+	@Reference
 	private InfoItemServiceTracker _infoItemServiceTracker;
+
+	@Reference
+	private LayoutLocalService _layoutLocalService;
 
 	@Reference
 	private Portal _portal;

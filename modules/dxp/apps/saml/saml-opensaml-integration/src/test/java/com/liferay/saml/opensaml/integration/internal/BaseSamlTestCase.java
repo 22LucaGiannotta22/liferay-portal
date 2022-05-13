@@ -82,8 +82,10 @@ import org.apache.velocity.app.VelocityEngine;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import org.opensaml.core.config.ConfigurationService;
@@ -97,12 +99,16 @@ import org.opensaml.saml.saml2.metadata.SingleLogoutService;
 import org.opensaml.saml.saml2.metadata.SingleSignOnService;
 import org.opensaml.security.credential.Credential;
 
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
+
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * @author Mika Koivisto
  */
-public abstract class BaseSamlTestCase {
+@RunWith(PowerMockRunner.class)
+public abstract class BaseSamlTestCase extends PowerMockito {
 
 	@Before
 	public void setUp() throws Exception {
@@ -229,19 +235,19 @@ public abstract class BaseSamlTestCase {
 	}
 
 	protected void prepareIdentityProvider(String entityId) {
-		Mockito.when(
+		when(
 			samlProviderConfiguration.entityId()
 		).thenReturn(
 			entityId
 		);
 
-		Mockito.when(
+		when(
 			samlProviderConfiguration.role()
 		).thenReturn(
 			SamlProviderConfigurationKeys.SAML_ROLE_IDP
 		);
 
-		Mockito.when(
+		when(
 			samlProviderConfigurationHelper.isRoleIdp()
 		).thenReturn(
 			true
@@ -269,19 +275,19 @@ public abstract class BaseSamlTestCase {
 	}
 
 	protected void prepareServiceProvider(String entityId) {
-		Mockito.when(
+		when(
 			samlProviderConfiguration.entityId()
 		).thenReturn(
 			entityId
 		);
 
-		Mockito.when(
+		when(
 			samlProviderConfiguration.role()
 		).thenReturn(
 			SamlProviderConfigurationKeys.SAML_ROLE_SP
 		);
 
-		Mockito.when(
+		when(
 			samlProviderConfigurationHelper.isRoleSp()
 		).thenReturn(
 			true
@@ -448,7 +454,7 @@ public abstract class BaseSamlTestCase {
 		SamlProviderConfiguration peerSamlProviderConfiguration = Mockito.mock(
 			SamlProviderConfiguration.class);
 
-		Mockito.when(
+		when(
 			peerSamlProviderConfiguration.entityId()
 		).thenReturn(
 			entityId
@@ -457,13 +463,13 @@ public abstract class BaseSamlTestCase {
 		String keyStoreCredentialPassword =
 			samlProviderConfiguration.keyStoreCredentialPassword();
 
-		Mockito.when(
+		when(
 			peerSamlProviderConfiguration.keyStoreCredentialPassword()
 		).thenReturn(
 			keyStoreCredentialPassword
 		);
 
-		Mockito.when(
+		when(
 			peerSamlProviderConfigurationHelper.getSamlProviderConfiguration()
 		).thenReturn(
 			peerSamlProviderConfiguration
@@ -480,7 +486,7 @@ public abstract class BaseSamlTestCase {
 
 		serviceUtilClasses.add(serviceUtilClass);
 
-		T serviceMock = Mockito.mock(serviceClass);
+		T serviceMock = mock(serviceClass);
 
 		ReflectionTestUtil.setFieldValue(
 			serviceUtilClass, "_service", serviceMock);
@@ -496,64 +502,63 @@ public abstract class BaseSamlTestCase {
 
 		PortletClassLoaderUtil.setServletContextName("saml-portlet");
 
-		Configuration configuration = Mockito.mock(Configuration.class);
+		Configuration configuration = mock(Configuration.class);
 
-		ConfigurationFactory configurationFactory = Mockito.mock(
+		ConfigurationFactory configurationFactory = mock(
 			ConfigurationFactory.class);
 
 		ConfigurationFactoryUtil.setConfigurationFactory(configurationFactory);
 
-		Mockito.when(
+		when(
 			configurationFactory.getConfiguration(
 				Mockito.any(ClassLoader.class), Mockito.eq("portlet"))
 		).thenReturn(
 			configuration
 		);
 
-		Mockito.when(
+		when(
 			configurationFactory.getConfiguration(
 				Mockito.any(ClassLoader.class), Mockito.eq("service"))
 		).thenReturn(
 			configuration
 		);
 
-		Mockito.when(
+		when(
 			configuration.get(PortletPropsKeys.SAML_KEYSTORE_MANAGER_IMPL)
 		).thenReturn(
 			FileSystemKeyStoreManagerImpl.class.getName()
 		);
 
-		samlProviderConfigurationHelper = Mockito.mock(
+		samlProviderConfigurationHelper = mock(
 			SamlProviderConfigurationHelper.class);
 
-		Mockito.when(
+		when(
 			samlProviderConfigurationHelper.isEnabled()
 		).thenReturn(
 			true
 		);
 
-		samlProviderConfiguration = Mockito.mock(
-			SamlProviderConfiguration.class);
+		samlProviderConfiguration = mock(SamlProviderConfiguration.class);
 
-		Mockito.when(
+		when(
 			samlProviderConfiguration.defaultAssertionLifetime()
 		).thenReturn(
 			1800
 		);
 
-		Mockito.when(
+		when(
 			samlProviderConfigurationHelper.getSamlProviderConfiguration()
 		).thenReturn(
 			samlProviderConfiguration
 		);
 
-		Mockito.when(
+		when(
 			samlProviderConfiguration.enabled()
 		).thenReturn(
 			true
 		);
 
-		Mockito.when(
+		when(
 			samlProviderConfiguration.keyStoreCredentialPassword()
 		).thenReturn(
 			"liferay"
@@ -568,45 +573,59 @@ public abstract class BaseSamlTestCase {
 		samlIdentifierGenerator = samlIdentifierGeneratorStrategyFactory.create(
 			16);
 
-		IdentifierGenerationStrategy identifierGenerationStrategy =
-			Mockito.mock(IdentifierGenerationStrategy.class);
+		IdentifierGenerationStrategy identifierGenerationStrategy = mock(
+			IdentifierGenerationStrategy.class);
 
-		identifierGenerationStrategyFactory = Mockito.mock(
+		identifierGenerationStrategyFactory = mock(
 			IdentifierGenerationStrategyFactory.class);
 
-		Mockito.when(
+		when(
 			identifierGenerationStrategyFactory.create(Mockito.anyInt())
 		).thenReturn(
 			identifierGenerationStrategy
 		);
 
-		Mockito.when(
+		when(
 			identifierGenerationStrategy.generateIdentifier()
 		).thenAnswer(
-			(Answer<String>)invocationOnMock -> {
-				String identifier =
-					samlIdentifierGenerator.generateIdentifier();
+			new Answer<String>() {
 
-				identifiers.add(identifier);
+				@Override
+				public String answer(InvocationOnMock invocationOnMock)
+					throws Throwable {
 
-				return identifier;
+					String identifier =
+						samlIdentifierGenerator.generateIdentifier();
+
+					identifiers.add(identifier);
+
+					return identifier;
+				}
+
 			}
 		);
 
-		Mockito.when(
+		when(
 			identifierGenerationStrategy.generateIdentifier(
 				Mockito.anyBoolean())
 		).thenAnswer(
-			(Answer<String>)invocationOnMock -> {
-				boolean xmlSafe = GetterUtil.getBoolean(
-					invocationOnMock.getArguments()[0]);
+			new Answer<String>() {
 
-				String identifier = samlIdentifierGenerator.generateIdentifier(
-					xmlSafe);
+				@Override
+				public String answer(InvocationOnMock invocationOnMock)
+					throws Throwable {
 
-				identifiers.add(identifier);
+					boolean xmlSafe = GetterUtil.getBoolean(
+						invocationOnMock.getArguments()[0]);
 
-				return identifier;
+					String identifier =
+						samlIdentifierGenerator.generateIdentifier(xmlSafe);
+
+					identifiers.add(identifier);
+
+					return identifier;
+				}
+
 			}
 		);
 	}
@@ -657,46 +676,46 @@ public abstract class BaseSamlTestCase {
 	}
 
 	private void _setupPortal() throws Exception {
-		httpClient = Mockito.mock(HttpClient.class);
+		httpClient = mock(HttpClient.class);
 
 		PortalUtil portalUtil = new PortalUtil();
 
-		portal = Mockito.mock(Portal.class);
+		portal = mock(Portal.class);
 
 		portalUtil.setPortal(portal);
 
-		Mockito.when(
+		when(
 			portal.getCompanyId(Mockito.any(HttpServletRequest.class))
 		).thenReturn(
 			COMPANY_ID
 		);
 
-		Mockito.when(
+		when(
 			portal.getPathContext()
 		).thenReturn(
 			""
 		);
 
-		Mockito.when(
+		when(
 			portal.getPathMain()
 		).thenReturn(
 			Portal.PATH_MAIN
 		);
 
-		Mockito.when(
+		when(
 			portal.getPortalURL(Mockito.any(MockHttpServletRequest.class))
 		).thenReturn(
 			PORTAL_URL
 		);
 
-		Mockito.when(
+		when(
 			portal.getPortalURL(
 				Mockito.any(MockHttpServletRequest.class), Mockito.eq(false))
 		).thenReturn(
 			PORTAL_URL
 		);
 
-		Mockito.when(
+		when(
 			portal.getPortalURL(
 				Mockito.any(MockHttpServletRequest.class), Mockito.eq(true))
 		).thenReturn(
@@ -708,9 +727,9 @@ public abstract class BaseSamlTestCase {
 		groupLocalService = getMockPortalService(
 			GroupLocalServiceUtil.class, GroupLocalService.class);
 
-		Group guestGroup = Mockito.mock(Group.class);
+		Group guestGroup = mock(Group.class);
 
-		Mockito.when(
+		when(
 			groupLocalService.getGroup(
 				Mockito.anyLong(), Mockito.eq(GroupConstants.GUEST))
 		).thenReturn(
@@ -720,7 +739,7 @@ public abstract class BaseSamlTestCase {
 		LayoutLocalService layoutLocalService = getMockPortalService(
 			LayoutLocalServiceUtil.class, LayoutLocalService.class);
 
-		Mockito.when(
+		when(
 			layoutLocalService.getDefaultPlid(
 				Mockito.anyLong(), Mockito.anyBoolean())
 		).thenReturn(
@@ -761,7 +780,7 @@ public abstract class BaseSamlTestCase {
 			SamlPeerBindingLocalServiceUtil.class,
 			SamlPeerBindingLocalService.class);
 
-		Mockito.when(
+		when(
 			samlPeerBindingLocalService.getSamlPeerBinding(Mockito.anyLong())
 		).thenAnswer(
 			answer -> _samlPeerBindings.get((long)answer.getArguments()[0])

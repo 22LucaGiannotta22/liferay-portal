@@ -17,33 +17,15 @@ import {useEffect} from 'react';
 import Container from '../../components/Layout/Container';
 import ListView from '../../components/ListView/ListView';
 import {getProjects} from '../../graphql/queries';
-import {useAccountContext, useHeader} from '../../hooks';
+import useHeader from '../../hooks/useHeader';
 import i18n from '../../i18n';
-import {SecurityPermissions} from '../../types';
 import ProjectModal from './ProjectModal';
 import useProjectActions from './useProjectActions';
 
-type ProjectsProps = {
-	PageContainer?: React.FC;
-	addHeading?: boolean;
-};
+const Projects = ({addHeading = true, PageContainer = Container}) => {
+	const {actions, formModal} = useProjectActions();
 
-const Projects: React.FC<ProjectsProps & SecurityPermissions> = ({
-	addHeading = true,
-	PageContainer = Container,
-	security,
-	permissions,
-}) => {
-	const {actions, formModal} = useProjectActions(security, permissions);
-
-	const {setDropdown, setDropdownIcon, setHeading} = useHeader({
-		shouldUpdate: true,
-	});
-
-	useEffect(() => {
-		setDropdownIcon('polls');
-		setDropdown([]);
-	}, [setDropdownIcon, setDropdown]);
+	const {setHeading} = useHeader({shouldUpdate: false});
 
 	useEffect(() => {
 		if (addHeading) {
@@ -62,9 +44,7 @@ const Projects: React.FC<ProjectsProps & SecurityPermissions> = ({
 				<ListView
 					forceRefetch={formModal.forceRefetch}
 					managementToolbarProps={{
-						addButton: permissions.CREATE
-							? () => formModal.modal.open()
-							: undefined,
+						addButton: () => formModal.modal.open(),
 					}}
 					query={getProjects}
 					tableProps={{
@@ -84,7 +64,6 @@ const Projects: React.FC<ProjectsProps & SecurityPermissions> = ({
 							`/project/${project.id}/routines`,
 					}}
 					transformData={(data) => data?.c?.projects}
-					viewPermission={permissions.INDEX}
 				/>
 			</PageContainer>
 
@@ -93,27 +72,4 @@ const Projects: React.FC<ProjectsProps & SecurityPermissions> = ({
 	);
 };
 
-const ProjectPermissions: React.FC<ProjectsProps> = (props) => {
-	const {security} = useAccountContext();
-
-	const permissions = security.permissions('TestrayProject', [
-		'INDEX',
-		'CREATE',
-		'UPDATE',
-		'DELETE',
-	]);
-
-	if (permissions) {
-		return (
-			<Projects
-				{...props}
-				permissions={permissions}
-				security={security}
-			/>
-		);
-	}
-
-	return null;
-};
-
-export default ProjectPermissions;
+export default Projects;

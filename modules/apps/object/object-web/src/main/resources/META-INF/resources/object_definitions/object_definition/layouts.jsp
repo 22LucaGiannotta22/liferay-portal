@@ -35,6 +35,10 @@ renderResponse.setTitle(objectDefinition.getLabel(locale, true));
 	fdsActionDropdownItems="<%= objectDefinitionsLayoutsDisplayContext.getFDSActionDropdownItems() %>"
 	formName="fm"
 	id="<%= ObjectDefinitionsFDSNames.OBJECT_LAYOUTS %>"
+	itemsPerPage="<%= 20 %>"
+	namespace="<%= liferayPortletResponse.getNamespace() %>"
+	pageNumber="<%= 1 %>"
+	portletURL="<%= liferayPortletResponse.createRenderURL() %>"
 	style="fluid"
 />
 

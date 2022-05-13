@@ -3142,7 +3142,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.search.elasticsearch7.impl.jar!jackson-dataformat-smile.jar</file-name>
-				<version>2.13.2</version>
+				<version>2.10.4</version>
 				<project-name>Jackson dataformat: Smile</project-name>
 				<project-url>http://github.com/FasterXML/jackson-dataformats-binary</project-url>
 				<licenses>
@@ -6452,7 +6452,7 @@
 			</library>
 			<library>
 				<file-name>lib/development/postgresql.jar</file-name>
-				<version>42.3.3</version>
+				<version>42.2.5</version>
 				<project-name>PostgreSQL JDBC Driver</project-name>
 				<project-url>http://jdbc.postgresql.org</project-url>
 				<licenses>
@@ -6866,6 +6866,32 @@
 				</licenses>
 			</library>
 			<library>
+				<file-name>lib/portal/commons-fileupload.jar</file-name>
+				<version>1.3.3</version>
+				<project-name>Commons FileUpload</project-name>
+				<project-url>http://commons.apache.org/fileupload</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+						<copyright-notice>Copyright (c) 2002-2006 The Apache Software Foundation</copyright-notice>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/commons-io.jar</file-name>
+				<version>2.8.0</version>
+				<project-name>Commons IO</project-name>
+				<project-url>http://commons.apache.org/io</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+						<copyright-notice>Copyright (c) 2001-2007 The Apache Software Foundation</copyright-notice>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>lib/portal/commons-lang.jar</file-name>
 				<version>2.6</version>
 				<project-name>Commons Lang</project-name>
@@ -6920,6 +6946,42 @@
 				<version>2.6.3</version>
 				<project-name>HikariCP</project-name>
 				<project-url>https://github.com/brettwooldridge/HikariCP</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/httpclient.jar</file-name>
+				<version>4.5.13</version>
+				<project-name>HttpComponents</project-name>
+				<project-url>http://hc.apache.org</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/httpcore.jar</file-name>
+				<version>4.4.14</version>
+				<project-name>HttpComponents</project-name>
+				<project-url>http://hc.apache.org</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/httpmime.jar</file-name>
+				<version>4.5.13</version>
+				<project-name>HttpComponents</project-name>
+				<project-url>http://hc.apache.org</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License 2.0</license-name>
@@ -7189,6 +7251,18 @@
 				<version>3.0.1</version>
 				<project-name>JSR 362 Portlet Specification 3.0</project-name>
 				<project-url>https://jcp.org/en/jsr/detail?id=362</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/portletmvc4spring-framework.jar</file-name>
+				<version>5.2.0</version>
+				<project-name>PortletMVC4Spring</project-name>
+				<project-url>https://github.com/liferay/portletmvc4spring</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License 2.0</license-name>

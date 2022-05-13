@@ -11,7 +11,6 @@
 import ClayAlert from '@clayui/alert';
 import ClayModal from '@clayui/modal';
 import React, {useState} from 'react';
-import i18n from '../../../../../../common/I18n';
 import Button from '../../../../../../common/components/Button';
 import {useApplicationProvider} from '../../../../../../common/context/AppPropertiesProvider';
 import {useCustomerPortal} from '../../../../context';
@@ -52,7 +51,7 @@ const ModalKeyDetails = ({
 				<div className="d-flex justify-content-between mb-4">
 					<div className="flex-row mb-1">
 						<h6 className="text-brand-primary">
-							{i18n.translate('activation-key-details')}
+							ACTIVATION KEY DETAILS
 						</h6>
 
 						<h2 className="text-neutral-10">
@@ -79,7 +78,7 @@ const ModalKeyDetails = ({
 
 				<div className="d-flex justify-content-end my-4">
 					<Button displayType="secondary" onClick={onClose}>
-						{i18n.translate('close')}
+						Close
 					</Button>
 
 					<Button
@@ -97,7 +96,7 @@ const ModalKeyDetails = ({
 							handleAlertStatus(isAbleToDownloadKey);
 						}}
 					>
-						{i18n.translate('download-key')}
+						Download Key
 					</Button>
 				</div>
 			</div>
@@ -109,9 +108,7 @@ const ModalKeyDetails = ({
 						displayType="success"
 						onClose={() => setValueToCopyToClipboard(false)}
 					>
-						{i18n.sub('x-copied-to-clipboard', [
-							valueToCopyToClipboard,
-						])}
+						{valueToCopyToClipboard} copied to clipboard
 					</ClayAlert>
 				</ClayAlert.ToastContainer>
 			)}

@@ -143,8 +143,6 @@ public class SXPElementPersistenceTest {
 
 		newSXPElement.setHidden(RandomTestUtil.randomBoolean());
 
-		newSXPElement.setKey(RandomTestUtil.randomString());
-
 		newSXPElement.setReadOnly(RandomTestUtil.randomBoolean());
 
 		newSXPElement.setSchemaVersion(RandomTestUtil.randomString());
@@ -152,8 +150,6 @@ public class SXPElementPersistenceTest {
 		newSXPElement.setTitle(RandomTestUtil.randomString());
 
 		newSXPElement.setType(RandomTestUtil.nextInt());
-
-		newSXPElement.setVersion(RandomTestUtil.randomString());
 
 		newSXPElement.setStatus(RandomTestUtil.nextInt());
 
@@ -191,8 +187,6 @@ public class SXPElementPersistenceTest {
 		Assert.assertEquals(
 			existingSXPElement.isHidden(), newSXPElement.isHidden());
 		Assert.assertEquals(
-			existingSXPElement.getKey(), newSXPElement.getKey());
-		Assert.assertEquals(
 			existingSXPElement.isReadOnly(), newSXPElement.isReadOnly());
 		Assert.assertEquals(
 			existingSXPElement.getSchemaVersion(),
@@ -201,8 +195,6 @@ public class SXPElementPersistenceTest {
 			existingSXPElement.getTitle(), newSXPElement.getTitle());
 		Assert.assertEquals(
 			existingSXPElement.getType(), newSXPElement.getType());
-		Assert.assertEquals(
-			existingSXPElement.getVersion(), newSXPElement.getVersion());
 		Assert.assertEquals(
 			existingSXPElement.getStatus(), newSXPElement.getStatus());
 	}
@@ -285,8 +277,8 @@ public class SXPElementPersistenceTest {
 			"SXPElement", "mvccVersion", true, "uuid", true, "sxpElementId",
 			true, "companyId", true, "userId", true, "userName", true,
 			"createDate", true, "modifiedDate", true, "description", true,
-			"hidden", true, "key", true, "readOnly", true, "schemaVersion",
-			true, "title", true, "type", true, "version", true, "status", true);
+			"hidden", true, "readOnly", true, "schemaVersion", true, "title",
+			true, "type", true, "status", true);
 	}
 
 	@Test
@@ -523,8 +515,6 @@ public class SXPElementPersistenceTest {
 
 		sxpElement.setHidden(RandomTestUtil.randomBoolean());
 
-		sxpElement.setKey(RandomTestUtil.randomString());
-
 		sxpElement.setReadOnly(RandomTestUtil.randomBoolean());
 
 		sxpElement.setSchemaVersion(RandomTestUtil.randomString());
@@ -532,8 +522,6 @@ public class SXPElementPersistenceTest {
 		sxpElement.setTitle(RandomTestUtil.randomString());
 
 		sxpElement.setType(RandomTestUtil.nextInt());
-
-		sxpElement.setVersion(RandomTestUtil.randomString());
 
 		sxpElement.setStatus(RandomTestUtil.nextInt());
 

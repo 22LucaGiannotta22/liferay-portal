@@ -16,10 +16,8 @@ package com.liferay.layout.page.template.internal.upgrade.v5_1_0;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.segments.model.SegmentsExperience;
 import com.liferay.segments.service.SegmentsExperienceLocalService;
@@ -34,39 +32,34 @@ public class LayoutPageTemplateStructureUpgradeProcess extends UpgradeProcess {
 
 	public LayoutPageTemplateStructureUpgradeProcess(
 		LayoutLocalService layoutLocalService,
-		SegmentsExperienceLocalService segmentsExperienceLocalService,
-		UserLocalService userLocalService) {
+		SegmentsExperienceLocalService segmentsExperienceLocalService) {
 
 		_layoutLocalService = layoutLocalService;
 		_segmentsExperienceLocalService = segmentsExperienceLocalService;
-		_userLocalService = userLocalService;
 	}
 
 	@Override
 	protected void doUpgrade() throws Exception {
 		try (PreparedStatement preparedStatement1 = connection.prepareStatement(
-				"select layoutPageTemplateStructureId, companyId, userId," +
-					"classPK from LayoutPageTemplateStructure")) {
+				"select layoutPageTemplateStructureId, classPK, userId from " +
+					"LayoutPageTemplateStructure")) {
 
 			try (ResultSet resultSet = preparedStatement1.executeQuery()) {
 				while (resultSet.next()) {
 					long layoutPageTemplateStructureId = resultSet.getLong(
 						"layoutPageTemplateStructureId");
-					long companyId = resultSet.getLong("companyId");
-					long userId = resultSet.getLong("userId");
 					long classPK = resultSet.getLong("classPK");
+					long userId = resultSet.getLong("userId");
 
 					_addDefaultSegmentsExperience(
-						classPK, companyId, layoutPageTemplateStructureId,
-						userId);
+						classPK, layoutPageTemplateStructureId, userId);
 				}
 			}
 		}
 	}
 
 	private void _addDefaultSegmentsExperience(
-			long classPK, long companyId, long layoutPageTemplateStructureId,
-			long userId)
+			long classPK, long layoutPageTemplateStructureId, long userId)
 		throws Exception {
 
 		long defaultSegmentsExperienceId =
@@ -74,12 +67,6 @@ public class LayoutPageTemplateStructureUpgradeProcess extends UpgradeProcess {
 				classPK);
 
 		if (defaultSegmentsExperienceId <= 0) {
-			User user = _userLocalService.fetchUser(userId);
-
-			if (user == null) {
-				userId = _userLocalService.getDefaultUserId(companyId);
-			}
-
 			SegmentsExperience defaultSegmentsExperience =
 				_segmentsExperienceLocalService.addDefaultSegmentsExperience(
 					userId, classPK, new ServiceContext());
@@ -197,6 +184,5 @@ public class LayoutPageTemplateStructureUpgradeProcess extends UpgradeProcess {
 	private final LayoutLocalService _layoutLocalService;
 	private final SegmentsExperienceLocalService
 		_segmentsExperienceLocalService;
-	private final UserLocalService _userLocalService;
 
 }

@@ -42,7 +42,6 @@ export function initializeConfig(backendConfig) {
 	const augmentedPanels = augmentPanelData(pluginsRootPath, sidebarPanels);
 
 	const syntheticItems = {
-		commonStyles: getCommonStyles(commonStyles, backendConfig),
 		commonStylesFields: getCommonStylesFields(commonStyles),
 		panels: generatePanels(augmentedPanels),
 		sidebarPanels: partitionPanels(augmentedPanels),
@@ -106,22 +105,6 @@ function generatePanels(sidebarPanels) {
 		},
 		[[]]
 	);
-}
-
-function getCommonStyles(commonStyles, config) {
-	if (!config.featureFlagLps132571) {
-		return commonStyles;
-	}
-
-	return commonStyles.map((fieldSet) => {
-		return {
-			...fieldSet,
-			styles: fieldSet.styles.map((style) => ({
-				...style,
-				responsive: true,
-			})),
-		};
-	});
 }
 
 function getCommonStylesFields(commonStyles) {
