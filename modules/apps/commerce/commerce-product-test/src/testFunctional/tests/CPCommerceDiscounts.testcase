@@ -337,6 +337,10 @@ definition {
 
 		Button.clickPublish();
 
+		Click(locator1 = "Icon#BACK");
+
+		AssertElementPresent(locator1 = "Luca#LUCA3");
+
 		ApplicationsMenu.gotoSite(site = "Minium");
 
 		FrontStore.addInitializerProductToCart(
