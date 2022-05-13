@@ -20,6 +20,7 @@ import React, {useEffect, useRef} from 'react';
 
 import {addMappingFields} from '../../../../../app/actions/index';
 import {fromControlsId} from '../../../../../app/components/layout-data-items/Collection';
+import {REQUIRED_FIELD_DATA} from '../../../../../app/config/constants/formModalData';
 import {ITEM_ACTIVATION_ORIGINS} from '../../../../../app/config/constants/itemActivationOrigins';
 import {ITEM_TYPES} from '../../../../../app/config/constants/itemTypes';
 import {LAYOUT_DATA_ITEM_TYPES} from '../../../../../app/config/constants/layoutDataItemTypes';
@@ -33,6 +34,7 @@ import {
 import {
 	useDispatch,
 	useSelector,
+	useSelectorRef,
 } from '../../../../../app/contexts/StoreContext';
 import selectCanUpdatePageStructure from '../../../../../app/selectors/selectCanUpdatePageStructure';
 import selectSegmentsExperienceId from '../../../../../app/selectors/selectSegmentsExperienceId';
@@ -55,7 +57,10 @@ import {
 } from '../../../../../app/utils/drag-and-drop/useDragAndDrop';
 import getFirstControlsId from '../../../../../app/utils/getFirstControlsId';
 import getMappingFieldsKey from '../../../../../app/utils/getMappingFieldsKey';
+import hideFragment from '../../../../../app/utils/hideFragment';
+import openWarningModal from '../../../../../app/utils/openWarningModal';
 import updateItemStyle from '../../../../../app/utils/updateItemStyle';
+import useHasInputChild from '../../../../../app/utils/useHasInputChild';
 
 const HOVER_EXPAND_DELAY = 1000;
 
@@ -174,18 +179,13 @@ function StructureTreeNodeContent({
 	const dispatch = useDispatch();
 	const hoverItem = useHoverItem();
 	const nodeRef = useRef();
-	const layoutDataRef = useRef();
 	const segmentsExperienceId = useSelector(selectSegmentsExperienceId);
 	const selectedViewportSize = useSelector(
 		(state) => state.selectedViewportSize
 	);
 	const selectItem = useSelectItem();
 
-	useSelector((store) => {
-		layoutDataRef.current = store.layoutData;
-
-		return null;
-	});
+	const layoutDataRef = useSelectorRef((store) => store.layoutData);
 
 	const item = {
 		children: node.children,
@@ -320,7 +320,7 @@ function StructureTreeNodeContent({
 						node.hidden || node.hiddenAncestor,
 				})}
 			>
-				{(node.removable || node.hidden) && (
+				{(node.hidable || node.hidden) && (
 					<VisibilityButton
 						dispatch={dispatch}
 						node={node}
@@ -375,6 +375,8 @@ const VisibilityButton = ({
 	selectedViewportSize,
 	visible,
 }) => {
+	const hasInputChild = useHasInputChild();
+
 	return (
 		<ClayButton
 			aria-label={Liferay.Util.sub(
@@ -391,16 +393,30 @@ const VisibilityButton = ({
 			)}
 			disabled={node.isMasterItem || node.hiddenAncestor}
 			displayType="unstyled"
-			onClick={() =>
-				updateItemStyle({
-					dispatch,
-					itemId: node.id,
-					segmentsExperienceId,
-					selectedViewportSize,
-					styleName: 'display',
-					styleValue: node.hidden ? 'block' : 'none',
-				})
-			}
+			onClick={() => {
+				if (!node.hidden && hasInputChild()) {
+					openWarningModal({
+						action: () =>
+							hideFragment({
+								dispatch,
+								itemId: node.id,
+								segmentsExperienceId,
+								selectedViewportSize,
+							}),
+						...REQUIRED_FIELD_DATA,
+					});
+				}
+				else {
+					updateItemStyle({
+						dispatch,
+						itemId: node.id,
+						segmentsExperienceId,
+						selectedViewportSize,
+						styleName: 'display',
+						styleValue: node.hidden ? 'block' : 'none',
+					});
+				}
+			}}
 		>
 			<ClayIcon
 				symbol={node.hidden || node.hiddenAncestor ? 'hidden' : 'view'}
@@ -481,7 +497,8 @@ function computeHover({
 		const targetIsFragment =
 			targetItem.type === LAYOUT_DATA_ITEM_TYPES.fragment;
 		const targetIsContainer =
-			targetItem.type === LAYOUT_DATA_ITEM_TYPES.container;
+			targetItem.type === LAYOUT_DATA_ITEM_TYPES.container ||
+			targetItem.type === LAYOUT_DATA_ITEM_TYPES.form;
 		const targetIsEmpty =
 			layoutDataRef.current.items[targetItem.itemId]?.children.length ===
 			0;

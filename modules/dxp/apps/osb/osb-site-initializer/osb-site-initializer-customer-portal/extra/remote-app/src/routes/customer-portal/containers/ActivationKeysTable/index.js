@@ -12,7 +12,8 @@ import {ButtonWithIcon} from '@clayui/core';
 import {useModal} from '@clayui/modal';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useOutletContext} from 'react-router-dom';
+import i18n from '../../../../common/I18n';
 import RoundedGroupButtons from '../../../../common/components/RoundedGroupButtons';
 import Table from '../../../../common/components/Table';
 import {useApplicationProvider} from '../../../../common/context/AppPropertiesProvider';
@@ -41,6 +42,13 @@ const ActivationKeysTable = ({productName, project, sessionId}) => {
 	const [isVisibleModal, setIsVisibleModal] = useState(false);
 	const [downloadStatus, setDownloadStatus] = useState('');
 	const {state} = useLocation();
+	const {setHasQuickLinksPanel, setHasSideMenu} = useOutletContext();
+
+	useEffect(() => {
+		setHasQuickLinksPanel(true);
+		setHasSideMenu(true);
+	}, [setHasSideMenu, setHasQuickLinksPanel]);
+
 	const [
 		newKeyGeneratedAlertStatus,
 		setNewKeyGeneratedAlertStatus,
@@ -50,11 +58,13 @@ const ActivationKeysTable = ({productName, project, sessionId}) => {
 		state?.deactivateKeyAlert ? 'success' : ''
 	);
 
-	const messageNewKeyGeneratedAlert =
-		'Activation Key was generated successfully';
+	const messageNewKeyGeneratedAlert = i18n.translate(
+		'activation-key-was-generated-successfully'
+	);
 
-	const messageDeactivateKey =
-		'Activation Key(s) were deactivated successfully.';
+	const messageDeactivateKey = i18n.translate(
+		'activation-key-s-were-deactivated-successfully'
+	);
 
 	const {
 		activationKeysState: [activationKeys, setActivationKeys],
@@ -83,17 +93,11 @@ const ActivationKeysTable = ({productName, project, sessionId}) => {
 
 	const activationKeysByStatusPaginatedChecked = useMemo(
 		() =>
-			activationKeysByStatusPaginated.filter(({id}) =>
+			activationKeys.filter(({id}) =>
 				activationKeysIdChecked.includes(id)
 			) || [],
-		[activationKeysByStatusPaginated, activationKeysIdChecked]
+		[activationKeys, activationKeysIdChecked]
 	);
-
-	useEffect(() => {
-		if (activationKeysByStatusPaginated.length) {
-			setActivationKeysIdChecked([]);
-		}
-	}, [activationKeysByStatusPaginated]);
 
 	const handleAlertStatus = useCallback((hasSuccessfullyDownloadedKeys) => {
 		setDownloadStatus(
@@ -166,7 +170,9 @@ const ActivationKeysTable = ({productName, project, sessionId}) => {
 			>
 				<div>
 					<div className="align-center cp-activation-key-container d-flex justify-content-between mb-2">
-						<h3 className="m-0">Activation Keys</h3>
+						<h3 className="m-0">
+							{i18n.translate('activation-keys')}
+						</h3>
 
 						<RoundedGroupButtons
 							groupButtons={navigationGroupButtons}
@@ -213,8 +219,9 @@ const ActivationKeysTable = ({productName, project, sessionId}) => {
 					{!activationKeysByStatusPaginated.length &&
 						(filters.searchTerm || filters.hasValue) && (
 							<div className="d-flex justify-content-center py-4">
-								No activation keys found with this search
-								criteria.
+								{i18n.translate(
+									'no-activation-keys-found-with-this-search-criteria'
+								)}
 							</div>
 						)}
 				</div>

@@ -1,6 +1,8 @@
 @component-name = "portal-analytics-cloud"
 definition {
 
+	property analytics.cloud.release = "true";
+	property analytics.cloud.upstream = "true";
 	property portal.release = "false";
 	property portal.upstream = "true";
 	property property.group = "analytics.cloud.profile";
@@ -44,6 +46,8 @@ definition {
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8336 | Test Summary: Search for a Page in Pages list"
 	@priority = "5"
 	test CanSearchPageInPagesList {
+		property analytics.cloud.upstream = "false";
+
 		task ("Add pages") {
 			for (var layoutName : list "AC Page 2,AC Page 3") {
 				ACUtils.addPage(layoutName = "${layoutName}");
@@ -307,6 +311,8 @@ definition {
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8111 | Test Summary: Assert the pages list shows a list of pages"
 	@priority = "5"
 	test ShowsListOfPages {
+		property analytics.cloud.upstream = "false";
+
 		task ("Add pages") {
 			for (var layoutName : list "AC Page 2,AC Page 3") {
 				ACUtils.addPage(layoutName = "${layoutName}");

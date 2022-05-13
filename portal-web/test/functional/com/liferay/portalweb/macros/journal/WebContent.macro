@@ -1515,17 +1515,15 @@ definition {
 
 			WebContentNavigator.gotoEntryMenuItem(
 				entry = "${webContentTitleEscapeCharacter}",
-				menuItem = "Move to Recycle Bin");
+				menuItem = "Delete");
 		}
 		else {
 			var key_webContentTitle = "${webContentTitle}";
 
 			WebContentNavigator.gotoEntryMenuItem(
 				entry = "${webContentTitle}",
-				menuItem = "Move to Recycle Bin");
+				menuItem = "Delete");
 		}
-
-		AssertConfirm(value1 = "Are you sure you want to move this to the Recycle Bin?");
 
 		VerifyElementPresent(locator1 = "Message#SUCCESS");
 
@@ -1539,11 +1537,9 @@ definition {
 
 		PortletEntry.selectAll();
 
-		ClickNoError(locator1 = "Icon#MOVE_TO_RECYCLE_BIN");
+		Click(locator1 = "Icon#MOVE_TO_RECYCLE_BIN");
 
-		Confirm();
-
-		VerifyElementPresent(locator1 = "Message#SUCCESS");
+		Alert.viewSuccessMessage();
 	}
 
 	macro paginateRelatedAssets {
@@ -1977,11 +1973,9 @@ definition {
 		if (isSet(displayPageTemplateDisabled)) {
 			Portlet.waitForForm();
 
-			var key_panel = "Display Page Template";
+			var key_panel = "Display Page";
 
-			AssertElementNotPresent(locator1 = "Panel#PANEL_COLLAPSED");
-
-			AssertElementNotPresent(locator1 = "Panel#PANEL_EXPANDED");
+			AssertElementNotPresent(locator1 = "Panel#PANEL");
 		}
 	}
 
@@ -2510,6 +2504,21 @@ definition {
 
 				SelectFrameTop(value1 = "relative=top");
 			}
+		}
+
+		if ("${webContentBoolean}" == "true") {
+			var webContentBooleanFieldLabel = "Boolean";
+
+			AssertChecked.assertCheckedNotVisible(
+				checkboxName = "${webContentBooleanFieldLabel}",
+				locator1 = "Checkbox#ANY_CHECKBOX");
+		}
+		else if ("${webContentBoolean}" == "false") {
+			var webContentBooleanFieldLabel = "Boolean";
+
+			AssertNotChecked.assertNotCheckedNotVisible(
+				checkboxName = "${webContentBooleanFieldLabel}",
+				locator1 = "Checkbox#ANY_CHECKBOX");
 		}
 
 		if (isSet(webContentColor)) {

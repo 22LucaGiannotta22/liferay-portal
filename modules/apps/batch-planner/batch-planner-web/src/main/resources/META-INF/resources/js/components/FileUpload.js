@@ -34,6 +34,14 @@ function updateExtensionInputValue(namespace, value) {
 	}
 }
 
+function updateNameInput(namespace, fileName) {
+	const nameInput = document.getElementById(`${namespace}name`);
+
+	if (nameInput && !nameInput.value) {
+		nameInput.value = fileName.substring(0, fileName.lastIndexOf('.'));
+	}
+}
+
 const acceptedExtensions = IMPORT_FILE_FORMATS.map(
 	(format) => `.${format}`
 ).join(', ');
@@ -44,10 +52,9 @@ function FileUpload({portletNamespace}) {
 	const [fileToBeUploaded, setFileToBeUploaded] = useState(null);
 
 	const inputContainsHeadersId = `${portletNamespace}containsHeaders`;
-	const inputCSVSeparatorId = `${portletNamespace}csvSeparator`;
-	const inputCSVEnclosingCharacterId = `${portletNamespace}csvEnclosingCharacter`;
+	const inputDelimiterId = `${portletNamespace}delimiter`;
+	const inputEnclosingCharacterId = `${portletNamespace}enclosingCharacter`;
 	const inputFileId = `${portletNamespace}importFile`;
-	const inputNameId = `${portletNamespace}name`;
 
 	const [parserOptions, setParserOptions] = useState({
 		CSVContainsHeaders: true,
@@ -103,6 +110,12 @@ function FileUpload({portletNamespace}) {
 		portletNamespace,
 	]);
 
+	useEffect(() => {
+		if (fileToBeUploaded?.name) {
+			updateNameInput(portletNamespace, fileToBeUploaded.name);
+		}
+	}, [portletNamespace, fileToBeUploaded]);
+
 	return (
 		<>
 			<ClayForm.Group className={errorMessage ? 'has-error' : ''}>
@@ -156,14 +169,14 @@ function FileUpload({portletNamespace}) {
 					<div className="row">
 						<div className="col-md-6">
 							<ClayForm.Group>
-								<label htmlFor={inputCSVSeparatorId}>
+								<label htmlFor={inputDelimiterId}>
 									{Liferay.Language.get('csv-separator')}
 								</label>
 
 								<ClayInput
-									id={inputCSVSeparatorId}
+									id={inputDelimiterId}
 									maxLength={1}
-									name={inputCSVSeparatorId}
+									name={inputDelimiterId}
 									onChange={({target}) => {
 										setParserOptions({
 											...parserOptions,
@@ -177,15 +190,13 @@ function FileUpload({portletNamespace}) {
 
 						<div className="col-md-6">
 							<ClayForm.Group>
-								<label htmlFor={inputCSVEnclosingCharacterId}>
-									{Liferay.Language.get(
-										'csv-file-column-delimiter'
-									)}
+								<label htmlFor={inputEnclosingCharacterId}>
+									{Liferay.Language.get('csv-enclosure')}
 								</label>
 
 								<ClaySelect
-									id={inputCSVEnclosingCharacterId}
-									name={inputCSVEnclosingCharacterId}
+									id={inputEnclosingCharacterId}
+									name={inputEnclosingCharacterId}
 									onChange={({target}) =>
 										setParserOptions({
 											...parserOptions,
@@ -207,23 +218,6 @@ function FileUpload({portletNamespace}) {
 						</div>
 					</div>
 				</>
-			)}
-
-			{fileToBeUploaded && (
-				<ClayForm.Group>
-					<label htmlFor={inputNameId}>
-						{Liferay.Language.get('name')}
-					</label>
-
-					<ClayInput
-						defaultValue={fileToBeUploaded.name.substring(
-							0,
-							fileToBeUploaded.name.lastIndexOf('.')
-						)}
-						id={inputNameId}
-						name={inputNameId}
-					/>
-				</ClayForm.Group>
 			)}
 		</>
 	);

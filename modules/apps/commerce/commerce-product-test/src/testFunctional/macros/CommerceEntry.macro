@@ -419,6 +419,18 @@ definition {
 			value1 = "${price}");
 	}
 
+	macro addProductDescription {
+		Type(
+			locator1 = "CommerceEntry#SHORT_DESCRIPTION_FIELD",
+			value1 = "${productShortDescription}");
+
+		CommerceEntry.addFullDescriptionViaCKEditor(entryFullDescription = "${productFullDescription}");
+
+		Click(
+			key_text = "Save as Draft",
+			locator1 = "Button#ANY");
+	}
+
 	macro addProductsEntry {
 		WaitForElementPresent(locator1 = "IFrame#MODAL_BODY");
 
@@ -436,6 +448,10 @@ definition {
 
 		WaitForPageLoad();
 
+		AssertElementPresent(
+			key_status = "Draft",
+			locator1 = "CommerceEntry#WORKFLOW_STATUS");
+
 		AssertSelectedLabel(
 			key_fieldLabel = "Catalog",
 			locator1 = "Select#GENERIC_SELECT_FIELD",
@@ -445,11 +461,27 @@ definition {
 			locator1 = "CommerceEntry#NAME_FIELD",
 			value1 = "${productName}");
 
-		Type(
-			locator1 = "CommerceEntry#SHORT_DESCRIPTION_FIELD",
-			value1 = "${productShortDescription}");
+		if (!(isSet(compileDescription))) {
+			var compileDescription = "true";
+		}
 
-		CommerceEntry.addFullDescriptionViaCKEditor(entryFullDescription = "${productFullDescription}");
+		if ("${compileDescription}" == "true") {
+			echo("compileDescription enabled");
+
+			CommerceEntry.addProductDescription(
+				productFullDescription = "${productFullDescription}",
+				productShortDescription = "${productShortDescription}");
+		}
+
+		if (!(isSet(publishProduct))) {
+			var publishProduct = "true";
+		}
+
+		if ("${publishProduct}" == "true") {
+			echo("publishProduct enabled");
+
+			CommerceEntry.publishEntry(status = "Approved");
+		}
 	}
 
 	macro AddShippingOptionSettingsVariableRate {
@@ -583,6 +615,16 @@ definition {
 		Click(locator1 = "Button#BACK");
 	}
 
+	macro assertCheckedSpecificToggle {
+		task ("Check if the Toggle is checked") {
+			AssertElementPresent(
+				key_name = "${name}",
+				locator1 = "CommerceEntry#CHECK_SPECIFIC_TOGGLE_SWITCH");
+
+			echo("The toggle for the ${name} is active");
+		}
+	}
+
 	macro assertDefaultDisplayPage {
 		if (!(isSet(pageType))) {
 			AssertTextEquals(
@@ -624,14 +666,18 @@ definition {
 	}
 
 	macro checkImageName {
-		echo("number is: ${number} image is: ${image} uploadFileName is: ${uploadFileName}");
+		if (isSet(number)) {
+			if ("${number}" != "") {
+				echo("number is: ${number} image is: ${image} uploadFileName is: ${uploadFileName}");
 
-		if ("${number}" != "") {
-			AssertElementPresent(
-				key_entry = "Commerce_${image} (${number}).jpg",
-				locator1 = "CommerceNavigation#ANY_ENTRY_NAME_WITHOUT_CONTAINS");
+				AssertElementPresent(
+					key_entry = "Commerce_${image} (${number}).jpg",
+					locator1 = "CommerceNavigation#ANY_ENTRY_NAME_WITHOUT_CONTAINS");
+			}
 		}
 		else {
+			echo("uploadFileName is: ${uploadFileName}");
+
 			AssertElementPresent(
 				key_entry = "${uploadFileName}",
 				locator1 = "CommerceNavigation#ANY_ENTRY_NAME_WITHOUT_CONTAINS");
@@ -919,17 +965,9 @@ definition {
 	macro publishEntry {
 		Button.clickPublish();
 
-		if (IsElementPresent(locator1 = "Message#SUCCESS")) {
-			AssertElementPresent(locator1 = "Message#SUCCESS");
-		}
-		else {
-			AssertTextEquals(
-				key_status = "${status}",
-				locator1 = "CommerceEntry#WORKFLOW_STATUS",
-				value1 = "${status}");
-		}
-
-		Pause(locator1 = "3000");
+		AssertElementPresent(
+			key_status = "${status}",
+			locator1 = "CommerceEntry#WORKFLOW_STATUS");
 	}
 
 	macro publishProductImage {

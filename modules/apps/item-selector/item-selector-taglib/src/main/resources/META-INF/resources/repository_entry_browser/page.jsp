@@ -61,7 +61,7 @@ RepositoryEntryBrowserDisplayContext repositoryEntryBrowserDisplayContext = new 
 
 ItemSelectorRepositoryEntryManagementToolbarDisplayContext itemSelectorRepositoryEntryManagementToolbarDisplayContext = new ItemSelectorRepositoryEntryManagementToolbarDisplayContext(request, liferayPortletRequest, liferayPortletResponse, repositoryEntryBrowserDisplayContext);
 
-if (FFItemSelectorSingleFileUploaderConfigurationUtil.enabled()) {
+if (showDragAndDropZone && FFItemSelectorSingleFileUploaderConfigurationUtil.enabled()) {
 	emptyResultsMessage = null;
 }
 
@@ -79,7 +79,7 @@ SearchContainer<?> searchContainer = new SearchContainer(renderRequest, itemSele
 	searchFormMethod="POST"
 	searchFormName="searchFm"
 	selectable="<%= false %>"
-	showCreationMenu="<%= itemSelectorRepositoryEntryManagementToolbarDisplayContext.isShowCreationMenu() %>"
+	showCreationMenu="<%= showDragAndDropZone && itemSelectorRepositoryEntryManagementToolbarDisplayContext.isShowCreationMenu() %>"
 	showInfoButton="<%= false %>"
 	showSearch="<%= showSearch %>"
 	sortingOrder="<%= itemSelectorRepositoryEntryManagementToolbarDisplayContext.getOrderByType() %>"

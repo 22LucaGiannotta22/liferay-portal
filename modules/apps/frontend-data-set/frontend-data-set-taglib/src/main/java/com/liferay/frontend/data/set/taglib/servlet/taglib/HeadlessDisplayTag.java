@@ -14,6 +14,7 @@
 
 package com.liferay.frontend.data.set.taglib.servlet.taglib;
 
+import com.liferay.frontend.data.set.filter.FDSFilter;
 import com.liferay.frontend.data.set.filter.FDSFilterSerializer;
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.frontend.data.set.model.FDSPaginationEntry;
@@ -96,6 +97,10 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 
 	public List<FDSActionDropdownItem> getFdsActionDropdownItems() {
 		return _fdsActionDropdownItems;
+	}
+
+	public List<FDSFilter> getFdsFilters() {
+		return _fdsFilters;
 	}
 
 	public List<FDSSortItem> getFdsSortItemList() {
@@ -184,6 +189,10 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 		_fdsActionDropdownItems = fdsActionDropdownItems;
 	}
 
+	public void setFdsFilters(List<FDSFilter> fdsFilters) {
+		_fdsFilters = fdsFilters;
+	}
+
 	public void setFdsSortItemList(FDSSortItemList fdsSortItemList) {
 		_fdsSortItemList = fdsSortItemList;
 	}
@@ -263,6 +272,7 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 		_creationMenu = new CreationMenu();
 		_customViewsEnabled = false;
 		_fdsActionDropdownItems = new ArrayList<>();
+		_fdsFilters = new ArrayList<>();
 		_fdsFiltersContext = null;
 		_fdsFilterSerializer = null;
 		_fdsPaginationEntries = null;
@@ -383,7 +393,7 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 
 	private void _setFDSFiltersContext() {
 		_fdsFiltersContext = _fdsFilterSerializer.serialize(
-			getId(), PortalUtil.getLocale(getRequest()));
+			getId(), getFdsFilters(), PortalUtil.getLocale(getRequest()));
 	}
 
 	private void _setFDSPaginationEntries() {
@@ -427,6 +437,7 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 	private boolean _customViewsEnabled;
 	private List<FDSActionDropdownItem> _fdsActionDropdownItems =
 		new ArrayList<>();
+	private List<FDSFilter> _fdsFilters = new ArrayList<>();
 	private Object _fdsFiltersContext;
 	private FDSFilterSerializer _fdsFilterSerializer;
 	private List<FDSPaginationEntry> _fdsPaginationEntries;

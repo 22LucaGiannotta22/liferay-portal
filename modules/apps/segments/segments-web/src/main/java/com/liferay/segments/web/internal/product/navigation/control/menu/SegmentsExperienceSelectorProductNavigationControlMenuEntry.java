@@ -37,7 +37,7 @@ import com.liferay.product.navigation.control.menu.constants.ProductNavigationCo
 import com.liferay.segments.manager.SegmentsExperienceManager;
 import com.liferay.segments.service.SegmentsExperienceLocalService;
 import com.liferay.segments.web.internal.display.context.SegmentsExperienceSelectorDisplayContext;
-import com.liferay.sites.kernel.util.SitesUtil;
+import com.liferay.sites.kernel.util.Sites;
 
 import java.io.IOException;
 
@@ -85,16 +85,6 @@ public class SegmentsExperienceSelectorProductNavigationControlMenuEntry
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		long segmentsExperiencesCount =
-			_segmentsExperienceLocalService.getSegmentsExperiencesCount(
-				themeDisplay.getScopeGroupId(),
-				_portal.getClassNameId(Layout.class.getName()),
-				themeDisplay.getPlid(), true);
-
-		if (segmentsExperiencesCount <= 1) {
-			return false;
-		}
-
 		LayoutTypePortlet layoutTypePortlet =
 			themeDisplay.getLayoutTypePortlet();
 
@@ -105,18 +95,28 @@ public class SegmentsExperienceSelectorProductNavigationControlMenuEntry
 			return false;
 		}
 
+		Layout layout = themeDisplay.getLayout();
+
+		if (!layout.isTypeContent() || !_sites.isLayoutUpdateable(layout)) {
+			return false;
+		}
+
+		long segmentsExperiencesCount =
+			_segmentsExperienceLocalService.getSegmentsExperiencesCount(
+				themeDisplay.getScopeGroupId(),
+				_portal.getClassNameId(Layout.class.getName()),
+				themeDisplay.getPlid(), true);
+
+		if (segmentsExperiencesCount <= 1) {
+			return false;
+		}
+
 		String className = (String)httpServletRequest.getAttribute(
 			ContentPageEditorWebKeys.CLASS_NAME);
 
 		if (Objects.equals(
 				className, LayoutPageTemplateEntry.class.getName())) {
 
-			return false;
-		}
-
-		Layout layout = themeDisplay.getLayout();
-
-		if (!layout.isTypeContent() || !SitesUtil.isLayoutUpdateable(layout)) {
 			return false;
 		}
 
@@ -189,5 +189,8 @@ public class SegmentsExperienceSelectorProductNavigationControlMenuEntry
 
 	@Reference
 	private SegmentsExperienceLocalService _segmentsExperienceLocalService;
+
+	@Reference
+	private Sites _sites;
 
 }

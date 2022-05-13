@@ -11,7 +11,10 @@
 
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useOutletContext} from 'react-router-dom';
+import i18n from '../../../../common/I18n';
 import Table from '../../../../common/components/Table';
+import {useCustomerPortal} from '../../context';
 import useGetActivationKeysData from '../ActivationKeysTable/hooks/useGetActivationKeysData';
 import usePagination from '../ActivationKeysTable/hooks/usePagination';
 import useStatusCountNavigation from '../ActivationKeysTable/hooks/useStatusCountNavigation';
@@ -28,7 +31,15 @@ import DeactivationKeysTableHeader from './components/Header';
 import useFilters from './components/Header/hooks/useFilters';
 import {DEACTIVATE_COLUMNS} from './utils/constants';
 
-const DeactivateKeysTable = ({accountKey, productName, project, sessionId}) => {
+const DeactivateKeysTable = ({productName}) => {
+	const [{project, sessionId}] = useCustomerPortal();
+	const {setHasQuickLinksPanel, setHasSideMenu} = useOutletContext();
+
+	useEffect(() => {
+		setHasQuickLinksPanel(false);
+		setHasSideMenu(false);
+	}, [setHasSideMenu, setHasQuickLinksPanel]);
+
 	const {
 		activationKeysState: [activationKeys, setActivationKeys],
 		loading,
@@ -50,17 +61,11 @@ const DeactivateKeysTable = ({accountKey, productName, project, sessionId}) => {
 
 	const activationKeysByStatusPaginatedChecked = useMemo(
 		() =>
-			activationKeysByStatusPaginated.filter(({id}) =>
+			activationKeys.filter(({id}) =>
 				activationKeysIdChecked.includes(id)
 			) || [],
-		[activationKeysByStatusPaginated, activationKeysIdChecked]
+		[activationKeys, activationKeysIdChecked]
 	);
-
-	useEffect(() => {
-		if (activationKeysByStatusPaginated.length) {
-			setActivationKeysIdChecked([]);
-		}
-	}, [activationKeysByStatusPaginated]);
 
 	const getDeactivationKeysRows = useCallback(
 		(activationKey) => ({
@@ -90,9 +95,13 @@ const DeactivateKeysTable = ({accountKey, productName, project, sessionId}) => {
 		<div className="h-100 ml-auto mr-auto w-75">
 			<div className="d-flex flex-column">
 				<div className="text-left">
-					<h3>Deactivate DXP Activation Key(s)</h3>
+					<h3>{i18n.translate('deactivate-dxp-activation-key-s')}</h3>
 
-					<p>Select the activation key you wish to deactivate.</p>
+					<p>
+						{i18n.translate(
+							'select-the-activation-key-you-wish-to-deactivate'
+						)}
+					</p>
 				</div>
 			</div>
 
@@ -134,7 +143,7 @@ const DeactivateKeysTable = ({accountKey, productName, project, sessionId}) => {
 			</ClayTooltipProvider>
 
 			<DeactivateKeysTableFooter
-				accountKey={accountKey}
+				accountKey={project?.accountKey}
 				activationKeysByStatusPaginatedChecked={
 					activationKeysByStatusPaginatedChecked
 				}

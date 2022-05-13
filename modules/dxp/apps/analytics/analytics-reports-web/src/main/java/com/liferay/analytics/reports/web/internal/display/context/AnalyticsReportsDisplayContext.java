@@ -17,7 +17,7 @@ package com.liferay.analytics.reports.web.internal.display.context;
 import com.liferay.analytics.reports.info.item.ClassNameClassPKInfoItemIdentifier;
 import com.liferay.info.item.ClassPKInfoItemIdentifier;
 import com.liferay.info.item.InfoItemReference;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.util.Collections;
 import java.util.Map;
@@ -34,9 +34,10 @@ public class AnalyticsReportsDisplayContext<T> {
 
 	public AnalyticsReportsDisplayContext(
 		InfoItemReference infoItemReference, RenderRequest renderRequest,
-		RenderResponse renderResponse, ThemeDisplay themeDisplay) {
+		RenderResponse renderResponse) {
 
 		_infoItemReference = infoItemReference;
+		_renderRequest = renderRequest;
 		_renderResponse = renderResponse;
 	}
 
@@ -58,6 +59,8 @@ public class AnalyticsReportsDisplayContext<T> {
 	private ResourceURL _getResourceURL(String resourceID) {
 		ResourceURL resourceURL = _renderResponse.createResourceURL();
 
+		resourceURL.setParameter(
+			"redirect", ParamUtil.getString(_renderRequest, "redirect"));
 		resourceURL.setParameter(
 			"className", _infoItemReference.getClassName());
 
@@ -96,6 +99,7 @@ public class AnalyticsReportsDisplayContext<T> {
 
 	private Map<String, Object> _data;
 	private final InfoItemReference _infoItemReference;
+	private final RenderRequest _renderRequest;
 	private final RenderResponse _renderResponse;
 
 }

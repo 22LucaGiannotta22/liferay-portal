@@ -97,16 +97,11 @@
 /portal/commons-collections.jar
 /portal/commons-compress.jar
 /portal/commons-configuration.jar
-/portal/commons-fileupload.jar
-/portal/commons-io.jar
 /portal/commons-lang.jar
 /portal/commons-logging.jar
 /portal/dom4j.jar
 /portal/hibernate-core.jar
 /portal/hikaricp.jar
-/portal/httpclient.jar
-/portal/httpcore.jar
-/portal/httpmime.jar
 /portal/isoparser.jar
 /portal/istack-commons-runtime.jar
 /portal/jabsorb.jar
@@ -134,7 +129,6 @@
 /portal/log4j-core.jar
 /portal/persistence.jar
 /portal/portlet.jar
-/portal/portletmvc4spring-framework.jar
 /portal/simplecaptcha.jar
 /portal/slf4j-api.jar
 /portal/soap-api.jar

@@ -107,19 +107,6 @@
 		<field name="vocabularyId" type="long" />
 		<field name="lastPublishDate" type="Date" />
 	</model>
-	<model name="com.liferay.asset.kernel.model.AssetCategoryProperty">
-		<field name="mvccVersion" type="long" />
-		<field name="ctCollectionId" type="long" />
-		<field name="categoryPropertyId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="categoryId" type="long" />
-		<field name="key" type="String" />
-		<field name="value" type="String" />
-	</model>
 	<model name="com.liferay.asset.kernel.model.AssetEntry">
 		<field name="mvccVersion" type="long" />
 		<field name="ctCollectionId" type="long" />
@@ -1407,7 +1394,7 @@
 			<hint name="max-length">4000</hint>
 		</field>
 		<field localized="true" name="description" type="String">
-			<hint-collection name="TEXTAREA" />
+			<hint-collection name="CLOB" />
 		</field>
 		<field name="type" type="int" />
 		<field name="subtype" type="String" />
