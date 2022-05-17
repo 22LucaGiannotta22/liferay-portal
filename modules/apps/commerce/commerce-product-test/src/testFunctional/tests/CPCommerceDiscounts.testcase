@@ -362,7 +362,11 @@ definition {
 			locator1 = "TextInput#DISCOUNT",
 			value1 = "TEST");
 
-		Button.click(button = "Apply");
+		Click(
+			key_tab = "Apply",
+			locator1 = "Button#TAB_SUBMIT_BTN");
+
+		AssertElementNotPresent(locator1 = "Message#ALERT_DISMISSIBLE");
 
 		Type(
 			key_fieldName = "Name",
