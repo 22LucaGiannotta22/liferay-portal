@@ -673,12 +673,25 @@ definition {
 	}
 
 	@description = "Verify that the user can delete Nodes of Fork"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test CanDeleteForkNode {
+		property test.name.skip.portal.instance = "ProcessBuilderKaleoDesignerReact#CanDeleteForkNode";
 
-		// TODO CanDeleteForkNode pending implementation
+		Workflow.openWorkflowListView();
 
+		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition");
+
+		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
+			nodeLabel = "Fork",
+			nodePosition = "20,-500",
+			nodeType = "fork");
+
+		ProcessBuilderKaleoDesignerReact.deleteNodeOrConnection(
+			modalMessage = "Are you sure you want to delete the selected fork node?",
+			nodeType = "fork",
+			title = "Delete Fork Node");
+
+		ProcessBuilderKaleoDesignerReact.viewPanelNodeNotPresent(nodeType = "fork");
 	}
 
 	@description = "Verify that the user can delete Nodes of Join"
@@ -704,12 +717,25 @@ definition {
 	}
 
 	@description = "Verify that the user can delete Nodes of Join XOR"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test CanDeleteJoinXORNode {
+		property test.name.skip.portal.instance = "ProcessBuilderKaleoDesignerReact#CanDeleteJoinXORNode";
 
-		// TODO CanDeleteJoinXORNode pending implementation
+		Workflow.openWorkflowListView();
 
+		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition");
+
+		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
+			nodeLabel = "Join XOR",
+			nodePosition = "-40,-200",
+			nodeType = "join-xor");
+
+		ProcessBuilderKaleoDesignerReact.deleteNodeOrConnection(
+			modalMessage = "Are you sure you want to delete the selected join xor node?",
+			nodeType = "join-xor",
+			title = "Delete Join Xor Node");
+
+		ProcessBuilderKaleoDesignerReact.viewPanelNodeNotPresent(nodeType = "join-xor");
 	}
 
 	@description = "Verify that the user can delete all notifications configurations"
@@ -2276,21 +2302,39 @@ definition {
 	}
 
 	@description = "Publish workflow definition with no End Node And View Error Message"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test DefinitionRequiresEndNodeToPublish {
+		property test.name.skip.portal.instance = "ProcessBuilderKaleoDesignerReact#DefinitionRequiresEndNodeToPublish";
 
-		// TODO DefinitionRequiresEndNodeToPublish pending implementation
+		Workflow.openWorkflowListView();
 
+		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition");
+
+		ProcessBuilderKaleoDesignerReact.selectNode(nodeType = "end");
+
+		ProcessBuilderKaleoDesignerReact.deleteNodeOrConnection(title = "Delete End Node");
+
+		Button.clickPublish();
+
+		Alert.viewErrorMessage(errorMessage = "The item_0 node must have an outgoing transition");
 	}
 
 	@description = "Publish workflow definition with no start node and view error message"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test DefinitionRequiresStartNodeToPublish {
+		property test.name.skip.portal.instance = "ProcessBuilderKaleoDesignerReact#DefinitionRequiresStartNodeToPublish";
 
-		// TODO DefinitionRequiresStartNodeToPublish pending implementation
+		Workflow.openWorkflowListView();
 
+		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition");
+
+		ProcessBuilderKaleoDesignerReact.selectNode(nodeType = "start");
+
+		ProcessBuilderKaleoDesignerReact.deleteNodeOrConnection(title = "Delete Start Node");
+
+		Button.clickPublish();
+
+		Alert.viewErrorMessage(errorMessage = "You must define a start node");
 	}
 
 	@description = "Verify that, when the user deletes a translation, the action reflects in the language selector"

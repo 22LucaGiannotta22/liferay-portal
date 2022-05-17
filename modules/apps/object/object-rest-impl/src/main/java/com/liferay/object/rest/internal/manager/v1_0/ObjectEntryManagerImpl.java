@@ -19,6 +19,7 @@ import com.liferay.object.constants.ObjectConstants;
 import com.liferay.object.exception.NoSuchObjectEntryException;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
+import com.liferay.object.model.ObjectRelationship;
 import com.liferay.object.rest.dto.v1_0.ObjectEntry;
 import com.liferay.object.rest.internal.dto.v1_0.converter.ObjectEntryDTOConverter;
 import com.liferay.object.rest.internal.odata.entity.v1_0.ObjectEntryEntityModel;
@@ -29,6 +30,7 @@ import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectEntryService;
 import com.liferay.object.service.ObjectFieldLocalService;
+import com.liferay.object.service.ObjectRelationshipService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
@@ -104,6 +106,26 @@ public class ObjectEntryManagerImpl implements ObjectEntryManager {
 					objectEntry.getProperties(),
 					dtoConverterContext.getLocale()),
 				new ServiceContext()));
+	}
+
+	@Override
+	public ObjectEntry addObjectRelationshipMappingTableValues(
+			DTOConverterContext dtoConverterContext,
+			ObjectDefinition objectDefinition, String objectRelationshipName,
+			long primaryKey1, long primaryKey2)
+		throws Exception {
+
+		ObjectRelationship objectRelationship =
+			_objectRelationshipService.getObjectRelationship(
+				objectDefinition.getObjectDefinitionId(),
+				objectRelationshipName);
+
+		_objectRelationshipService.addObjectRelationshipMappingTableValues(
+			objectRelationship.getObjectRelationshipId(), primaryKey1,
+			primaryKey2, new ServiceContext());
+
+		return getObjectEntry(
+			dtoConverterContext, objectDefinition, primaryKey1);
 	}
 
 	@Override
@@ -535,6 +557,9 @@ public class ObjectEntryManagerImpl implements ObjectEntryManager {
 
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;
+
+	@Reference
+	private ObjectRelationshipService _objectRelationshipService;
 
 	@Reference
 	private ObjectScopeProviderRegistry _objectScopeProviderRegistry;

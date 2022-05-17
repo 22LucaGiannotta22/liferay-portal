@@ -90,6 +90,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.Role;
@@ -789,7 +790,7 @@ public class BundleSiteInitializerTest {
 
 	private void _assertLayouts(Group group) throws Exception {
 		List<Layout> privateLayouts = _layoutLocalService.getLayouts(
-			group.getGroupId(), true);
+			group.getGroupId(), true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 		Assert.assertTrue(privateLayouts.size() == 1);
 
@@ -801,8 +802,19 @@ public class BundleSiteInitializerTest {
 			privateLayout.getName(LocaleUtil.getSiteDefault()));
 		Assert.assertEquals("content", privateLayout.getType());
 
+		List<Layout> privateChildLayouts = privateLayout.getAllChildren();
+
+		Assert.assertTrue(privateChildLayouts.size() == 1);
+
+		Layout privateChildLayout = privateChildLayouts.get(0);
+
+		Assert.assertEquals(
+			"Test Private Child Layout",
+			privateChildLayout.getName(LocaleUtil.getSiteDefault()));
+
 		List<Layout> publicLayouts = _layoutLocalService.getLayouts(
-			group.getGroupId(), false);
+			group.getGroupId(), false,
+			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 		Assert.assertTrue(publicLayouts.size() == 1);
 
@@ -813,6 +825,16 @@ public class BundleSiteInitializerTest {
 			"Test Public Layout",
 			publicLayout.getName(LocaleUtil.getSiteDefault()));
 		Assert.assertEquals("content", publicLayout.getType());
+
+		List<Layout> publicChildLayouts = publicLayout.getAllChildren();
+
+		Assert.assertTrue(publicChildLayouts.size() == 1);
+
+		Layout publicChildLayout = publicChildLayouts.get(0);
+
+		Assert.assertEquals(
+			"Test Public Child Layout",
+			publicChildLayout.getName(LocaleUtil.getSiteDefault()));
 	}
 
 	private void _assertLayoutSets(Group group) throws Exception {
