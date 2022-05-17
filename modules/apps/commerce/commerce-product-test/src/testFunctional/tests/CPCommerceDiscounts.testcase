@@ -228,7 +228,7 @@ definition {
 	}
 
 	test CreateNewDiscount {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 		property portal.upstream = "true";
 
 		CommerceNavigator.gotoPortlet(
