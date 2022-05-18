@@ -2207,7 +2207,7 @@ definition {
 	@description = "This is a test for COMMERCE-6266. VerifyNotificationQueue"
 	@priority = "3"
 	test VerifyNotificationQueue {
-		property portal.acceptance = "Intern Test";
+		property portal.acceptance = "TEST";
 
 		// TODO Review
 
