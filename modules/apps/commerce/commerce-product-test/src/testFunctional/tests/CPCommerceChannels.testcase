@@ -2231,7 +2231,9 @@ definition {
 			locator1 = "TextInput#GENERIC_TEXT_INPUT",
 			value1 = "User Account Group");
 
-		Button.clickSave();
+		Click(
+			key_text = "Save",
+			locator1 = "Button#ANY");
 
 		CommerceNavigator.gotoEntry(entryName = "User Account Group");
 
@@ -2266,7 +2268,9 @@ definition {
 			fromName = "Test",
 			notificationType = "Order Placed");
 
-		Button.clickSave();
+		Click(
+			key_text = "Save",
+			locator1 = "Button#ANY");
 
 		Refresh();
 
