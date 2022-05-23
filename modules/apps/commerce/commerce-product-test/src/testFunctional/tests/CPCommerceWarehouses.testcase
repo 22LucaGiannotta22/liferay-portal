@@ -856,6 +856,14 @@ definition {
 				locator1 = "CommerceEntry#ACCORDION_COLLAPSED");
 		}
 
+		AssertChecked(
+			key_toggleSwitchLabel = "${commerceChannel2}",
+			locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
+
+		AssertChecked(
+			key_toggleSwitchLabel = "${commerceChannel1}",
+			locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");		
+
 		Uncheck.uncheckToggleSwitch(
 			key_toggleSwitchLabel = "${commerceChannel2}",
 			locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
