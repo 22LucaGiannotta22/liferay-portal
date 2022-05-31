@@ -817,7 +817,7 @@ definition {
 	@description = "This is a test for COMMERCE-6069. Price List Qualifier"
 	@priority = "3"
 	test AddPriceListQualifier {
-		property portal.acceptance = "false";
+		property portal.acceptance = "Test";
 
 		// TODO Review
 		// TODO Fix Commerce tests that are skipping portal instances - COMMERCE-6586
@@ -1216,7 +1216,7 @@ definition {
 	}
 
 	test AssertPriceEntriesAreProductsInTheSameCatalogAsPriceList {
-		property portal.acceptance = "false";
+		property portal.acceptance = "Test";
 		property portal.upstream = "true";
 
 		CommerceNavigator.gotoPortlet(
