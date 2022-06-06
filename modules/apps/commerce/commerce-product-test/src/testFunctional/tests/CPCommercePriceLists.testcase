@@ -915,7 +915,7 @@ definition {
 		Type(
 			key_title = "Add SKUs",
 			locator1 = "CommerceEntry#ADD_RELATION_FIELD",
-			value1 = "MIN55861");
+			value1 = "U-Joint");
 
 		Pause(locator1 = "2000");
 
@@ -938,7 +938,7 @@ definition {
 		Type(
 			key_title = "Add SKUs",
 			locator1 = "CommerceEntry#ADD_RELATION_FIELD",
-			value1 = "MIN55861");
+			value1 = "U-Joint");
 
 		Pause(locator1 = "2000");
 
