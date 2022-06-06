@@ -18,10 +18,14 @@ import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.service.AssetCategoryServiceUtil;
 import com.liferay.asset.kernel.service.AssetVocabularyServiceUtil;
 import com.liferay.asset.list.model.AssetListEntry;
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.exportimport.kernel.staging.LayoutStagingUtil;
 import com.liferay.exportimport.kernel.staging.StagingUtil;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
+import com.liferay.item.selector.ItemSelector;
+import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
+import com.liferay.item.selector.criteria.file.criterion.FileItemSelectorCriterion;
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalServiceUtil;
@@ -48,14 +52,17 @@ import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.LayoutSetBranch;
 import com.liferay.portal.kernel.model.LayoutType;
 import com.liferay.portal.kernel.model.LayoutTypePortlet;
+import com.liferay.portal.kernel.model.Theme;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
+import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.SearchDisplayStyleUtil;
 import com.liferay.portal.kernel.portlet.SearchOrderByUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
@@ -82,8 +89,6 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.util.LayoutDescription;
-import com.liferay.portal.util.LayoutListUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.RobotsUtil;
 import com.liferay.portlet.layoutsadmin.display.context.GroupDisplayContextHelper;
@@ -115,12 +120,14 @@ import javax.servlet.http.HttpServletRequest;
 public class LayoutsAdminDisplayContext {
 
 	public LayoutsAdminDisplayContext(
+		ItemSelector itemSelector,
 		LayoutConverterRegistry layoutConverterRegistry,
 		LayoutCopyHelper layoutCopyHelper,
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
 		StagingGroupHelper stagingGroupHelper) {
 
+		_itemSelector = itemSelector;
 		_layoutConverterRegistry = layoutConverterRegistry;
 		_layoutCopyHelper = layoutCopyHelper;
 		_liferayPortletRequest = liferayPortletRequest;
@@ -458,6 +465,54 @@ public class LayoutsAdminDisplayContext {
 		return _getDraftLayoutURL(layout);
 	}
 
+	public String getFaviconImage() {
+		LayoutSet layoutSet = getSelLayoutSet();
+
+		String faviconImage = layoutSet.getFavicon();
+
+		if (faviconImage != null) {
+			return faviconImage;
+		}
+
+		return getThemeFavicon(layoutSet.getTheme());
+	}
+
+	public String getFaviconTitle() {
+		LayoutSet selLayoutSet = getSelLayoutSet();
+
+		if (selLayoutSet.getFaviconFileEntryId() == 0) {
+			return LanguageUtil.get(httpServletRequest, "favicon-from-theme");
+		}
+
+		try {
+			FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(
+				selLayoutSet.getFaviconFileEntryId());
+
+			return fileEntry.getTitle();
+		}
+		catch (PortalException portalException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(portalException);
+			}
+		}
+
+		return LanguageUtil.get(httpServletRequest, "favicon-from-theme");
+	}
+
+	public String getFileEntryItemSelectorURL() {
+		FileItemSelectorCriterion itemSelectorCriterion =
+			new FileItemSelectorCriterion();
+
+		itemSelectorCriterion.setDesiredItemSelectorReturnTypes(
+			new FileEntryItemSelectorReturnType());
+
+		PortletURL itemSelectorURL = _itemSelector.getItemSelectorURL(
+			RequestBackedPortletURLFactoryUtil.create(httpServletRequest),
+			getSelectFaviconEventName(), itemSelectorCriterion);
+
+		return itemSelectorURL.toString();
+	}
+
 	public String getFirstColumnConfigureLayoutURL(boolean privatePages) {
 		return PortletURLBuilder.createRenderURL(
 			_liferayPortletResponse
@@ -544,18 +599,6 @@ public class LayoutsAdminDisplayContext {
 		).setParameter(
 			"selPlid", layout.getPlid()
 		).buildString();
-	}
-
-	public List<LayoutDescription> getLayoutDescriptions() {
-		if (_layoutDescriptions != null) {
-			return _layoutDescriptions;
-		}
-
-		_layoutDescriptions = LayoutListUtil.getLayoutDescriptions(
-			getGroupId(), isPrivateLayout(), getRootNodeName(),
-			themeDisplay.getLocale());
-
-		return _layoutDescriptions;
 	}
 
 	public Long getLayoutId() {
@@ -931,6 +974,10 @@ public class LayoutsAdminDisplayContext {
 		).buildPortletURL();
 	}
 
+	public String getSelectFaviconEventName() {
+		return _liferayPortletResponse.getNamespace() + "selectImage";
+	}
+
 	public String getSelectLayoutCollectionURL(
 		long selPlid, String selectedTab, boolean privateLayout) {
 
@@ -1141,6 +1188,14 @@ public class LayoutsAdminDisplayContext {
 		return _tabs1;
 	}
 
+	public String getThemeFavicon(Theme theme) {
+		if (theme == null) {
+			return StringPool.BLANK;
+		}
+
+		return theme.getContextPath() + theme.getImagesPath() + "/favicon.ico";
+	}
+
 	public String getTitle(boolean privatePages) {
 		String title = "pages";
 
@@ -1288,6 +1343,16 @@ public class LayoutsAdminDisplayContext {
 
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	public boolean isClearFaviconButtonEnabled() {
+		LayoutSet selLayoutSet = getSelLayoutSet();
+
+		if (selLayoutSet.getFaviconFileEntryId() > 0) {
+			return true;
 		}
 
 		return false;
@@ -2003,10 +2068,10 @@ public class LayoutsAdminDisplayContext {
 	private Boolean _firstColumn;
 	private final GroupDisplayContextHelper _groupDisplayContextHelper;
 	private Boolean _hasLayouts;
+	private final ItemSelector _itemSelector;
 	private String _keywords;
 	private final LayoutConverterRegistry _layoutConverterRegistry;
 	private final LayoutCopyHelper _layoutCopyHelper;
-	private List<LayoutDescription> _layoutDescriptions;
 	private Long _layoutId;
 	private SearchContainer<Layout> _layoutsSearchContainer;
 	private final LiferayPortletRequest _liferayPortletRequest;

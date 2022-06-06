@@ -96,7 +96,7 @@ boolean hasPermission = commercePricingClassCPDefinitionDisplayContext.hasPermis
 								fieldName: ['catalog', 'name'],
 							},
 						],
-						spritemap: '<%= themeDisplay.getPathThemeImages() %>/clay/icons.svg',
+						spritemap: '<%= FrontendIconsUtil.getSpritemap(themeDisplay) %>',
 						titleLabel: '<%= LanguageUtil.get(request, "add-existing-product") %>',
 					});
 				</aui:script>

@@ -117,12 +117,15 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 			Layout layout = _layoutLocalService.getLayout(
 				groupId, privateLayout, layoutId);
 
-			long masterLayoutPlid = ParamUtil.getLong(
-				uploadPortletRequest, "masterLayoutPlid",
-				layout.getMasterLayoutPlid());
 			long styleBookEntryId = ParamUtil.getLong(
 				uploadPortletRequest, "styleBookEntryId",
 				layout.getStyleBookEntryId());
+			long faviconFileEntryId = ParamUtil.getLong(
+				uploadPortletRequest, "faviconFileEntryId",
+				layout.getFaviconFileEntryId());
+			long masterLayoutPlid = ParamUtil.getLong(
+				uploadPortletRequest, "masterLayoutPlid",
+				layout.getMasterLayoutPlid());
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
 				Layout.class.getName(), actionRequest);
@@ -155,8 +158,8 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 				groupId, privateLayout, layoutId, layout.getParentLayoutId(),
 				nameMap, layout.getTitleMap(), layout.getDescriptionMap(),
 				layout.getKeywordsMap(), layout.getRobotsMap(), type, hidden,
-				friendlyURLMap, !deleteLogo, iconBytes, masterLayoutPlid,
-				styleBookEntryId, serviceContext);
+				friendlyURLMap, !deleteLogo, iconBytes, styleBookEntryId,
+				faviconFileEntryId, masterLayoutPlid, serviceContext);
 
 			UnicodeProperties formTypeSettingsUnicodeProperties =
 				PropertiesParamUtil.getProperties(
@@ -177,8 +180,8 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 					draftLayout.getKeywordsMap(), draftLayout.getRobotsMap(),
 					type, draftLayout.isHidden(),
 					draftLayout.getFriendlyURLMap(), !deleteLogo, iconBytes,
-					draftLayout.getMasterLayoutPlid(), styleBookEntryId,
-					serviceContext);
+					styleBookEntryId, faviconFileEntryId,
+					draftLayout.getMasterLayoutPlid(), serviceContext);
 			}
 
 			themeDisplay.clearLayoutFriendlyURL(layout);

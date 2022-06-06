@@ -962,6 +962,7 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 				imageBytes, _sourceLayout.getThemeId(),
 				_sourceLayout.getColorSchemeId(),
 				_sourceLayout.getStyleBookEntryId(), _sourceLayout.getCss(),
+				_sourceLayout.getFaviconFileEntryId(),
 				_sourceLayout.getMasterLayoutPlid());
 		}
 

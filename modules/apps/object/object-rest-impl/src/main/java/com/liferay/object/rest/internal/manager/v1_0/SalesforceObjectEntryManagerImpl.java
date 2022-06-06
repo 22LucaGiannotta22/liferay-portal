@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Guilherme Camacho
  */
 @Component(
-	enabled = false, immediate = true,
+	immediate = true,
 	property = "object.entry.manager.storage.type=" + ObjectDefinitionConstants.STORAGE_TYPE_SALESFORCE,
 	service = ObjectEntryManager.class
 )
@@ -136,6 +136,16 @@ public class SalesforceObjectEntryManagerImpl implements ObjectEntryManager {
 			DTOConverterContext dtoConverterContext,
 			String externalReferenceCode, long companyId,
 			ObjectDefinition objectDefinition, String scopeKey)
+		throws Exception {
+
+		return null;
+	}
+
+	@Override
+	public Page<ObjectEntry> getObjectEntryRelatedObjectEntries(
+			DTOConverterContext dtoConverterContext,
+			ObjectDefinition objectDefinition, Long objectEntryId,
+			String objectRelationshipName, Pagination pagination)
 		throws Exception {
 
 		return null;
