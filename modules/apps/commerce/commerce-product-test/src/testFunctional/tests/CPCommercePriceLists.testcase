@@ -817,7 +817,7 @@ definition {
 	@description = "This is a test for COMMERCE-6069. Price List Qualifier"
 	@priority = "3"
 	test AddPriceListQualifier {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 
 		// TODO Review
 		// TODO Fix Commerce tests that are skipping portal instances - COMMERCE-6586
@@ -2287,7 +2287,7 @@ definition {
 	@description = "This is a test for COMMERCE-6228. Check that an expired entity is not considered in the price calculation"
 	@priority = "3"
 	test ViewPriceNotAffectedByExpiredPriceEntities {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 		property test.name.skip.portal.instance = "CPCommercePriceLists#ViewPriceNotAffectedByExpiredPriceEntities";
 
 		// TODO Review
