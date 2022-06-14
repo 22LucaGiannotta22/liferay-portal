@@ -896,7 +896,7 @@ definition {
 	@priority = "5"
 	test CanEditAddressOfAnOpenOrderWithAddressAlreadySet {
 		property custom.properties = "jsonws.web.service.paths.excludes=${line.separator}company.security.strangers.verify=false";
-		property portal.acceptance = "true";
+		property portal.acceptance = "TEST";
 
 		task ("Given the Admin already created a Minium Site and a buyer account") {
 			CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
