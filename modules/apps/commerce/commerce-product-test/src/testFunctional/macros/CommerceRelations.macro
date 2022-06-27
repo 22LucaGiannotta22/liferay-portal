@@ -110,6 +110,8 @@ definition {
 			key_title = "${title}",
 			locator1 = "CommerceEntry#ADD_RELATION_FIELD_SELECT");
 
+		ScrollWebElementIntoView(locator1 = "CommerceEntry#ADD_RELATION_FIELD_SELECT");
+
 		ClickNoError(
 			key_entryName = "${entryName}",
 			key_title = "${title}",
