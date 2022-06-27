@@ -792,7 +792,7 @@ definition {
 	@description = "This is a test for COMMERCE-6204. Get stock quantity of a SKU for specific channel"
 	@priority = "3"
 	test GetChannelSKUStockQuantity {
-		property portal.acceptance = "Intern Test";
+		property portal.acceptance = "TEST";
 
 		// TODO Review
 
@@ -855,6 +855,14 @@ definition {
 				key_accordionTitle = "channels",
 				locator1 = "CommerceEntry#ACCORDION_COLLAPSED");
 		}
+
+		AssertChecked(
+			key_toggleSwitchLabel = "${commerceChannel2}",
+			locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
+
+		AssertChecked(
+			key_toggleSwitchLabel = "${commerceChannel1}",
+			locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");		
 
 		Uncheck.uncheckToggleSwitch(
 			key_toggleSwitchLabel = "${commerceChannel2}",
