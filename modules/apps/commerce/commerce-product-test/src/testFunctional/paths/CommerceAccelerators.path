@@ -422,6 +422,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>CHECKOUT_SUMMARY_SHIPPING_METHOD</td>
+	<td>//div[contains(@class,'shipping-method')]//div[contains(@class,'shipping-${key_methodEntry}') and contains(.,'${key_entry}')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>CHECKOUT_SUMMARY_SUBTOTAL</td>
 	<td>//li[contains(@class,'commerce-subtotal')]//div[contains(@class,'commerce-value') and contains (.,'${key_subtotalValue}')]</td>
 	<td></td>
