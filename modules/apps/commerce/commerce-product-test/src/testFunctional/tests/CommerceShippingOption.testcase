@@ -121,12 +121,36 @@ definition {
 		}
 	}
 
-	@description = "This is a test for the ticket COMMERCE-9130 | When selecting an account's Default Shipping Option, assert ineligible Shipping Options are not selectable"
+	@description = "Verify that not eligible default shipping method cannot be selected into the checkout."
 	@priority = "3"
-	test CanAssertIneligibleShippingOptionsNotSelectable {
-		property portal.acceptance = "false";
+	test CheckIfNotEligibleDefaultShippingMethodIntoTheCheckoutCanNotBeSelected {
+		property custom.properties = "jsonws.web.service.paths.excludes=${line.separator}company.security.strangers.verify=false";
+		property portal.acceptance = "TEST";
 
-		task ("Given the Sales Manager disables 'Flat Rate'") {
+		task ("Given a buyer user associated with the Commerce Account") {
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				accountType = "Business",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				createNewAccount = "false",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And given Flat Rate / Standard Delivery is set as the default shipping option for the Commerce Account") {
+			CommerceJSONShippingMethods._setDefaultAccountShippingOption(
+				accountName = "Commerce Account",
+				channelName = "Minium Portal",
+				shippingMethod = "Flat Rate",
+				shippingOption = "Standard Delivery");
+		}
+
+		task ("When the Sales Manager goes into the Minium Portal channel and disables the Flat Rate Shipping Method") {
 			CommerceChannels.openChannelsAdmin();
 
 			CommerceNavigator.gotoEntry(entryName = "Minium Portal");
@@ -136,45 +160,79 @@ definition {
 				shippingMethod = "Flat Rate");
 		}
 
-		task ("When the Sales Manager is on the Order Defaults tab in the Account") {
-			CommerceNavigator.gotoMiniumAccountOrderDefaults(accountName = "Commerce Account");
+		Click(
+			key_entryName = "Variable Rate",
+			locator1 = "CommerceEntry#CHANNELS_GENERAL_TAB_EDITS");
+
+		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
+
+		Check.checkToggleSwitch(
+			key_toggleSwitchLabel = "Active",
+			locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
+
+		Button.clickSave();
+
+		Alert.viewSuccessMessage();
+
+		CommerceEntry.gotoMenuTab(menuTab = "Shipping Options");
+
+		CommerceEntry.AddShippingOptionVariableRate(
+			key_description = "",
+			key_name = "Test Shipping Option",
+			key_priority = "");
+
+		Alert.viewSuccessMessage();
+
+		Click(locator1 = "Icon#CLOSE");
+
+		SelectFrameTop();
+
+		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
+
+		CommerceEntry.gotoMenuTab(menuTab = "Shipping Option Settings");
+
+		CommerceEntry.addShippingOptionSettingsVariableRate(
+			fixedPrice = "100",
+			shippingOption = "Test Shipping Option",
+			weightTo = "100");
+
+		Alert.viewSuccessMessage();
+
+		User.logoutPG();
+
+		CommerceLogin.miniumLogin(
+			password = "test",
+			urlAppend = "web/minium",
+			userEmailAddress = "buyer@liferay.com");
+
+		FrontStore.addInitializerProductToCart(
+			productName = "U-Joint",
+			productQuantity = "1");
+
+		CommerceCheckout.gotoCheckoutViaMiniCart();
+
+		task ("Then the shipping option used at checkout is Test Shipping Option based on priority and not Expedited Delivery because it is not present in Order Type 1") {
+			CommerceCheckout.initializersCheckout(
+				defaultShippingMethod = "Test Shipping Option",
+				newAddressAddress = "Test Address",
+				newAddressCity = "Test City",
+				newAddressCountry = "United States",
+				newAddressName = "Address Name",
+				newAddressZipCode = "Test Zip Code",
+				notEligibleShippingMethods = "Expedited Delivery",
+				productName = "U-Joint",
+				productQuantity = "1",
+				productUnitPrice = "24");
 		}
 
-		task ("And click on 'Edit' button for the 'Minium Portal' entry") {
-			Click(
-				key_entryName = "Minium Portal",
-				key_table = "Default Account Commerce Channels Shipping Options",
-				locator1 = "CommerceEntry#TABLE_ENTRY_EDIT_BUTTON");
+		AssertElementNotPresent(
+			key_label = "Shipping Method",
+			locator1 = "CommerceAccelerators#CHECKOUT_MULTI_STEP_INDICATOR_LABEL");
 
-			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_BODY");
-		}
-
-		task ("Then the Sales Manager can choose only 'Use Priority Settings'") {
-			AssertElementPresent(
-				key_radioOption = "Use Priority Settings",
-				locator1 = "CommerceEntry#RADIO_BUTTON");
-
-			AssertElementNotPresent(
-				key_radioOption = "Flat Rate / Standard Delivery",
-				locator1 = "CommerceEntry#RADIO_BUTTON");
-
-			AssertElementNotPresent(
-				key_radioOption = "Flat Rate / Expedited Delivery",
-				locator1 = "CommerceEntry#RADIO_BUTTON");
-
-			Click.clickAtNotVisible(
-				key_radioOption = "Use Priority Settings",
-				locator1 = "CommerceEntry#RADIO_BUTTON");
-
-			Button.clickSave();
-
-			IFrame.selectTopFrame();
-
-			CommerceChannels.assertDefaultAccountShippingOption(
-				channelName = "Minium Portal",
-				shippingMethod = "Use Priority Settings",
-				shippingOption = "Use Priority Settings");
-		}
+		AssertElementPresent(
+			key_entry = "Test Shipping Option",
+			key_methodEntry = "description",
+			locator1 = "CommerceAccelerators#CHECKOUT_SUMMARY_SHIPPING_METHOD");
 	}
 
 	@description = "Verify only one default account shipping option can be set."
