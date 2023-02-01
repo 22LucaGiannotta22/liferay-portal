@@ -457,6 +457,100 @@ definition {
 		}
 	}
 
+	@description = "This is a test for COMMERCE-10534. Buyer user can add SKU with multiple quantities"
+	@priority = "4"
+	test CanAddSKUWithMultipleQuantities {
+		property portal.acceptance = "false";
+
+		task ("Given a multiple quantity is configured for a product (e.g. multiple quantity 3 for MIN55860)") {
+			CommerceNavigator.gotoPortlet(
+				category = "Product Management",
+				portlet = "Products");
+
+			CommerceProducts.searchAndGoToProductEntry(entryProductName = "Transmission Cooler Line Assembly");
+
+			CommerceEntry.gotoMenuTab(menuTab = "Configuration");
+
+			Type(
+				key_text = "Multiple Order Quantity",
+				locator1 = "TextInput#ANY",
+				value1 = "3");
+
+			Button.clickPublish();
+		}
+
+		task ("And an account with a buyer user is created") {
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				accountType = "Business",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				createNewAccount = "true",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And buyer user logs in") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+		}
+
+		task ("When the buyer user opens the minicart") {
+			FrontStore.addInitializerProductToCart(
+				productName = "U-Joint",
+				productQuantity = "1");
+
+			// To be removed when COMMERCE-10472 is fixed
+
+			CommerceNavigator.gotoMiniCart();
+
+			Button.click(button = "Remove All Items");
+
+			// To be removed when COMMERCE-10472 is fixed
+
+			Button.click(button = "Yes");
+
+			// To be removed when COMMERCE-10472 is fixed
+
+		}
+
+		task ("And selects MIN55860") {
+			FrontStore.quickAddToCartSearchAndSelectItem(orderItemSku = "MIN55860");
+		}
+
+		task ("And adds the SKU to the cart") {
+			Click(locator1 = "CommerceAccelerators#QUICK_ADD_TO_CART_BUTTON");
+		}
+
+		task ("Then the SKU is added to the cart with quantity 3") {
+			AssertTextEquals(
+				key_cartItemSku = "MIN55860",
+				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
+				value1 = "3");
+		}
+
+		task ("When the user adds the SKU again to the cart") {
+			FrontStore.quickAddToCartSearchAndSelectItem(orderItemSku = "MIN55860");
+
+			Click(locator1 = "CommerceAccelerators#QUICK_ADD_TO_CART_BUTTON");
+		}
+
+		task ("Then the SKU quantity updates to 6") {
+			AssertTextEquals(
+				key_cartItemSku = "MIN55860",
+				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
+				value1 = "6");
+		}
+	}
+
 	@description = "This is a test for COMMERCE-10620. Buyer user can add to cart a product with a price list applied to it"
 	@priority = "4"
 	test CanAddToCartProductWithPriceList {
