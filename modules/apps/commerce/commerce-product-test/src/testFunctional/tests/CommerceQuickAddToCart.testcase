@@ -100,6 +100,127 @@ definition {
 		}
 	}
 
+	@description = "This is a test for COMMERCE-10531. Can add SKU with allowed quantities"
+	@priority = "4"
+	test CanAddSKUWithAllowedQuantities {
+		property portal.acceptance = "false";
+
+		task ("Given allowed quantities are configured for a product (e.g. allowed quantities 3,5,7 for MIN55860)") {
+			CommerceNavigator.gotoPortlet(
+				category = "Product Management",
+				portlet = "Products");
+
+			CommerceProducts.searchAndGoToProductEntry(entryProductName = "Transmission Cooler Line Assembly");
+
+			CommerceEntry.gotoMenuTab(menuTab = "Configuration");
+
+			AssertElementPresent(
+				key_fieldLabel = "Allowed Order Quantities",
+				locator1 = "TextInput#GENERIC_TEXT_INPUT");
+
+			Type(
+				key_fieldLabel = "Allowed Order Quantities",
+				locator1 = "TextInput#GENERIC_TEXT_INPUT",
+				value1 = "3 5 7");
+
+			Button.clickPublish();
+		}
+
+		task ("And an account with a buyer user is created(e.g. Commerce Account)") {
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				accountType = "Business",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				createNewAccount = "true",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And buyer user logs in") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+		}
+
+		task ("When the buyer opens the mini-cart") {
+			FrontStore.addInitializerProductToCart(
+				productName = "U-Joint",
+				productQuantity = "1");
+
+			// To be removed when COMMERCE-10472 is fixed
+
+			CommerceNavigator.gotoMiniCart();
+
+			Button.click(button = "Remove All Items");
+
+			// To be removed when COMMERCE-10472 is fixed
+
+			Button.click(button = "Yes");
+
+			// To be removed when COMMERCE-10472 is fixed
+
+		}
+
+		task ("And selects MIN55860 from the quick add-to-cart search bar") {
+			FrontStore.quickAddToCartSearchAndSelectItem(orderItemSku = "MIN55860");
+		}
+
+		task ("And adds the SKU to the cart") {
+			Click(locator1 = "CommerceAccelerators#QUICK_ADD_TO_CART_BUTTON");
+		}
+
+		task ("Then the SKU is added with the lowest allowed quantity") {
+			AssertTextEquals(
+				key_cartItemSku = "MIN55860",
+				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
+				value1 = "3");
+		}
+
+		task ("When the buyer adds the SKU again to the cart") {
+			FrontStore.quickAddToCartSearchAndSelectItem(orderItemSku = "MIN55860");
+
+			Click(locator1 = "CommerceAccelerators#QUICK_ADD_TO_CART_BUTTON");
+		}
+
+		task ("Then the SKU quantity is updated to the next allowed quantity (5)") {
+			AssertTextEquals(
+				key_cartItemSku = "MIN55860",
+				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
+				value1 = "5");
+		}
+
+		task ("When the buyer adds the SKU again to the cart") {
+			FrontStore.quickAddToCartSearchAndSelectItem(orderItemSku = "MIN55860");
+
+			Click(locator1 = "CommerceAccelerators#QUICK_ADD_TO_CART_BUTTON");
+		}
+
+		task ("Then the SKU quantity is updated to the next allowed quantity (7)") {
+			AssertTextEquals(
+				key_cartItemSku = "MIN55860",
+				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
+				value1 = "7");
+		}
+
+		task ("When the buyer adds the SKU again to the cart") {
+			FrontStore.quickAddToCartSearchAndSelectItem(orderItemSku = "MIN55860");
+
+			Click(locator1 = "CommerceAccelerators#QUICK_ADD_TO_CART_BUTTON");
+		}
+
+		task ("Then a red alert is shown") {
+			Alert.viewErrorMessage(errorMessage = "The specified quantity is not allowed.");
+		}
+	}
+
 	@description = "This is a test for COMMERCE-10596. Buyer user can add SKU with maximum quantity"
 	@priority = "4"
 	test CanAddSKUWithMaximumQuantity {
