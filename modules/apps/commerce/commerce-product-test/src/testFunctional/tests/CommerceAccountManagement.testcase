@@ -313,6 +313,41 @@ definition {
 				tableEntry = "Person",
 				tableEntryInfo = "Person");
 		}
+
+		task ("When a 'Supplier' type of account is post and passed via API") {
+			CommerceJSONAccountsAPI._addCommerceAccount(
+				accountName = "Supplier Account",
+				accountType = "Supplier",
+				externalReferenceCode = "Supplier Account ERC");
+		}
+
+		task ("Then a 'Supplier' type of account is created under Accounts panel") {
+			Account.openAccountsAdmin();
+
+			LexiconTable.viewTableEntryInfo(
+				index = 5,
+				tableEntry = "Supplier",
+				tableEntryInfo = "Supplier");
+		}
+	}
+
+	@description = "This is a test case for COMMERCE-11475. An account of type business is created via API when account type is not specified"
+	@priority = 3
+	test CanCreateBusinessAccountWhenAccountTypeIsNotSpecified {
+		property portal.acceptance = "false";
+
+		task ("When an account is created via API without specifying the type") {
+			CommerceJSONAccountsAPI._addCommerceAccount(accountName = "Test Account");
+		}
+
+		task ("Then a 'Business' type of account is created under Accounts panel") {
+			Account.openAccountsAdmin();
+
+			LexiconTable.viewTableEntryInfo(
+				index = 5,
+				tableEntry = "Business",
+				tableEntryInfo = "Business");
+		}
 	}
 
 	@description = "COMMERCE-9427 CanSortAccountEntriesUsingReverseSortDirectionButton"
