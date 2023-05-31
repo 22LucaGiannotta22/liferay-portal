@@ -12,6 +12,8 @@
  * details.
  */
 
+/// <reference types="react" />
+
 import {IClientExtensionCellRenderer} from './api';
 import '../css/FDSView.scss';
 import {FDSViewType} from './FDSViews';
@@ -37,4 +39,4 @@ declare const FDSView: ({
 	saveFDSFieldsURL,
 }: IFDSViewInterface) => JSX.Element;
 export {IFDSViewSectionInterface};
-export default FDSView;
+qualcoexport default FDSView;
