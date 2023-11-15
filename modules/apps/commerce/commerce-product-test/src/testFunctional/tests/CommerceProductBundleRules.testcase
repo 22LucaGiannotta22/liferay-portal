@@ -36,7 +36,7 @@ definition {
 	@description = "COMMERCE-12803. As an admin, I want to be able to verify the excluded Product Relation is bidirectional"
 	@priority = 5
 	test VerifyExcludedProductRelationIsBidirectional {
-		property portal.acceptance = "true";
+		property portal.acceptance = "TEST";
 
 		task ("When U-Joint Incompatible in Product Bundle to ABS Sensor is added") {
 			CommerceProducts.openProductsAdmin();
@@ -96,7 +96,7 @@ definition {
 	@description = "COMMERCE-12805. As a buyer, I want to be able to verify the included and excluded option values are disabled with reason messages"
 	@priority = 5
 	test VerifyIncludedAndExcludedOptionValuesAreDisabledWithReasonMessage {
-		property portal.acceptance = "true";
+		property portal.acceptance = "TEST";
 
 		task ("Given an access token is generated to enable Show Unselectable Options from Instance Settings") {
 			var companyId = JSONCompany.getCompanyId();
@@ -301,7 +301,7 @@ definition {
 	@description = "COMMERCE-12810. As a buyer, I want to be able to verify the included and excluded option values are disabled with reason messages without SKU Contributor"
 	@priority = 5
 	test VerifyIncludedAndExcludedOptionValuesAreDisabledWithReasonMessageWithoutSKUContributor {
-		property portal.acceptance = "true";
+		property portal.acceptance = "TEST";
 
 		task ("Given an access token is generated to enable Show Unselectable Options from Instance Settings") {
 			var companyId = JSONCompany.getCompanyId();
@@ -496,7 +496,7 @@ definition {
 	@description = "COMMERCE-12806. As a buyer, I want to be able to verify that only valid included and excluded option values combinations are selectable"
 	@priority = 3
 	test VerifyIncludedAndExcludedOptionValuesOnlySelectableOptionsShown {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 
 		task ("Given U-Joint Requires in Product Bundle to ABS Sensor is added") {
 			CommerceProducts.openProductsAdmin();
@@ -696,7 +696,7 @@ definition {
 	@description = "COMMERCE-12804. As an admin, I want to be able to verify the included Product Relation is unidirectional"
 	@priority = 5
 	test VerifyIncludedProductRelationIsUnidirectional {
-		property portal.acceptance = "true";
+		property portal.acceptance = "TEST";
 
 		task ("When U-Joint Requires in Product Bundle to ABS Sensor is added") {
 			CommerceProducts.openProductsAdmin();
@@ -733,7 +733,7 @@ definition {
 	@description = "COMMERCE-12796. As a buyer, I want to be able to view the Products Limit rule applied to the bundled product"
 	@priority = 5
 	test VerifyProductsLimitRule {
-		property portal.acceptance = "true";
+		property portal.acceptance = "TEST";
 
 		task ("Given an access token is generated to enable Show Unselectable Options from Instance Settings") {
 			var companyId = JSONCompany.getCompanyId();
@@ -924,7 +924,7 @@ definition {
 	@description = "COMMERCE-12799. As a buyer, I want to be able to view the Products Limit rule applied to the bundled product considering the rule's priority"
 	@priority = 4
 	test VerifyProductsLimitRulesConsideringRulesPriority {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 
 		task ("Given two active order rules with products limit type and different priority are created") {
 			CommerceOrders.openOrderRulesAdmin();
@@ -1042,7 +1042,7 @@ definition {
 	@description = "COMMERCE-12800. As a buyer, I want to be able to view the Products Limit rule applied to the bundled product with account eligibility"
 	@priority = 4
 	test VerifyProductsLimitRuleWithAccountEligibility {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 
 		task ("Given a second account associated with buyer user is created") {
 			CommerceEntry.addAccountEntryUser(
@@ -1196,7 +1196,7 @@ definition {
 	@description = "COMMERCE-12801. As a buyer, I want to be able to view the Products Limit rule applied to the bundled product with channel eligibility"
 	@priority = 4
 	test VerifyProductsLimitRuleWithChannelEligibility {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 
 		task ("Given a second Minium site associated with buyer user is created") {
 			CommerceAccelerators.initializeNewSiteViaAccelerator(
@@ -1345,7 +1345,7 @@ definition {
 	@priority = 5
 	test VerifyProductsLimitRuleWithDecimalUOMQuantity {
 		property custom.properties = "feature.flag.COMMERCE-9599=true${line.separator}feature.flag.COMMERCE-11287=true${line.separator}feature.flag.COMMERCE-11922=true${line.separator}jsonws.web.service.paths.excludes=";
-		property portal.acceptance = "true";
+		property portal.acceptance = "TEST";
 
 		task ("Given an access token is generated to enable Show Unselectable Options from Instance Settings") {
 			var companyId = JSONCompany.getCompanyId();
@@ -1492,7 +1492,7 @@ definition {
 	@description = "COMMERCE-12802. As a buyer, I want to be able to view the Products Limit rule applied to the bundled product with order type eligibility"
 	@priority = 4
 	test VerifyProductsLimitRuleWithOrderTypeEligibility {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 
 		task ("Given two active order types") {
 			for (var orderTypeNumber : list "1,2") {
@@ -1643,7 +1643,7 @@ definition {
 	@description = "COMMERCE-12798. As a buyer, I want to be able to view the Products Limit rule applied to the bundled product even when the order items are splitted"
 	@priority = 4
 	test VerifyProductsLimitRuleWithSplittedOrderItems {
-		property portal.acceptance = "false";
+		property portal.acceptance = "TEST";
 
 		task ("Given an active order rule with products limit type is created") {
 			CommerceOrders.openOrderRulesAdmin();
