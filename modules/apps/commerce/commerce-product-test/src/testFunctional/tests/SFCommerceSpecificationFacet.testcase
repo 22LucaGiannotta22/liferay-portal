@@ -178,7 +178,7 @@ definition {
 
 	@priority = 5
 	test View100Terms {
-		property portal.acceptance = "true";
+		property portal.acceptance = "TEST";
 
 		CommerceJSONSpecificationsAPI._addCommerceProductsWithSpecifications(
 			catalogName = "Minium",
